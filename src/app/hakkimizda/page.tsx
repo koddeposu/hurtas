@@ -1,7 +1,6 @@
 "use client";
 import AboutHero from '@/components/about-hero';
 import FAQ from '@/components/faq';
-import Footer from '@/components/footer';
 import { Interactive } from '@/components/Interactive';
 import { MissionVision } from '@/components/mission-vision';
 import Navbar from '@/components/navbar';
@@ -45,17 +44,7 @@ const About = () => {
             <FAQ />
           </div>
         </section>
-
-
-        <section className="flex justify-center pb-10">
-          <div className="max-w-[1280px] w-full">
-            <Footer />
-          </div>
-        </section>
-
       </div>
-
-
     </main>
   );
 };
