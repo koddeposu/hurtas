@@ -221,7 +221,7 @@ const MobileFilterPanel = ({ isOpen, onClose, activeTab, sortBy, onCategorySelec
 // Product Grid Component
 const ProductGrid = ({ products }: ProductGridProps) => (
   <div className="flex-1">
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <AnimatePresence mode='popLayout'>
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />

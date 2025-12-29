@@ -1,5 +1,4 @@
 "use client";
-
 import { MOCK_PRODUCT } from "@/types/product";
 import { motion } from "framer-motion";
 import {
@@ -14,7 +13,7 @@ import {
   Ruler,
 } from "lucide-react";
 import Image from "next/image";
-
+import { use } from "react";
 
 const FEATURE_ICONS = {
   home: Home,
@@ -23,20 +22,29 @@ const FEATURE_ICONS = {
   height: ArrowUp,
 } as const;
 
-
 interface PageProps {
-  params: {
-    id: string;
-  };
+  params: Promise<{
+    slug: string;
+  }>;
 }
 
-const ProductPage = ({ params }: PageProps) => {
-  const { id } = params;
+function ProductPage({ params }: PageProps) {
+  const { slug } = use(params);
 
-  const product = MOCK_PRODUCT.find(p => p.id === id);
+  // Slug'dan ID'yi çıkar (örn: "villa-lux-01" -> "01")
+  const productId = slug.split('-').pop();
+
+  const product = MOCK_PRODUCT.find(p => p.id === productId);
 
   if (!product) {
-    return <div>Ürün bulunamadı</div>;
+    return (
+      <main className="bg-white min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-4xl font-black text-slate-900 mb-4">Ürün Bulunamadı</h1>
+          <p className="text-slate-500">Aradığınız ürün mevcut değil.</p>
+        </div>
+      </main>
+    );
   }
 
   const { detail } = product;
@@ -61,12 +69,11 @@ const ProductPage = ({ params }: PageProps) => {
                     className="object-cover"
                     priority
                   />
-
                 )}
 
-                {detail?.image.badge && (
+                {detail?.image?.badge && (
                   <div className="absolute top-6 left-6 bg-red-600 text-white px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em]">
-                    {detail?.image.badge}
+                    {detail.image.badge}
                   </div>
                 )}
               </motion.div>
@@ -81,7 +88,7 @@ const ProductPage = ({ params }: PageProps) => {
                 </div>
 
                 <div className="prose prose-slate max-w-none">
-                  {detail?.description.map((text, i) => (
+                  {detail?.description?.map((text, i) => (
                     <p
                       key={i}
                       className="text-slate-500 text-lg leading-relaxed font-medium mt-4"
@@ -110,7 +117,7 @@ const ProductPage = ({ params }: PageProps) => {
 
                 {/* FEATURES */}
                 <div className="flex flex-wrap items-center gap-6 py-5 border-y border-slate-100 mb-8">
-                  {detail?.features.map((feature, i) => {
+                  {detail?.features?.map((feature, i) => {
                     const Icon = FEATURE_ICONS[feature.icon];
                     return (
                       <div
@@ -148,11 +155,11 @@ const ProductPage = ({ params }: PageProps) => {
 
               {/* ACTIONS */}
               <div className="space-y-4">
-                <button className="w-full bg-[#25D366] text-white py-5 rounded-[2rem] font-black text-sm tracking-widest flex items-center justify-center gap-3">
+                <button className="w-full bg-[#25D366] text-white py-5 rounded-[2rem] font-black text-sm tracking-widest flex items-center justify-center gap-3 hover:bg-[#20ba5a] transition-colors">
                   <MessageCircle size={22} /> WHATSAPP İLE SOR
                 </button>
 
-                <button className="w-full bg-[#49202d] text-white py-5 rounded-[2rem] font-black text-sm tracking-widest flex items-center justify-center gap-3">
+                <button className="w-full bg-[#49202d] text-white py-5 rounded-[2rem] font-black text-sm tracking-widest flex items-center justify-center gap-3 hover:bg-[#3d1a26] transition-colors">
                   <Phone size={22} /> BİZİ ARAYIN
                 </button>
               </div>
@@ -178,6 +185,6 @@ const ProductPage = ({ params }: PageProps) => {
       </section>
     </main>
   );
-};
+}
 
 export default ProductPage;

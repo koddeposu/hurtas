@@ -8,15 +8,15 @@ import Link from 'next/link';
 // Product Card Component
 export const ProductCard = ({ product }: { product: Product }) => {
   return (
-    <Link href={`/urun/urun-detay/${product.id}`} className="block">
+    <Link href={`/urun-detay/${product.slug}-${product.id}`}>
       <motion.div
         layout
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9 }}
-        className="group bg-white rounded-[2.5rem] p-4 border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer"
+        className="group bg-white rounded-[2rem]  border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer"
       >
-        <div className="relative aspect-square rounded-[2rem] overflow-hidden mb-6">
+        <div className="relative aspect-video rounded-tr-[2rem] rounded-tl-[2rem] overflow-hidden mb-6">
           {product.img && (
             <Image
               src={product.img}
@@ -31,32 +31,34 @@ export const ProductCard = ({ product }: { product: Product }) => {
             </span>
           </div>
         </div>
+        <div className='px-4'>
+          <div className="px-2 pb-2">
+            <h3 className="text-xl font-black text-slate-900 tracking-tight mb-2">{product.name}</h3>
+            <p className="text-lg font-bold text-secondary mb-4">
+              {product.price.toLocaleString('tr-TR')} ₺
+            </p>
 
-        <div className="px-2 pb-2">
-          <h3 className="text-xl font-black text-slate-900 tracking-tight mb-2">{product.name}</h3>
-          <p className="text-lg font-bold text-[#49202d] mb-4">
-            {/* {product.price.toLocaleString('tr-TR')} ₺ */}
-          </p>
+            <div className="grid grid-cols-2 gap-4 border-t border-slate-50 pt-4">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-[#49202d]">
+                  <Ruler size={14} />
+                </div>
+                <span className="text-xs font-bold text-slate-500">{product.area}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-[#49202d]">
+                  <Home size={14} />
+                </div>
+                <span className="text-xs font-bold text-slate-500">{product.room}</span>
+              </div>
+            </div>
 
-          <div className="grid grid-cols-2 gap-4 border-t border-slate-50 pt-4">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-[#49202d]">
-                <Ruler size={14} />
-              </div>
-              <span className="text-xs font-bold text-slate-500">{product.area}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-[#49202d]">
-                <Home size={14} />
-              </div>
-              <span className="text-xs font-bold text-slate-500">{product.room}</span>
-            </div>
+            <button className="w-full mt-6 py-4 bg-slate-900 text-white rounded-2xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 group-hover:bg-[#49202d] transition-all">
+              İncele <ArrowUpRight size={14} />
+            </button>
           </div>
-
-          <button className="w-full mt-6 py-4 bg-slate-900 text-white rounded-2xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 group-hover:bg-[#49202d] transition-all">
-            İncele <ArrowUpRight size={14} />
-          </button>
         </div>
+
       </motion.div>
     </Link >
   )
