@@ -52,7 +52,7 @@ const FAQ = () => {
   ];
 
   return (
-    <section className="relative  bg-white font-[family-name:var(--font-poppins)] overflow-hidden">
+    <section className="relative  overflow-hidden">
 
       {/* ARKA PLAN DEKORASYONU: Nokta Matrisi */}
       <div className="absolute top-20 right-20 opacity-10 rotate-12">
@@ -63,7 +63,7 @@ const FAQ = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-6 max-w-6xl">
+      <div className="container mx-auto  max-w-6xl">
         <div className="grid lg:grid-cols-12 gap-16 items-start">
 
           {/* SOL: BAŞLIK ALANI (Sticky) */}

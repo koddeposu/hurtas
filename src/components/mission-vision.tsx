@@ -35,9 +35,9 @@ export const MissionVision = () => {
       <div className="absolute top-1/2 left-0 w-96 h-96 bg-[#165b39]/5 rounded-full blur-[120px] -z-10" />
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#49202d]/5 rounded-full blur-[120px] -z-10" />
 
-      <div className="container mx-auto px-6 max-w-7xl">
+      <div className="container mx-auto  max-w-7xl ">
 
-        <div className="grid lg:grid-cols-12 gap-16 items-center lg:mb-28 relative">
+        <div className="grid lg:grid-cols-12 gap-5 md:gap-16 items-center lg:mb-28 relative">
 
           <div className="lg:col-span-6 relative">
             <div className="absolute -top-10 -left-10 z-0">
@@ -52,7 +52,7 @@ export const MissionVision = () => {
             >
               <img
                 src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80"
-                className="w-full h-[450px] object-cover"
+                className="w-full h-[300px] md:h-[450px] object-cover"
                 alt="Mission"
               />
               <div className="absolute bottom-8 right-0 w-24 h-32 bg-[#165b39] opacity-90 rounded-l-3xl shadow-xl flex items-center justify-center">
@@ -76,8 +76,7 @@ export const MissionVision = () => {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-16 items-center relative">
-
+        <div className="grid lg:grid-cols-12 gap-5 md:gap-16 items-center relative mt-20 lg:mt-0">
           <div className="lg:col-span-6 order-2 lg:order-1 lg:text-right flex flex-col items-end space-y-6">
             <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-slate-900 leading-[0.9]">
               VİZYON <br /> <span style={{ color: '#49202d' }}>UMUZ.</span>

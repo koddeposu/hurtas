@@ -6,35 +6,35 @@ import { ArrowRight, CheckCircle, MousePointer2, Play } from 'lucide-react';
 
 export const Hero4 = () => {
   return (
-    <section className="relative   pt-20 pb-12 overflow-hidden ">
+    <section className="relative   pt-5 lg:pt-20 pb-12">
 
       {/* Arka Plan Dekorasyonu (Soft Işıklar) */}
       <div className="absolute top-0 right-0 w-[40%] h-[40%] bg-secondary/20 rounded-full blur-[120px] -z-10" />
       <div className="absolute bottom-10 left-10 w-64 h-64 bg-primary/20 rounded-full blur-[100px] -z-10" />
 
-      <div className=" px-6 h-full flex items-center">
+      <div className="h-full flex items-center">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
 
           {/* SOL TARAF: BAŞLIK VE CTA */}
-          <div className="lg:col-span-6 space-y-8 relative z-20">
+          <div className="lg:col-span-6 space-y-5 lg:space-y-8 relative z-20">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 rounded-full mb-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 rounded-full mb-2 lg:mb-6">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
                 </span>
-                <span className="text-emerald-700 text-xs font-bold uppercase tracking-widest">30 GÜNDE ANAHTAR TESLİM</span>
+                <span className="text-emerald-700 text-[10px] lg:ext-xs font-bold uppercase tracking-widest">30 GÜNDE ANAHTAR TESLİM</span>
               </div>
 
               <h1 className="text-5xl md:text-7xl font-black text-slate-900 leading-[1.05] tracking-tight">
-                Hayallerinizi <br />
-                <span className="text-secondary/90">Özgürleştirin.</span>
+                Sakarya <br />
+                <span className="text-secondary/90">Prefabrik Ev</span>
               </h1>
-              <p className="mt-6 text-lg text-slate-500 font-medium max-w-lg leading-relaxed">
+              <p className="mt-6 text-md lg:text-lg text-slate-500 font-medium max-w-lg leading-relaxed">
                 Geleneksel betonarme süreçlerini geride bırakın. Modern mimari, sarsılmaz çelik konstrüksiyon ve estetik tasarımı bir araya getiriyoruz.
               </p>
             </motion.div>
@@ -44,12 +44,12 @@ export const Hero4 = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.8 }}
-              className="flex flex-wrap gap-4"
+              className="flex flex-row lg:flex-wrap gap-4 w-full"
             >
-              <button className="px-8 py-4 bg-slate-900 text-white rounded-[1.5rem] font-bold text-sm flex items-center gap-3 hover:bg-emerald-600 transition-all shadow-xl shadow-slate-200">
+              <button className="px-3 py-2 lg:px-8 lg:py-4 bg-slate-900 text-white rounded-[1.5rem] font-bold text-xs lg:text-sm flex items-center gap-3 hover:bg-emerald-600 transition-all shadow-xl shadow-slate-200 w-full lg:w-fit justify-center">
                 Projeleri İncele <ArrowRight size={18} />
               </button>
-              <button className="px-8 py-4 bg-white text-slate-900 border border-slate-100 rounded-[1.5rem] font-bold text-sm flex items-center gap-3 hover:bg-slate-50 transition-all shadow-sm">
+              <button className="px-3 py-2 lg:px-8 lg:py-4 bg-white text-slate-900 border border-slate-100 rounded-[1.5rem] font-bold text-xs lg:text-sm flex items-center gap-3 hover:bg-slate-50 transition-all shadow-sm w-full lg:w-fit justify-center">
                 <div className="w-8 h-8 bg-secondary/15 rounded-full flex items-center justify-center">
                   <Play size={14} className="text-secondary fill-secondary" />
                 </div>
@@ -62,7 +62,7 @@ export const Hero4 = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
-              className="flex flex-wrap gap-6 pt-4"
+              className="flex flex-wrap gap-6 lg:pt-4"
             >
               {['Deprem Dayanımlı', 'A++ Enerji Verimliliği', 'Özel Mimari Çizim'].map((item, i) => (
                 <div key={i} className="flex items-center gap-2 text-xs font-bold text-slate-400">
@@ -88,7 +88,7 @@ export const Hero4 = () => {
                 <img
                   src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?q=80&w=2000&auto=format&fit=crop"
                   alt="Modern Prefabrik Ev"
-                  className="w-full h-[550px] object-cover"
+                  className="w-full h-auto lg:h-[550px] object-video"
                 />
               </div>
             </motion.div>

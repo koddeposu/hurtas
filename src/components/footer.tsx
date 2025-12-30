@@ -30,7 +30,7 @@ const Footer = () => {
           <div className="relative z-10">
             <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
               Hayalinizdeki yuvayı <br />
-              <span className="text-emerald-400 italic">birlikte inşa edelim.</span>
+              <span className="text-emerald-500 italic">birlikte inşa edelim.</span>
             </h2>
           </div>
 
@@ -47,7 +47,7 @@ const Footer = () => {
           {/* 1. Kolon: Marka & Hakkında */}
           <div className="lg:col-span-4 space-y-6">
             <div className="flex items-center gap-2 text-2xl font-black tracking-tighter" style={{ color: '#165b39' }}>
-              <Home className="w-8 h-8" /> AKTAŞ <span style={{ color: '#49202d' }}>PREFABRİK</span>
+              <Home className="w-8 h-8" /> CT <span style={{ color: '#49202d' }}>PREFABRİK</span>
             </div>
             <p className="text-slate-500 text-sm leading-relaxed font-medium max-w-sm">
               Sakarya Aktas Prefabrik olarak, modern mimariyi çeliğin gücüyle birleştiriyoruz.

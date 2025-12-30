@@ -4,13 +4,13 @@ import { CheckCircle2, MessageSquare, Phone, Send, User } from 'lucide-react';
 
 export const LeadForm = () => {
   return (
-    <section className="py-24 px-6 font-[family-name:var(--font-poppins)] overflow-hidden">
+    <section className="lg:px-6">
       <div className="container mx-auto max-w-6xl">
-        <div className="bg-white rounded-[3.5rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.05)] border border-slate-50 overflow-hidden">
+        <div className="bg-white rounded-[3.5rem] shadow-md  border border-slate-50 overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-12">
 
             {/* SOL TARAF: Bilgilendirme Alanı */}
-            <div className="lg:col-span-5 p-10 md:p-16 flex flex-col justify-center relative overflow-hidden" style={{ backgroundColor: '#165b39' }}>
+            <div className="lg:col-span-5 p-10 md:p-16 flex flex-col justify-center relative overflow-hidden bg-secondary">
               {/* Arka plan dekoratif halka */}
               <div className="absolute -top-20 -left-20 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
               <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-[#49202d]/20 rounded-full blur-3xl" />
@@ -46,7 +46,7 @@ export const LeadForm = () => {
             </div>
 
             {/* SAĞ TARAF: Form Alanı */}
-            <div className="lg:col-span-7 p-10 md:p-16 bg-white">
+            <div className="lg:col-span-7 p-4 md:p-16 bg-white">
               <form className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Ad Soyad */}

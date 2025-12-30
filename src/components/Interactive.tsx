@@ -21,10 +21,10 @@ export const Interactive = () => {
   ];
 
   return (
-    <section className="relative py-32 px-6">
+    <section className="relative">
       <div className="container mx-auto max-w-7xl">
-        <div className="grid lg:grid-cols-2 gap-24 items-start">
-          <div className="lg:sticky lg:top-32 space-y-8">
+        <div className="grid lg:grid-cols-2 gap-5 md:gap-24 items-start">
+          <div className="lg:sticky lg:top-32 space-y-4 md:space-y-8">
             <h2 className="text-5xl font-black text-slate-900 tracking-tighter uppercase">
               HİKAYEMİZİN <br /> <span style={{ color: '#165b39' }}>KATMANLARI.</span>
             </h2>
@@ -32,7 +32,7 @@ export const Interactive = () => {
               Süreçlerimizi bir binanın yükselişi gibi adım adım kurguladık. Her katmanda bir değer saklı.
             </p>
 
-            <div className="flex flex-col gap-4 pt-10">
+            <div className="flex flex-col gap-4 pt-2 md:pt-10">
               {storySteps.map((step, i) => (
                 <button
                   key={i} onClick={() => setActiveStep(i)}
@@ -45,7 +45,7 @@ export const Interactive = () => {
             </div>
           </div>
 
-          <div className="relative min-h-[500px] flex items-center">
+          <div className="relative min-h-auto  md:min-h-[500px] flex items-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeStep}
@@ -53,17 +53,17 @@ export const Interactive = () => {
                 animate={{ opacity: 1, x: 0, rotateY: 0 }}
                 exit={{ opacity: 0, x: -50, rotateY: -30 }}
                 transition={{ duration: 0.6, ease: "circOut" }}
-                className="bg-white p-12 md:p-16 rounded-[4rem] shadow-2xl border border-slate-50 relative overflow-hidden"
+                className="bg-white p-8 md:p-16  rounded-[2rem] md:rounded-[2rem] shadow-2xl border border-slate-50 relative overflow-hidden"
               >
                 <div
                   className="absolute top-0 right-0 w-32 h-32 opacity-10 blur-2xl"
                   style={{ backgroundColor: storySteps[activeStep].color }}
                 />
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-white mb-10 shadow-lg" style={{ backgroundColor: storySteps[activeStep].color }}>
+                <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-white mb-5 md:mb-10 shadow-lg" style={{ backgroundColor: storySteps[activeStep].color }}>
                   {storySteps[activeStep].icon}
                 </div>
-                <h3 className="text-4xl font-bold text-slate-900 mb-6">{storySteps[activeStep].title}</h3>
-                <p className="text-xl text-slate-500 font-medium leading-relaxed italic">
+                <h3 className="text-2xl md:text-4xl font-bold text-slate-900 mb-2 md:mb-6">{storySteps[activeStep].title}</h3>
+                <p className="text-md md:text-xl text-slate-500 font-medium leading-relaxed italic">
                   {storySteps[activeStep].desc}
                 </p>
               </motion.div>

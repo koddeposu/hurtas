@@ -7,13 +7,12 @@ import {
 export const Referans = () => {
 
   return (
-    <section className=" bg-white  border-slate-50 overflow-hidden relative">
-      <div className="absolute inset-y-0 left-0 w-40 bg-gradient-to-r from-white to-transparent z-10" />
-      <div className="absolute inset-y-0 right-0 w-40 bg-gradient-to-l from-white to-transparent z-10" />
+    <section className=" overflow-hidden relative">
+
       <div className='space-y-6'>
         <motion.div
           animate={{ x: ["0%", "-50%"] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
           className="flex gap-24 whitespace-nowrap items-center min-w-full"
         >
           {[...Array(2)].map((_, i) => (

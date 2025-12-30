@@ -13,14 +13,14 @@ export const Features = () => {
   ];
 
   return (
-    <section className="relative py-32  overflow-hidden font-[family-name:var(--font-poppins)]">
+    <section className="relative overflow-hidden font-[family-name:var(--font-poppins)]">
 
       {/* Arka Plan Büyük Yazı Efekti (Mimari Dergi Hissi) */}
-      <div className="absolute top-10 left-[-5%] text-[15vw] font-black text-slate-50 select-none leading-none z-0">
-        AKTAŞ
+      <div className="absolute top-10 left-[0%] text-[15vw] font-black text-slate-50 select-none leading-none z-0">
+        CT PREFABRİK
       </div>
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="container mx-auto relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
 
           {/* SOL TARAF: Sabit Başlık Alanı (Dikey Çizgili) */}
@@ -32,13 +32,13 @@ export const Features = () => {
               transition={{ duration: 0.8 }}
             >
               <div className="flex items-center gap-4 mb-6">
-                <div className="h-[2px] w-12 bg-[#165b39]" />
-                <span className="text-[#165b39] font-bold text-xs uppercase tracking-[0.4em]">Ayrıcalıklarımız</span>
+                <div className="h-[2px] w-12 bg-secondary" />
+                <span className="text-secondary font-bold text-xs uppercase tracking-[0.2em]">Ayrıcalıklarımız</span>
               </div>
 
-              <h2 className="text-5xl md:text-6xl font-black tracking-tighter  text-slate-900 leading-[1.1] mb-8">
+              <h2 className="text-3xl md:text-6xl font-black tracking-tighter  text-slate-900 leading-[1.1] mb-8">
                 Neden <br />
-                <span style={{ color: '#49202d' }}>AKTAŞ</span> Prefabrik?
+                <span style={{ color: '#49202d' }}>CT</span> Prefabrik?
               </h2>
 
               <div className="relative pl-8 border-l-2 border-slate-100 space-y-6">
@@ -87,7 +87,7 @@ export const Features = () => {
                       {item.title}
                     </h3>
                     <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">
-                      Aktaş Standartları
+                      CT Standartları
                     </p>
                   </div>
                 </motion.div>

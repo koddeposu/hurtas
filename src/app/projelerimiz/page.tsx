@@ -4,10 +4,11 @@ import { motion } from 'framer-motion';
 import { CheckCircle, CheckCircle2, Home, MapPin, Play, Ruler } from 'lucide-react';
 import Image from 'next/image';
 
-// Sizin görselleriniz
 import { default as image1 } from '@/assets/hero/home-page-1.webp';
 import image2 from '@/assets/hero/home-page-2.webp';
 import image3 from '@/assets/hero/home-page-3.webp';
+
+
 const projects = [
   { id: 1, img: image1, title: "Sapanca Modern", area: "145m²", room: "3+1", loc: "Sakarya" },
   { id: 2, img: image2, title: "Kartepe Loft", area: "110m²", room: "2+1", loc: "Kocaeli" },
@@ -28,7 +29,7 @@ const ProjectsPage = () => {
 
         {/* Sol alttaki teknik çizim çizgileri (Grid Vector) */}
         <div className="absolute bottom-0 left-0 w-full h-full opacity-[0.02] pointer-events-none  min-h-[90vh]"
-          style={{ backgroundImage: 'linear-gradient(#49202d 1px, transparent 1px), linear-gradient(90deg, #49202d 1px, transparent 1px)', size: '100px 100px', backgroundSize: '60px 60px' }}
+          style={{ backgroundImage: 'linear-gradient(#49202d 1px, transparent 1px), linear-gradient(90deg, #49202d 1px, transparent 1px)', backgroundSize: '60px 60px' }}
         />
 
       </section>

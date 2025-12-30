@@ -55,13 +55,13 @@ export const Stats = () => {
   ];
 
   return (
-    <section className="relative py-24 bg-white font-[family-name:var(--font-poppins)] overflow-hidden">
+    <section className="relative">
 
       {/* ARKA PLAN VEKTÖRÜ: Nokta Izgarası */}
       <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
         style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
 
-      <div className="container mx-auto px-6 max-w-7xl">
+      <div className="container mx-auto  max-w-7xl">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {stats.map((item, i) => (
             <motion.div
@@ -127,7 +127,7 @@ export const Stats = () => {
             <div className="w-1 h-1 bg-[#165b39] rounded-full" />
             <div className="w-12 h-1 bg-[#49202d] rounded-full" />
           </div>
-          <span className="text-[8px] font-mono tracking-[1em] uppercase">Aktaş Data Metrics</span>
+          <span className="text-[8px] font-mono tracking-[1em] uppercase">CT Data Metrics</span>
           <div className="flex gap-1">
             <div className="w-12 h-1 bg-[#165b39] rounded-full" />
             <div className="w-1 h-1 bg-[#49202d] rounded-full" />
