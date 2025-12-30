@@ -47,12 +47,13 @@ export interface ProductDetail {
 export interface Product {
   id: string;
   slug: string;
+  bestseller?: boolean;
   cat: Category;
   name: string;
   area: string;
   room: string;
   price: number;
-  img: string | StaticImageData;
+  img: StaticImageData[];
   oldPrice?: number;
   detail?: ProductDetail;
 }
@@ -61,6 +62,7 @@ export interface Product {
 export const MOCK_PRODUCT: Product[] = [
   {
     id: "1",
+    bestseller: true,
     cat: "Tek Katlı",
     name: "Safir Konak",
     slug: "safir-konak",
@@ -68,7 +70,7 @@ export const MOCK_PRODUCT: Product[] = [
     room: "3+1",
     price: 1450000,
     oldPrice: 13000,
-    img: Image1,
+    img: [Image1, Image1, Image1],
     detail: {
       image: {
         src: Image1,
@@ -93,14 +95,14 @@ export const MOCK_PRODUCT: Product[] = [
   {
     id: "2",
     slug: "safir-konak",
-
+    bestseller: true,
     cat: CATEGORIES[1],
     name: "Safir Konak",
     area: "145m²",
     room: "3+1",
     price: 1450000,
     oldPrice: 13000,
-    img: Image2,
+    img: [Image1],
     detail: {
       image: {
         src: Image2,
@@ -126,12 +128,13 @@ export const MOCK_PRODUCT: Product[] = [
     id: "3",
     slug: "safir-konak",
     cat: CATEGORIES[2],
+    bestseller: true,
     name: "Safir Konak",
     area: "145m²",
     room: "3+1",
     price: 1450000,
     oldPrice: 13000,
-    img: Image3,
+    img: [Image4, Image2, Image3],
     detail: {
       image: {
         src: Image3,
@@ -157,12 +160,13 @@ export const MOCK_PRODUCT: Product[] = [
     id: "4",
     slug: "safir-konak",
     cat: CATEGORIES[2],
+    bestseller: true,
     name: "Safir Konak",
     area: "145m²",
     room: "3+1",
     price: 1450000,
     oldPrice: 13000,
-    img: Image4,
+    img: [Image5, Image1, Image1],
     detail: {
       image: {
         src: Image4,
@@ -188,12 +192,13 @@ export const MOCK_PRODUCT: Product[] = [
     id: "5",
     slug: "safir-konak",
     cat: CATEGORIES[3],
+    bestseller: true,
     name: "Safir Konak",
     area: "145m²",
     room: "3+1",
     price: 1450000,
     oldPrice: 13000,
-    img: Image5,
+    img: [Image1],
     detail: {
       image: {
         src: Image5,

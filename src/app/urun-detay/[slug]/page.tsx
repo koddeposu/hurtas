@@ -1,4 +1,5 @@
 "use client";
+import { ImageSlider } from "@/components/ImageSlider";
 import { MOCK_PRODUCT } from "@/types/product";
 import { motion } from "framer-motion";
 import {
@@ -12,7 +13,6 @@ import {
   Phone,
   Ruler,
 } from "lucide-react";
-import Image from "next/image";
 import { use } from "react";
 
 const FEATURE_ICONS = {
@@ -59,17 +59,17 @@ function ProductPage({ params }: PageProps) {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="relative aspect-[16/10] rounded-[3rem] overflow-hidden shadow-2xl border border-slate-50"
+                className="relative aspect-video rounded-[3rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] border-[8px] border-white"
               >
-                {detail?.image && (
-                  <Image
-                    src={detail.image.src}
-                    alt={detail.image.alt}
-                    fill
-                    className="object-cover"
-                    priority
+                {product?.img && (
+                  <ImageSlider
+                    showActiveColor="bg-secondary"
+                    showDots
+                    images={product.img}
+                    height="aspect-video"
                   />
                 )}
+
 
                 {detail?.image?.badge && (
                   <div className="absolute top-6 left-6 bg-red-600 text-white px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em]">
@@ -149,13 +149,13 @@ function ProductPage({ params }: PageProps) {
                 </div>
 
                 <p className="text-slate-400 text-xs font-medium italic">
-                  Fiyatlar proje ve arsa durumuna göre değişiklik gösterebilir.
+                  Ücretsiz Kurulum
                 </p>
               </div>
 
               {/* ACTIONS */}
               <div className="space-y-4">
-                <button className="w-full bg-[#25D366] text-white py-5 rounded-[2rem] font-black text-sm tracking-widest flex items-center justify-center gap-3 hover:bg-[#20ba5a] transition-colors">
+                <button className="w-full bg-secondary text-white py-5 rounded-[2rem] font-black text-sm tracking-widest flex items-center justify-center gap-3 hover:bg-[#20ba5a] transition-colors">
                   <MessageCircle size={22} /> WHATSAPP İLE SOR
                 </button>
 
@@ -167,11 +167,11 @@ function ProductPage({ params }: PageProps) {
               {/* GÜVEN VEREN ÖZELLİKLER */}
               <div className="bg-white border border-slate-100 p-6 rounded-[2rem] space-y-3 shadow-sm">
                 <div className="flex items-center gap-3 text-xs font-bold text-slate-600 uppercase">
-                  <CheckCircle2 size={16} className="text-emerald-500" />
+                  <CheckCircle2 size={16} className="text-secondary" />
                   TSE Onaylı Malzemeler
                 </div>
                 <div className="flex items-center gap-3 text-xs font-bold text-slate-600 uppercase">
-                  <CheckCircle2 size={16} className="text-emerald-500" />
+                  <CheckCircle2 size={16} className="text-secondary" />
                   10 Yıl Resmi Garanti
                 </div>
                 <div className="flex items-center gap-3 text-xs font-bold text-slate-600 uppercase">
