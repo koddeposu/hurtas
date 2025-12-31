@@ -45,9 +45,9 @@ const BLOG_POSTS = [
 
 const BlogPage = () => {
   return (
-    <main className="bg-[#fdfdfd] min-h-screen">
+    <main className=" min-h-screen">
 
-      <section className="relative pt-44 pb-24 px-6 overflow-hidden bg-white">
+      <section className="relative pt-24 md:pt-40 pb-24  overflow-hidden bg-white">
 
         {/* --- ARKA PLAN VEKTÖREL SÜSLER (Kibar ve Şekilli) --- */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
@@ -65,10 +65,10 @@ const BlogPage = () => {
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#49202d]/5 border border-[#49202d]/10 mb-8"
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#49202d]/5 border border-[#49202d]/10 mb-12"
             >
               <PencilLine size={14} className="text-[#49202d]" />
-              <span className="text-[#49202d] text-[10px] font-black uppercase tracking-[0.3em]">Aktaş Akademi & Blog</span>
+              <span className="text-[#49202d] text-[10px] font-black uppercase tracking-[0.3em]">CT Akademi & Blog</span>
             </motion.div>
 
             {/* Ana Başlık: Karakterli ve Güçlü */}
@@ -114,7 +114,7 @@ const BlogPage = () => {
       </section>
 
       {/* --- BLOG GRID (3 COLUMN) --- */}
-      <section className="pb-32 px-6">
+      <section className="pb-32 ">
         <div className="container mx-auto max-w-7xl">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-16">
             {BLOG_POSTS.map((post, index) => (

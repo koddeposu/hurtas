@@ -31,13 +31,13 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="flex justify-center pt-14 lg:pg-0">
+      <section className="flex justify-center pt-10 md:pt-0 lg:pg-0">
         <div className="max-w-[1280px] w-full">
           <BestSellingHouses />
         </div>
       </section>
 
-      <section className="flex justify-center mt-20 lg:mt-0">
+      <section className="flex justify-center pt-20 lg:mt-0">
         <div className="max-w-[1280px] w-full">
           <LeadForm />
         </div>
