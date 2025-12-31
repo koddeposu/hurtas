@@ -1,57 +1,49 @@
-'use client';
-import React, { forwardRef } from "react";
+'use client'
+import { Experience } from "@/components/page/Experience";
+import { UI } from "@/components/page/UI";
+import { Loader } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import { Suspense, useEffect, useState } from "react";
 
-import HTMLFlipBook from 'react-pageflip';
+function App() {
+  const [cameraZ, setCameraZ] = useState(4);
 
-export default function BookFlip() {
+  useEffect(() => {
+    // Bu blok sadece tarayıcıda (Client-side) çalışır
+    const handleResize = () => {
+      setCameraZ(window.innerWidth > 800 ? 4 : 9);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
-    <div className="w-full flex justify-center pt-10">
-      <HTMLFlipBook
-        width={500}
-        height={500}
-        size="fixed"
-        minWidth={500}
-        maxWidth={500}
-        minHeight={500}
-        maxHeight={500}
-        maxShadowOpacity={0.3}
-        showCover={true}
-        mobileScrollSupport={true}
-
-        style={{}}
-        startPage={0}
-        drawShadow={true}
-        flippingTime={700}
-        usePortrait={true}
-        startZIndex={0}
-        autoSize={false}
-        clickEventForward={true}
-        useMouseEvents={true}
-        swipeDistance={30}
-        showPageCorners={true}
-        disableFlipByClick={false}
+    <>
+      <UI />
+      <Loader />
+      <Canvas
+        dpr={[1, 2]}
+        gl={{
+          antialias: true,
+          preserveDrawingBuffer: true
+        }}
+        shadows
+        camera={{
+          position: [0, 1, cameraZ],
+          fov: 35,
+        }}
       >
-        <Page className="bg-red-400">Page 1</Page>
-        <Page className="bg-primary">Page 2</Page>
-        <Page className="bg-secondary">Page 3</Page>
-        <Page className="bg-amber-300">Page 4</Page>
-      </HTMLFlipBook>
-    </div>
+        <group position-y={0}>
+          <Suspense fallback={null}>
+            <Experience />
+          </Suspense>
+        </group>
+      </Canvas>
+    </>
   );
 }
 
-export const Page = forwardRef<
-  HTMLDivElement,
-  { children: React.ReactNode; className?: string }
->(({ children, className }, ref) => {
-  return (
-    <div
-      ref={ref}
-      className={`page h-full w-full flex items-center justify-center text-xl ${className}`}
-    >
-      {children}
-    </div>
-  );
-});
-
-Page.displayName = "Page";
+export default App;
