@@ -1,6 +1,8 @@
 "use client";
+import MissionImage from '@/assets/mission.webp';
+import VizyonImage from '@/assets/vizyon.webp';
 import { motion } from 'framer-motion';
-
+import Image from 'next/image';
 
 const DotGrid = ({ color }: { color: string }) => (
   <div className="grid grid-cols-6 gap-2 opacity-40">
@@ -50,8 +52,8 @@ export const MissionVision = () => {
               transition={{ duration: 0.8 }}
               className="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slate-200"
             >
-              <img
-                src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80"
+              <Image
+                src={MissionImage}
                 className="w-full h-[300px] md:h-[450px] object-cover"
                 alt="Mission"
               />
@@ -101,8 +103,8 @@ export const MissionVision = () => {
               transition={{ duration: 0.8 }}
               className="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl shadow-slate-200"
             >
-              <img
-                src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80"
+              <Image
+                src={VizyonImage}
                 className="w-full h-[450px] object-cover"
                 alt="Vision"
               />

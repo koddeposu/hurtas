@@ -1,7 +1,8 @@
 "use client";
+import HeroImage from '@/assets/who-we-are.webp';
 import { motion } from 'framer-motion';
 import { ArrowRight, PencilRuler, ShieldCheck, Trees, Zap } from 'lucide-react';
-
+import Image from 'next/image';
 export const WhoWeAre = () => {
   // Akışkan animasyon ayarları
   const cardHover = {
@@ -49,11 +50,8 @@ export const WhoWeAre = () => {
             className="md:col-span-8 bg-[#F8FAFC] rounded-[3rem] p-4 shadow-sm border border-slate-100 flex flex-col"
           >
             <div className="relative h-[400px] w-full overflow-hidden rounded-[2.5rem]">
-              <img
-                src="https://images.unsplash.com/photo-1542718610-a1d656d1884c?q=80&w=2070&auto=format&fit=crop"
-                className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700"
-                alt="Modern Modular Home"
-              />
+
+              <Image src={HeroImage} alt='prefabrik-ev' className="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700" />
               <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl flex items-center gap-2 shadow-sm">
                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 <span className="text-[10px] font-bold uppercase tracking-widest">30 GÜNDE TESLİM</span>

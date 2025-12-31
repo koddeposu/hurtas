@@ -33,20 +33,32 @@ const FAQ = () => {
   const questions = [
     {
       id: 0,
-      q: "Prefabrik evler depreme karşı ne kadar dayanıklı?",
-      a: "Esnek çelik konstrüksiyon yapısı sayesinde, deprem dalgalarıyla birlikte esneyerek kırılma riskini yok eder. 9 şiddetindeki sarsıntılara dayanıklı statik hesaplamalarla üretilir.",
+      q: "Prefabrik ev satın alma süreci nasıl işliyor?",
+      a: "İlk olarak ihtiyaçlarınıza uygun model seçilir. Ardından projenin onayı, üretim ve teslimat süreci başlar. Araziniz hazırsa, kurulum ve montaj işlemi kısa sürede tamamlanır.",
       tag: "STRUCTURAL_SAFETY"
     },
     {
       id: 1,
-      q: "İmar izni ve ruhsat süreçlerinde destek veriyor musunuz?",
-      a: "Tüm mimari, statik, elektrik ve mekanik projeleri biz hazırlıyoruz. Belediyeye başvuru aşamasında size tam teknik dosya desteği ve danışmanlık sağlıyoruz.",
+      q: "Prefabrik evlerin teslim süresi ne kadar?",
+      a: "Projenin büyüklüğüne göre değişmekle birlikte, üretim süreci ortalama 2-4 hafta, kurulum süreci ise 3-7 gün arasında tamamlanmaktadır.",
       tag: "PERMIT_PROCESS"
     },
     {
       id: 2,
-      q: "Teslimat ve montaj süreci kaç gün sürer?",
-      a: "Sözleşme sonrası fabrikada üretim 15 gün, yerinde montaj ise 10-15 gün sürer. Ortalama 30-45 iş gününde anahtar teslim yuvanıza kavuşursunuz.",
+      q: "Prefabrik evlerin ömrü ne kadar?",
+      a: "Kaliteli malzeme ve doğru kurulumla prefabrik evlerin ömrü 40-50 yıla kadar çıkabilmektedir. Düzenli bakım yapıldığında daha uzun süre kullanılabilir.",
+      tag: "TIMELINE_EST"
+    },
+    {
+      id: 3,
+      q: "Kurulum yapılacak arazi nasıl olmalı?",
+      a: "Arazinin eğimsiz veya hafif eğimli olması, zeminin sert ve taşıyıcı özellikte olması gerekir. Gerekli altyapılar (su, elektrik, kanalizasyon) hazır olmalıdır.",
+      tag: "TIMELINE_EST"
+    },
+    {
+      id: 4,
+      q: "Kredi veya taksitli ödeme seçenekleri var mı?",
+      a: "Evet, anlaşmalı bankalar aracılığıyla kredi ile ödeme imkânı sunuyoruz. Ayrıca bazı projelerimizde esnek taksitlendirme seçenekleri de mevcuttur. Detaylar için satış ekibimizle iletişime geçebilirsiniz.",
       tag: "TIMELINE_EST"
     }
   ];

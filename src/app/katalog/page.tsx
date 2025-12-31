@@ -1,6 +1,6 @@
 'use client'
-import { Experience } from "@/components/page/Experience";
-import { UI } from "@/components/page/UI";
+import { Experience } from "@/components/katolog/Experience";
+import { UI } from "@/components/katolog/UI";
 import { Loader } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useEffect, useState } from "react";

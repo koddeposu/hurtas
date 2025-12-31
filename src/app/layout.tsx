@@ -26,7 +26,9 @@ export default function RootLayout({
 
   // Navbar & Footer GÖRÜNMEYECEK sayfalar
   const hideLayout =
-    pathname.startsWith("/test")
+    pathname.startsWith("/katalog")
+  const hideLayout2 =
+    pathname.startsWith("/iletisim")
 
 
   return (
@@ -36,7 +38,7 @@ export default function RootLayout({
         <Navbar />
 
         <main className="relative overflow-hidden">
-          <div className="h-screen w-full">
+          <div className={` w-full ${hideLayout && "h-screen"} ${!hideLayout2 && "p-5"} `}>
             {children}
           </div>
         </main>

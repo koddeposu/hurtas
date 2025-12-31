@@ -1,12 +1,32 @@
 'use client'
 
+import HeroImage from '@/assets/home-hero.webp';
 import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle, MousePointer2, Play } from 'lucide-react';
-
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { Modal } from '../ui/modal';
 
 export const Hero4 = () => {
+  const [modal, setModal] = useState(false);
+  const router = useRouter();
   return (
     <section className="relative   pt-5 lg:pt-20 pb-12">
+      <Modal isShow={modal} onClose={() => setModal(false)}>
+        <div className='h-screen flex items-center justify-center p-5'>
+          <div className=" max-h-[600px] max-w-[600px] w-full h-full bg-transparent rounded-xl overflow-hidden">
+            <iframe
+              title="Prefabrik Ev 3D"
+              src="https://sketchfab.com/models/489302e595ce444ab5f696e2db29b763/embed?autospin=1&ui_theme=dark"
+              className="w-full h-full bg-transparent"
+              allow="autoplay; fullscreen; xr-spatial-tracking"
+              allowFullScreen
+            />
+          </div>
+        </div>
+
+      </Modal>
 
       {/* Arka Plan Dekorasyonu (Soft Işıklar) */}
       <div className="absolute top-0 right-0 w-[40%] h-[40%] bg-secondary/20 rounded-full blur-[120px] -z-10" />
@@ -46,10 +66,10 @@ export const Hero4 = () => {
               transition={{ delay: 0.3, duration: 0.8 }}
               className="flex flex-row lg:flex-wrap gap-4 w-full"
             >
-              <button className="px-3 py-2 lg:px-8 lg:py-4 bg-slate-900 text-white rounded-[1.5rem] font-bold text-xs lg:text-sm flex items-center gap-3 hover:bg-emerald-600 transition-all shadow-xl shadow-slate-200 w-full lg:w-fit justify-center">
+              <button onClick={() => router.push('/projelerimiz')} className="cursor-pointer px-3 py-2 lg:px-8 lg:py-4 bg-slate-900 text-white rounded-[1.5rem] font-bold text-xs lg:text-sm flex items-center gap-3 hover:bg-emerald-600 transition-all shadow-xl shadow-slate-200 w-full lg:w-fit justify-center">
                 Projeleri İncele <ArrowRight size={18} />
               </button>
-              <button className="px-3 py-2 lg:px-8 lg:py-4 bg-white text-slate-900 border border-slate-100 rounded-[1.5rem] font-bold text-xs lg:text-sm flex items-center gap-3 hover:bg-slate-50 transition-all shadow-sm w-full lg:w-fit justify-center">
+              <button onClick={() => setModal(true)} className="cursor-pointer px-3 py-2 lg:px-8 lg:py-4 bg-white text-slate-900 border border-slate-100 rounded-[1.5rem] font-bold text-xs lg:text-sm flex items-center gap-3 hover:bg-slate-50 transition-all shadow-sm w-full lg:w-fit justify-center">
                 <div className="w-8 h-8 bg-secondary/15 rounded-full flex items-center justify-center">
                   <Play size={14} className="text-secondary fill-secondary" />
                 </div>
@@ -85,11 +105,7 @@ export const Hero4 = () => {
             >
               <div className="absolute inset-0 bg-emerald-500/5 rounded-[3.5rem] translate-x-4 translate-y-4 -z-10" />
               <div className="rounded-[3.5rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] border-[8px] border-white">
-                <img
-                  src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?q=80&w=2000&auto=format&fit=crop"
-                  alt="Modern Prefabrik Ev"
-                  className="w-full h-auto lg:h-[550px] object-video"
-                />
+                <Image src={HeroImage} alt='prefabrik-ev' className='object-cover w-full  lg:h-[550px]' />
               </div>
             </motion.div>
 

@@ -56,7 +56,7 @@ export const UI = () => {
 
   return (
     <>
-      <main className="pointer-events-none select-none z-20 fixed inset-0 flex flex-col justify-between mt-16  md:p-12">
+      <main className="pointer-events-none select-none z-20 fixed inset-0 flex flex-col justify-between mt-16 p-5 md:p-12">
 
         {/* --- ÜST KISIM: LOGO & SAYFA BİLGİSİ --- */}
         <div className="flex justify-between items-start w-full pointer-events-auto mt-10 md:mt-0">
@@ -82,7 +82,7 @@ export const UI = () => {
         </div>
 
         {/* --- ALT KISIM: NAVİGASYON --- */}
-        <div className="w-full flex flex-col items-center gap-6 pointer-events-auto mb-10 md:mb-0">
+        <div className="w-full flex flex-col items-center gap-6 pointer-events-auto  md:mb-0">
 
           <motion.div
             animate={{ y: [0, -5, 0] }}

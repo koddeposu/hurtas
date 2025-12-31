@@ -202,13 +202,32 @@ function ProductPriceMobile({ product }: ProductPriceProps) {
 }
 
 function ProductActions() {
+  const phoneNumber = "+905375183006";
+  const whatsappMessage = "Merhaba, CT Prefabrik sitesinden ulaşıyorum.";
+
+  const handleWhatsApp = () => {
+    const encodedMessage = encodeURIComponent(whatsappMessage);
+    const whatsappUrl = `https://wa.me/${phoneNumber.replace(/\+/g, '')}?text=${encodedMessage}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const handleCall = () => {
+    window.location.href = `tel:${phoneNumber}`;
+  };
+
   return (
     <div className="space-y-4">
-      <button className="w-full bg-secondary text-white py-5 rounded-[2rem] font-black text-sm tracking-widest flex items-center justify-center gap-3 hover:bg-[#20ba5a] transition-colors">
+      <button
+        onClick={handleWhatsApp}
+        className="cursor-pointer w-full bg-secondary text-white py-5 rounded-[2rem] font-black text-sm tracking-widest flex items-center justify-center gap-3 hover:bg-[#20ba5a] transition-colors"
+      >
         <MessageCircle size={22} /> WHATSAPP
       </button>
 
-      <button className="w-full bg-[#49202d] text-white py-5 rounded-[2rem] font-black text-sm tracking-widest flex items-center justify-center gap-3 hover:bg-[#3d1a26] transition-colors">
+      <button
+        onClick={handleCall}
+        className="cursor-pointer w-full bg-[#49202d] text-white py-5 rounded-[2rem] font-black text-sm tracking-widest flex items-center justify-center gap-3 hover:bg-[#3d1a26] transition-colors"
+      >
         <Phone size={22} /> BİZİ ARAYIN
       </button>
     </div>

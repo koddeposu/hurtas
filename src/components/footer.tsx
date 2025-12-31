@@ -1,7 +1,9 @@
 "use client";
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowUpRight,
+  Check,
+  Copy,
   Facebook,
   Home,
   Instagram,
@@ -10,9 +12,31 @@ import {
   Phone,
   Twitter
 } from 'lucide-react';
+import { useState } from 'react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [copiedAddress, setCopiedAddress] = useState(false);
+  const [copiedPhone, setCopiedPhone] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+
+  const copyToClipboard = async (text: string, type: 'address' | 'phone' | 'email') => {
+    try {
+      await navigator.clipboard.writeText(text);
+      if (type === 'address') {
+        setCopiedAddress(true);
+        setTimeout(() => setCopiedAddress(false), 2000);
+      } else if (type === 'phone') {
+        setCopiedPhone(true);
+        setTimeout(() => setCopiedPhone(false), 2000);
+      } else {
+        setCopiedEmail(true);
+        setTimeout(() => setCopiedEmail(false), 2000);
+      }
+    } catch (err) {
+      console.error('Kopyalama başarısız:', err);
+    }
+  };
 
   return (
     <footer className="bg-white pt-20 pb-10 px-6 font-[family-name:var(--font-poppins)]">
@@ -50,7 +74,7 @@ const Footer = () => {
               <Home className="w-8 h-8" /> CT <span style={{ color: '#49202d' }}>PREFABRİK</span>
             </div>
             <p className="text-slate-500 text-sm leading-relaxed font-medium max-w-sm">
-              Sakarya Aktas Prefabrik olarak, modern mimariyi çeliğin gücüyle birleştiriyoruz.
+              Sakarya CT Prefabrik olarak, modern mimariyi çeliğin gücüyle birleştiriyoruz.
               Sizin için güvenli, hızlı ve sürdürülebilir yaşam alanları tasarlıyoruz.
             </p>
             <div className="flex gap-4">
@@ -73,7 +97,7 @@ const Footer = () => {
             <ul className="space-y-4">
               {['Hakkımızda', 'Modellerimiz', 'Süreç', 'Projeler', 'Blog'].map((item) => (
                 <li key={item}>
-                  <a href="#" className="text-sm font-semibold text-slate-500 hover:text-[#165b39] transition-colors">{item}</a>
+                  <div className="text-sm font-semibold text-slate-500 hover:text-[#165b39] transition-colors">{item}</div>
                 </li>
               ))}
             </ul>
@@ -95,32 +119,111 @@ const Footer = () => {
           <div className="lg:col-span-4 space-y-6">
             <h4 className="text-sm font-black uppercase tracking-[0.2em]" style={{ color: '#49202d' }}>İletişim</h4>
             <div className="space-y-4">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0 text-[#165b39]">
-                  <MapPin size={18} />
+              {/* Adres */}
+              <div className="relative group cursor-pointer" onClick={() => copyToClipboard('Sakarya Prefabrik Üretim Tesisleri, Erenler / Sakarya', 'address')}>
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0 text-[#165b39]">
+                    <MapPin size={18} />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-slate-500">
+                      Sakarya Prefabrik Üretim Tesisleri, <br /> Erenler / Sakarya
+                    </p>
+                  </div>
+                  <button
+
+                    className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+                  >
+                    {copiedAddress ? (
+                      <Check size={16} className="text-green-600" />
+                    ) : (
+                      <Copy size={16} className="text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    )}
+                  </button>
                 </div>
-                <p className="text-sm font-medium text-slate-500">
-                  Sakarya Prefabrik Üretim Tesisleri, <br /> Erenler / Sakarya
-                </p>
+                <AnimatePresence>
+                  {copiedAddress && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 5 }}
+                      className="absolute -top-10 left-0 bg-secondary text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg whitespace-nowrap z-10"
+                    >
+                      ✓ Kopyalandı!
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0 text-[#165b39]">
-                  <Phone size={18} />
+
+              {/* Telefon */}
+              <div className="relative group">
+                <div className="flex items-center gap-4 cursor-pointer" onClick={() => copyToClipboard('+90 537 518 30 06', 'phone')}>
+                  <div className="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0 text-[#165b39]">
+                    <Phone size={18} />
+                  </div>
+                  <p className="text-sm font-bold text-slate-900 flex-1">+90 537 518 30 06</p>
+                  <button
+
+                    className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+                  >
+                    {copiedPhone ? (
+                      <Check size={16} className="text-green-600" />
+                    ) : (
+                      <Copy size={16} className="text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    )}
+                  </button>
                 </div>
-                <p className="text-sm font-bold text-slate-900">+90 (264) 000 00 00</p>
+                <AnimatePresence>
+                  {copiedPhone && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 5 }}
+                      className="absolute -top-10 left-0 bg-secondary text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg whitespace-nowrap z-10"
+                    >
+                      ✓ Kopyalandı!
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
-              <div className="flex items-center gap-4">
-                <div className="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0 text-[#165b39]">
-                  <Mail size={18} />
+
+              {/* Email */}
+              <div className="relative group cursor-pointer" onClick={() => copyToClipboard('info@ctprefabrik.com', 'email')}>
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0 text-[#165b39]">
+                    <Mail size={18} />
+                  </div>
+                  <p className="text-sm font-medium text-slate-500 flex-1">info@ctprefabrik.com</p>
+                  <button
+
+                    className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+                  >
+                    {copiedEmail ? (
+                      <Check size={16} className="text-green-600" />
+                    ) : (
+                      <Copy size={16} className="text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    )}
+                  </button>
                 </div>
-                <p className="text-sm font-medium text-slate-500">bilgi@aktasprefabrik.com</p>
+                <AnimatePresence>
+                  {copiedEmail && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 5 }}
+                      className="absolute -top-10 left-0 bg-secondary text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg whitespace-nowrap z-10"
+                    >
+                      ✓ Kopyalandı!
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             </div>
           </div>
         </div>
 
         {/* Alt Bar: Copyright */}
-        <div className="pt-8 border-t border-slate-100 flex flex-col md:row justify-between items-center gap-4">
+        <div className="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
             © {currentYear} AKTAŞ PREFABRİK. TÜM HAKLARI SAKLIDIR.
           </p>

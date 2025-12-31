@@ -4,6 +4,7 @@ import { ProductCard } from '@/components/ProductCard';
 import { CATEGORIES, Category, MOCK_PRODUCT, ProductGridProps, SORT_OPTIONS, SortFilterProps, SortType } from '@/types/product';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowUpDown, ChevronRight, Filter, Info, X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 
@@ -113,20 +114,24 @@ interface InfoCardProps {
   compact?: boolean;
 }
 
-const InfoCard = ({ compact = false }: InfoCardProps) => (
-  <div className={`bg-[#49202d] ${compact ? 'p-6' : 'p-8'} rounded-[2${compact ? '' : '.5'}rem] text-white relative overflow-hidden group`}>
-    <div className="relative z-10">
-      <Info className={`${compact ? 'mb-3' : 'mb-4'} opacity-50`} size={compact ? 20 : 24} />
-      <p className={`font-bold ${compact ? 'text-xs' : 'text-sm'} leading-relaxed`}>
-        Aradığınız ölçüde bir proje bulamadınız mı? Size özel çizim yapabiliriz.
-      </p>
-      <button className={`${compact ? 'mt-4 text-[9px]' : 'mt-6 text-[10px]'} font-black uppercase tracking-widest border-b border-white/30 pb-1 hover:border-white transition-all`}>
-        Destek Al
-      </button>
+const InfoCard = ({ compact = false }: InfoCardProps) => {
+  const router = useRouter()
+  const handle = () => router.push("/iletisim")
+  return (
+    <div onClick={handle} className={`bg-[#49202d] ${compact ? 'p-6' : 'p-8'} rounded-[2${compact ? '' : '.5'}rem] text-white relative overflow-hidden group`}>
+      <div className="relative z-10">
+        <Info className={`${compact ? 'mb-3' : 'mb-4'} opacity-50`} size={compact ? 20 : 24} />
+        <p className={`font-bold ${compact ? 'text-xs' : 'text-sm'} leading-relaxed`}>
+          Aradığınız ölçüde bir proje bulamadınız mı? Size özel çizim yapabiliriz.
+        </p>
+        <button className={`${compact ? 'mt-4 text-[9px]' : 'mt-6 text-[10px]'} font-black uppercase tracking-widest border-b border-white/30 pb-1 hover:border-white transition-all`}>
+          Destek Al
+        </button>
+      </div>
+      <div className={`absolute ${compact ? '-bottom-8 -right-8 w-24 h-24' : '-bottom-10 -right-10 w-32 h-32'} bg-white/5 rounded-full group-hover:scale-150 transition-transform duration-700`} />
     </div>
-    <div className={`absolute ${compact ? '-bottom-8 -right-8 w-24 h-24' : '-bottom-10 -right-10 w-32 h-32'} bg-white/5 rounded-full group-hover:scale-150 transition-transform duration-700`} />
-  </div>
-);
+  )
+}
 
 interface DesktopSidebarProps {
   activeTab: Category;

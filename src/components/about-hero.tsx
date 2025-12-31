@@ -1,8 +1,10 @@
 "use client";
+import Hero2 from '@/assets/hakkimizda-2.jpg';
+import MissionImage from '@/assets/mission.webp';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowDownRight } from 'lucide-react';
+import Image from 'next/image';
 import { useRef } from 'react';
-
 const AboutHero = () => {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -20,7 +22,9 @@ const AboutHero = () => {
     <section ref={containerRef} className="relative   font-[family-name:var(--font-poppins)]">
       <div className="container mx-auto lg:px-6 max-w-7xl relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-
+          {/* Arka Plan Dekorasyonu (Soft Işıklar) */}
+          <div className="absolute top-0 right-0 w-[40%] h-[40%] bg-secondary/30 rounded-full blur-[120px] -z-10" />
+          <div className="absolute bottom-10 left-10 w-64 h-64 bg-primary/20 rounded-full blur-[100px] -z-10" />
           {/* SOL TARAF: TİPOGRAFİK GİRİŞ */}
           <div className="lg:col-span-6 space-y-8 lg:space-y-12">
             <motion.div
@@ -43,7 +47,7 @@ const AboutHero = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="relative lg:pl-12 lg:border-l-2 lg:border-slate-100 space-y-4 lg:space-y-8"
+              className="relative lg:pl-12 lg:border-l-2 lg:border-slate-200 space-y-4 lg:space-y-8"
             >
               <p className="text-lg lg:text-2xl text-slate-500 font-light leading-relaxed">
                 <span className="font-bold text-slate-900">14 yıl</span> önce Sakarya'da başlayan serüvenimiz, bugün Türkiye'nin her köşesinde <span className="text-[#165b39] underline decoration-2 underline-offset-8">çelikten yuvalara</span> dönüştü.
@@ -66,12 +70,13 @@ const AboutHero = () => {
 
             {/* Büyük Ana Görsel (Yavaş Kayar) */}
             <div
-              className="absolute z-20 w-full md:w-[80%] h-[300px] md:h-[500px] rounded-[3rem] overflow-hidden "
+              className="absolute z-20 w-full md:w-[80%] h-[300px] md:h-[500px] rounded-[3rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)]  "
             >
-              <img
-                src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop"
+
+              <Image
+                src={Hero2}
                 className="w-full h-full object-cover"
-                alt="Architecture"
+                alt="prefabrik-evler"
               />
             </div>
 
@@ -79,10 +84,11 @@ const AboutHero = () => {
             <div
               className="absolute z-30   top-2/4 -right-4 md:top-1/4 w-[50%] h-[200px] md:h-[300px] rounded-[2.5rem] overflow-hidden shadow-2xl border-[10px] border-white"
             >
-              <img
-                src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=2070&auto=format&fit=crop"
+              <Image
+                src={MissionImage}
                 className="w-full h-full object-cover"
-                alt="Design"
+                alt="prefabrik-evler"
+                quality={40}
               />
             </div>
           </div>
