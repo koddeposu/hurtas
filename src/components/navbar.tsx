@@ -1,5 +1,5 @@
 "use client";
-import Logo from '@/assets/logo.jpeg';
+import Logo from '@/assets/logo.png';
 import { motion } from 'framer-motion';
 import { MessageSquare, Phone } from 'lucide-react';
 import Image from 'next/image';
@@ -18,8 +18,8 @@ const Navbar = () => {
             <Image
               src={Logo}
               alt="Sakarya Aktaş"
-              width={180}
-              height={50}
+              width={200}
+              height={200}
               className="h-10 w-auto"
             />
           </Link>

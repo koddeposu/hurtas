@@ -1,8 +1,15 @@
+import {
+  Carousel,
+  CarouselApi,
+  CarouselContent,
+  CarouselItem
+} from "@/components/ui/carousel";
 import { Product } from '@/types/product';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Home, Ruler } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ImageSlider } from './ImageSlider';
+import React from 'react';
 
 export const ProductCard = ({ product }: { product: Product }) => {
   const router = useRouter();
@@ -10,7 +17,18 @@ export const ProductCard = ({ product }: { product: Product }) => {
   const goDetail = () => {
     router.push(`/urun-detay/${product.slug}-${product.id}`);
   };
+  const [api, setApi] = React.useState<CarouselApi | null>(null)
+  const [current, setCurrent] = React.useState(0)
 
+  React.useEffect(() => {
+    if (!api) return
+
+    setCurrent(api.selectedScrollSnap())
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap())
+    })
+  }, [api])
   return (
     <motion.button
       type="button"
@@ -26,14 +44,45 @@ export const ProductCard = ({ product }: { product: Product }) => {
         className="relative rounded-tr-[2rem] rounded-tl-[2rem] overflow-hidden mb-6"
         onClick={(e) => e.stopPropagation()} // ⭐ slider tıklamasını iptal eder
       >
-        {product?.img && (
-          <ImageSlider
-            showActiveColor="bg-secondary"
-            showDots
-            images={product.img}
-            height="aspect-video"
-          />
-        )}
+        <div className="relative">
+          <Carousel
+            setApi={setApi}
+            className="w-full"
+          >
+            <CarouselContent>
+              {product.img.map((item, index) => (
+                <CarouselItem key={index} className="basis-full">
+                  <div className="relative aspect-video w-full">
+                    <Image
+                      src={item}
+                      alt="product image"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+
+          {/* DOTS */}
+          {product.img.length > 1 && (
+            <div className="absolute bottom-3  z-20 flex w-full justify-center gap-2">
+              {product.img.map((_, index) => (
+                <motion.div
+                  key={index}
+                  onClick={() => api?.scrollTo(index)}
+                  animate={{
+                    width: current === index ? 22 : 8,
+                  }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className={`h-2 rounded-full cursor-pointer ${current === index ? "bg-secondary" : "bg-white/70"
+                    }`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
 
         {product.bestseller && (
           <div className="absolute top-4 left-4 bg-red-600/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm">

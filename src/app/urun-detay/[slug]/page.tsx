@@ -1,7 +1,5 @@
 "use client";
-import { ImageSlider } from "@/components/ImageSlider";
 import { MOCK_PRODUCT } from "@/types/product";
-import { motion } from "framer-motion";
 import {
   ArrowUp,
   Bath,
@@ -13,7 +11,17 @@ import {
   Phone,
   Ruler,
 } from "lucide-react";
-import { use } from "react";
+import React, { use } from "react";
+
+import {
+  Carousel,
+  CarouselApi,
+  CarouselContent,
+  CarouselItem
+} from "@/components/ui/carousel";
+import { motion } from "framer-motion";
+import Image from "next/image";
+
 
 const FEATURE_ICONS = {
   home: Home,
@@ -50,31 +58,82 @@ interface ProductDescriptionProps {
   detail: ProductDetail;
 }
 
-// Ortak bileşenler
 function ProductImage({ product, detail }: ProductImageProps) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="relative aspect-cover rounded-[1rem] md:rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] border-2 md:border-[8px] border-white"
-    >
-      {product?.img && (
-        <ImageSlider
-          showActiveColor="bg-secondary"
-          showDots
-          images={product.img}
-          height="aspect-video"
-        />
-      )}
+  const [api, setApi] = React.useState<CarouselApi | null>(null)
+  const [current, setCurrent] = React.useState(0)
 
-      {detail?.image?.badge && (
-        <div className="absolute top-6 left-6 bg-red-600 text-white px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.2em]">
-          {detail.image.badge}
-        </div>
-      )}
-    </motion.div>
-  );
+  React.useEffect(() => {
+    if (!api) return
+
+    setCurrent(api.selectedScrollSnap())
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap())
+    })
+  }, [api])
+
+  return (
+    <div className="relative">
+      <div className="relative">
+        <Carousel
+          setApi={setApi}
+          className="w-full overflow-hidden rounded-[1rem] md:rounded-[2rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] border-2 md:border-[8px] border-white"
+        >
+          <CarouselContent>
+            {product.img.map((item, index) => (
+              <CarouselItem key={index} className="basis-full">
+                <div className="relative aspect-video w-full">
+                  <Image
+                    src={item}
+                    alt="product image"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+
+        {/* DOTS */}
+        {product.img.length > 1 && (
+          <div className="absolute bottom-5 md:bottom-10 z-20 flex w-full justify-center gap-2">
+            {product.img.map((_, index) => (
+              <motion.div
+                key={index}
+                onClick={() => api?.scrollTo(index)}
+                animate={{
+                  width: current === index ? 22 : 10,
+                }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className={`h-2.5 rounded-full cursor-pointer ${current === index ? "bg-secondary" : "bg-white/70"
+                  }`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+      <div className="relative flex items-center flex-wrap gap-3 mt-4">
+        {product.img.map((item, index) => (
+          <div className="border-3 border-white rounded-lg overflow-hidden shadow-[0_0_100px_1px_rgba(0,0,0,0.01)]" key={index} onClick={() => api?.scrollTo(index)}
+          >
+            <Image
+
+              src={item}
+              alt="product image"
+              width={100}
+              height={100}
+              className={`w-16 h-16 min-w-10  transition-opacity cursor-pointer  ${current === index ? "opacity-100" : "opacity-40"}`}
+            />
+          </div>
+
+        ))}
+      </div>
+    </div>
+
+  )
 }
+
 
 function ProductFeatures({ detail }: ProductFeaturesProps) {
   return (
@@ -96,6 +155,7 @@ function ProductFeatures({ detail }: ProductFeaturesProps) {
     </div>
   );
 }
+
 
 function ProductPrice({ product }: ProductPriceProps) {
   return (
@@ -224,7 +284,7 @@ function ProductPage({ params }: PageProps) {
   function Desktop() {
     return (
       <main className="bg-white min-h-screen">
-        <section className="pt-20 ">
+        <section className="pt-30 ">
           <div className="container mx-auto max-w-7xl">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-16 items-start">
               {/* SOL */}
