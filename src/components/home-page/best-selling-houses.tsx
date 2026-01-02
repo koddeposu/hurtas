@@ -6,6 +6,7 @@ import { ProductCard } from '../ProductCard';
 
 export const BestSellingHouses = () => {
   const router = useRouter()
+  const data = MOCK_PRODUCT.filter((e) => e.category === "Çelik Ev");
 
   return (
     <section className="font-[family-name:var(--font-poppins)] overflow-hidden">
@@ -33,8 +34,8 @@ export const BestSellingHouses = () => {
         {/* Kartlar Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
           <AnimatePresence mode='popLayout'>
-            {MOCK_PRODUCT.map((product) => (
-              <ProductCard key={product.id} product={product} />
+            {data.map((product) => (
+              <ProductCard key={product.id} product={product} bestseller />
             ))}
           </AnimatePresence>
         </div>

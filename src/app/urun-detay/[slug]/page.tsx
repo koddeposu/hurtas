@@ -65,8 +65,8 @@ function ProductImage({ product }: ProductImageProps) {
               <CarouselItem key={index} className="basis-full">
                 <div className="relative aspect-video w-full">
                   <Image
-                    src={item}
-                    alt="product image"
+                    src={`/product/${item.src}`}
+                    alt={`/product/${item.alt}`}
                     fill
                     className="object-cover"
                   />
@@ -99,8 +99,8 @@ function ProductImage({ product }: ProductImageProps) {
           <div className="border-3 border-white rounded-lg overflow-hidden shadow-[0_0_100px_1px_rgba(0,0,0,0.01)]" key={index} onClick={() => api?.scrollTo(index)}
           >
             <Image
-              src={item}
-              alt="product image"
+              src={`/product/${item.src}`}
+              alt={`/product/${item.alt}`}
               width={100}
               height={100}
               className={`w-16 h-16 min-w-10  transition-opacity cursor-pointer object-cover  ${current === index ? "opacity-100" : "opacity-40"}`}
@@ -160,13 +160,13 @@ function ProductPrice({ product }: ProductPriceProps) {
       {typeof product.oldPrice === "number" && product.oldPrice > 0 && (
         <div className="flex items-center gap-3 mb-2">
           <span className="text-slate-300 line-through font-bold">
-            {product.oldPrice.toLocaleString("tr-TR")} TL
+            {product.oldPrice} TL
           </span>
         </div>
       )}
 
       <div className="text-4xl font-black text-slate-900 tracking-tight mb-2">
-        {product.price.toLocaleString("tr-TR")} TL
+        {product?.price} TL
       </div>
 
       <p className="text-slate-400 text-xs font-medium italic">
@@ -182,13 +182,13 @@ function ProductPriceMobile({ product }: ProductPriceProps) {
       {typeof product.oldPrice === "number" && product.oldPrice > 0 && (
         <div className="flex items-center gap-3 mb-2">
           <span className="text-slate-300 line-through font-bold">
-            {product.oldPrice.toLocaleString("tr-TR")} TL
+            {product.oldPrice} TL
           </span>
         </div>
       )}
 
       <div className="text-xl font-black text-slate-900 tracking-tight mb-2">
-        {product.price.toLocaleString("tr-TR")} TL
+        {product?.price} TL
       </div>
 
       <p className="text-slate-400 text-xs font-medium italic">

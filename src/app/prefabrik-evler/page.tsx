@@ -243,12 +243,20 @@ const ProductsPage = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const getFilteredAndSortedProducts = () => {
-    let filtered = MOCK_PRODUCT.filter(p => activeTab === "Tümü" || p.cat === activeTab);
+    let filtered = MOCK_PRODUCT.filter(p => activeTab === "Tümü" || p.category === activeTab);
 
     if (sortBy === "price-asc") {
-      filtered = [...filtered].sort((a, b) => a.price - b.price);
+      filtered = [...filtered].sort((a, b) => {
+        const priceA = a.price === "null" ? 0 : Number(a.price);
+        const priceB = b.price === "null" ? 0 : Number(b.price);
+        return priceA - priceB;
+      });
     } else if (sortBy === "price-desc") {
-      filtered = [...filtered].sort((a, b) => b.price - a.price);
+      filtered = [...filtered].sort((a, b) => {
+        const priceA = a.price === "null" ? 0 : Number(a.price);
+        const priceB = b.price === "null" ? 0 : Number(b.price);
+        return priceB - priceA;
+      });
     }
 
     return filtered;

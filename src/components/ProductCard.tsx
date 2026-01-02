@@ -11,7 +11,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from 'react';
 
-export const ProductCard = ({ product }: { product: Product }) => {
+const formatPrice = (price: string | null) => {
+  if (!price || price === "null") return null;
+  return new Intl.NumberFormat('tr-TR').format(Number(price));
+};
+
+export const ProductCard = ({ product, bestseller }: { bestseller?: boolean, product: Product }) => {
   const router = useRouter();
 
   const goDetail = () => {
@@ -37,11 +42,11 @@ export const ProductCard = ({ product }: { product: Product }) => {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
       onClick={goDetail}
-      className="group w-full text-left bg-white rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer"
+      className="group w-full flex flex-col justify-between text-left bg-white overflow-hidden rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer"
     >
       {/* SLIDER */}
       <div
-        className="relative rounded-tr-[2rem] rounded-tl-[2rem] overflow-hidden mb-6"
+        className="relative rounded-tr-[2rem] rounded-tl-[2rem] overflow-hidden "
         onClick={(e) => e.stopPropagation()} // ⭐ slider tıklamasını iptal eder
       >
         <div className="relative">
@@ -54,8 +59,8 @@ export const ProductCard = ({ product }: { product: Product }) => {
                 <CarouselItem key={index} className="basis-full">
                   <div className="relative aspect-video w-full">
                     <Image
-                      src={item}
-                      alt="product image"
+                      src={`/product/${item.src}`}
+                      alt={item.alt}
                       fill
                       className="object-cover"
                     />
@@ -84,7 +89,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
           )}
         </div>
 
-        {product.bestseller && (
+        {bestseller && (
           <div className="absolute top-4 left-4 bg-red-600/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm">
             <span className="text-[9px] font-black text-white uppercase tracking-widest">
               Çok Satan
@@ -94,27 +99,32 @@ export const ProductCard = ({ product }: { product: Product }) => {
 
         <div className="absolute right-4 top-4 bg-white/90 backdrop-blur-md px-4 py-1 rounded-full shadow-sm">
           <span className="text-[9px] font-black text-primary uppercase tracking-widest">
-            {product.cat}
+            {product.category}
           </span>
+        </div>
+        <div className="px-6 pt-4">
+          <h3 className="text-xl font-black text-slate-900 mb-2">
+            {product.name}
+          </h3>
+
+          {product.price &&
+            <div className="flex items-center gap-2 mb-4">
+              <p className="text-lg font-bold text-secondary">
+                {formatPrice(product.price)} ₺
+              </p>
+              {product.oldPrice && (
+                <p className="text-md font-bold text-slate-500 line-through">
+                  {formatPrice(product.oldPrice)} ₺
+                </p>
+              )}
+            </div>
+          }
+
         </div>
       </div>
 
       {/* CONTENT */}
       <div className="px-6 pb-6">
-        <h3 className="text-xl font-black text-slate-900 mb-2">
-          {product.name}
-        </h3>
-
-        <div className="flex items-center gap-2 mb-4">
-          <p className="text-lg font-bold text-secondary">
-            {product.price.toLocaleString('tr-TR')} ₺
-          </p>
-          {product.oldPrice && (
-            <p className="text-md font-bold text-slate-500 line-through">
-              {product.oldPrice.toLocaleString('tr-TR')} ₺
-            </p>
-          )}
-        </div>
 
         <div className="grid grid-cols-2 gap-4 border-t border-slate-50 pt-4">
           <div className="flex items-center gap-2">
