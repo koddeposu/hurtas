@@ -125,7 +125,7 @@ const FAQ = () => {
                       className="text-xs font-black italic opacity-20 group-hover:opacity-100 transition-opacity"
                       style={{ color: activeId === faq.id ? '#165b39' : '#49202d' }}
                     >
-                      {activeId === faq.id ? 'ACTIVE' : 'QUERY'}
+                      {activeId === faq.id ? 'Aktif' : 'Soru'}
                     </span>
                     <span className={`text-lg md:text-xl font-bold tracking-tight transition-colors duration-500 ${activeId === faq.id ? 'text-[#165b39]' : 'text-slate-800'
                       }`}>
