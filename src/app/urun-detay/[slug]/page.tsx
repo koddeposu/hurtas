@@ -22,14 +22,6 @@ import {
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-
-const FEATURE_ICONS = {
-  home: Home,
-  bath: Bath,
-  floor: Ruler,
-  height: ArrowUp,
-} as const;
-
 interface PageProps {
   params: Promise<{
     slug: string;
@@ -38,27 +30,16 @@ interface PageProps {
 
 // Type tanımlamaları
 type Product = typeof MOCK_PRODUCT[number];
-type ProductDetail = Product['detail'];
-type FeatureIcon = keyof typeof FEATURE_ICONS;
 
 interface ProductImageProps {
   product: Product;
-  detail: ProductDetail;
-}
-
-interface ProductFeaturesProps {
-  detail: ProductDetail;
 }
 
 interface ProductPriceProps {
   product: Product;
 }
 
-interface ProductDescriptionProps {
-  detail: ProductDetail;
-}
-
-function ProductImage({ product, detail }: ProductImageProps) {
+function ProductImage({ product }: ProductImageProps) {
   const [api, setApi] = React.useState<CarouselApi | null>(null)
   const [current, setCurrent] = React.useState(0)
 
@@ -118,44 +99,60 @@ function ProductImage({ product, detail }: ProductImageProps) {
           <div className="border-3 border-white rounded-lg overflow-hidden shadow-[0_0_100px_1px_rgba(0,0,0,0.01)]" key={index} onClick={() => api?.scrollTo(index)}
           >
             <Image
-
               src={item}
               alt="product image"
               width={100}
               height={100}
-              className={`w-16 h-16 min-w-10  transition-opacity cursor-pointer  ${current === index ? "opacity-100" : "opacity-40"}`}
+              className={`w-16 h-16 min-w-10  transition-opacity cursor-pointer object-cover  ${current === index ? "opacity-100" : "opacity-40"}`}
             />
           </div>
-
         ))}
       </div>
     </div>
-
   )
 }
 
-
-function ProductFeatures({ detail }: ProductFeaturesProps) {
+function ProductFeatures({ product }: ProductPriceProps) {
   return (
     <div className="flex flex-wrap items-center gap-6 py-5 border-y border-slate-100 mb-8">
-      {detail?.features?.map((feature, i) => {
-        const Icon = FEATURE_ICONS[feature.icon as FeatureIcon];
-        return (
-          <div
-            key={i}
-            className="flex items-center gap-2 text-slate-600"
-          >
-            <Icon size={16} className="text-[#49202d]" />
-            <span className="text-sm font-bold">
-              {feature.label}
-            </span>
-          </div>
-        );
-      })}
+      {product.room &&
+        <div className="flex items-center gap-2 text-slate-600">
+          <Home size={16} className="text-[#49202d]" />
+          <span className="text-sm font-bold">
+            {product.room}
+          </span>
+        </div>
+      }
+
+      {product.bath &&
+        <div className="flex items-center gap-2 text-slate-600">
+          <Bath size={16} className="text-[#49202d]" />
+          <span className="text-sm font-bold">
+            {product.bath} banyo
+          </span>
+        </div>
+      }
+
+      {product.floor &&
+        <div className="flex items-center gap-2 text-slate-600">
+          <Ruler size={16} className="text-[#49202d]" />
+          <span className="text-sm font-bold">
+            {product.floor} kat
+          </span>
+        </div>
+      }
+
+      {product.height &&
+        <div className="flex items-center gap-2 text-slate-600">
+          <ArrowUp size={16} className="text-[#49202d]" />
+          <span className="text-sm font-bold">
+            {product.height} yükseklik
+          </span>
+        </div>
+      }
     </div>
   );
 }
-
 
 function ProductPrice({ product }: ProductPriceProps) {
   return (
@@ -169,7 +166,7 @@ function ProductPrice({ product }: ProductPriceProps) {
       )}
 
       <div className="text-4xl font-black text-slate-900 tracking-tight mb-2">
-        {product.price} TL
+        {product.price.toLocaleString("tr-TR")} TL
       </div>
 
       <p className="text-slate-400 text-xs font-medium italic">
@@ -191,7 +188,7 @@ function ProductPriceMobile({ product }: ProductPriceProps) {
       )}
 
       <div className="text-xl font-black text-slate-900 tracking-tight mb-2">
-        {product.price} TL
+        {product.price.toLocaleString("tr-TR")} TL
       </div>
 
       <p className="text-slate-400 text-xs font-medium italic">
@@ -253,7 +250,7 @@ function TrustFeatures() {
   );
 }
 
-function ProductDescription({ detail }: ProductDescriptionProps) {
+function ProductDescription({ product }: ProductPriceProps) {
   return (
     <div className="mt-8 md:mt-16 space-y-4 md:space-y-8 pr-10">
       <div className="flex items-center gap-3 text-[#49202d]">
@@ -264,7 +261,7 @@ function ProductDescription({ detail }: ProductDescriptionProps) {
       </div>
 
       <div className="prose prose-slate max-w-none">
-        {detail?.description?.map((text, i) => (
+        {product?.description?.map((text, i) => (
           <p
             key={i}
             className="text-slate-500 text-sm md:text-lg leading-relaxed font-medium mt-4"
@@ -280,9 +277,10 @@ function ProductDescription({ detail }: ProductDescriptionProps) {
 function ProductPage({ params }: PageProps) {
   const { slug } = use(params);
 
-  // Slug'dan ID'yi çıkar (örn: "villa-lux-01" -> "01")
+  // URL formatı: safir-konak-1 gibi geliyor, son tiret sonrası ID
   const productId = slug.split('-').pop();
 
+  // ID ile ürünü bul
   const productData = MOCK_PRODUCT.find(p => p.id === productId);
 
   if (!productData) {
@@ -296,9 +294,7 @@ function ProductPage({ params }: PageProps) {
     );
   }
 
-  // TypeScript için product'ın undefined olmadığını garanti ediyoruz
   const product: Product = productData;
-  const detail = product.detail;
 
   function Desktop() {
     return (
@@ -308,10 +304,10 @@ function ProductPage({ params }: PageProps) {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-16 items-start">
               {/* SOL */}
               <div className="lg:col-span-7">
-                <ProductImage product={product} detail={detail} />
+                <ProductImage product={product} />
 
                 {/* DESCRIPTION */}
-                <ProductDescription detail={detail} />
+                <ProductDescription product={product} />
               </div>
 
               {/* SAĞ */}
@@ -330,7 +326,7 @@ function ProductPage({ params }: PageProps) {
                   </h1>
 
                   {/* FEATURES */}
-                  <ProductFeatures detail={detail} />
+                  <ProductFeatures product={product} />
                 </div>
 
                 {/* PRICE */}
@@ -359,7 +355,7 @@ function ProductPage({ params }: PageProps) {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-16 items-start">
               {/* SOL */}
               <div className="lg:col-span-7">
-                <ProductImage product={product} detail={detail} />
+                <ProductImage product={product} />
               </div>
 
               {/* SAĞ */}
@@ -367,7 +363,7 @@ function ProductPage({ params }: PageProps) {
                 {/* HEADER */}
                 <div>
                   {/* FEATURES */}
-                  <ProductFeatures detail={detail} />
+                  <ProductFeatures product={product} />
 
                   <div className="flex items-center gap-2 mb-3">
                     <span className="w-8 h-[1px] bg-[#49202d]" />
@@ -385,7 +381,6 @@ function ProductPage({ params }: PageProps) {
                   <ProductPriceMobile product={product} />
                 }
 
-
                 {/* ACTIONS */}
                 <ProductActions />
 
@@ -393,7 +388,7 @@ function ProductPage({ params }: PageProps) {
                 <TrustFeatures />
 
                 {/* DESCRIPTION */}
-                <ProductDescription detail={detail} />
+                <ProductDescription product={product} />
               </div>
             </div>
           </div>
