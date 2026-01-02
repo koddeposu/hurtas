@@ -49,8 +49,7 @@ export const ProductCard = ({ product, bestseller, fullscreenChange }: { bestsel
   };
 
   return (
-    <motion.button
-      type="button"
+    <motion.div
       layout
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
@@ -189,6 +188,6 @@ export const ProductCard = ({ product, bestseller, fullscreenChange }: { bestsel
           </div>
         </div>
       </div>
-    </motion.button>
+    </motion.div>
   );
 };
