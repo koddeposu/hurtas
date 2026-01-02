@@ -73,47 +73,30 @@ export const ProductCard = ({ product, bestseller }: { bestseller?: boolean, pro
             <CarouselContent>
               {product.img.map((item, index) => (
                 <CarouselItem key={index} className="basis-full">
-                  <div className="relative aspect-video w-full">
+                  <div className="relative aspect-video w-full bg-slate-100">
                     <Image
                       src={`/product/${item.src}`}
                       alt={item.alt}
                       fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover select-none"
                       draggable={false}
-                      onContextMenu={handleContextMenu}
+                      priority={index === 0}
                     />
-
-                    {/* WATERMARK - Merkez */}
                     <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                      <Image
-                        src={Logo}
-                        alt="Sakarya Aktaş"
-                        width={150}
-                        height={150}
-                        className="opacity-20 select-none"
-                        draggable={false}
-                      />
-                    </div>
-
-                    {/* WATERMARK - Köşeler (Ekstra Koruma) */}
-                    <div className="absolute top-4 left-4 pointer-events-none opacity-15">
-                      <Image
-                        src={Logo}
+                      <img
+                        src={Logo.src}
                         alt=""
-                        width={60}
-                        height={60}
-                        className="select-none"
-                        draggable={false}
+                        className="w-[150px] h-auto opacity-20 select-none"
+                        loading="lazy"
                       />
                     </div>
                     <div className="absolute bottom-4 right-4 pointer-events-none opacity-15">
-                      <Image
-                        src={Logo}
+                      <img
+                        src={Logo.src}
                         alt=""
-                        width={60}
-                        height={60}
-                        className="select-none"
-                        draggable={false}
+                        className="w-[50px] h-auto select-none"
+                        loading="lazy"
                       />
                     </div>
                   </div>
