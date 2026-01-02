@@ -334,7 +334,9 @@ function ProductPage({ params }: PageProps) {
                 </div>
 
                 {/* PRICE */}
-                <ProductPrice product={product} />
+                {product.price &&
+                  <ProductPrice product={product} />
+                }
 
                 {/* ACTIONS */}
                 <ProductActions />
@@ -379,7 +381,10 @@ function ProductPage({ params }: PageProps) {
                 </div>
 
                 {/* PRICE */}
-                <ProductPriceMobile product={product} />
+                {product.price &&
+                  <ProductPriceMobile product={product} />
+                }
+
 
                 {/* ACTIONS */}
                 <ProductActions />
