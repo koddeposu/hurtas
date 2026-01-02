@@ -16,7 +16,7 @@ export const Features = () => {
     <section className="relative overflow-hidden font-[family-name:var(--font-poppins)]">
 
       {/* Arka Plan Büyük Yazı Efekti (Mimari Dergi Hissi) */}
-      <div className="absolute top-10 left-[0%] text-[15vw] font-black text-slate-50 select-none leading-none z-0">
+      <div className="absolute top-10 left-[0%] text-[15vw] font-black text-slate-100/80 select-none leading-none z-0">
         CT PREFABRİK
       </div>
 
