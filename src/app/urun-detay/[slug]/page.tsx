@@ -1,5 +1,4 @@
 "use client";
-import Logo from '@/assets/logo.png';
 import { MOCK_PRODUCT } from "@/types/product";
 
 import {
@@ -21,6 +20,7 @@ import {
   CarouselContent,
   CarouselItem
 } from "@/components/ui/carousel";
+import { ZoomableImage } from '@/components/ZoomableImage';
 import { motion } from "framer-motion";
 import Image from "next/image";
 
@@ -82,48 +82,10 @@ export function ProductImage({ product }: ProductImageProps) {
                   onContextMenu={handleContextMenu}
                   onDragStart={handleDragStart}
                 >
-                  <Image
+                  <ZoomableImage
                     src={`/product/${item.src}`}
                     alt={item.alt}
-                    fill
-                    className="object-cover select-none"
-                    draggable={false}
                   />
-
-                  {/* WATERMARK - Merkez */}
-                  <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                    <Image
-                      src={Logo}
-                      alt="Filigran"
-                      width={200}
-                      height={200}
-                      className="opacity-40 select-none"
-                      draggable={false}
-                    />
-                  </div>
-
-                  {/* WATERMARK - Köşeler */}
-                  <div className="absolute top-6 left-6 pointer-events-none opacity-15">
-                    <Image
-                      src={Logo}
-                      alt=""
-                      width={80}
-                      height={80}
-                      className="select-none"
-                      draggable={false}
-                    />
-                  </div>
-
-                  <div className="absolute bottom-6 right-6 pointer-events-none opacity-15">
-                    <Image
-                      src={Logo}
-                      alt=""
-                      width={80}
-                      height={80}
-                      className="select-none"
-                      draggable={false}
-                    />
-                  </div>
                 </div>
               </CarouselItem>
             ))}
