@@ -1,5 +1,7 @@
 "use client";
+import Logo from '@/assets/logo.png';
 import { MOCK_PRODUCT } from "@/types/product";
+
 import {
   ArrowUp,
   Bath,
@@ -39,7 +41,7 @@ interface ProductPriceProps {
   product: Product;
 }
 
-function ProductImage({ product }: ProductImageProps) {
+export function ProductImage({ product }: ProductImageProps) {
   const [api, setApi] = React.useState<CarouselApi | null>(null)
   const [current, setCurrent] = React.useState(0)
 
@@ -53,6 +55,18 @@ function ProductImage({ product }: ProductImageProps) {
     })
   }, [api])
 
+  // Sağ tık koruması
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    return false;
+  };
+
+  // Sürükle koruması
+  const handleDragStart = (e: React.DragEvent) => {
+    e.preventDefault();
+    return false;
+  };
+
   return (
     <div className="relative">
       <div className="relative">
@@ -63,13 +77,53 @@ function ProductImage({ product }: ProductImageProps) {
           <CarouselContent>
             {product.img.map((item, index) => (
               <CarouselItem key={index} className="basis-full">
-                <div className="relative aspect-video w-full">
+                <div
+                  className="relative aspect-video w-full"
+                  onContextMenu={handleContextMenu}
+                  onDragStart={handleDragStart}
+                >
                   <Image
                     src={`/product/${item.src}`}
-                    alt={`/product/${item.alt}`}
+                    alt={item.alt}
                     fill
-                    className="object-cover"
+                    className="object-cover select-none"
+                    draggable={false}
                   />
+
+                  {/* WATERMARK - Merkez */}
+                  <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                    <Image
+                      src={Logo}
+                      alt="Filigran"
+                      width={200}
+                      height={200}
+                      className="opacity-40 select-none"
+                      draggable={false}
+                    />
+                  </div>
+
+                  {/* WATERMARK - Köşeler */}
+                  <div className="absolute top-6 left-6 pointer-events-none opacity-15">
+                    <Image
+                      src={Logo}
+                      alt=""
+                      width={80}
+                      height={80}
+                      className="select-none"
+                      draggable={false}
+                    />
+                  </div>
+
+                  <div className="absolute bottom-6 right-6 pointer-events-none opacity-15">
+                    <Image
+                      src={Logo}
+                      alt=""
+                      width={80}
+                      height={80}
+                      className="select-none"
+                      draggable={false}
+                    />
+                  </div>
                 </div>
               </CarouselItem>
             ))}
@@ -94,16 +148,23 @@ function ProductImage({ product }: ProductImageProps) {
           </div>
         )}
       </div>
+
+      {/* THUMBNAILS */}
       <div className="relative flex items-center flex-wrap gap-3 mt-4">
         {product.img.map((item, index) => (
-          <div className="border-3 border-white rounded-lg overflow-hidden shadow-[0_0_100px_1px_rgba(0,0,0,0.01)]" key={index} onClick={() => api?.scrollTo(index)}
+          <div
+            className="border-3 border-white rounded-lg overflow-hidden shadow-[0_0_100px_1px_rgba(0,0,0,0.01)]"
+            key={index}
+            onClick={() => api?.scrollTo(index)}
+            onContextMenu={handleContextMenu}
           >
             <Image
               src={`/product/${item.src}`}
-              alt={`/product/${item.alt}`}
+              alt={item.alt}
               width={100}
               height={100}
-              className={`w-16 h-16 min-w-10  transition-opacity cursor-pointer object-cover  ${current === index ? "opacity-100" : "opacity-40"}`}
+              draggable={false}
+              className={`w-16 h-16 min-w-10 transition-opacity cursor-pointer object-cover select-none ${current === index ? "opacity-100" : "opacity-40"}`}
             />
           </div>
         ))}

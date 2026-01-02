@@ -59,8 +59,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "353800",
-    oldPrice: "375800",
+    price: "376200",
+    oldPrice: "391300",
     img: [
       {
         src: "tek-katli-prefabrik-1+1-40.jpg",
@@ -74,29 +74,6 @@ export const MOCK_PRODUCT: Product[] = [
   },
   {
     id: "14",
-    name: "1+1 Tek Katlı Prefabrik Ev 49 m2",
-    slug: "1-1-tek-katli-prefabrik-ev-49-m2",
-    area: "49",
-    room: "1+1",
-    floor: "1",
-    bath: "1",
-    height: "2.5",
-    category: "Tek Katlı",
-    price: "412700",
-    oldPrice: "423700",
-    img: [
-      {
-        src: "tek-katli-prefabrik-1+1-49.jpg",
-        alt: "1+1 Tek Katlı Prefabrik Ev 49 m2 dış cephe",
-      },
-      {
-        src: "tek-katli-prefabrik-1+1-49-plan-1.jpg",
-        alt: "1+1 Tek Katlı Prefabrik Ev 49 m2 planı",
-      },
-    ],
-  },
-  {
-    id: "15",
     name: "2+1 Tek Katlı Prefabrik Ev 45 m2",
     slug: "2-1-tek-katli-prefabrik-ev-45-m2",
     area: "45",
@@ -105,8 +82,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "426700",
-    oldPrice: "441700",
+    price: "453800",
+    oldPrice: "492400",
     img: [
       {
         src: "tek-katli-prefabrik-2+1-45.jpg",
@@ -115,6 +92,29 @@ export const MOCK_PRODUCT: Product[] = [
       {
         src: "tek-katli-prefabrik-2+1-45-plan-1.jpg",
         alt: "2+1 Tek Katlı Prefabrik Ev 45 m2 iç mekan planı",
+      },
+    ],
+  },
+  {
+    id: "15",
+    name: "1+1 Tek Katlı Prefabrik Ev 49 m2",
+    slug: "1-1-tek-katli-prefabrik-ev-49-m2",
+    area: "49",
+    room: "1+1",
+    floor: "1",
+    bath: "1",
+    height: "2.5",
+    category: "Tek Katlı",
+    price: "446800",
+    oldPrice: "496700",
+    img: [
+      {
+        src: "tek-katli-prefabrik-1+1-49.jpg",
+        alt: "1+1 Tek Katlı Prefabrik Ev 49 m2 dış cephe",
+      },
+      {
+        src: "tek-katli-prefabrik-1+1-49-plan-1.jpg",
+        alt: "1+1 Tek Katlı Prefabrik Ev 49 m2 planı",
       },
     ],
   },
@@ -128,8 +128,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "413700",
-    oldPrice: "428700",
+    price: "458700",
+    oldPrice: "492600",
     img: [
       {
         src: "tek-katli-prefabrik-2+1-49.jpg",
@@ -151,8 +151,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "446700",
-    oldPrice: "461700",
+    price: "467800",
+    oldPrice: "512800",
     img: [
       {
         src: "tek-katli-prefabrik-2+1-53.jpg",
@@ -174,8 +174,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "476800",
-    oldPrice: "491800",
+    price: "512600",
+    oldPrice: "565900",
     img: [
       {
         src: "tek-katli-prefabrik-2+1-62-plan-1.webp",
@@ -197,8 +197,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "522700",
-    oldPrice: "537700",
+    price: "552700",
+    oldPrice: "612100",
     img: [
       {
         src: "tek-katli-prefabrik-2+1-68.webp",
@@ -220,8 +220,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "553800",
-    oldPrice: "568800",
+    price: "596800",
+    oldPrice: "626800",
     img: [
       {
         src: "tek-katli-prefabrik-2+1-72.webp",
@@ -243,8 +243,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "582300",
-    oldPrice: "597300",
+    price: "592800",
+    oldPrice: "612900",
     img: [
       {
         src: "tek-katli-prefabrik-2+1-75.webp",
@@ -262,8 +262,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "586400",
-    oldPrice: "601400",
+    price: "608700",
+    oldPrice: "648600",
     img: [
       {
         src: "tek-katli-prefabrik-2+1-77.webp",
@@ -285,8 +285,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "572700",
-    oldPrice: "587700",
+    price: "616800",
+    oldPrice: "676800",
     img: [
       {
         src: "tek-katli-prefabrik-2+1-78.jpg",
@@ -308,8 +308,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "597800",
-    oldPrice: "612800",
+    price: "644700",
+    oldPrice: "694700",
     img: [
       {
         src: "tek-katli-prefabrik-2+1-81-plan-1.jpg",
@@ -331,8 +331,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "591800",
-    oldPrice: "576800",
+    price: "627800",
+    oldPrice: "687800",
     img: [
       {
         src: "tek-katli-prefabrik-2+1-84.jpg",
@@ -354,8 +354,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "652800",
-    oldPrice: "667800",
+    price: "668700",
+    oldPrice: "718700",
     img: [
       {
         src: "tek-katli-prefabrik-2+1-93.jpg",
@@ -377,8 +377,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "746800",
-    oldPrice: "761800",
+    price: "817600",
+    oldPrice: "867800",
     img: [
       {
         src: "tek-katli-prefabrik-3+1-112.jpg",
@@ -400,8 +400,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "786400",
-    oldPrice: "801400",
+    price: "826900",
+    oldPrice: "926900",
     img: [
       {
         src: "tek-katli-prefabrik-3+1-113.jpg",
@@ -423,8 +423,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "752600",
-    oldPrice: "767600",
+    price: "806900",
+    oldPrice: "846900",
     img: [
       {
         src: "tek-katli-prefabrik-3+1-117.jpg",
@@ -446,8 +446,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "857600",
-    oldPrice: "872600",
+    price: "882600",
+    oldPrice: "897400",
     img: [
       {
         src: "tek-katli-prefabrik-3+1-121.webp",
@@ -469,8 +469,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "2",
     height: "2.5",
     category: "Tek Katlı",
-    price: "832700",
-    oldPrice: "847700",
+    price: "892700",
+    oldPrice: "922700",
     img: [
       {
         src: "tek-katli-prefabrik-3+1-122.webp",
@@ -492,8 +492,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "2",
     height: "2.5",
     category: "Tek Katlı",
-    price: "872600",
-    oldPrice: "887600",
+    price: "928700",
+    oldPrice: "998700",
     img: [
       {
         src: "tek-katli-prefabrik-3+1-123.webp",
@@ -515,8 +515,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "1043600",
-    oldPrice: "1068600",
+    price: "1156800",
+    oldPrice: "1218400",
     img: [
       {
         src: "tek-katli-prefabrik-3+1-166.webp",
@@ -538,8 +538,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "604800",
-    oldPrice: "619800",
+    price: "644700",
+    oldPrice: "694700",
     img: [
       {
         src: "tek-katli-prefabrik2-3+1-81.jpg",
@@ -561,8 +561,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "608700",
-    oldPrice: "623700",
+    price: "662400",
+    oldPrice: "694300",
     img: [
       {
         src: "tek-katli-prefabrik-3+1-86.webp",
@@ -607,8 +607,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Tek Katlı",
-    price: "761900",
-    oldPrice: "776900",
+    price: "808600",
+    oldPrice: "888600",
     img: [
       {
         src: "tek-katli-prefabrik-3+1-98.jpg",
@@ -630,8 +630,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Çift Katlı",
-    price: "914500",
-    oldPrice: "929500",
+    price: "896700",
+    oldPrice: "914500",
     img: [
       {
         src: "2+1-cift-katli-prefabrik-100m2.jpg",
@@ -684,8 +684,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Çift Katlı",
-    price: "873600",
-    oldPrice: "888600",
+    price: "928600",
+    oldPrice: "998600",
     img: [
       {
         src: "cift-katli-prefabrik-92.jpg",
@@ -711,8 +711,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "2",
     height: "2.5",
     category: "Çift Katlı",
-    price: "997600",
-    oldPrice: "1012600",
+    price: "1146800",
+    oldPrice: "1210200",
     img: [
       {
         src: "cift-katli-3+1-105.jpg",
@@ -738,8 +738,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "2",
     height: "2.5",
     category: "Çift Katlı",
-    price: "992400",
-    oldPrice: "1007400",
+    price: "1063700",
+    oldPrice: "1157200",
     img: [
       {
         src: "cift-katli-prefabrik-3+1-114.jpg",
@@ -765,8 +765,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "1",
     height: "2.5",
     category: "Çift Katlı",
-    price: "1086700",
-    oldPrice: "1105700",
+    price: "1135400",
+    oldPrice: "1240400",
     img: [
       {
         src: "cift-katli-prefabrik-3+1-118.jpg",
@@ -792,8 +792,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "2",
     height: "2.5",
     category: "Çift Katlı",
-    price: "997600",
-    oldPrice: "1012600",
+    price: "1146800",
+    oldPrice: "1210200",
     img: [
       {
         src: "cift-katli-prefabrik-122.jpg",
@@ -819,8 +819,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "2",
     height: "2.5",
     category: "Çift Katlı",
-    price: "1044600",
-    oldPrice: "1069600",
+    price: "1185600",
+    oldPrice: "1287100",
     img: [
       {
         src: "cift-katli-prefabrik-131.jpg",
@@ -846,8 +846,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "2",
     height: "2.5",
     category: "Çift Katlı",
-    price: "1208600",
-    oldPrice: "1223600",
+    price: "1225600",
+    oldPrice: "1390100",
     img: [
       {
         src: "cift-katli-prefabrik-134.jpg",
@@ -873,8 +873,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "2",
     height: "2.5",
     category: "Çift Katlı",
-    price: "1272400",
-    oldPrice: "1287400",
+    price: "1317800",
+    oldPrice: "1415930",
     img: [
       {
         src: "cift-katli-prefabrik-3+1-158.jpg",
@@ -900,8 +900,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "2",
     height: "2.5",
     category: "Çift Katlı",
-    price: "1196800",
-    oldPrice: "1211800",
+    price: "1178400",
+    oldPrice: "1296800",
     img: [
       {
         src: "cift-katli-prefabrik-4+1-142.jpg",
@@ -927,8 +927,8 @@ export const MOCK_PRODUCT: Product[] = [
     bath: "2",
     height: "2.5",
     category: "Çift Katlı",
-    price: "1192600",
-    oldPrice: "1217600",
+    price: "1258700",
+    oldPrice: "1350000",
     img: [
       {
         src: "cift-katli-prefabrik-4+1-149.jpg",

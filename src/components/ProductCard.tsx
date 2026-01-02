@@ -1,3 +1,4 @@
+import Logo from '@/assets/logo.png'; // Logo import et
 import {
   Carousel,
   CarouselApi,
@@ -34,6 +35,19 @@ export const ProductCard = ({ product, bestseller }: { bestseller?: boolean, pro
       setCurrent(api.selectedScrollSnap())
     })
   }, [api])
+
+  // Sağ tık koruması
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    return false;
+  };
+
+  // Sürükle koruması
+  const handleDragStart = (e: React.DragEvent) => {
+    e.preventDefault();
+    return false;
+  };
+
   return (
     <motion.button
       type="button"
@@ -46,8 +60,10 @@ export const ProductCard = ({ product, bestseller }: { bestseller?: boolean, pro
     >
       {/* SLIDER */}
       <div
-        className="relative rounded-tr-[2rem] rounded-tl-[2rem] overflow-hidden "
-        onClick={(e) => e.stopPropagation()} // ⭐ slider tıklamasını iptal eder
+        className="relative rounded-tr-[2rem] rounded-tl-[2rem] overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+        onContextMenu={handleContextMenu}
+        onDragStart={handleDragStart}
       >
         <div className="relative">
           <Carousel
@@ -62,8 +78,44 @@ export const ProductCard = ({ product, bestseller }: { bestseller?: boolean, pro
                       src={`/product/${item.src}`}
                       alt={item.alt}
                       fill
-                      className="object-cover"
+                      className="object-cover select-none"
+                      draggable={false}
+                      onContextMenu={handleContextMenu}
                     />
+
+                    {/* WATERMARK - Merkez */}
+                    <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+                      <Image
+                        src={Logo}
+                        alt="Sakarya Aktaş"
+                        width={150}
+                        height={150}
+                        className="opacity-20 select-none"
+                        draggable={false}
+                      />
+                    </div>
+
+                    {/* WATERMARK - Köşeler (Ekstra Koruma) */}
+                    <div className="absolute top-4 left-4 pointer-events-none opacity-15">
+                      <Image
+                        src={Logo}
+                        alt=""
+                        width={60}
+                        height={60}
+                        className="select-none"
+                        draggable={false}
+                      />
+                    </div>
+                    <div className="absolute bottom-4 right-4 pointer-events-none opacity-15">
+                      <Image
+                        src={Logo}
+                        alt=""
+                        width={60}
+                        height={60}
+                        className="select-none"
+                        draggable={false}
+                      />
+                    </div>
                   </div>
                 </CarouselItem>
               ))}
@@ -72,7 +124,7 @@ export const ProductCard = ({ product, bestseller }: { bestseller?: boolean, pro
 
           {/* DOTS */}
           {product.img.length > 1 && (
-            <div className="absolute bottom-3  z-20 flex w-full justify-center gap-2">
+            <div className="absolute bottom-3 z-20 flex w-full justify-center gap-2">
               {product.img.map((_, index) => (
                 <motion.div
                   key={index}
@@ -90,14 +142,14 @@ export const ProductCard = ({ product, bestseller }: { bestseller?: boolean, pro
         </div>
 
         {bestseller && (
-          <div className="absolute top-4 left-4 bg-red-600/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm">
+          <div className="absolute top-4 left-4 bg-red-600/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm z-10">
             <span className="text-[9px] font-black text-white uppercase tracking-widest">
               Çok Satan
             </span>
           </div>
         )}
 
-        <div className="absolute right-4 top-4 bg-white/90 backdrop-blur-md px-4 py-1 rounded-full shadow-sm">
+        <div className="absolute right-4 top-4 bg-white/90 backdrop-blur-md px-4 py-1 rounded-full shadow-sm z-10">
           <span className="text-[9px] font-black text-primary uppercase tracking-widest">
             {product.category}
           </span>
@@ -119,13 +171,11 @@ export const ProductCard = ({ product, bestseller }: { bestseller?: boolean, pro
               )}
             </div>
           }
-
         </div>
       </div>
 
       {/* CONTENT */}
       <div className="px-6 pb-6">
-
         <div className="grid grid-cols-2 gap-4 border-t border-slate-50 pt-4">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-[#49202d]">
