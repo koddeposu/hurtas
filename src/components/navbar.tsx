@@ -1,7 +1,7 @@
 "use client";
 import Logo from '@/assets/logo.png';
 import { AnimatePresence, motion } from 'framer-motion';
-import { BookOpen, Building2, Check, Copy, File, FolderKanban, Home, Info, Mail, Menu, Phone, X } from 'lucide-react';
+import { BookOpen, Building2, Check, ChevronDown, Copy, File, FolderKanban, Home, Info, Mail, Menu, Phone, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -10,7 +10,16 @@ import { useState } from 'react';
 const menuItems = [
   { href: '/', label: 'Ana Sayfa', icon: Home },
   { href: '/hakkimizda', label: 'Hakkımızda', icon: Info },
-  { href: '/prefabrik-evler', label: 'Prefabrik Evler', icon: Building2 },
+  {
+    href: '/prefabrik-evler',
+    label: 'Prefabrik Evler',
+    icon: Building2,
+    subItems: [
+      { href: '/prefabrik-evler?kategori=Tek Katlı', label: 'Tek Katlı' },
+      { href: '/prefabrik-evler?kategori=Çift Katlı', label: 'Çift Katlı' },
+      { href: '/prefabrik-evler?kategori=Çelik Ev', label: 'Çelik Ev' },
+    ]
+  },
   { href: '/projelerimiz', label: 'Projelerimiz', icon: FolderKanban },
   { href: '/blog', label: 'Blog', icon: BookOpen },
   { href: '/iletisim', label: 'İletişim', icon: Mail },
@@ -18,6 +27,8 @@ const menuItems = [
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [desktopDropdownOpen, setDesktopDropdownOpen] = useState(false);
+  const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const pathname = usePathname();
@@ -63,14 +74,52 @@ const Navbar = () => {
           {/* Desktop Menu Items */}
           <ul className="hidden lg:flex items-center gap-8 text-[15px] font-semibold text-slate-800">
             {menuItems.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className={`hover:text-primary transition ${isActive(item.href) ? 'text-secondary' : 'text-slate-800'
-                    }`}
-                >
-                  {item.label}
-                </Link>
+              <li key={item.href} className="relative">
+                {item.subItems ? (
+                  <div
+                    onMouseEnter={() => setDesktopDropdownOpen(true)}
+                    onMouseLeave={() => setDesktopDropdownOpen(false)}
+                  >
+                    <button
+                      className={`hover:text-primary transition flex items-center gap-1 ${pathname.startsWith(item.href) ? 'text-secondary' : 'text-slate-800'
+                        }`}
+                    >
+                      {item.label}
+                      <ChevronDown size={16} className={`transition-transform ${desktopDropdownOpen ? 'rotate-180' : ''}`} />
+                    </button>
+
+                    <AnimatePresence>
+                      {desktopDropdownOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.2 }}
+                          className="absolute top-full left-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden"
+                        >
+                          {item.subItems.map((subItem) => (
+                            <Link
+                              key={subItem.href}
+                              href={subItem.href}
+                              className={`block px-5 py-3 hover:bg-slate-50 transition ${pathname === subItem.href ? 'text-secondary bg-slate-50' : 'text-slate-700'
+                                }`}
+                            >
+                              {subItem.label}
+                            </Link>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className={`hover:text-primary transition ${isActive(item.href) ? 'text-secondary' : 'text-slate-800'
+                      }`}
+                  >
+                    {item.label}
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
@@ -146,14 +195,65 @@ const Navbar = () => {
                     const Icon = item.icon;
                     const active = isActive(item.href);
 
+                    if (item.subItems) {
+                      return (
+                        <div key={item.href}>
+                          <button
+                            onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)}
+                            className={`w-full flex items-center justify-between px-5 py-4 rounded-2xl font-bold transition-all text-sm ${pathname.startsWith(item.href)
+                                ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                                : 'bg-transparent text-slate-600 hover:bg-slate-50'
+                              }`}
+                          >
+                            <div className="flex items-center gap-4">
+                              <Icon size={20} />
+                              {item.label}
+                            </div>
+                            <ChevronDown
+                              size={18}
+                              className={`transition-transform ${mobileDropdownOpen ? 'rotate-180' : ''}`}
+                            />
+                          </button>
+
+                          <AnimatePresence>
+                            {mobileDropdownOpen && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className="overflow-hidden"
+                              >
+                                <div className="ml-4 mt-2 space-y-1">
+                                  {item.subItems.map((subItem) => (
+                                    <Link
+                                      key={subItem.href}
+                                      href={subItem.href}
+                                      onClick={() => setMobileMenuOpen(false)}
+                                      className={`block px-5 py-3 rounded-xl text-sm font-semibold transition-all ${pathname === subItem.href
+                                          ? 'bg-secondary text-white'
+                                          : 'text-slate-600 hover:bg-slate-50'
+                                        }`}
+                                    >
+                                      {subItem.label}
+                                    </Link>
+                                  ))}
+                                </div>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
+                      );
+                    }
+
                     return (
                       <Link
                         key={item.href}
                         href={item.href}
                         onClick={() => setMobileMenuOpen(false)}
                         className={`flex items-center gap-4 px-5 py-4 rounded-2xl font-bold transition-all text-sm ${active
-                          ? 'bg-primary text-white shadow-lg shadow-primary/20'
-                          : 'bg-transparent text-slate-600 hover:bg-slate-50'
+                            ? 'bg-primary text-white shadow-lg shadow-primary/20'
+                            : 'bg-transparent text-slate-600 hover:bg-slate-50'
                           }`}
                       >
                         <Icon size={20} />

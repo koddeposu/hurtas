@@ -4,8 +4,8 @@ import { ProductCard } from '@/components/ProductCard';
 import { CATEGORIES, Category, MOCK_PRODUCT, ProductGridProps, SORT_OPTIONS, SortFilterProps, SortType } from '@/types/product';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowUpDown, ChevronRight, Filter, Info, X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 
 const HeroSection = () => (
@@ -118,7 +118,7 @@ const InfoCard = ({ compact = false }: InfoCardProps) => {
   const router = useRouter()
   const handle = () => router.push("/iletisim")
   return (
-    <div onClick={handle} className={`bg-[#49202d] ${compact ? 'p-6' : 'p-8'} rounded-[2${compact ? '' : '.5'}rem] text-white relative overflow-hidden group`}>
+    <div onClick={handle} className={`bg-[#49202d] ${compact ? 'p-6' : 'p-8'} rounded-[2${compact ? '' : '.5'}rem] text-white relative overflow-hidden group cursor-pointer`}>
       <div className="relative z-10">
         <Info className={`${compact ? 'mb-3' : 'mb-4'} opacity-50`} size={compact ? 20 : 24} />
         <p className={`font-bold ${compact ? 'text-xs' : 'text-sm'} leading-relaxed`}>
@@ -238,9 +238,22 @@ const ProductGrid = ({ products }: ProductGridProps) => (
 
 // ==================== MAIN PAGE ====================
 const ProductsPage = () => {
+  const searchParams = useSearchParams();
+  const kategoriFromURL = searchParams.get('kategori');
+
   const [activeTab, setActiveTab] = useState<Category>("Tümü");
   const [sortBy, setSortBy] = useState<SortType>("default");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+  // URL'den kategori geldiğinde otomatik filtrele
+  useEffect(() => {
+    if (kategoriFromURL) {
+      const validCategory = CATEGORIES.find(cat => cat === kategoriFromURL);
+      if (validCategory) {
+        setActiveTab(validCategory as Category);
+      }
+    }
+  }, [kategoriFromURL]);
 
   const getFilteredAndSortedProducts = () => {
     let filtered = MOCK_PRODUCT.filter(p => activeTab === "Tümü" || p.category === activeTab);
