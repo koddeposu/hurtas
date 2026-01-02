@@ -225,7 +225,7 @@ const Footer = () => {
         {/* Alt Bar: Copyright */}
         <div className="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-            © {currentYear} AKTAŞ PREFABRİK. TÜM HAKLARI SAKLIDIR.
+            © {currentYear} CT PREFABRİK. TÜM HAKLARI SAKLIDIR.
           </p>
           <div className="flex gap-8 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
             <a href="#" className="hover:text-[#49202d] transition-colors">KVKK</a>
