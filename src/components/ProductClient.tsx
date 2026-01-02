@@ -1,10 +1,11 @@
 "use client";
 import { ProductCard } from '@/components/ProductCard';
-import { CATEGORIES, Category, MOCK_PRODUCT, ProductGridProps, SORT_OPTIONS, SortFilterProps, SortType } from '@/types/product';
+import { CATEGORIES, Category, MOCK_PRODUCT, Product, SORT_OPTIONS, SortFilterProps, SortType } from '@/types/product';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowUpDown, ChevronRight, Filter, Info, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { ProjectGalleryModal } from './ModalSliderImage';
 
 
 const HeroSection = () => (
@@ -222,18 +223,6 @@ const MobileFilterPanel = ({ isOpen, onClose, activeTab, sortBy, onCategorySelec
 
 
 
-// Product Grid Component
-const ProductGrid = ({ products }: ProductGridProps) => (
-  <div className="flex-1">
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <AnimatePresence mode='popLayout'>
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </AnimatePresence>
-    </div>
-  </div>
-);
 
 
 // ... (HeroSection, MobileFilterButton, CategoryFilter, SortFilter, InfoCard, DesktopSidebar, MobileFilterPanel, ProductGrid bileşenleri aynı kalıyor, dokunmanıza gerek yok) ...
@@ -246,7 +235,7 @@ const ProductsClient = () => {
   const [activeTab, setActiveTab] = useState<Category>("Tümü");
   const [sortBy, setSortBy] = useState<SortType>("default");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   useEffect(() => {
     if (kategoriFromURL) {
       const validCategory = CATEGORIES.find(cat => cat === kategoriFromURL);
@@ -277,6 +266,20 @@ const ProductsClient = () => {
 
   return (
     <main className='max-w-[1280px] w-full'>
+      <ProjectGalleryModal
+        projects={
+          selectedProduct
+            ? selectedProduct.img.map((imageItem, i) => ({
+              id: i,
+              img: typeof imageItem.src === 'string' ? `/product/${imageItem.src}` : imageItem.src,
+              title: imageItem.alt,
+            }))
+            : []
+        }
+        isOpen={!!selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+      />
+
       <HeroSection />
 
       <section className=" max-w-[1400px] pb-20">
@@ -293,7 +296,16 @@ const ProductsClient = () => {
             onSortSelect={(sort: SortType) => setSortBy(sort)}
           />
 
-          <ProductGrid products={getFilteredAndSortedProducts()} />
+          <div className="flex-1">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <AnimatePresence mode='popLayout'>
+                {getFilteredAndSortedProducts().map((product) => (
+                  <ProductCard key={product.id} product={product} fullscreenChange={() => setSelectedProduct(product)} />
+                ))}
+              </AnimatePresence>
+            </div>
+          </div>
+
         </div>
       </section>
 

@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/carousel";
 import { Product } from '@/types/product';
 import { motion } from 'framer-motion';
-import { ArrowUpRight, Home, Ruler } from "lucide-react";
+import { ArrowUpRight, Home, Maximize2, Ruler } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from 'react';
@@ -17,7 +17,7 @@ const formatPrice = (price: string | null) => {
   return new Intl.NumberFormat('tr-TR').format(Number(price));
 };
 
-export const ProductCard = ({ product, bestseller }: { bestseller?: boolean, product: Product }) => {
+export const ProductCard = ({ product, bestseller, fullscreenChange }: { bestseller?: boolean, fullscreenChange: () => void, product: Product }) => {
   const router = useRouter();
 
   const goDetail = () => {
@@ -55,15 +55,12 @@ export const ProductCard = ({ product, bestseller }: { bestseller?: boolean, pro
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
-      onClick={goDetail}
-      className="group w-full flex flex-col justify-between text-left bg-white overflow-hidden rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 cursor-pointer"
+
+      className="group w-full flex flex-col justify-between text-left bg-white overflow-hidden rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 "
     >
       {/* SLIDER */}
       <div
         className="relative rounded-tr-[2rem] rounded-tl-[2rem] overflow-hidden"
-        onClick={(e) => e.stopPropagation()}
-        onContextMenu={handleContextMenu}
-        onDragStart={handleDragStart}
       >
         <div className="relative">
           <Carousel
@@ -72,7 +69,7 @@ export const ProductCard = ({ product, bestseller }: { bestseller?: boolean, pro
           >
             <CarouselContent>
               {product.img.map((item, index) => (
-                <CarouselItem key={index} className="basis-full">
+                <CarouselItem key={index} className="basis-full" >
                   <div className="relative aspect-video w-full bg-slate-100">
                     <Image
                       src={`/product/${item.src}`}
@@ -99,6 +96,9 @@ export const ProductCard = ({ product, bestseller }: { bestseller?: boolean, pro
                         loading="lazy"
                       />
                     </div>
+                    <button onClick={fullscreenChange} className='absolute bottom-4 right-4 text-white bg-black/30 rounded-md w-10 h-10  flex items-center justify-center cursor-pointer hover:scale-110 duration-200'>
+                      <Maximize2 size={20} className='text-white' />
+                    </button>
                   </div>
                 </CarouselItem>
               ))}
@@ -124,63 +124,69 @@ export const ProductCard = ({ product, bestseller }: { bestseller?: boolean, pro
           )}
         </div>
 
-        {bestseller && (
-          <div className="absolute top-4 left-4 bg-red-600/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm z-10">
-            <span className="text-[9px] font-black text-white uppercase tracking-widest">
-              Çok Satan
+        <div
+          className='cursor-pointer'
+          onClick={goDetail}
+          onContextMenu={handleContextMenu}
+          onDragStart={handleDragStart}
+        >
+          {bestseller && (
+            <div className="absolute top-4 left-4 bg-red-600/90 backdrop-blur-md px-3 py-1 rounded-full shadow-sm z-10 ">
+              <span className="text-[9px] font-black text-white uppercase tracking-widest">
+                Çok Satan
+              </span>
+            </div>
+          )}
+
+          <div className="absolute right-4 top-4 bg-white/90 backdrop-blur-md px-4 py-1 rounded-full shadow-sm z-10">
+            <span className="text-[9px] font-black text-primary uppercase tracking-widest">
+              {product.category}
             </span>
           </div>
-        )}
+          <div className="px-6 pt-4">
+            <h3 className="text-xl font-black text-slate-900 mb-2">
+              {product.name}
+            </h3>
 
-        <div className="absolute right-4 top-4 bg-white/90 backdrop-blur-md px-4 py-1 rounded-full shadow-sm z-10">
-          <span className="text-[9px] font-black text-primary uppercase tracking-widest">
-            {product.category}
-          </span>
-        </div>
-        <div className="px-6 pt-4">
-          <h3 className="text-xl font-black text-slate-900 mb-2">
-            {product.name}
-          </h3>
-
-          {product.price &&
-            <div className="flex items-center gap-2 mb-4">
-              <p className="text-lg font-bold text-secondary">
-                {formatPrice(product.price)} ₺
-              </p>
-              {product.oldPrice && (
-                <p className="text-md font-bold text-slate-500 line-through">
-                  {formatPrice(product.oldPrice)} ₺
+            {product.price &&
+              <div className="flex items-center gap-2 mb-4">
+                <p className="text-lg font-bold text-secondary">
+                  {formatPrice(product.price)} ₺
                 </p>
-              )}
-            </div>
-          }
-        </div>
-      </div>
-
-      {/* CONTENT */}
-      <div className="px-6 pb-6">
-        <div className="grid grid-cols-2 gap-4 border-t border-slate-50 pt-4">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-[#49202d]">
-              <Ruler size={14} />
-            </div>
-            <span className="text-xs font-bold text-slate-500">
-              {product.area}
-            </span>
+                {product.oldPrice && (
+                  <p className="text-md font-bold text-slate-500 line-through">
+                    {formatPrice(product.oldPrice)} ₺
+                  </p>
+                )}
+              </div>
+            }
           </div>
+          {/* CONTENT */}
+          <div className="px-6 pb-6">
+            <div className="grid grid-cols-2 gap-4 border-t border-slate-50 pt-4">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-[#49202d]">
+                  <Ruler size={14} />
+                </div>
+                <span className="text-xs font-bold text-slate-500">
+                  {product.area}
+                </span>
+              </div>
 
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-[#49202d]">
-              <Home size={14} />
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-[#49202d]">
+                  <Home size={14} />
+                </div>
+                <span className="text-xs font-bold text-slate-500">
+                  {product.room}
+                </span>
+              </div>
             </div>
-            <span className="text-xs font-bold text-slate-500">
-              {product.room}
-            </span>
-          </div>
-        </div>
 
-        <div className="w-full mt-6 py-4 bg-slate-900 text-white rounded-2xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 group-hover:bg-[#49202d] transition-all">
-          İncele <ArrowUpRight size={14} />
+            <div className="w-full mt-6 py-4 bg-slate-900 text-white rounded-2xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 group-hover:bg-[#49202d] transition-all">
+              İncele <ArrowUpRight size={14} />
+            </div>
+          </div>
         </div>
       </div>
     </motion.button>

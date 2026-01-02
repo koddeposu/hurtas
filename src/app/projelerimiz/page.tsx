@@ -7,11 +7,9 @@ import Image from 'next/image';
 import image2 from '@/assets/hero/home-page-2.webp';
 import image3 from '@/assets/hero/home-page-3.webp';
 import { default as image1 } from '@/assets/hero/home-page-5.webp';
+import { ProjectGalleryModal } from '@/components/ModalSliderImage';
 import {
-  Carousel,
-  CarouselApi,
-  CarouselContent,
-  CarouselItem
+  CarouselApi
 } from "@/components/ui/carousel";
 import { Modal } from '@/components/ui/modal';
 import { StaticImageData } from 'next/image';
@@ -75,73 +73,12 @@ const ProjectsPage = () => {
         </div>
       </Modal>
 
-      <Modal isShow={selectedProjectIndex !== null} onClose={() => setSelectedProjectIndex(null)}>
-        <div className='h-screen flex items-center justify-center p-5'>
-          <div className="max-w-[1000px] w-full">
-            <div className="relative">
-              <Carousel
-                setApi={setApi}
-                className="w-full overflow-hidden rounded-[1rem] md:rounded-[2rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] border-2 md:border-[8px] border-white"
-              >
-                <CarouselContent>
-                  {projects.map((project, index) => (
-                    <CarouselItem key={project.id} className="basis-full">
-                      <div className="relative aspect-video w-full">
-                        <Image
-                          src={project.img}
-                          alt={project.title}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-              </Carousel>
-
-              {/* DOTS */}
-              {projects.length > 1 && (
-                <div className="absolute bottom-5 md:bottom-10 z-20 flex w-full justify-center gap-2">
-                  {projects.map((_, index) => (
-                    <motion.div
-                      key={index}
-                      onClick={() => api?.scrollTo(index)}
-                      animate={{
-                        width: current === index ? 22 : 10,
-                      }}
-                      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                      className={`h-2.5 rounded-full cursor-pointer ${current === index ? "bg-secondary" : "bg-white/70"
-                        }`}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Thumbnail Navigation */}
-            {projects.length > 1 && (
-              <div className="relative flex items-center flex-wrap gap-3 mt-4 justify-center">
-                {projects.map((project, index) => (
-                  <div
-                    className="border-3 border-white rounded-lg overflow-hidden shadow-[0_0_100px_1px_rgba(0,0,0,0.01)]"
-                    key={project.id}
-                    onClick={() => api?.scrollTo(index)}
-                  >
-                    <Image
-                      src={project.img}
-                      alt={project.title}
-                      width={100}
-                      height={100}
-                      className={`w-16 h-16 min-w-10 object-cover transition-opacity cursor-pointer ${current === index ? "opacity-100" : "opacity-40"
-                        }`}
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </Modal>
+      <ProjectGalleryModal
+        projects={projects}
+        isOpen={selectedProjectIndex !== null}
+        initialIndex={selectedProjectIndex ?? 0}
+        onClose={() => setSelectedProjectIndex(null)}
+      />
 
       <section className='w-full bg-[#fdfdfd] mb-28'>
         <div className="absolute -top-24 -right-24 w-[600px] h-[600px] bg-[#49202d]/[0.03] rounded-full blur-3xl pointer-events-none  min-h-[90vh]" />
