@@ -3,6 +3,7 @@
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import { usePathname } from "next/navigation";
+import BottomBar from "./bottomBar";
 
 export default function ClientLayout({
   children,
@@ -24,6 +25,7 @@ export default function ClientLayout({
           {children}
         </div>
       </main>
+      <BottomBar />
 
       {!hideLayout && (
         <section className="flex justify-center">
