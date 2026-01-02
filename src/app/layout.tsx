@@ -1,15 +1,20 @@
-'use client';
-
-import Footer from "@/components/footer";
-import Navbar from "@/components/navbar";
+import ClientLayout from "@/components/ClientLayout";
+import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { usePathname } from "next/navigation";
 import "./globals.css";
-import "./styles.css";
+
+export const metadata: Metadata = {
+  title: {
+    default: "Sakarya CT Prefabrik Evler",
+    template: "%s | Sakarya CT Prefabrik Evler",
+  },
+  description: "Prefabrik ev, çelik ev ve konteyner çözümleri! Hızlı kurulum, modern tasarımlar, Sakarya CT Prefabrik 20 yıllık deneyim. Ücretsiz keşif +90 537 518 30 06.",
+};
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const geistMono = Geist_Mono({
@@ -22,35 +27,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
-
-  // Navbar & Footer GÖRÜNMEYECEK sayfalar
-  const hideLayout =
-    pathname.startsWith("/katalog")
-  const hideLayout2 =
-    pathname.startsWith("/iletisim")
-
-
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-
-        <Navbar />
-
-        <main className="relative overflow-hidden">
-          <div className={` w-full ${hideLayout && "h-screen"} ${!hideLayout2 && "p-5"} `}>
-            {children}
-          </div>
-        </main>
-
-        {!hideLayout && (
-          <section className="flex justify-center">
-            <div className="w-full">
-              <Footer />
-            </div>
-          </section>
-        )}
-
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
