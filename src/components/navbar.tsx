@@ -78,7 +78,7 @@ const Navbar = () => {
           {/* Desktop Action Buttons */}
           <div className="hidden md:flex items-center gap-3">
             <a
-              href="tel:+905551234567"
+              href="tel:+905375183006"
               className="bg-[linear-gradient(10deg,#49202d,hsl(150.43deg_95%_22.16%))] text-white px-5 py-2.5 rounded-lg flex items-center gap-2 font-bold hover:opacity-90 transition"
             >
               <Phone size={18} fill="currentColor" /> Bizi Arayın
@@ -166,7 +166,7 @@ const Navbar = () => {
                 {/* Action Buttons */}
                 <div className="space-y-3 pt-6 border-t border-slate-200">
                   <a
-                    href="tel:+905551234567"
+                    href="tel:+905375183006"
                     className="bg-[linear-gradient(10deg,#49202d,hsl(150.43deg_95%_22.16%))] text-white px-5 py-4 rounded-xl flex items-center justify-center gap-2 font-bold hover:opacity-90 transition w-full"
                   >
                     <Phone size={18} fill="currentColor" />

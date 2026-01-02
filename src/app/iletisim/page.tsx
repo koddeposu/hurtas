@@ -61,10 +61,10 @@ const ContactPage = () => {
             <ContactCard
               icon={<Phone size={32} />}
               label="Bizi Arayın"
-              value="+90 555 123 45 67"
+              value="+90 537 518 30 06"
               sub="Hafta içi: 09:00 - 18:00"
               delay={0.1}
-              onCopy={() => copyToClipboard('+905551234567', 'phone')}
+              onCopy={() => copyToClipboard('+905375183006', 'phone')}
               copied={copiedPhone}
             />
             <ContactCard
@@ -79,10 +79,10 @@ const ContactPage = () => {
             <ContactCard
               icon={<MapPin size={32} />}
               label="Merkez Ofisimiz"
-              value="Erenler, Sakarya"
+              value="Soğucak, Kervan/1 Sokak No: 2/4, 54160 Söğütlü/Sakarya"
               sub="Tesislerimize Kahveye Bekleriz"
               delay={0.3}
-              onCopy={() => copyToClipboard('Erenler, Sakarya', 'address')}
+              onCopy={() => copyToClipboard('Soğucak, Kervan/1 Sokak No: 2/4, 54160 Söğütlü/Sakarya', 'address')}
               copied={copiedAddress}
             />
           </div>
@@ -105,7 +105,7 @@ const ContactPage = () => {
       {/* --- GOOGLE MAPS (YENİ NESİL FULL WIDTH) --- */}
       <section className="h-[500px] w-full bg-slate-100 grayscale hover:grayscale-0 transition-all duration-1000 relative mt-20">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193397.3551579737!2d30.2520625!3d40.7719625!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14cb6599b45e7f1b%3A0xc392e2133a8a3a0d!2sSakarya!5e0!3m2!1str!2str!4v1700000000000!5m2!1str!2str"
+          src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d188.48880587821307!2d30.50763411393848!3d40.89774357467647!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNDDCsDUzJzUxLjciTiAzMMKwMzAnMjcuOSJF!5e0!3m2!1str!2str!4v1767361404509!5m2!1str!2str"
           width="100%"
           height="100%"
           style={{ border: 0 }}

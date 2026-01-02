@@ -127,7 +127,7 @@ const Footer = () => {
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-medium text-slate-500">
-                      Sakarya Prefabrik Üretim Tesisleri, <br /> Erenler / Sakarya
+                      Soğucak, Kervan/1 Sokak No: 2/4, 54160 <br />Söğütlü / Sakarya
                     </p>
                   </div>
                   <button
