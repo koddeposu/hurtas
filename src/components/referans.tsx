@@ -1,54 +1,74 @@
 "use client";
-import { motion } from 'framer-motion';
-import {
-  Zap
-} from 'lucide-react';
+
+import { motion } from "framer-motion";
+import Image from "next/image";
+
+import Airbnb from "@/assets/referans/airbnb.webp";
+import AnkaraSigorta from "@/assets/referans/ankara-sigorta.webp";
+import Canva from "@/assets/referans/canva.webp";
+import Exon from "@/assets/referans/exon.webp";
+import Hubspot from "@/assets/referans/hubspot.webp";
+import Huvai from "@/assets/referans/huvai.webp";
+import Kale from "@/assets/referans/kale.webp";
+import Netflix from "@/assets/referans/netflix.webp";
+import Patagonia from "@/assets/referans/patagonia.webp";
+import RaySigorta from "@/assets/referans/ray-sigorta.webp";
+import Spotify from "@/assets/referans/spotify.webp";
+import Tesla from "@/assets/referans/tesla.webp";
+import Vodafone from "@/assets/referans/vodofone.webp";
+import Western from "@/assets/referans/western.webp";
+import Whatsapp from "@/assets/referans/whatsapp.webp";
+import Zendesk from "@/assets/referans/zendesk.webp";
+import Ziraat from "@/assets/referans/ziraat.webp";
+
+export const logos = [
+  Airbnb,
+  AnkaraSigorta,
+  Canva,
+  Exon,
+  Hubspot,
+  Huvai,
+  Kale,
+  Netflix,
+  Patagonia,
+  RaySigorta,
+  Spotify,
+  Tesla,
+  Vodafone,
+  Western,
+  Whatsapp,
+  Zendesk,
+  Ziraat,
+];
 
 export const Referans = () => {
-
   return (
-    <section className=" overflow-hidden relative">
+    <section className="overflow-hidden relative py-16 space-y-10">
 
-      <div className='space-y-6'>
-        <motion.div
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-          className="flex gap-24 whitespace-nowrap items-center min-w-full"
-        >
-          {[...Array(2)].map((_, i) => (
-            <div key={i} className="flex gap-24 items-center">
-              {["GLOBAL", "VIZYON", "AKTAŞ", "MODERN", "PRESTİJ", "GÜVEN"].map((name, index) => (
-                <div key={index} className="flex items-center gap-4 group">
-                  <div className="w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center text-slate-300 group-hover:text-[#165b39] group-hover:border-[#165b39] transition-all">
-                    <Zap size={18} />
-                  </div>
-                  <span className="text-5xl font-black text-slate-100 group-hover:text-slate-900 transition-all italic tracking-tighter uppercase">{name}</span>
-                </div>
-              ))}
-            </div>
-          ))}
-        </motion.div>
-        <motion.div
-          animate={{ x: ["-50%", "0%"] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          className="flex gap-24  items-center min-w-full"
-        >
-          {[...Array(2)].map((_, i) => (
-            <div key={i} className="flex gap-24 items-center">
-              {["GLOBAL", "VIZYON", "AKTAŞ", "MODERN", "PRESTİJ", "GÜVEN"].map((name, index) => (
-                <div key={index} className="flex items-center gap-4 group">
-                  <div className="w-12 h-12 rounded-full border border-slate-200 flex items-center justify-center text-slate-300 group-hover:text-[#165b39] group-hover:border-[#165b39] transition-all">
-                    <Zap size={18} />
-                  </div>
-                  <span className="text-5xl font-black text-slate-100 group-hover:text-slate-900 transition-all italic tracking-tighter uppercase">{name}</span>
-                </div>
-              ))}
-            </div>
-          ))}
-        </motion.div>
-      </div>
-
+      {/* ÜST SATIR */}
+      <motion.div
+        animate={{ x: ["0%", "-100%"] }}
+        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
+        className="flex items-center gap-24 min-w-full"
+      >
+        {[...Array(2)].map((_, i) => (
+          <div key={i} className="flex items-center gap-24">
+            {logos.map((logo, index) => (
+              <div
+                key={index}
+                className="relative w-40 h-20 "
+              >
+                <Image
+                  src={logo}
+                  alt="Referans"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            ))}
+          </div>
+        ))}
+      </motion.div>
     </section>
   );
 };
-
