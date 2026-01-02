@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     default: "Sakarya CT Prefabrik Evler",
     template: "%s | Sakarya CT Prefabrik Evler",
   },
-  description: "Prefabrik ev, çelik ev ve konteyner çözümleri! Hızlı kurulum, modern tasarımlar, Sakarya CT Prefabrik 20 yıllık deneyim. Ücretsiz keşif +90 537 518 30 06.",
+  description: "Prefabrik ev,  çelik ev ve konteyner çözümleri! Hızlı kurulum, modern tasarımlar, Sakarya CT Prefabrik 20 yıllık deneyim. Ücretsiz keşif +90 537 518 30 06.",
 };
 
 const geistSans = Geist({
