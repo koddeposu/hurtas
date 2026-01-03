@@ -106,6 +106,8 @@ export default function RootLayout({
   return (
     <html lang="tr">
       <head>
+        <meta name="yandex-verification" content="d1e22bf8dd1eb29e" />
+
         <meta name="google-site-verification" content="-eKu2_9KxeaM_RgTv1LMwIx2955IHuOtoSJYUdxScT0" />
         {/* Google Analytics */}
         <script
