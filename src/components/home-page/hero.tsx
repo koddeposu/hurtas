@@ -36,7 +36,7 @@ function AnimatedGradientText() {
         `}</style>
 
         <p className="shimmer-text text-lg lg:text-2xl font-black tracking-tighter uppercase">
-          "HER BİR DEĞER HER MÜŞTERİ BİR REFERANSTIR"
+          "HER EV BİR DEĞER HER MÜŞTERİ BİR REFERANSTIR"
         </p>
       </div>
     </div>
