@@ -8,6 +8,41 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Modal } from '../ui/modal';
 
+function AnimatedGradientText() {
+  return (
+    <div className="flex items-center pt-7">
+      <div className="relative">
+        <style>{`
+          @keyframes shimmer-sweep {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+          }
+
+          .shimmer-text {
+            /* Ana renk koyu bir Slate, parlama rengi ise beyaz/gümüş */
+            background: linear-gradient(
+              to right,
+              #0f172a 20%,
+              #0f172a 40%,
+              #10b981 50%,
+              #0f172a 60%,
+              #0f172a 80%
+            );
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer-sweep 4s linear infinite;
+          }
+        `}</style>
+
+        <p className="shimmer-text text-lg lg:text-2xl font-black tracking-tighter uppercase">
+          "HER BİR DEĞER HER MÜŞTERİ BİR REFERANSTIR"
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export const Hero4 = () => {
   const [modal, setModal] = useState(false);
   const router = useRouter();
@@ -54,6 +89,7 @@ export const Hero4 = () => {
                 Sakarya <br />
                 <span className="text-secondary/90">Prefabrik Ev</span>
               </h1>
+              <AnimatedGradientText />
               <p className="mt-6 text-md lg:text-lg text-slate-500 font-medium max-w-lg leading-relaxed">
                 Geleneksel betonarme süreçlerini geride bırakın. Modern mimari, sarsılmaz çelik konstrüksiyon ve estetik tasarımı bir araya getiriyoruz.
               </p>

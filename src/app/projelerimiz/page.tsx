@@ -150,8 +150,14 @@ const ProjectsPage = () => {
                 className="relative w-[85%] h-[80%] z-10"
               >
                 <div className="relative w-full h-full rounded-[4rem] overflow-hidden border-[12px] border-white">
-                  <Image src={image1} alt="Lüks Proje" fill className="object-cover" priority />
-                  <div className="absolute inset-0 bg-gradient-to-tr from-[#49202d]/20 to-transparent" />
+                  <video
+                    src="/proje-video.webm"
+                    autoPlay
+                    loop
+                    playsInline
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-tr from-[#49202d]/40 to-transparent" />
                 </div>
               </motion.div>
 
