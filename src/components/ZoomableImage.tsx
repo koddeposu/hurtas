@@ -34,6 +34,7 @@ export function ZoomableImage({ src, alt }: { src: string; alt: string }) {
         transition={{ type: "spring", stiffness: 150, damping: 20, mass: 0.5 }}
         style={{ originX: 0.5, originY: 0.5 }}
       >
+
         <Image
           src={src}
           alt={alt}
@@ -41,7 +42,6 @@ export function ZoomableImage({ src, alt }: { src: string; alt: string }) {
           className="object-cover select-none"
           draggable={false}
         />
-
 
         <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
           <Image

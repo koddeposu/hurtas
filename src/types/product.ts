@@ -322,6 +322,29 @@ export const MOCK_PRODUCT: Product[] = [
     ],
   },
   {
+    id: "34",
+    name: "3+1 Tek Katlı Prefabrik Ev 81 m2",
+    slug: "3-1-tek-katli-prefabrik-ev-81-m2",
+    area: "81",
+    room: "3+1",
+    floor: "1",
+    bath: "1",
+    height: "2.5",
+    category: "Tek Katlı",
+    price: "644700",
+    oldPrice: "694700",
+    img: [
+      {
+        src: "tek-katli-prefabrik2-3+1-81.jpg",
+        alt: "3+1 Tek Katlı Prefabrik Ev 81 m2 ev modeli",
+      },
+      {
+        src: "tek-katli-prefabrik2-3+1-81-plan-1.jpg",
+        alt: "3+1 Tek Katlı Prefabrik Ev 81 m2 yerleşim planı",
+      },
+    ],
+  },
+  {
     id: "25",
     name: "2+1 Tek Katlı Prefabrik Ev 84 m2",
     slug: "2-1-tek-katli-prefabrik-ev-84-m2",
@@ -345,6 +368,29 @@ export const MOCK_PRODUCT: Product[] = [
     ],
   },
   {
+    id: "35",
+    name: "3+1 Tek Katlı Prefabrik Ev 86 m2",
+    slug: "3-1-tek-katli-prefabrik-ev-86-m2",
+    area: "86",
+    room: "3+1",
+    floor: "1",
+    bath: "1",
+    height: "2.5",
+    category: "Tek Katlı",
+    price: "662400",
+    oldPrice: "694300",
+    img: [
+      {
+        src: "tek-katli-prefabrik-3+1-86.webp",
+        alt: "3+1 Tek Katlı Prefabrik Ev 86 m2 bina görsel",
+      },
+      {
+        src: "tek-katli-prefabrik-3+1-86-plan-1.jpg",
+        alt: "3+1 Tek Katlı Prefabrik Ev 86 m2 şema",
+      },
+    ],
+  },
+  {
     id: "26",
     name: "2+1 Tek Katlı Prefabrik Ev 93 m2",
     slug: "2-1-tek-katli-prefabrik-ev-93-m2",
@@ -364,6 +410,54 @@ export const MOCK_PRODUCT: Product[] = [
       {
         src: "tek-katli-prefabrik-2+1-93-plan-1.webp",
         alt: "2+1 Tek Katlı Prefabrik Ev 93 m2 yerleşim planı",
+      },
+    ],
+  },
+
+  {
+    id: "36",
+    name: "3+1 Tek Katlı Prefabrik Ev 95 m2",
+    slug: "3-1-tek-katli-prefabrik-ev-95-m2",
+    area: "95",
+    room: "3+1",
+    floor: "1",
+    bath: "2",
+    height: "2.5",
+    category: "Tek Katlı",
+    price: "687900",
+    oldPrice: "702900",
+    img: [
+      {
+        src: "tek-katli-prefabrik-3+1-95.jpg",
+        alt: "3+1 Tek Katlı Prefabrik Ev 95 m2 bitmiş ev",
+      },
+      {
+        src: "tek-katli-prefabrik-3+1-95-plan-1.jpg",
+        alt: "3+1 Tek Katlı Prefabrik Ev 95 m2 banyolu plan",
+      },
+    ],
+  },
+
+  {
+    id: "37",
+    name: "3+1 Tek Katlı Prefabrik Ev 98 m2",
+    slug: "3-1-tek-katli-prefabrik-ev-98-m2",
+    area: "98",
+    room: "3+1",
+    floor: "1",
+    bath: "1",
+    height: "2.5",
+    category: "Tek Katlı",
+    price: "808600",
+    oldPrice: "888600",
+    img: [
+      {
+        src: "tek-katli-prefabrik-3+1-98.jpg",
+        alt: "3+1 Tek Katlı Prefabrik Ev 98 m2 villa tipi",
+      },
+      {
+        src: "tek-katli-prefabrik-3+1-98-plan-1.jpg",
+        alt: "3+1 Tek Katlı Prefabrik Ev 98 m2 teknik plan",
       },
     ],
   },
@@ -529,125 +623,6 @@ export const MOCK_PRODUCT: Product[] = [
     ],
   },
   {
-    id: "34",
-    name: "3+1 Tek Katlı Prefabrik Ev 81 m2",
-    slug: "3-1-tek-katli-prefabrik-ev-81-m2",
-    area: "81",
-    room: "3+1",
-    floor: "1",
-    bath: "1",
-    height: "2.5",
-    category: "Tek Katlı",
-    price: "644700",
-    oldPrice: "694700",
-    img: [
-      {
-        src: "tek-katli-prefabrik2-3+1-81.jpg",
-        alt: "3+1 Tek Katlı Prefabrik Ev 81 m2 ev modeli",
-      },
-      {
-        src: "tek-katli-prefabrik2-3+1-81-plan-1.jpg",
-        alt: "3+1 Tek Katlı Prefabrik Ev 81 m2 yerleşim planı",
-      },
-    ],
-  },
-  {
-    id: "35",
-    name: "3+1 Tek Katlı Prefabrik Ev 86 m2",
-    slug: "3-1-tek-katli-prefabrik-ev-86-m2",
-    area: "86",
-    room: "3+1",
-    floor: "1",
-    bath: "1",
-    height: "2.5",
-    category: "Tek Katlı",
-    price: "662400",
-    oldPrice: "694300",
-    img: [
-      {
-        src: "tek-katli-prefabrik-3+1-86.webp",
-        alt: "3+1 Tek Katlı Prefabrik Ev 86 m2 bina görsel",
-      },
-      {
-        src: "tek-katli-prefabrik-3+1-86-plan-1.jpg",
-        alt: "3+1 Tek Katlı Prefabrik Ev 86 m2 şema",
-      },
-    ],
-  },
-  {
-    id: "36",
-    name: "3+1 Tek Katlı Prefabrik Ev 95 m2",
-    slug: "3-1-tek-katli-prefabrik-ev-95-m2",
-    area: "95",
-    room: "3+1",
-    floor: "1",
-    bath: "2",
-    height: "2.5",
-    category: "Tek Katlı",
-    price: "687900",
-    oldPrice: "702900",
-    img: [
-      {
-        src: "tek-katli-prefabrik-3+1-95.jpg",
-        alt: "3+1 Tek Katlı Prefabrik Ev 95 m2 bitmiş ev",
-      },
-      {
-        src: "tek-katli-prefabrik-3+1-95-plan-1.jpg",
-        alt: "3+1 Tek Katlı Prefabrik Ev 95 m2 banyolu plan",
-      },
-    ],
-  },
-  {
-    id: "37",
-    name: "3+1 Tek Katlı Prefabrik Ev 98 m2",
-    slug: "3-1-tek-katli-prefabrik-ev-98-m2",
-    area: "98",
-    room: "3+1",
-    floor: "1",
-    bath: "1",
-    height: "2.5",
-    category: "Tek Katlı",
-    price: "808600",
-    oldPrice: "888600",
-    img: [
-      {
-        src: "tek-katli-prefabrik-3+1-98.jpg",
-        alt: "3+1 Tek Katlı Prefabrik Ev 98 m2 villa tipi",
-      },
-      {
-        src: "tek-katli-prefabrik-3+1-98-plan-1.jpg",
-        alt: "3+1 Tek Katlı Prefabrik Ev 98 m2 teknik plan",
-      },
-    ],
-  },
-  {
-    id: "1",
-    name: "2+1 Çift Katlı Prefabrik Ev 100 m2",
-    slug: "2-1-cift-katli-prefabrik-ev-100-m2",
-    area: "100",
-    room: "2+1",
-    floor: "2",
-    bath: "1",
-    height: "2.5",
-    category: "Çift Katlı",
-    price: "896700",
-    oldPrice: "914500",
-    img: [
-      {
-        src: "2+1-cift-katli-prefabrik-100m2.jpg",
-        alt: "2+1 Çift Katlı Prefabrik Ev 100 m2 dış görünüş",
-      },
-      {
-        src: "2+1-cift-katli-prefabrik-100m2-plan-1.jpg",
-        alt: "2+1 Çift Katlı Prefabrik Ev 100 m2 kat planı 1",
-      },
-      {
-        src: "2+1-cift-katli-prefabrik-100m2-plan-2.jpg",
-        alt: "2+1 Çift Katlı Prefabrik Ev 100 m2 kat planı 2",
-      },
-    ],
-  },
-  {
     id: "2",
     name: "2+1 Çift Katlı Prefabrik Ev 82 m2",
     slug: "2-1-cift-katli-prefabrik-ev-82-m2",
@@ -674,6 +649,7 @@ export const MOCK_PRODUCT: Product[] = [
       },
     ],
   },
+
   {
     id: "3",
     name: "2+1 Çift Katlı Prefabrik Ev 92 m2",
@@ -702,29 +678,29 @@ export const MOCK_PRODUCT: Product[] = [
     ],
   },
   {
-    id: "4",
-    name: "3+1 Çift Katlı Prefabrik Ev 122 m2",
-    slug: "3-1-cift-katli-prefabrik-ev-122-m2",
-    area: "122",
-    room: "3+1",
+    id: "1",
+    name: "2+1 Çift Katlı Prefabrik Ev 100 m2",
+    slug: "2-1-cift-katli-prefabrik-ev-100-m2",
+    area: "100",
+    room: "2+1",
     floor: "2",
-    bath: "2",
+    bath: "1",
     height: "2.5",
     category: "Çift Katlı",
-    price: "1146800",
-    oldPrice: "1210200",
+    price: "896700",
+    oldPrice: "914500",
     img: [
       {
-        src: "cift-katli-3+1-105.jpg",
-        alt: "3+1 Çift Katlı Prefabrik Ev 122 m2 dış görünüş",
+        src: "2+1-cift-katli-prefabrik-100m2.jpg",
+        alt: "2+1 Çift Katlı Prefabrik Ev 100 m2 dış görünüş",
       },
       {
-        src: "cift-katli-3+1-105-plan-1.jpg",
-        alt: "3+1 Çift Katlı Prefabrik Ev 122 m2 kat planı 1",
+        src: "2+1-cift-katli-prefabrik-100m2-plan-1.jpg",
+        alt: "2+1 Çift Katlı Prefabrik Ev 100 m2 kat planı 1",
       },
       {
-        src: "cift-katli-3+1-105-plan-2.jpg",
-        alt: "3+1 Çift Katlı Prefabrik Ev 122 m2 kat planı 2",
+        src: "2+1-cift-katli-prefabrik-100m2-plan-2.jpg",
+        alt: "2+1 Çift Katlı Prefabrik Ev 100 m2 kat planı 2",
       },
     ],
   },
@@ -782,6 +758,34 @@ export const MOCK_PRODUCT: Product[] = [
       },
     ],
   },
+  {
+    id: "4",
+    name: "3+1 Çift Katlı Prefabrik Ev 122 m2",
+    slug: "3-1-cift-katli-prefabrik-ev-122-m2",
+    area: "122",
+    room: "3+1",
+    floor: "2",
+    bath: "2",
+    height: "2.5",
+    category: "Çift Katlı",
+    price: "1146800",
+    oldPrice: "1210200",
+    img: [
+      {
+        src: "cift-katli-3+1-105.jpg",
+        alt: "3+1 Çift Katlı Prefabrik Ev 122 m2 dış görünüş",
+      },
+      {
+        src: "cift-katli-3+1-105-plan-1.jpg",
+        alt: "3+1 Çift Katlı Prefabrik Ev 122 m2 kat planı 1",
+      },
+      {
+        src: "cift-katli-3+1-105-plan-2.jpg",
+        alt: "3+1 Çift Katlı Prefabrik Ev 122 m2 kat planı 2",
+      },
+    ],
+  },
+
   {
     id: "7",
     name: "3+1 Çift Katlı Prefabrik Ev 122 m2",
@@ -863,33 +867,7 @@ export const MOCK_PRODUCT: Product[] = [
       },
     ],
   },
-  {
-    id: "10",
-    name: "3+1 Çift Katlı Prefabrik Ev 158 m2",
-    slug: "3-1-cift-katli-prefabrik-ev-158-m2",
-    area: "158",
-    room: "3+1",
-    floor: "2",
-    bath: "2",
-    height: "2.5",
-    category: "Çift Katlı",
-    price: "1317800",
-    oldPrice: "1415930",
-    img: [
-      {
-        src: "cift-katli-prefabrik-3+1-158.jpg",
-        alt: "3+1 Çift Katlı Prefabrik Ev 158 m2 bina",
-      },
-      {
-        src: "cift-katli-prefabrik-3+1-158-plan-2.jpg",
-        alt: "3+1 Çift Katlı Prefabrik Ev 158 m2 plan 2",
-      },
-      {
-        src: "cift-katli-prefabrik-3+1-158-plan-1.jpg",
-        alt: "3+1 Çift Katlı Prefabrik Ev 158 m2 plan 1",
-      },
-    ],
-  },
+
   {
     id: "11",
     name: "4+1 Çift Katlı Prefabrik Ev 142 m2",
@@ -941,6 +919,33 @@ export const MOCK_PRODUCT: Product[] = [
       {
         src: "cift-katli-prefabrik-4+1-149-plan-2.jpg",
         alt: "4+1 Çift Katlı Prefabrik Ev 149 m2 üst plan",
+      },
+    ],
+  },
+  {
+    id: "10",
+    name: "3+1 Çift Katlı Prefabrik Ev 158 m2",
+    slug: "3-1-cift-katli-prefabrik-ev-158-m2",
+    area: "158",
+    room: "3+1",
+    floor: "2",
+    bath: "2",
+    height: "2.5",
+    category: "Çift Katlı",
+    price: "1317800",
+    oldPrice: "1415930",
+    img: [
+      {
+        src: "cift-katli-prefabrik-3+1-158.jpg",
+        alt: "3+1 Çift Katlı Prefabrik Ev 158 m2 bina",
+      },
+      {
+        src: "cift-katli-prefabrik-3+1-158-plan-2.jpg",
+        alt: "3+1 Çift Katlı Prefabrik Ev 158 m2 plan 2",
+      },
+      {
+        src: "cift-katli-prefabrik-3+1-158-plan-1.jpg",
+        alt: "3+1 Çift Katlı Prefabrik Ev 158 m2 plan 1",
       },
     ],
   },
