@@ -26,10 +26,11 @@ export const Interactive = () => {
         <div className="grid lg:grid-cols-2 gap-5 md:gap-24 items-start">
           <div className="lg:sticky lg:top-32 space-y-4 md:space-y-8">
             <h2 className="text-5xl font-black text-slate-900 tracking-tighter uppercase">
-              HİKAYEMİZİN <br /> <span style={{ color: '#165b39' }}>KATMANLARI.</span>
+              PREFABRİK ÇELİK YAPIDA <br />
+              <span style={{ color: '#165b39' }}>HİKAYEMİZİN KATMANLARI</span>
             </h2>
             <p className="text-slate-400 font-medium max-w-sm leading-relaxed italic">
-              Süreçlerimizi bir binanın yükselişi gibi adım adım kurguladık. Her katmanda bir değer saklı.
+              Prefabrik çelik yapı projelerimizi bir binanın yükselişi gibi adım adım kurguladık.
             </p>
 
             <div className="flex flex-col gap-4 pt-2 md:pt-10">

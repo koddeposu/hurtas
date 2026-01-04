@@ -76,7 +76,7 @@ const AboutHero = () => {
               <Image
                 src={Hero2}
                 className="w-full h-full object-cover"
-                alt="prefabrik-evler"
+                alt="Türkiye geneli prefabrik çelik yapı üretimi"
               />
             </div>
 
