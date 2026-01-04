@@ -6,11 +6,13 @@ export const metadata: Metadata = {
   description: 'CT Prefabrik olarak 15 yıldır kaliteli, güvenli ve uygun fiyatlı prefabrik ev üretiyoruz. TSE onaylı malzemeler, profesyonel ekip ve müşteri memnuniyeti odaklı hizmet anlayışımızla yanınızdayız.',
   keywords: [
     'CT Prefabrik hakkında',
+    'ctprefabrik hakkında',
     'prefabrik ev üreticisi',
     'prefabrik firma',
     'güvenilir prefabrik',
     'TSE onaylı prefabrik',
     'CT Prefabrik referanslar',
+    'ctprefabrik referanslar',
     'prefabrik şirket',
     'kaliteli prefabrik ev',
   ],

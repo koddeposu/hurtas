@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   keywords: [
     'CT Prefabrik iletişim',
     'ctprefabrik iletişim',
+    'ctprefabrik iletişim',
     'prefabrik ev iletişim',
     'prefabrik firma telefon',
     'CT Prefabrik telefon',
