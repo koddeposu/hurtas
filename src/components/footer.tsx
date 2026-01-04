@@ -4,16 +4,27 @@ import {
   ArrowUpRight,
   Check,
   Copy,
-  Facebook,
   Home,
   Instagram,
   Mail,
   MapPin,
   Phone,
-  Twitter
 } from 'lucide-react';
 import { useState } from 'react';
 
+const pageLink = [
+  { name: "Hakkımızda", href: "/hakkimizda" },
+  { name: "Prefabrik Evler", href: "/prefabrik-evler" },
+  { name: "Blog", href: "/blog" },
+  { name: "Projelerimiz", href: "/projelerimiz" },
+  { name: "İletişim", href: "/iletisim" },
+]
+
+const services = [
+  { href: '/prefabrik-evler?kategori=Tek Katlı', name: 'Tek Katlı Prefabrik' },
+  { href: '/prefabrik-evler?kategori=Çift Katlı', name: 'Çift Katlı Prefabrik' },
+  { href: '/prefabrik-evler?kategori=Çelik Ev', name: 'Çelik Ev' },
+]
 const Footer = () => {
   const currentYear = new Date().getFullYear();
   const [copiedAddress, setCopiedAddress] = useState(false);
@@ -78,10 +89,10 @@ const Footer = () => {
               Sizin için güvenli, hızlı ve sürdürülebilir yaşam alanları tasarlıyoruz.
             </p>
             <div className="flex gap-4">
-              {[Instagram, Facebook, Twitter].map((Icon, i) => (
+              {[Instagram].map((Icon, i) => (
                 <motion.a
                   key={i}
-                  href="#"
+                  href="https://www.instagram.com/ctprefabrikev/"
                   whileHover={{ y: -5, scale: 1.1 }}
                   className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-[#165b39] hover:text-white transition-all shadow-sm"
                 >
@@ -95,9 +106,9 @@ const Footer = () => {
           <div className="lg:col-span-2 space-y-6">
             <h4 className="text-sm font-black uppercase tracking-[0.2em]" style={{ color: '#49202d' }}>Kurumsal</h4>
             <ul className="space-y-4">
-              {['Hakkımızda', 'Modellerimiz', 'Süreç', 'Projeler', 'Blog'].map((item) => (
-                <li key={item}>
-                  <div className="text-sm font-semibold text-slate-500 hover:text-[#165b39] transition-colors">{item}</div>
+              {pageLink.map((item, index) => (
+                <li key={index} className='cursor-pointer'>
+                  <a href={item.href} className="text-sm font-semibold text-slate-500 hover:text-[#165b39] transition-colors cursor-pointer">{item.name}</a>
                 </li>
               ))}
             </ul>
@@ -107,9 +118,9 @@ const Footer = () => {
           <div className="lg:col-span-2 space-y-6">
             <h4 className="text-sm font-black uppercase tracking-[0.2em]" style={{ color: '#49202d' }}>Hizmetler</h4>
             <ul className="space-y-4">
-              {['Prefabrik Evler', 'Çelik Yapılar', 'Konteyner', 'Özel Çizim', 'Montaj'].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-sm font-semibold text-slate-500 hover:text-[#165b39] transition-colors">{item}</a>
+              {services.map((item, index) => (
+                <li key={index}>
+                  <a href={item.href} className="text-sm font-semibold text-slate-500 hover:text-[#165b39] transition-colors">{item.name}</a>
                 </li>
               ))}
             </ul>

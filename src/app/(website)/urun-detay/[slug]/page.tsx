@@ -37,6 +37,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     'anahtar teslim prefabrik ev',
     'çelik konstrüksiyon prefabrik ev',
     'CT Prefabrik ürünleri',
+    'CT Prefabrik Evleri',
+    'ctprefabrik ürünleri',
+    'ctprefabrik evleri',
   ].filter(Boolean);
 
   return {

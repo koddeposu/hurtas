@@ -6,9 +6,12 @@ export const metadata: Metadata = {
   description: 'CT Prefabrik ile iletişime geçin. Telefon: +90 537 518 30 06, E-posta: info@ctprefabrik.com. Sakarya merkez ofisimizden veya online olarak bize ulaşabilirsiniz.',
   keywords: [
     'CT Prefabrik iletişim',
+    'ctprefabrik iletişim',
     'prefabrik ev iletişim',
     'prefabrik firma telefon',
     'CT Prefabrik telefon',
+    'ctprefabrik telefon',
+    'ctprefabrik adres',
     'CT Prefabrik adres',
     'Sakarya prefabrik',
     'prefabrik teklif al',

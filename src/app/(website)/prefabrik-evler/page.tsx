@@ -17,6 +17,7 @@ export const metadata: Metadata = {
     '2 katlı prefabrik ev',
     'villa tipi prefabrik ev',
     'CT Prefabrik',
+    'ctprefabrik',
   ],
   openGraph: {
     title: 'Prefabrik Ev Modelleri | CT Prefabrik',
