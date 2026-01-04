@@ -28,22 +28,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     ? product.description[0].substring(0, 160)
     : `${product.name} - ${product.room ? product.room + ' oda' : ''} ${product.bath ? product.bath + ' banyo' : ''} prefabrik ev modeli. Uygun fiyatlarla hemen teslim.`;
 
-  // Anahtar kelimeler
   const keywords = [
     product.name,
-    'prefabrik ev',
-    'prefabrik ev modelleri',
-    'prefabrik ev fiyatları',
-    product.room && `${product.room} oda prefabrik ev`,
-    product.bath && `${product.bath} banyo`,
-    product.floor && `${product.floor} katlı prefabrik`,
-    'CT Prefabrik',
-    'prefabrik konut',
-    'modüler ev',
+    `${product.room} oda prefabrik ev`,
+    `${product.room} prefabrik ev fiyatı`,
+    `${product.floor} katlı prefabrik ev`,
+    "Prefabrik ev fiyatları",
+    'anahtar teslim prefabrik ev',
+    'çelik konstrüksiyon prefabrik ev',
+    'CT Prefabrik ürünleri',
   ].filter(Boolean);
 
   return {
-    title: `${product.name} | Prefabrik Ev Modelleri | CT Prefabrik`,
+    title: `${product.name} – ${product.room ? product.room + ' Oda' : ''} Prefabrik Ev | CT Prefabrik`,
     description,
     keywords: keywords.join(', '),
 

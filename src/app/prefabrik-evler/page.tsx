@@ -4,16 +4,19 @@ import { Suspense } from "react";
 
 
 export const metadata: Metadata = {
-  title: 'Prefabrik Ev Modelleri | Tüm Ürünler',
-  description: 'CT Prefabrik\'in tüm prefabrik ev modellerini inceleyin. Farklı oda sayıları, kat seçenekleri ve fiyat aralıklarında yüzlerce model. TSE onaylı, 10 yıl garantili.',
+  title: 'Prefabrik Ev Modelleri ve Fiyatları | CT Prefabrik',
+  description: 'CT Prefabrik’in prefabrik ev modellerini ve fiyatlarını inceleyin. 1+1, 2+1, 3+1 seçenekleri, tek katlı ve 2 katlı prefabrik evler. Anahtar teslim, TSE onaylı.',
   keywords: [
     'prefabrik ev modelleri',
-    'prefabrik ev kataloğu',
     'prefabrik ev fiyatları',
-    '2 katlı prefabrik',
-    '3 oda prefabrik ev',
-    'tek katlı prefabrik',
-    'villa tipi prefabrik',
+    'anahtar teslim prefabrik ev',
+    '1+1 prefabrik ev',
+    '2+1 prefabrik ev',
+    '3+1 prefabrik ev',
+    'tek katlı prefabrik ev',
+    '2 katlı prefabrik ev',
+    'villa tipi prefabrik ev',
+    'CT Prefabrik',
   ],
   openGraph: {
     title: 'Prefabrik Ev Modelleri | CT Prefabrik',

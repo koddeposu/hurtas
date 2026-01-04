@@ -13,16 +13,14 @@ const HeroSection = () => (
     <div className="container mx-auto max-w-[1400px] relative">
       <div className="absolute top-0 right-0 w-64 h-64 bg-[#49202d]/5 rounded-full blur-3xl -z-10" />
       <div className="border-b border-slate-200 pb-10">
-        <motion.span
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+        <h1
           className="text-[10px] font-black tracking-[0.4em] text-[#49202d] uppercase mb-4 block"
         >
-          Üretim Kataloğu 2025
-        </motion.span>
-        <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter">
-          PROJE <span className="text-slate-300 italic font-serif">SEÇKİSİ.</span>
+          Prefabrik Ev Modelleri
         </h1>
+        <h2 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter">
+          PROJE <span className="text-slate-300 italic font-serif">SEÇKİSİ . 2026</span>
+        </h2>
       </div>
     </div>
   </section>
@@ -265,7 +263,7 @@ const ProductsClient = () => {
   };
 
   return (
-    <main className='max-w-[1280px] w-full'>
+    <div className='max-w-[1280px] w-full'>
       <ProjectGalleryModal
         projects={
           selectedProduct
@@ -317,7 +315,7 @@ const ProductsClient = () => {
         onCategorySelect={setActiveTab}
         onSortSelect={setSortBy}
       />
-    </main>
+    </div>
   );
 };
 
