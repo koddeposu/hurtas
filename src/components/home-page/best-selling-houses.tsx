@@ -49,7 +49,7 @@ export const BestSellingHouses = () => {
             </motion.div>
 
             <p className="text-slate-400 font-medium text-sm md:text-right max-w-xs uppercase tracking-widest">
-              Yüzlerce aileye yuva olan, en popüler tasarımlarımız.
+              Yüzlerce aileye yuva olan, en çok tercih edilen prefabrik ev modellerimiz.
             </p>
           </div>
 

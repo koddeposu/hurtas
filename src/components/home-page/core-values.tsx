@@ -50,7 +50,7 @@ export const CoreValues = () => {
             className="text-2xl md:text-4xl font-black tracking-tighter"
             style={{ color: '#165b39' }}
           >
-            DEĞERLERİMİZ <span style={{ color: '#49202d' }}>& GÜCÜMÜZ</span>
+            PREFABRİK EVLERDE DEĞERLERİMİZ <span style={{ color: '#49202d' }}>& GÜCÜMÜZ</span>
           </motion.h2>
           <motion.div
             initial={{ width: 0 }}

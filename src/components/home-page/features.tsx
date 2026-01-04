@@ -38,7 +38,7 @@ export const Features = () => {
 
               <h2 className="text-3xl md:text-6xl font-black tracking-tighter  text-slate-900 leading-[1.1] mb-8">
                 Neden <br />
-                <span style={{ color: '#49202d' }}>CT</span> Prefabrik?
+                <span style={{ color: '#49202d' }}>CT</span> Prefabrik Ev?
               </h2>
 
               <div className="relative pl-8 border-l-2 border-slate-100 space-y-6">
