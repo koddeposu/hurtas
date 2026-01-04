@@ -1,14 +1,13 @@
 "use client";
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-  ArrowUpRight,
   Check,
   Copy,
   Home,
   Instagram,
   Mail,
   MapPin,
-  Phone,
+  Phone
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -69,11 +68,14 @@ const Footer = () => {
             </h2>
           </div>
 
-          <button
-            className="relative z-10 px-10 py-5 bg-white text-slate-900 rounded-full font-bold text-sm flex items-center gap-3 hover:bg-emerald-50 transition-all shadow-xl active:scale-95"
+          <a
+            href="tel:+905375183006"
+            className="cursor-pointer relative z-10 px-10 py-5 bg-white text-slate-900 rounded-full font-bold text-sm flex items-center gap-3 hover:bg-emerald-50 transition-all shadow-xl active:scale-95"
           >
-            TEKLİF ALIN <ArrowUpRight size={20} className="text-[#165b39]" />
-          </button>
+            <Phone size={20} fill="currentColor" />
+            Bizi Arayın
+          </a>
+
         </motion.div>
 
         {/* Ana Footer İçeriği */}
