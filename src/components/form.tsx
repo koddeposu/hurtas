@@ -1,6 +1,6 @@
 "use client";
-import { motion } from 'framer-motion';
-import { CheckCircle2, MessageSquare, Phone, Send, User } from 'lucide-react';
+import { motion } from "framer-motion";
+import { CheckCircle2, MessageSquare, Phone, Send, User } from "lucide-react";
 
 export const LeadForm = () => {
   return (
@@ -8,12 +8,11 @@ export const LeadForm = () => {
       <div className="container mx-auto max-w-6xl">
         <div className="bg-white rounded-[3.5rem] shadow-md  border border-slate-50 overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-12">
-
             {/* SOL TARAF: Bilgilendirme Alanı */}
             <div className="lg:col-span-5 p-10 md:p-16 flex flex-col justify-center relative overflow-hidden bg-secondary">
               {/* Arka plan dekoratif halka */}
               <div className="absolute -top-20 -left-20 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
-              <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-[#49202d]/20 rounded-full blur-3xl" />
+              <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-primary/20 rounded-full blur-3xl" />
 
               <div className="relative z-10 space-y-8">
                 <motion.div
@@ -23,10 +22,15 @@ export const LeadForm = () => {
                 >
                   <h2 className="text-4xl md:text-5xl font-black text-white leading-tight tracking-tighter">
                     Ücretsiz <br />
-                    <span className="text-emerald-300 italic">Danışmanlık</span> Alın.
+                    <span className="text-emerald-300 italic">
+                      Danışmanlık
+                    </span>{" "}
+                    Alın.
                   </h2>
                   <p className="mt-6 text-emerald-50/70 font-medium leading-relaxed">
-                    Hayalinizdeki prefabrik ev projesini uzman ekibimizle planlayın. Size en uygun çözümü ve bütçeyi birlikte belirleyelim.
+                    Hayalinizdeki prefabrik ev projesini uzman ekibimizle
+                    planlayın. Size en uygun çözümü ve bütçeyi birlikte
+                    belirleyelim.
                   </p>
                 </motion.div>
 
@@ -34,10 +38,16 @@ export const LeadForm = () => {
                   {[
                     "Kişiye özel mimari çizim",
                     "Detaylı maliyet analizi",
-                    "Zemin ve arazi danışmanlığı"
+                    "Zemin ve arazi danışmanlığı",
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-3 text-white/90 font-semibold text-sm">
-                      <CheckCircle2 size={18} className="text-emerald-400 shrink-0" />
+                    <div
+                      key={i}
+                      className="flex items-center gap-3 text-white/90 font-semibold text-sm"
+                    >
+                      <CheckCircle2
+                        size={18}
+                        className="text-emerald-400 shrink-0"
+                      />
                       {item}
                     </div>
                   ))}
@@ -51,7 +61,9 @@ export const LeadForm = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Ad Soyad */}
                   <div className="space-y-2">
-                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Adınız Soyadınız</label>
+                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                      Adınız Soyadınız
+                    </label>
                     <div className="relative group">
                       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-[#165b39] transition-colors">
                         <User size={18} />
@@ -66,7 +78,9 @@ export const LeadForm = () => {
 
                   {/* Telefon */}
                   <div className="space-y-2">
-                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Telefon Numaranız</label>
+                    <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                      Telefon Numaranız
+                    </label>
                     <div className="relative group">
                       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-[#165b39] transition-colors">
                         <Phone size={18} />
@@ -82,7 +96,9 @@ export const LeadForm = () => {
 
                 {/* Mesaj */}
                 <div className="space-y-2">
-                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Mesajınız / Hayalinizdeki Ev</label>
+                  <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                    Mesajınız / Hayalinizdeki Ev
+                  </label>
                   <div className="relative group">
                     <div className="absolute top-4 left-4 pointer-events-none text-slate-300 group-focus-within:text-[#165b39] transition-colors">
                       <MessageSquare size={18} />
@@ -100,21 +116,23 @@ export const LeadForm = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="w-full py-5 rounded-2xl text-white font-bold text-sm tracking-[0.2em] flex items-center justify-center gap-3 shadow-xl transition-all"
-                  style={{ backgroundColor: '#165b39' }}
+                  style={{ backgroundColor: "#165b39" }}
                 >
                   TEKLİFİ GÖNDER <Send size={18} />
                 </motion.button>
 
                 <p className="text-center text-[10px] text-slate-400 font-medium">
-                  Verileriniz KVKK kapsamında korunmaktadır. Formu göndererek <span className="underline cursor-pointer">aydınlatma metnini</span> kabul etmiş sayılırsınız.
+                  Verileriniz KVKK kapsamında korunmaktadır. Formu göndererek{" "}
+                  <span className="underline cursor-pointer">
+                    aydınlatma metnini
+                  </span>{" "}
+                  kabul etmiş sayılırsınız.
                 </p>
               </form>
             </div>
-
           </div>
         </div>
       </div>
     </section>
   );
 };
-

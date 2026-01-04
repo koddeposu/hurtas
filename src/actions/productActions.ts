@@ -1,0 +1,268 @@
+"use server";
+
+import { eq, desc, asc } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { db } from "@/db/drizzle";
+import { product, productImage, category } from "@/db/schema";
+import { requireAuth } from "@/lib/requireAuth";
+
+function generateId() {
+  return crypto.randomUUID();
+}
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/ğ/g, "g")
+    .replace(/ü/g, "u")
+    .replace(/ş/g, "s")
+    .replace(/ı/g, "i")
+    .replace(/ö/g, "o")
+    .replace(/ç/g, "c")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+export async function getProducts(categoryId?: string) {
+  let query = db
+    .select({
+      product: product,
+      category: category,
+    })
+    .from(product)
+    .leftJoin(category, eq(product.categoryId, category.id))
+    .orderBy(asc(product.order), desc(product.createdAt));
+
+  if (categoryId) {
+    query = query.where(eq(product.categoryId, categoryId)) as typeof query;
+  }
+
+  const results = await query;
+  return results;
+}
+
+export async function getProductBySlug(slug: string) {
+  const result = await db
+    .select({
+      product: product,
+      category: category,
+    })
+    .from(product)
+    .leftJoin(category, eq(product.categoryId, category.id))
+    .where(eq(product.slug, slug))
+    .limit(1);
+
+  if (!result[0]) return null;
+
+  const images = await db
+    .select()
+    .from(productImage)
+    .where(eq(productImage.productId, result[0].product.id))
+    .orderBy(asc(productImage.order));
+
+  return {
+    ...result[0].product,
+    category: result[0].category,
+    images,
+  };
+}
+
+export async function getProductById(id: string) {
+  const result = await db
+    .select()
+    .from(product)
+    .where(eq(product.id, id))
+    .limit(1);
+
+  if (!result[0]) return null;
+
+  const images = await db
+    .select()
+    .from(productImage)
+    .where(eq(productImage.productId, id))
+    .orderBy(asc(productImage.order));
+
+  return {
+    ...result[0],
+    images,
+  };
+}
+
+export async function getProductsWithImages() {
+  const products = await db
+    .select({
+      product: product,
+      category: category,
+    })
+    .from(product)
+    .leftJoin(category, eq(product.categoryId, category.id))
+    .where(eq(product.isActive, true))
+    .orderBy(asc(product.order));
+
+  const productsWithImages = await Promise.all(
+    products.map(async (p) => {
+      const images = await db
+        .select()
+        .from(productImage)
+        .where(eq(productImage.productId, p.product.id))
+        .orderBy(asc(productImage.order));
+
+      return {
+        ...p.product,
+        category: p.category,
+        images,
+      };
+    }),
+  );
+
+  return productsWithImages;
+}
+
+export async function createProduct(data: {
+  categoryId?: string;
+  name: string;
+  area: string;
+  room: string;
+  floor: string;
+  bath: string;
+  height: string;
+  price?: string;
+  oldPrice?: string;
+  description?: string;
+  isActive?: boolean;
+  order?: number;
+}) {
+  await requireAuth();
+
+  const id = generateId();
+  const slug = slugify(data.name);
+
+  await db.insert(product).values({
+    id,
+    categoryId: data.categoryId ?? null,
+    name: data.name,
+    slug,
+    area: data.area,
+    room: data.room,
+    floor: data.floor,
+    bath: data.bath,
+    height: data.height,
+    price: data.price ?? null,
+    oldPrice: data.oldPrice ?? null,
+    description: data.description ?? null,
+    isActive: data.isActive ?? true,
+    order: data.order ?? 0,
+  });
+
+  revalidatePath("/admin/products");
+  revalidatePath("/prefabrik-evler");
+
+  return { id, slug };
+}
+
+export async function updateProduct(
+  id: string,
+  data: {
+    categoryId?: string | null;
+    name?: string;
+    area?: string;
+    room?: string;
+    floor?: string;
+    bath?: string;
+    height?: string;
+    price?: string | null;
+    oldPrice?: string | null;
+    description?: string | null;
+    isActive?: boolean;
+    order?: number;
+  },
+) {
+  await requireAuth();
+
+  const updateData: Record<string, unknown> = {};
+
+  if (data.name !== undefined) {
+    updateData.name = data.name;
+    updateData.slug = slugify(data.name);
+  }
+  if (data.categoryId !== undefined) updateData.categoryId = data.categoryId;
+  if (data.area !== undefined) updateData.area = data.area;
+  if (data.room !== undefined) updateData.room = data.room;
+  if (data.floor !== undefined) updateData.floor = data.floor;
+  if (data.bath !== undefined) updateData.bath = data.bath;
+  if (data.height !== undefined) updateData.height = data.height;
+  if (data.price !== undefined) updateData.price = data.price;
+  if (data.oldPrice !== undefined) updateData.oldPrice = data.oldPrice;
+  if (data.description !== undefined) updateData.description = data.description;
+  if (data.isActive !== undefined) updateData.isActive = data.isActive;
+  if (data.order !== undefined) updateData.order = data.order;
+
+  await db.update(product).set(updateData).where(eq(product.id, id));
+
+  revalidatePath("/admin/products");
+  revalidatePath("/prefabrik-evler");
+
+  return { success: true };
+}
+
+export async function deleteProduct(id: string) {
+  await requireAuth();
+
+  // Images are deleted automatically via cascade
+  await db.delete(product).where(eq(product.id, id));
+
+  revalidatePath("/admin/products");
+  revalidatePath("/prefabrik-evler");
+
+  return { success: true };
+}
+
+export async function addProductImage(
+  productId: string,
+  data: {
+    url: string;
+    alt: string;
+    order?: number;
+  },
+) {
+  await requireAuth();
+
+  const id = generateId();
+
+  await db.insert(productImage).values({
+    id,
+    productId,
+    url: data.url,
+    alt: data.alt,
+    order: data.order ?? 0,
+  });
+
+  revalidatePath("/admin/products");
+  revalidatePath("/prefabrik-evler");
+
+  return { id };
+}
+
+export async function deleteProductImage(imageId: string) {
+  await requireAuth();
+
+  await db.delete(productImage).where(eq(productImage.id, imageId));
+
+  revalidatePath("/admin/products");
+  revalidatePath("/prefabrik-evler");
+
+  return { success: true };
+}
+
+export async function updateProductImageOrder(imageId: string, order: number) {
+  await requireAuth();
+
+  await db
+    .update(productImage)
+    .set({ order })
+    .where(eq(productImage.id, imageId));
+
+  revalidatePath("/admin/products");
+
+  return { success: true };
+}

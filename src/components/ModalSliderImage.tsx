@@ -1,16 +1,16 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 import {
   Carousel,
   CarouselApi,
   CarouselContent,
   CarouselItem,
-} from '@/components/ui/carousel';
-import { Modal } from './ui/modal';
+} from "@/components/ui/carousel";
+import { Modal } from "./ui/modal";
 
 export interface ProjectImage {
   id: string | number;
@@ -44,14 +44,14 @@ export function ProjectGalleryModal({
     };
 
     // 'select' olayına abone ol
-    api.on('select', onSelect);
+    api.on("select", onSelect);
 
     // İlk açılışta mevcut durumu eşitle
     onSelect();
 
     // Temizlik: Bileşen kapanınca dinleyiciyi kaldır
     return () => {
-      api.off('select', onSelect);
+      api.off("select", onSelect);
     };
   }, [api]);
   // ---------------------------------------------------
@@ -105,9 +105,10 @@ export function ProjectGalleryModal({
                     key={index}
                     onClick={() => api?.scrollTo(index)}
                     animate={{ width: current === index ? 22 : 10 }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                    className={`h-2.5 rounded-full cursor-pointer transition-colors ${current === index ? 'bg-secondary' : 'bg-white/70'
-                      }`}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    className={`h-2.5 rounded-full cursor-pointer transition-colors ${
+                      current === index ? "bg-secondary" : "bg-white/70"
+                    }`}
                   />
                 ))}
               </div>
@@ -125,10 +126,11 @@ export function ProjectGalleryModal({
                     // Burada setCurrent(index) demenize artık gerek yok,
                     // yukarıdaki api.on('select') bu işi otomatik yapıyor.
                   }}
-                  className={`border-2 rounded-lg overflow-hidden transition-all duration-300 ${current === index
-                      ? 'border-secondary scale-110 shadow-lg'
-                      : 'border-white opacity-40 hover:opacity-100'
-                    }`}
+                  className={`border-2 rounded-lg overflow-hidden transition-all duration-300 ${
+                    current === index
+                      ? "border-secondary scale-110 shadow-lg"
+                      : "border-white opacity-40 hover:opacity-100"
+                  }`}
                 >
                   <div className="relative w-16 h-16">
                     <Image

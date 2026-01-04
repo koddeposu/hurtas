@@ -1,7 +1,12 @@
-'use client'
+"use client";
 import { motion } from "framer-motion";
 import { atom, useAtom } from "jotai";
-import { BookOpen, ChevronLeft, ChevronRight, MousePointer2 } from "lucide-react";
+import {
+  BookOpen,
+  ChevronLeft,
+  ChevronRight,
+  MousePointer2,
+} from "lucide-react";
 import { useEffect } from "react";
 
 // Resim Çiftleri: left -> Teknik/Plan (-k), right -> Gerçek Resim
@@ -19,7 +24,7 @@ export const pageAtom = atom(0);
 export const pages: { front: string; back: string }[] = [
   {
     front: "katolog/prefabrik-ev-katolog-kapagi", // Ön Kapak (Sağda başlar)
-    back: `katolog/${catalogPairs[0].left}`,      // Kapak açılınca soldaki ilk teknik çizim
+    back: `katolog/${catalogPairs[0].left}`, // Kapak açılınca soldaki ilk teknik çizim
   },
 ];
 
@@ -30,7 +35,7 @@ for (let i = 0; i < catalogPairs.length; i++) {
   if (nextPair) {
     pages.push({
       front: `katolog/${currentPair.right}`, // Sağ sayfa (Resim)
-      back: `katolog/${nextPair.left}`,     // Çevrilince sol sayfa (Sonraki Teknik)
+      back: `katolog/${nextPair.left}`, // Çevrilince sol sayfa (Sonraki Teknik)
     });
   } else {
     // Son resim ve Arka Kapak
@@ -57,7 +62,6 @@ export const UI = () => {
   return (
     <>
       <main className="pointer-events-none select-none z-20 fixed inset-0 flex flex-col justify-between mt-16 p-5 md:p-12">
-
         {/* --- ÜST KISIM: LOGO & SAYFA BİLGİSİ --- */}
         <div className="flex justify-between items-start w-full pointer-events-auto mt-10 md:mt-0">
           <motion.div
@@ -65,25 +69,28 @@ export const UI = () => {
             animate={{ opacity: 1, x: 0 }}
             className="bg-white/90 backdrop-blur-xl px-6 py-3 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4"
           >
-            <div className="w-10 h-10 bg-[#49202d] rounded-xl flex items-center justify-center text-white shadow-lg shadow-[#49202d]/20">
+            <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-[#49202d]/20">
               <BookOpen size={20} />
             </div>
             <div>
-              <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] leading-none">Proje Kataloğu</h2>
-              <p className="text-sm font-black text-slate-900 mt-1 uppercase">CT Prefabrik 2025</p>
+              <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] leading-none">
+                Proje Kataloğu
+              </h2>
+              <p className="text-sm font-black text-slate-900 mt-1 uppercase">
+                CT Prefabrik 2025
+              </p>
             </div>
           </motion.div>
 
           <div className="hidden md:flex flex-col items-end">
             <div className="text-[4rem] font-black text-[#49202d]/10 leading-none select-none">
-              {String(page).padStart(2, '0')}
+              {String(page).padStart(2, "0")}
             </div>
           </div>
         </div>
 
         {/* --- ALT KISIM: NAVİGASYON --- */}
         <div className="w-full flex flex-col items-center gap-6 pointer-events-auto  md:mb-0">
-
           <motion.div
             animate={{ y: [0, -5, 0] }}
             transition={{ repeat: Infinity, duration: 2 }}
@@ -93,7 +100,6 @@ export const UI = () => {
           </motion.div>
 
           <div className="bg-white/80 backdrop-blur-2xl p-3 rounded-[2.5rem] border border-white shadow-[0_20px_50px_rgba(0,0,0,0.1)] flex items-center gap-2 max-w-full overflow-hidden">
-
             {/* Geri Butonu */}
             <button
               onClick={() => setPage(Math.max(0, page - 1))}
@@ -108,12 +114,15 @@ export const UI = () => {
                 <button
                   key={index}
                   onClick={() => setPage(index)}
-                  className={`relative shrink-0 transition-all duration-500 rounded-full ${index === page
-                    ? "px-6 py-2 bg-[#49202d] text-white shadow-lg shadow-[#49202d]/30"
-                    : "w-3 h-3 bg-slate-200 hover:bg-[#49202d]/40"
-                    }`}
+                  className={`relative shrink-0 transition-all duration-500 rounded-full ${
+                    index === page
+                      ? "px-6 py-2 bg-primary text-white shadow-lg shadow-[#49202d]/30"
+                      : "w-3 h-3 bg-slate-200 hover:bg-primary/40"
+                  }`}
                 >
-                  <span className={`text-[10px] font-black uppercase tracking-widest ${index === page ? "block" : "hidden"}`}>
+                  <span
+                    className={`text-[10px] font-black uppercase tracking-widest ${index === page ? "block" : "hidden"}`}
+                  >
                     {index === 0 ? "Kapak" : `S. ${index}`}
                   </span>
                 </button>
@@ -122,12 +131,15 @@ export const UI = () => {
               {/* Arka Kapak Butonu */}
               <button
                 onClick={() => setPage(pages.length)}
-                className={`relative shrink-0 transition-all duration-500 rounded-full ${page === pages.length
-                  ? "px-6 py-2 bg-[#49202d] text-white shadow-lg shadow-[#49202d]/30"
-                  : "w-3 h-3 bg-slate-200 hover:bg-[#49202d]/40"
-                  }`}
+                className={`relative shrink-0 transition-all duration-500 rounded-full ${
+                  page === pages.length
+                    ? "px-6 py-2 bg-primary text-white shadow-lg shadow-[#49202d]/30"
+                    : "w-3 h-3 bg-slate-200 hover:bg-primary/40"
+                }`}
               >
-                <span className={`text-[10px] font-black uppercase tracking-widest ${page === pages.length ? "block" : "hidden"}`}>
+                <span
+                  className={`text-[10px] font-black uppercase tracking-widest ${page === pages.length ? "block" : "hidden"}`}
+                >
                   Son
                 </span>
               </button>
@@ -146,7 +158,7 @@ export const UI = () => {
 
       {/* Arka Plan Dekorasyonu */}
       <div className="fixed inset-0 bg-gradient-to-b from-slate-50 to-white -z-10" />
-      <div className="fixed top-0 right-0 w-[500px] h-[500px] bg-[#49202d]/[0.03] rounded-full blur-[120px] -z-10" />
+      <div className="fixed top-0 right-0 w-[500px] h-[500px] bg-primary/[0.03] rounded-full blur-[120px] -z-10" />
     </>
   );
 };

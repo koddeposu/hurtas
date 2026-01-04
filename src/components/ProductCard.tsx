@@ -1,40 +1,48 @@
-import Logo from '@/assets/logo.png'; // Logo import et
+import Logo from "@/assets/logo.png"; // Logo import et
 import {
   Carousel,
   CarouselApi,
   CarouselContent,
-  CarouselItem
+  CarouselItem,
 } from "@/components/ui/carousel";
-import { Product } from '@/types/product';
-import { motion } from 'framer-motion';
+import { Product } from "@/types/product";
+import { motion } from "framer-motion";
 import { ArrowUpRight, Home, Maximize2, Ruler } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from 'react';
+import React from "react";
 
 const formatPrice = (price: string | null) => {
   if (!price || price === "null") return null;
-  return new Intl.NumberFormat('tr-TR').format(Number(price));
+  return new Intl.NumberFormat("tr-TR").format(Number(price));
 };
 
-export const ProductCard = ({ product, bestseller, fullscreenChange }: { bestseller?: boolean, fullscreenChange: () => void, product: Product }) => {
+export const ProductCard = ({
+  product,
+  bestseller,
+  fullscreenChange,
+}: {
+  bestseller?: boolean;
+  fullscreenChange: () => void;
+  product: Product;
+}) => {
   const router = useRouter();
 
   const goDetail = () => {
     router.push(`/urun-detay/${product.slug}-${product.id}`);
   };
-  const [api, setApi] = React.useState<CarouselApi | null>(null)
-  const [current, setCurrent] = React.useState(0)
+  const [api, setApi] = React.useState<CarouselApi | null>(null);
+  const [current, setCurrent] = React.useState(0);
 
   React.useEffect(() => {
-    if (!api) return
+    if (!api) return;
 
-    setCurrent(api.selectedScrollSnap())
+    setCurrent(api.selectedScrollSnap());
 
     api.on("select", () => {
-      setCurrent(api.selectedScrollSnap())
-    })
-  }, [api])
+      setCurrent(api.selectedScrollSnap());
+    });
+  }, [api]);
 
   // Sağ tık koruması
   const handleContextMenu = (e: React.MouseEvent) => {
@@ -54,21 +62,15 @@ export const ProductCard = ({ product, bestseller, fullscreenChange }: { bestsel
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
-
       className="group w-full flex flex-col justify-between text-left bg-white overflow-hidden rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 "
     >
       {/* SLIDER */}
-      <div
-        className="relative rounded-tr-[2rem] rounded-tl-[2rem] overflow-hidden"
-      >
+      <div className="relative rounded-tr-[2rem] rounded-tl-[2rem] overflow-hidden">
         <div className="relative">
-          <Carousel
-            setApi={setApi}
-            className="w-full"
-          >
+          <Carousel setApi={setApi} className="w-full">
             <CarouselContent>
               {product.img.map((item, index) => (
-                <CarouselItem key={index} className="basis-full" >
+                <CarouselItem key={index} className="basis-full">
                   <div className="relative aspect-video w-full bg-slate-100">
                     <Image
                       src={`/product/${item.src}`}
@@ -95,8 +97,11 @@ export const ProductCard = ({ product, bestseller, fullscreenChange }: { bestsel
                         loading="lazy"
                       />
                     </div>
-                    <button onClick={fullscreenChange} className='absolute bottom-4 right-4 text-white bg-black/30 rounded-md w-10 h-10  flex items-center justify-center cursor-pointer hover:scale-110 duration-200'>
-                      <Maximize2 size={20} className='text-white' />
+                    <button
+                      onClick={fullscreenChange}
+                      className="absolute bottom-4 right-4 text-white bg-black/30 rounded-md w-10 h-10  flex items-center justify-center cursor-pointer hover:scale-110 duration-200"
+                    >
+                      <Maximize2 size={20} className="text-white" />
                     </button>
                   </div>
                 </CarouselItem>
@@ -115,8 +120,9 @@ export const ProductCard = ({ product, bestseller, fullscreenChange }: { bestsel
                     width: current === index ? 22 : 8,
                   }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  className={`h-2 rounded-full cursor-pointer ${current === index ? "bg-secondary" : "bg-white/70"
-                    }`}
+                  className={`h-2 rounded-full cursor-pointer ${
+                    current === index ? "bg-secondary" : "bg-white/70"
+                  }`}
                 />
               ))}
             </div>
@@ -124,7 +130,7 @@ export const ProductCard = ({ product, bestseller, fullscreenChange }: { bestsel
         </div>
 
         <div
-          className='cursor-pointer'
+          className="cursor-pointer"
           onClick={goDetail}
           onContextMenu={handleContextMenu}
           onDragStart={handleDragStart}
@@ -147,7 +153,7 @@ export const ProductCard = ({ product, bestseller, fullscreenChange }: { bestsel
               {product.name}
             </h3>
 
-            {product.price &&
+            {product.price && (
               <div className="flex items-center gap-2 mb-4">
                 <p className="text-lg font-bold text-secondary">
                   {formatPrice(product.price)} ₺
@@ -158,7 +164,7 @@ export const ProductCard = ({ product, bestseller, fullscreenChange }: { bestsel
                   </p>
                 )}
               </div>
-            }
+            )}
           </div>
           {/* CONTENT */}
           <div className="px-6 pb-6">
@@ -182,7 +188,7 @@ export const ProductCard = ({ product, bestseller, fullscreenChange }: { bestsel
               </div>
             </div>
 
-            <div className="w-full mt-6 py-4 bg-slate-900 text-white rounded-2xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 group-hover:bg-[#49202d] transition-all">
+            <div className="w-full mt-6 py-4 bg-slate-900 text-white rounded-2xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 group-hover:bg-primary transition-all">
               İncele <ArrowUpRight size={14} />
             </div>
           </div>

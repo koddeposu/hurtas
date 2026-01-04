@@ -3,9 +3,9 @@ import {
   Carousel,
   CarouselApi,
   CarouselContent,
-  CarouselItem
+  CarouselItem,
 } from "@/components/ui/carousel";
-import { ZoomableImage } from '@/components/ZoomableImage';
+import { ZoomableImage } from "@/components/ZoomableImage";
 import { motion } from "framer-motion";
 import {
   ArrowUp,
@@ -22,7 +22,7 @@ import Image from "next/image";
 import React from "react";
 
 // MOCK_PRODUCT'tan gelen gerçek type'ı import et
-import { Product } from '@/types/product';
+import { Product } from "@/types/product";
 
 interface ProductPageClientProps {
   product: Product;
@@ -37,16 +37,16 @@ interface ProductPriceProps {
 }
 
 export function ProductImage({ product }: ProductImageProps) {
-  const [api, setApi] = React.useState<CarouselApi | null>(null)
-  const [current, setCurrent] = React.useState(0)
+  const [api, setApi] = React.useState<CarouselApi | null>(null);
+  const [current, setCurrent] = React.useState(0);
 
   React.useEffect(() => {
-    if (!api) return
-    setCurrent(api.selectedScrollSnap())
+    if (!api) return;
+    setCurrent(api.selectedScrollSnap());
     api.on("select", () => {
-      setCurrent(api.selectedScrollSnap())
-    })
-  }, [api])
+      setCurrent(api.selectedScrollSnap());
+    });
+  }, [api]);
 
   const handleContextMenu = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -73,10 +73,7 @@ export function ProductImage({ product }: ProductImageProps) {
                   onContextMenu={handleContextMenu}
                   onDragStart={handleDragStart}
                 >
-                  <ZoomableImage
-                    src={`/product/${item.src}`}
-                    alt={item.alt}
-                  />
+                  <ZoomableImage src={`/product/${item.src}`} alt={item.alt} />
                 </div>
               </CarouselItem>
             ))}
@@ -93,8 +90,9 @@ export function ProductImage({ product }: ProductImageProps) {
                   width: current === index ? 22 : 10,
                 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className={`h-2.5 rounded-full cursor-pointer ${current === index ? "bg-secondary" : "bg-white/70"
-                  }`}
+                className={`h-2.5 rounded-full cursor-pointer ${
+                  current === index ? "bg-secondary" : "bg-white/70"
+                }`}
               />
             ))}
           </div>
@@ -121,36 +119,36 @@ export function ProductImage({ product }: ProductImageProps) {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 function ProductFeatures({ product }: ProductPriceProps) {
   return (
     <div className="flex flex-wrap items-center gap-6 py-5 border-y border-slate-100 mb-8">
-      {product.room &&
+      {product.room && (
         <div className="flex items-center gap-2 text-slate-600">
           <Home size={16} className="text-[#49202d]" />
           <span className="text-sm font-bold">{product.room}</span>
         </div>
-      }
-      {product.bath &&
+      )}
+      {product.bath && (
         <div className="flex items-center gap-2 text-slate-600">
           <Bath size={16} className="text-[#49202d]" />
           <span className="text-sm font-bold">{product.bath} banyo</span>
         </div>
-      }
-      {product.floor &&
+      )}
+      {product.floor && (
         <div className="flex items-center gap-2 text-slate-600">
           <Ruler size={16} className="text-[#49202d]" />
           <span className="text-sm font-bold">{product.floor} kat</span>
         </div>
-      }
-      {product.height &&
+      )}
+      {product.height && (
         <div className="flex items-center gap-2 text-slate-600">
           <ArrowUp size={16} className="text-[#49202d]" />
           <span className="text-sm font-bold">{product.height} yükseklik</span>
         </div>
-      }
+      )}
     </div>
   );
 }
@@ -163,7 +161,7 @@ function ProductPrice({ product }: ProductPriceProps) {
       {oldPriceNum > 0 && (
         <div className="flex items-center gap-3 mb-2">
           <span className="text-slate-300 line-through font-bold">
-            {oldPriceNum.toLocaleString('tr-TR')} TL
+            {oldPriceNum.toLocaleString("tr-TR")} TL
           </span>
         </div>
       )}
@@ -185,7 +183,7 @@ function ProductPriceMobile({ product }: ProductPriceProps) {
       {oldPriceNum > 0 && (
         <div className="flex items-center gap-3 mb-2">
           <span className="text-slate-300 line-through font-bold">
-            {oldPriceNum.toLocaleString('tr-TR')} TL
+            {oldPriceNum.toLocaleString("tr-TR")} TL
           </span>
         </div>
       )}
@@ -205,8 +203,8 @@ function ProductActions() {
 
   const handleWhatsApp = () => {
     const encodedMessage = encodeURIComponent(whatsappMessage);
-    const whatsappUrl = `https://wa.me/${phoneNumber.replace(/\+/g, '')}?text=${encodedMessage}`;
-    window.open(whatsappUrl, '_blank');
+    const whatsappUrl = `https://wa.me/${phoneNumber.replace(/\+/g, "")}?text=${encodedMessage}`;
+    window.open(whatsappUrl, "_blank");
   };
 
   const handleCall = () => {
@@ -223,7 +221,7 @@ function ProductActions() {
       </button>
       <button
         onClick={handleCall}
-        className="cursor-pointer w-full bg-[#49202d] text-white py-5 rounded-[2rem] font-black text-sm tracking-widest flex items-center justify-center gap-3 hover:bg-[#3d1a26] transition-colors"
+        className="cursor-pointer w-full bg-primary text-white py-5 rounded-[2rem] font-black text-sm tracking-widest flex items-center justify-center gap-3 hover:bg-[#3d1a26] transition-colors"
       >
         <Phone size={22} /> BİZİ ARAYIN
       </button>
@@ -255,9 +253,7 @@ function ProductDescription({ product }: ProductPriceProps) {
     <div className="mt-8 md:mt-16 space-y-4 md:space-y-8 pr-10">
       <div className="flex items-center gap-3 text-[#49202d]">
         <FileText size={20} />
-        <h2 className="text-xl font-black tracking-tight">
-          Ürün Açıklaması
-        </h2>
+        <h2 className="text-xl font-black tracking-tight">Ürün Açıklaması</h2>
       </div>
       <div className="prose prose-slate max-w-none">
         {product?.description?.map((text, i) => (
@@ -287,7 +283,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
               <div className="lg:col-span-5 lg:sticky lg:top-32 space-y-8">
                 <div>
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="w-8 h-[1px] bg-[#49202d]" />
+                    <span className="w-8 h-[1px] bg-primary" />
                     <span className="text-[10px] font-black text-[#49202d] uppercase tracking-[0.3em]">
                       CT PREFABRİK
                     </span>
@@ -305,7 +301,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
           </div>
         </section>
       </main>
-    )
+    );
   }
 
   function Mobile() {
@@ -321,7 +317,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                 <div>
                   <ProductFeatures product={product} />
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="w-8 h-[1px] bg-[#49202d]" />
+                    <span className="w-8 h-[1px] bg-primary" />
                     <span className="text-[10px] font-black text-[#49202d] uppercase tracking-[0.3em]">
                       CT PREFABRİK
                     </span>
@@ -339,7 +335,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
           </div>
         </section>
       </main>
-    )
+    );
   }
 
   return (

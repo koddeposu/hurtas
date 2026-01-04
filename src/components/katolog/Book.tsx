@@ -65,7 +65,7 @@ for (let i = 0; i < position.count; i++) {
   const x = vertex.x;
 
   const skinIndex = Math.max(0, Math.floor(x / SEGMENT_WIDTH));
-  let skinWeight = (x % SEGMENT_WIDTH) / SEGMENT_WIDTH;
+  const skinWeight = (x % SEGMENT_WIDTH) / SEGMENT_WIDTH;
 
   skinIndexes.push(skinIndex, skinIndex + 1, 0, 0);
   skinWeights.push(1 - skinWeight, skinWeight, 0, 0);
@@ -126,7 +126,7 @@ const Page = ({ number, front, back, page, opened, bookClosed, ...props }: PageP
   const manualSkinnedMesh = useMemo(() => {
     const bones: Bone[] = [];
     for (let i = 0; i <= PAGE_SEGMENTS; i++) {
-      let bone = new Bone();
+      const bone = new Bone();
       bones.push(bone);
       if (i === 0) {
         bone.position.x = 0;
