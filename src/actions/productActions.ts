@@ -266,3 +266,21 @@ export async function updateProductImageOrder(imageId: string, order: number) {
 
   return { success: true };
 }
+
+export async function updateProductsOrder(
+  items: { id: string; order: number }[],
+) {
+  await requireAuth();
+
+  for (const item of items) {
+    await db
+      .update(product)
+      .set({ order: item.order })
+      .where(eq(product.id, item.id));
+  }
+
+  revalidatePath("/admin/products");
+  revalidatePath("/prefabrik-evler");
+
+  return { success: true };
+}

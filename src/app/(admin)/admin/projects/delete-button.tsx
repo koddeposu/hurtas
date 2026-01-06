@@ -20,9 +20,11 @@ import { toast } from "sonner";
 export function DeleteProjectButton({
   id,
   title,
+  disabled,
 }: {
   id: string;
   title: string;
+  disabled?: boolean;
 }) {
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -45,6 +47,7 @@ export function DeleteProjectButton({
           variant="outline"
           size="sm"
           className="text-red-600 hover:text-red-700"
+          disabled={disabled}
         >
           <Trash2 className="h-4 w-4" />
         </Button>

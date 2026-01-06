@@ -86,7 +86,6 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
     oldPrice: product.oldPrice || "",
     description: product.description || "",
     isActive: product.isActive,
-    order: product.order,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -213,20 +212,6 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                             ))}
                           </SelectContent>
                         </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="order">Sıralama</Label>
-                        <Input
-                          id="order"
-                          type="number"
-                          value={formData.order}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              order: parseInt(e.target.value) || 0,
-                            })
-                          }
-                        />
                       </div>
                     </div>
 

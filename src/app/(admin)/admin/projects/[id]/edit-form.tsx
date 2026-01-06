@@ -40,7 +40,6 @@ export function EditProjectForm({ project }: { project: Project }) {
     location: project.location,
     imageAlt: project.imageAlt || "",
     isActive: project.isActive,
-    order: project.order,
   });
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {

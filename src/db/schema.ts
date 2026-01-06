@@ -199,6 +199,7 @@ export const blogPost = pgTable("blog_post", {
   imageAlt: text("image_alt"),
   readTime: text("read_time"),
   isPublished: boolean("is_published").default(false).notNull(),
+  order: integer("order").default(0).notNull(),
   publishedAt: timestamp("published_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")

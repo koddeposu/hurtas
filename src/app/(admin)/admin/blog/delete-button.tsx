@@ -17,7 +17,15 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 
-export function DeleteBlogButton({ id, title }: { id: string; title: string }) {
+export function DeleteBlogButton({
+  id,
+  title,
+  disabled,
+}: {
+  id: string;
+  title: string;
+  disabled?: boolean;
+}) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
@@ -39,6 +47,7 @@ export function DeleteBlogButton({ id, title }: { id: string; title: string }) {
           variant="outline"
           size="sm"
           className="text-red-600 hover:text-red-700"
+          disabled={disabled}
         >
           <Trash2 className="h-4 w-4" />
         </Button>

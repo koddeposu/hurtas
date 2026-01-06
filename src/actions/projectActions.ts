@@ -126,3 +126,21 @@ export async function deleteProject(id: string) {
 
   return { success: true };
 }
+
+export async function updateProjectsOrder(
+  items: { id: string; order: number }[],
+) {
+  await requireAuth();
+
+  for (const item of items) {
+    await db
+      .update(project)
+      .set({ order: item.order })
+      .where(eq(project.id, item.id));
+  }
+
+  revalidatePath("/admin/projects");
+  revalidatePath("/projelerimiz");
+
+  return { success: true };
+}

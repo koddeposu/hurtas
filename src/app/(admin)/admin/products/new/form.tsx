@@ -46,7 +46,6 @@ export function NewProductForm({ categories }: NewProductFormProps) {
     oldPrice: "",
     description: "",
     isActive: true,
-    order: 0,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -130,21 +129,6 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                             ))}
                           </SelectContent>
                         </Select>
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="order">Sıralama</Label>
-                        <Input
-                          id="order"
-                          type="number"
-                          value={formData.order}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              order: parseInt(e.target.value) || 0,
-                            })
-                          }
-                          min={0}
-                        />
                       </div>
                     </div>
 

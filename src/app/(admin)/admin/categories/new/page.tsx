@@ -20,7 +20,6 @@ export default function NewCategoryPage() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    order: 0,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -87,25 +86,6 @@ export default function NewCategoryPage() {
                     placeholder="Kategori hakkında kısa açıklama"
                     rows={3}
                   />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="order">Sıralama</Label>
-                  <Input
-                    id="order"
-                    type="number"
-                    value={formData.order}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        order: parseInt(e.target.value) || 0,
-                      })
-                    }
-                    min={0}
-                  />
-                  <p className="text-xs text-slate-500">
-                    Düşük değerler önce gösterilir
-                  </p>
                 </div>
 
                 <div className="flex gap-4">

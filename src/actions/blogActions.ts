@@ -1,6 +1,6 @@
 "use server";
 
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, asc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db/drizzle";
 import { blogPost } from "@/db/schema";
@@ -24,7 +24,10 @@ function slugify(text: string): string {
 }
 
 export async function getBlogPosts(publishedOnly: boolean = false) {
-  let query = db.select().from(blogPost).orderBy(desc(blogPost.createdAt));
+  let query = db
+    .select()
+    .from(blogPost)
+    .orderBy(asc(blogPost.order), desc(blogPost.createdAt));
 
   if (publishedOnly) {
     query = query.where(eq(blogPost.isPublished, true)) as typeof query;
@@ -137,6 +140,24 @@ export async function deleteBlogPost(id: string) {
   await requireAuth();
 
   await db.delete(blogPost).where(eq(blogPost.id, id));
+
+  revalidatePath("/admin/blog");
+  revalidatePath("/blog");
+
+  return { success: true };
+}
+
+export async function updateBlogPostsOrder(
+  items: { id: string; order: number }[],
+) {
+  await requireAuth();
+
+  for (const item of items) {
+    await db
+      .update(blogPost)
+      .set({ order: item.order })
+      .where(eq(blogPost.id, item.id));
+  }
 
   revalidatePath("/admin/blog");
   revalidatePath("/blog");

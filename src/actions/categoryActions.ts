@@ -104,3 +104,21 @@ export async function deleteCategory(id: string) {
 
   return { success: true };
 }
+
+export async function updateCategoriesOrder(
+  items: { id: string; order: number }[],
+) {
+  await requireAuth();
+
+  for (const item of items) {
+    await db
+      .update(category)
+      .set({ order: item.order })
+      .where(eq(category.id, item.id));
+  }
+
+  revalidatePath("/admin/categories");
+  revalidatePath("/prefabrik-evler");
+
+  return { success: true };
+}

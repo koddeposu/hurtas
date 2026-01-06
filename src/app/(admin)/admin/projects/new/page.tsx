@@ -28,7 +28,6 @@ export default function NewProjectPage() {
     location: "",
     imageAlt: "",
     isActive: true,
-    order: 0,
   });
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
