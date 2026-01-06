@@ -81,7 +81,7 @@ export default async function ContactsPage() {
                         <TableCell>
                           <a
                             href={`tel:${submission.phone}`}
-                            className="text-[#49202d] hover:underline"
+                            className="text-primary hover:underline"
                           >
                             {submission.phone}
                           </a>
@@ -102,6 +102,10 @@ export default async function ContactsPage() {
                           <ContactActions
                             id={submission.id}
                             isRead={submission.isRead}
+                            name={submission.name}
+                            phone={submission.phone}
+                            date={formatDate(submission.createdAt)}
+                            message={submission.message}
                           />
                         </TableCell>
                       </TableRow>
