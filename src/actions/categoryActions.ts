@@ -5,24 +5,11 @@ import { revalidatePath } from "next/cache";
 import { db } from "@/db/drizzle";
 import { category } from "@/db/schema";
 import { requireAuth } from "@/lib/requireAuth";
+import { generateUniqueSlug } from "@/lib/slug";
 
 // Generate unique ID
 function generateId() {
   return crypto.randomUUID();
-}
-
-// Generate slug from name
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/ğ/g, "g")
-    .replace(/ü/g, "u")
-    .replace(/ş/g, "s")
-    .replace(/ı/g, "i")
-    .replace(/ö/g, "o")
-    .replace(/ç/g, "c")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
 }
 
 export async function getCategories() {
@@ -47,7 +34,7 @@ export async function createCategory(data: {
   await requireAuth();
 
   const id = generateId();
-  const slug = slugify(data.name);
+  const slug = await generateUniqueSlug("category", data.name);
 
   await db.insert(category).values({
     id,
@@ -77,7 +64,7 @@ export async function updateCategory(
 
   if (data.name !== undefined) {
     updateData.name = data.name;
-    updateData.slug = slugify(data.name);
+    updateData.slug = await generateUniqueSlug("category", data.name, id);
   }
   if (data.description !== undefined) {
     updateData.description = data.description;

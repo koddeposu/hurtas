@@ -5,22 +5,10 @@ import { revalidatePath } from "next/cache";
 import { db } from "@/db/drizzle";
 import { blogPost } from "@/db/schema";
 import { requireAuth } from "@/lib/requireAuth";
+import { generateUniqueSlug } from "@/lib/slug";
 
 function generateId() {
   return crypto.randomUUID();
-}
-
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/ğ/g, "g")
-    .replace(/ü/g, "u")
-    .replace(/ş/g, "s")
-    .replace(/ı/g, "i")
-    .replace(/ö/g, "o")
-    .replace(/ç/g, "c")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
 }
 
 export async function getBlogPosts(publishedOnly: boolean = false) {
@@ -67,7 +55,7 @@ export async function createBlogPost(data: {
   await requireAuth();
 
   const id = generateId();
-  const slug = slugify(data.title);
+  const slug = await generateUniqueSlug("blogPost", data.title);
 
   await db.insert(blogPost).values({
     id,
@@ -108,7 +96,7 @@ export async function updateBlogPost(
 
   if (data.title !== undefined) {
     updateData.title = data.title;
-    updateData.slug = slugify(data.title);
+    updateData.slug = await generateUniqueSlug("blogPost", data.title, id);
   }
   if (data.excerpt !== undefined) updateData.excerpt = data.excerpt;
   if (data.content !== undefined) updateData.content = data.content;

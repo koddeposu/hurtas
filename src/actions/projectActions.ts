@@ -5,22 +5,10 @@ import { revalidatePath } from "next/cache";
 import { db } from "@/db/drizzle";
 import { project } from "@/db/schema";
 import { requireAuth } from "@/lib/requireAuth";
+import { generateUniqueSlug } from "@/lib/slug";
 
 function generateId() {
   return crypto.randomUUID();
-}
-
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/ğ/g, "g")
-    .replace(/ü/g, "u")
-    .replace(/ş/g, "s")
-    .replace(/ı/g, "i")
-    .replace(/ö/g, "o")
-    .replace(/ç/g, "c")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
 }
 
 export async function getProjects(activeOnly: boolean = false) {
@@ -58,7 +46,7 @@ export async function createProject(data: {
   await requireAuth();
 
   const id = generateId();
-  const slug = slugify(data.title);
+  const slug = await generateUniqueSlug("project", data.title);
 
   await db.insert(project).values({
     id,
@@ -98,7 +86,7 @@ export async function updateProject(
 
   if (data.title !== undefined) {
     updateData.title = data.title;
-    updateData.slug = slugify(data.title);
+    updateData.slug = await generateUniqueSlug("project", data.title, id);
   }
   if (data.area !== undefined) updateData.area = data.area;
   if (data.room !== undefined) updateData.room = data.room;

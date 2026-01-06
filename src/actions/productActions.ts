@@ -5,22 +5,10 @@ import { revalidatePath } from "next/cache";
 import { db } from "@/db/drizzle";
 import { product, productImage, category } from "@/db/schema";
 import { requireAuth } from "@/lib/requireAuth";
+import { generateUniqueSlug } from "@/lib/slug";
 
 function generateId() {
   return crypto.randomUUID();
-}
-
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/ğ/g, "g")
-    .replace(/ü/g, "u")
-    .replace(/ş/g, "s")
-    .replace(/ı/g, "i")
-    .replace(/ö/g, "o")
-    .replace(/ç/g, "c")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
 }
 
 export async function getProducts(categoryId?: string) {
@@ -135,7 +123,7 @@ export async function createProduct(data: {
   await requireAuth();
 
   const id = generateId();
-  const slug = slugify(data.name);
+  const slug = await generateUniqueSlug("product", data.name);
 
   await db.insert(product).values({
     id,
@@ -183,7 +171,7 @@ export async function updateProduct(
 
   if (data.name !== undefined) {
     updateData.name = data.name;
-    updateData.slug = slugify(data.name);
+    updateData.slug = await generateUniqueSlug("product", data.name, id);
   }
   if (data.categoryId !== undefined) updateData.categoryId = data.categoryId;
   if (data.area !== undefined) updateData.area = data.area;
