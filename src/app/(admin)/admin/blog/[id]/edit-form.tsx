@@ -10,12 +10,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Loader2, Upload } from "lucide-react";
+import { ArrowLeft, Info, Loader2, Upload } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { updateBlogPost } from "@/actions/blogActions";
 import { uploadImage } from "@/actions/uploadActions";
 import { toast } from "sonner";
+import { BlogContentEditor } from "@/components/admin/blog-content-editor";
 
 interface BlogPost {
   id: string;
@@ -25,7 +26,7 @@ interface BlogPost {
   category: string;
   imageUrl: string;
   imageAlt: string | null;
-  readTime: string | null;
+  readTime: number | null;
   isPublished: boolean;
 }
 
@@ -40,7 +41,7 @@ export function EditBlogForm({ post }: { post: BlogPost }) {
     content: post.content || "",
     category: post.category,
     imageAlt: post.imageAlt || "",
-    readTime: post.readTime || "",
+    readTime: post.readTime?.toString() || "",
     isPublished: post.isPublished,
   });
 
@@ -77,6 +78,7 @@ export function EditBlogForm({ post }: { post: BlogPost }) {
     try {
       await updateBlogPost(post.id, {
         ...formData,
+        readTime: formData.readTime ? parseInt(formData.readTime, 10) : null,
         imageUrl,
       });
       toast.success("Blog yazısı güncellendi");
@@ -104,69 +106,57 @@ export function EditBlogForm({ post }: { post: BlogPost }) {
             </Link>
           </div>
 
-          <form onSubmit={handleSubmit}>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>İçerik</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="title">Başlık *</Label>
-                      <Input
-                        id="title"
-                        value={formData.title}
-                        onChange={(e) =>
-                          setFormData({ ...formData, title: e.target.value })
-                        }
-                        required
-                      />
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Top Bar: Details, Cover Image, Publishing, Submit */}
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex flex-wrap items-end gap-4">
+                  <div className="flex-1 min-w-[200px]">
+                    <Label htmlFor="title">Başlık *</Label>
+                    <Input
+                      id="title"
+                      value={formData.title}
+                      onChange={(e) =>
+                        setFormData({ ...formData, title: e.target.value })
+                      }
+                      required
+                      className="mt-1"
+                    />
+                  </div>
+                  <div className="w-[160px]">
+                    <Label htmlFor="category">Kategori *</Label>
+                    <Input
+                      id="category"
+                      value={formData.category}
+                      onChange={(e) =>
+                        setFormData({ ...formData, category: e.target.value })
+                      }
+                      required
+                      className="mt-1"
+                    />
+                  </div>
+                  <div className="w-[100px]">
+                    <div className="flex items-center gap-1.5">
+                      <Label htmlFor="readTime">Okuma Süresi</Label>
+                      <span title="Tahmini okuma süresi (dakika olarak)">
+                        <Info className="h-4 w-4 text-muted-foreground cursor-help" />
+                      </span>
                     </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="excerpt">Özet *</Label>
-                      <Textarea
-                        id="excerpt"
-                        value={formData.excerpt}
-                        onChange={(e) =>
-                          setFormData({ ...formData, excerpt: e.target.value })
-                        }
-                        rows={2}
-                        required
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="content">İçerik</Label>
-                      <Textarea
-                        id="content"
-                        value={formData.content}
-                        onChange={(e) =>
-                          setFormData({ ...formData, content: e.target.value })
-                        }
-                        rows={12}
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Kapak Görseli</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    {imageUrl && (
-                      <div className="relative aspect-video rounded-lg overflow-hidden mb-4">
-                        <Image
-                          src={imageUrl}
-                          alt="Kapak görseli"
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    )}
-                    <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-slate-300 rounded-lg cursor-pointer hover:border-[#49202d] transition-colors">
+                    <Input
+                      id="readTime"
+                      type="number"
+                      min={1}
+                      value={formData.readTime}
+                      onChange={(e) =>
+                        setFormData({ ...formData, readTime: e.target.value })
+                      }
+                      placeholder="5"
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-xs text-slate-500">Kapak Görseli</Label>
+                    <label className="mt-1 flex items-center gap-2 px-3 py-2 border border-slate-300 rounded-lg cursor-pointer hover:border-primary transition-colors bg-white">
                       <input
                         type="file"
                         accept="image/*"
@@ -175,84 +165,81 @@ export function EditBlogForm({ post }: { post: BlogPost }) {
                         disabled={isUploading}
                       />
                       {isUploading ? (
-                        <Loader2 className="h-8 w-8 text-slate-400 animate-spin" />
+                        <Loader2 className="h-4 w-4 text-slate-400 animate-spin" />
+                      ) : imageUrl ? (
+                        <div className="flex items-center gap-2">
+                          <div className="relative w-8 h-8 rounded overflow-hidden">
+                            <Image src={imageUrl} alt="Kapak" fill className="object-cover" />
+                          </div>
+                          <span className="text-xs text-slate-600">Değiştir</span>
+                        </div>
                       ) : (
                         <>
-                          <Upload className="h-8 w-8 text-slate-400 mb-2" />
-                          <span className="text-sm text-slate-500">
-                            Görseli Değiştir
-                          </span>
+                          <Upload className="h-4 w-4 text-slate-400" />
+                          <span className="text-xs text-slate-500">Yükle</span>
                         </>
                       )}
                     </label>
-                  </CardContent>
-                </Card>
-              </div>
+                  </div>
+                  <div className="flex items-center gap-3 px-4 py-2 bg-slate-50 rounded-lg">
+                    <Label htmlFor="isPublished" className="text-sm">Yayında</Label>
+                    <Switch
+                      id="isPublished"
+                      checked={formData.isPublished}
+                      onCheckedChange={(checked) =>
+                        setFormData({ ...formData, isPublished: checked })
+                      }
+                    />
+                  </div>
+                  <Button
+                    type="submit"
+                    className="bg-primary hover:bg-[#3a1924]"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Kaydediliyor...
+                      </>
+                    ) : (
+                      "Değişiklikleri Kaydet"
+                    )}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
 
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Detaylar</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="category">Kategori *</Label>
-                      <Input
-                        id="category"
-                        value={formData.category}
-                        onChange={(e) =>
-                          setFormData({ ...formData, category: e.target.value })
-                        }
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="readTime">Okuma Süresi</Label>
-                      <Input
-                        id="readTime"
-                        value={formData.readTime}
-                        onChange={(e) =>
-                          setFormData({ ...formData, readTime: e.target.value })
-                        }
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
+            {/* Main Content Area - Full Width */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Özet</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Textarea
+                  id="excerpt"
+                  value={formData.excerpt}
+                  onChange={(e) =>
+                    setFormData({ ...formData, excerpt: e.target.value })
+                  }
+                  rows={2}
+                  required
+                />
+              </CardContent>
+            </Card>
 
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Yayın</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center justify-between">
-                      <Label htmlFor="isPublished">Yayında</Label>
-                      <Switch
-                        id="isPublished"
-                        checked={formData.isPublished}
-                        onCheckedChange={(checked) =>
-                          setFormData({ ...formData, isPublished: checked })
-                        }
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Button
-                  type="submit"
-                  className="w-full bg-primary hover:bg-[#3a1924]"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      Kaydediliyor...
-                    </>
-                  ) : (
-                    "Değişiklikleri Kaydet"
-                  )}
-                </Button>
-              </div>
-            </div>
+            <Card>
+              <CardHeader>
+                <CardTitle>İçerik</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <BlogContentEditor
+                  content={formData.content}
+                  onChange={(json) =>
+                    setFormData({ ...formData, content: json })
+                  }
+                />
+              </CardContent>
+            </Card>
           </form>
         </main>
       </div>

@@ -29,7 +29,7 @@ interface BlogPost extends SortableItem {
   title: string;
   excerpt: string;
   category: string;
-  readTime: string | null;
+  readTime: number | null;
   isPublished: boolean;
   order: number;
 }

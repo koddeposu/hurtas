@@ -1,6 +1,6 @@
 "use server";
 
-import { eq, desc, asc } from "drizzle-orm";
+import { eq, desc, asc, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db/drizzle";
 import { blogPost } from "@/db/schema";
@@ -22,6 +22,54 @@ export async function getBlogPosts(publishedOnly: boolean = false) {
   }
 
   return await query;
+}
+
+export async function getBlogPostsPaginated(options: {
+  page?: number;
+  limit?: number;
+  publishedOnly?: boolean;
+}) {
+  const page = options.page ?? 1;
+  const limit = options.limit ?? 9;
+  const offset = (page - 1) * limit;
+  const publishedOnly = options.publishedOnly ?? true;
+
+  // Count query
+  const countResult = publishedOnly
+    ? await db
+        .select({ count: sql<number>`count(*)` })
+        .from(blogPost)
+        .where(eq(blogPost.isPublished, true))
+    : await db.select({ count: sql<number>`count(*)` }).from(blogPost);
+
+  const totalCount = Number(countResult[0].count);
+
+  // Data query
+  const posts = publishedOnly
+    ? await db
+        .select()
+        .from(blogPost)
+        .where(eq(blogPost.isPublished, true))
+        .orderBy(asc(blogPost.order), desc(blogPost.createdAt))
+        .limit(limit)
+        .offset(offset)
+    : await db
+        .select()
+        .from(blogPost)
+        .orderBy(asc(blogPost.order), desc(blogPost.createdAt))
+        .limit(limit)
+        .offset(offset);
+
+  const totalPages = Math.ceil(totalCount / limit);
+
+  return {
+    posts,
+    totalCount,
+    totalPages,
+    currentPage: page,
+    hasNextPage: page < totalPages,
+    hasPrevPage: page > 1,
+  };
 }
 
 export async function getBlogPostById(id: string) {
@@ -49,7 +97,7 @@ export async function createBlogPost(data: {
   category: string;
   imageUrl: string;
   imageAlt?: string;
-  readTime?: string;
+  readTime?: number;
   isPublished?: boolean;
 }) {
   await requireAuth();
@@ -86,7 +134,7 @@ export async function updateBlogPost(
     category?: string;
     imageUrl?: string;
     imageAlt?: string | null;
-    readTime?: string | null;
+    readTime?: number | null;
     isPublished?: boolean;
   },
 ) {

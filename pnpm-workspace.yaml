@@ -6,5 +6,6 @@ ignoredBuiltDependencies:
   - unrs-resolver
 
 onlyBuiltDependencies:
+  - '@parcel/watcher'
   - esbuild
   - msw

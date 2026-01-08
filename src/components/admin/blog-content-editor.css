@@ -1,0 +1,45 @@
+/* Override default tiptap editor styles for admin panel */
+.blog-content-editor .simple-editor-wrapper {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 400px;
+}
+
+.blog-content-editor .simple-editor-content {
+  max-width: 100% !important;
+  height: calc(100vh - 300px);
+  overflow-y: auto;
+  min-height: 300px;
+}
+
+.blog-content-editor .simple-editor-content .tiptap.ProseMirror.simple-editor {
+  padding: 1.5rem !important;
+  min-height: 300px;
+}
+
+/* Drag handle styles */
+.blog-editor-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: grab;
+  background: var(--tt-gray-light-200, #e5e7eb);
+  opacity: 0.6;
+  transition: opacity 0.15s, background 0.15s;
+}
+
+.blog-editor-drag-handle:hover {
+  opacity: 1;
+  background: var(--tt-gray-light-300, #d1d5db);
+}
+
+.blog-editor-drag-handle:active {
+  cursor: grabbing;
+}
+
+.blog-editor-drag-handle svg {
+  fill: var(--tt-gray-light-700, #374151);
+}

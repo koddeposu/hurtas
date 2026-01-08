@@ -1,0 +1,117 @@
+.tiptap.ProseMirror {
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    cursor: pointer;
+    transition: outline-color 0.15s ease;
+  }
+
+  > img:not([data-type="emoji"] img) {
+    margin: 2rem 0;
+    outline: 0.125rem solid transparent;
+    border-radius: var(--tt-radius-xs, 0.25rem);
+  }
+
+  img:not([data-type="emoji"] img).ProseMirror-selectednode {
+    outline-color: var(--tt-brand-color-500);
+  }
+
+  // Image alignment styles
+  img[data-align="left"] {
+    margin-left: 0;
+    margin-right: auto;
+  }
+
+  img[data-align="center"] {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  img[data-align="right"] {
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  // Resizable image wrapper
+  .tiptap-resizable-view {
+    display: inline-block;
+    position: relative;
+    max-width: 100%;
+
+    &[data-align="left"] {
+      margin-left: 0;
+      margin-right: auto;
+    }
+
+    &[data-align="center"] {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    &[data-align="right"] {
+      margin-left: auto;
+      margin-right: 0;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  // Resize handles
+  .tiptap-resize-handle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: var(--tt-brand-color-500, #49202d);
+    border: 2px solid white;
+    border-radius: 2px;
+    cursor: pointer;
+    z-index: 10;
+
+    &--left {
+      left: -5px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: ew-resize;
+    }
+
+    &--right {
+      right: -5px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: ew-resize;
+    }
+
+    &--top {
+      top: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: ns-resize;
+    }
+
+    &--bottom {
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: ns-resize;
+    }
+  }
+
+  // Thread image handling
+  .tiptap-thread:has(> img) {
+    margin: 2rem 0;
+
+    img {
+      outline: 0.125rem solid transparent;
+      border-radius: var(--tt-radius-xs, 0.25rem);
+    }
+  }
+
+  .tiptap-thread img {
+    margin: 0;
+  }
+}

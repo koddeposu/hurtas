@@ -8,12 +8,6 @@ import {
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
-export const todo = pgTable("todo", {
-  id: integer("id").primaryKey(),
-  text: text("text").notNull(),
-  done: boolean("done").default(false).notNull(),
-});
-
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
@@ -197,7 +191,7 @@ export const blogPost = pgTable("blog_post", {
   category: text("category").notNull(),
   imageUrl: text("image_url").notNull(),
   imageAlt: text("image_alt"),
-  readTime: text("read_time"),
+  readTime: integer("read_time").default(1),
   isPublished: boolean("is_published").default(false).notNull(),
   order: integer("order").default(0).notNull(),
   publishedAt: timestamp("published_at"),
