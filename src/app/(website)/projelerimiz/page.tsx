@@ -14,15 +14,23 @@ import Image from "next/image";
 import image2 from "@/assets/hero/home-page-2.webp";
 import image3 from "@/assets/hero/home-page-3.webp";
 import { default as image1 } from "@/assets/hero/home-page-5.webp";
-import { ProjectGalleryModal } from "@/components/ModalSliderImage";
-import { CarouselApi } from "@/components/ui/carousel";
+import {
+  Carousel,
+  CarouselApi,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 import { Modal } from "@/components/ui/modal";
 import { StaticImageData } from "next/image";
 import { useEffect, useState } from "react";
 
+interface ImageType {
+  src: string | StaticImageData;
+  alt: string;
+}
 interface Project {
   id: number;
-  img: StaticImageData;
+  img: ImageType[];
   title: string;
   area: string;
   room: string;
@@ -32,7 +40,7 @@ interface Project {
 const projects: Project[] = [
   {
     id: 1,
-    img: image1,
+    img: [{ src: image1, alt: "Sapanca Modern - Görsel 1" }],
     title: "Sapanca Modern",
     area: "145m²",
     room: "3+1",
@@ -40,7 +48,11 @@ const projects: Project[] = [
   },
   {
     id: 2,
-    img: image2,
+    img: [
+      { src: image1, alt: "Kartepe Loft - Görsel 1" },
+      { src: image2, alt: "Kartepe Loft - Görsel 2" },
+      { src: image3, alt: "Kartepe Loft - Görsel 3" },
+    ],
     title: "Kartepe Loft",
     area: "110m²",
     room: "2+1",
@@ -48,7 +60,11 @@ const projects: Project[] = [
   },
   {
     id: 3,
-    img: image3,
+    img: [
+      { src: image1, alt: "Erenler Villa - Görsel 1" },
+      { src: image2, alt: "Erenler Villa - Görsel 2" },
+      { src: image3, alt: "Erenler Villa - Görsel 3" },
+    ],
     title: "Erenler Villa",
     area: "190m²",
     room: "4+1",
@@ -56,7 +72,11 @@ const projects: Project[] = [
   },
   {
     id: 4,
-    img: image2,
+    img: [
+      { src: image1, alt: "Serdivan Konsept - Görsel 1" },
+      { src: image2, alt: "Serdivan Konsept - Görsel 2" },
+      { src: image3, alt: "Serdivan Konsept - Görsel 3" },
+    ],
     title: "Serdivan Konsept",
     area: "125m²",
     room: "3+1",
@@ -64,7 +84,11 @@ const projects: Project[] = [
   },
   {
     id: 5,
-    img: image3,
+    img: [
+      { src: image1, alt: "Kocaeli Trend - Görsel 1" },
+      { src: image2, alt: "Kocaeli Trend - Görsel 2" },
+      { src: image3, alt: "Kocaeli Trend - Görsel 3" },
+    ],
     title: "Kocaeli Trend",
     area: "95m²",
     room: "2+1",
@@ -72,7 +96,11 @@ const projects: Project[] = [
   },
   {
     id: 6,
-    img: image1,
+    img: [
+      { src: image1, alt: "Arifiye Bahçe - Görsel 1" },
+      { src: image2, alt: "Arifiye Bahçe - Görsel 2" },
+      { src: image3, alt: "Arifiye Bahçe - Görsel 3" },
+    ],
     title: "Arifiye Bahçe",
     area: "160m²",
     room: "3+1",
@@ -85,6 +113,9 @@ const ProjectsPage = () => {
   const [selectedProjectIndex, setSelectedProjectIndex] = useState<
     number | null
   >(null);
+  const selectedProject =
+    selectedProjectIndex !== null ? projects[selectedProjectIndex] : null;
+
   const [api, setApi] = useState<CarouselApi | null>(null);
   const [current, setCurrent] = useState(0);
 
@@ -92,7 +123,6 @@ const ProjectsPage = () => {
     if (!api) return;
 
     setCurrent(api.selectedScrollSnap());
-
     api.on("select", () => {
       setCurrent(api.selectedScrollSnap());
     });
@@ -122,12 +152,13 @@ const ProjectsPage = () => {
         </div>
       </Modal>
 
-      <ProjectGalleryModal
-        projects={projects}
-        isOpen={selectedProjectIndex !== null}
-        initialIndex={selectedProjectIndex ?? 0}
-        onClose={() => setSelectedProjectIndex(null)}
-      />
+      {selectedProject && (
+        <ProjectGalleryModal
+          project={selectedProject}
+          isOpen={selectedProjectIndex !== null}
+          onClose={() => setSelectedProjectIndex(null)}
+        />
+      )}
 
       <section className="w-full bg-[#fdfdfd] mb-28">
         <div className="absolute -top-24 -right-24 w-[600px] h-[600px] bg-primary/[0.03] rounded-full blur-3xl pointer-events-none  min-h-[90vh]" />
@@ -220,7 +251,6 @@ const ProjectsPage = () => {
                   <video
                     src="/proje-video.webm"
                     autoPlay
-                    loop
                     playsInline
                     className="w-full h-full object-cover"
                   />
@@ -275,51 +305,14 @@ const ProjectsPage = () => {
       <div className="max-w-[1280px] w-full mt-20">
         <section className="pb-32">
           <div className="">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5">
               {projects.map((project, index) => (
-                <motion.div
+                <ProjectCard
                   key={project.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  onClick={() => handleProjectClick(index)}
-                  className="group relative h-[250px] rounded-[2.5rem] overflow-hidden bg-slate-100 shadow-sm cursor-pointer"
-                >
-                  <Image
-                    src={project.img}
-                    alt={project.title}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#49202d]/60 via-[#49202d]/10 to-transparent transition-all duration-500 p-8 flex flex-col justify-end">
-                    <div className="translate-y-10">
-                      <div className="flex gap-6 mb-6">
-                        <div className="flex flex-col items-center gap-1">
-                          <Ruler className="text-white/60" size={18} />
-                          <span className="text-white font-bold text-sm">
-                            {project.area}
-                          </span>
-                        </div>
-                        <div className="w-[1px] h-8 bg-white/20" />
-                        <div className="flex flex-col items-center gap-1">
-                          <Home className="text-white/60" size={18} />
-                          <span className="text-white font-bold text-sm">
-                            {project.room}
-                          </span>
-                        </div>
-                        <div className="w-[1px] h-8 bg-white/20" />
-                        <div className="flex flex-col items-center gap-1">
-                          <MapPin className="text-white/60" size={18} />
-                          <span className="text-white font-bold text-sm">
-                            {project.loc}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
+                  project={project}
+                  index={index}
+                  onProjectClick={(idx) => setSelectedProjectIndex(idx)}
+                />
               ))}
             </div>
           </div>
@@ -330,3 +323,215 @@ const ProjectsPage = () => {
 };
 
 export default ProjectsPage;
+
+const ProjectCard = ({
+  project,
+  index,
+  onProjectClick,
+}: {
+  project: Project;
+  index: number;
+  onProjectClick: (idx: number) => void;
+}) => {
+  const [api, setApi] = useState<CarouselApi | null>(null);
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (!api) return;
+
+    setCurrent(api.selectedScrollSnap());
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap());
+    });
+  }, [api]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.1 }}
+      onClick={() => onProjectClick(index)}
+      className="relative cursor-pointer group"
+    >
+      <Carousel
+        setApi={setApi}
+        className="w-full overflow-hidden rounded-[1rem] md:rounded-[2rem] border-white bg-white"
+      >
+        <CarouselContent>
+          {project.img.map((item, imgIndex) => (
+            <CarouselItem key={imgIndex} className="basis-full relative">
+              <div className="relative w-full aspect-[4/3] md:aspect-[16/9] overflow-hidden">
+                <Image
+                  src={item.src}
+                  alt={item.alt}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
+
+      {/* Dot Göstergeleri */}
+      {project.img.length > 1 && (
+        <div className="absolute bottom-5 md:bottom-10 z-20 flex w-full justify-center gap-2">
+          {project.img.map((_, dotIdx) => (
+            <button
+              key={dotIdx}
+              onClick={(e) => {
+                e.stopPropagation(); // Kartın click eventini tetiklemesin
+                api?.scrollTo(dotIdx);
+              }}
+              className="p-1" // Tıklama alanını genişletmek için
+            >
+              <motion.div
+                animate={{ width: current === dotIdx ? 22 : 10 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className={`h-2.5 rounded-full transition-colors ${
+                  current === dotIdx ? "bg-secondary" : "bg-white/70"
+                }`}
+              />
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Overlay Bilgileri */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#49202d]/60 via-[#49202d]/10 to-transparent p-4 flex flex-col justify-end pointer-events-none rounded-[1rem] md:rounded-[2rem]">
+        <h3 className="text-white text-xl font-black mb-4">{project.title}</h3>
+        <div className="flex gap-6">
+          <div className="flex flex-col items-center gap-1">
+            <Ruler className="text-white/60" size={18} />
+            <span className="text-white font-bold text-sm">{project.area}</span>
+          </div>
+          <div className="w-[1px] h-8 bg-white/20" />
+          <div className="flex flex-col items-center gap-1">
+            <Home className="text-white/60" size={18} />
+            <span className="text-white font-bold text-sm">{project.room}</span>
+          </div>
+          <div className="w-[1px] h-8 bg-white/20" />
+          <div className="flex flex-col items-center gap-1">
+            <MapPin className="text-white/60" size={18} />
+            <span className="text-white font-bold text-sm">{project.loc}</span>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+export interface ProjectImage {
+  id: string | number;
+  img: any;
+  title?: string;
+}
+
+interface ProjectGalleryModalProps {
+  project: Project;
+  isOpen: boolean;
+  onClose: () => void;
+  initialIndex?: number;
+}
+
+export function ProjectGalleryModal({
+  project,
+  isOpen,
+  onClose,
+}: ProjectGalleryModalProps) {
+  const [api, setApi] = useState<CarouselApi | null>(null);
+  const [current, setCurrent] = useState(0);
+
+  // Resim değiştiğinde index'i güncelle
+  useEffect(() => {
+    if (!api) return;
+    const onSelect = () => setCurrent(api.selectedScrollSnap());
+    api.on("select", onSelect);
+    return () => {
+      api.off("select", onSelect);
+    };
+  }, [api]);
+
+  // Modal her açıldığında ilk resme dön
+  useEffect(() => {
+    if (isOpen && api) {
+      api.scrollTo(0, true);
+      setCurrent(0);
+    }
+  }, [isOpen, api]);
+
+  return (
+    <Modal isShow={isOpen} onClose={onClose}>
+      <div className="h-screen flex items-center justify-center p-5">
+        <div className="max-w-[1000px] w-full">
+          {/* ANA SLIDER - Seçili projenin resimlerini döner */}
+          <div className="relative">
+            <Carousel
+              setApi={setApi}
+              className="w-full overflow-hidden rounded-[1rem] md:rounded-[2rem] border-white border-4 md:border-[8px] bg-white shadow-2xl"
+            >
+              <CarouselContent>
+                {project.img.map((image, index) => (
+                  <CarouselItem key={index} className="basis-full">
+                    <div className="relative aspect-video w-full">
+                      <Image
+                        src={image.src}
+                        alt={image.alt}
+                        fill
+                        className="object-cover"
+                        priority
+                      />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+
+            {/* FOTOĞRAF SAYACI (Örn: 1/3) */}
+            <div className="absolute top-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm font-bold">
+              {current + 1} / {project.img.length}
+            </div>
+          </div>
+
+          {/* KÜÇÜK RESİMLER (THUMBNAILS) */}
+          {project.img.length > 1 && (
+            <div className="relative flex items-center flex-wrap gap-3 mt-4 justify-center">
+              {project.img.map((image, index) => (
+                <button
+                  key={index}
+                  onClick={() => api?.scrollTo(index)}
+                  className={`border-2 rounded-lg overflow-hidden transition-all duration-300 ${
+                    current === index
+                      ? "border-secondary scale-110 shadow-lg"
+                      : "border-white/50 opacity-40 hover:opacity-100"
+                  }`}
+                >
+                  <div className="relative w-16 h-16">
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {/* BAŞLIK BİLGİSİ */}
+          <div className="text-center mt-6">
+            <h2 className="text-2xl font-black text-white drop-shadow-md">
+              {project.title}
+            </h2>
+            <p className="text-white/80 font-medium">
+              {project.loc} - {project.area}
+            </p>
+          </div>
+        </div>
+      </div>
+    </Modal>
+  );
+}
