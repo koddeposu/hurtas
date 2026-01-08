@@ -22,7 +22,7 @@ type ProductCardProduct = DBProduct | Product;
 
 // Helper to check if product is from DB
 function isDBProduct(product: ProductCardProduct): product is DBProduct {
-  return 'images' in product;
+  return "images" in product;
 }
 
 export const ProductCard = ({
@@ -40,7 +40,7 @@ export const ProductCard = ({
   const images = isDBProduct(product)
     ? product.images.map((img) => ({ src: img.url, alt: img.alt }))
     : product.img.map((img) => ({
-        src: typeof img.src === 'string' ? `/product/${img.src}` : img.src,
+        src: typeof img.src === "string" ? `/product/${img.src}` : img.src,
         alt: img.alt,
       }));
 
@@ -98,6 +98,7 @@ export const ProductCard = ({
               {images.map((item, index) => (
                 <CarouselItem key={index} className="basis-full">
                   <div className="relative aspect-video w-full bg-slate-100">
+                    {/* <img src={item.src} alt={item.alt} /> */}
                     <Image
                       src={item.src}
                       alt={item.alt}
@@ -107,22 +108,7 @@ export const ProductCard = ({
                       draggable={false}
                       priority={index === 0}
                     />
-                    <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-                      <img
-                        src={Logo.src}
-                        alt=""
-                        className="w-[150px] h-auto opacity-20 select-none"
-                        loading="lazy"
-                      />
-                    </div>
-                    <div className="absolute bottom-4 right-4 pointer-events-none opacity-15">
-                      <img
-                        src={Logo.src}
-                        alt=""
-                        className="w-[50px] h-auto select-none"
-                        loading="lazy"
-                      />
-                    </div>
+
                     <button
                       onClick={fullscreenChange}
                       className="absolute bottom-4 right-4 text-white bg-black/30 rounded-md w-10 h-10  flex items-center justify-center cursor-pointer hover:scale-110 duration-200"

@@ -9,65 +9,45 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Loader2, Upload } from "lucide-react";
+import { ArrowLeft, Loader2, Upload, X } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { createProject } from "@/actions/projectActions";
 import { uploadImage } from "@/actions/uploadActions";
 import { toast } from "sonner";
-import Image from "next/image";
+
+interface PendingImage {
+  tempId: string;
+  url: string;
+  alt: string;
+  order: number;
+}
 
 export default function NewProjectPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [imageUrl, setImageUrl] = useState("");
+  const [pendingImages, setPendingImages] = useState<PendingImage[]>([]);
   const [formData, setFormData] = useState({
     title: "",
     area: "",
     room: "",
     location: "",
-    imageAlt: "",
     isActive: true,
   });
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setIsUploading(true);
-    try {
-      const fd = new FormData();
-      fd.append("file", file);
-      fd.append("folder", "projects");
-
-      const result = await uploadImage(fd);
-      if (result.error) {
-        toast.error(result.error);
-        return;
-      }
-      if (result.url) {
-        setImageUrl(result.url);
-        toast.success("Görsel yüklendi");
-      }
-    } catch {
-      toast.error("Görsel yüklenemedi");
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!imageUrl) {
-      toast.error("Lütfen bir görsel yükleyin");
-      return;
-    }
     setIsLoading(true);
 
     try {
       await createProject({
         ...formData,
-        imageUrl,
+        pendingImages: pendingImages.map(({ url, alt, order }) => ({
+          url,
+          alt,
+          order,
+        })),
       });
       toast.success("Proje oluşturuldu");
       router.push("/admin/projects");
@@ -76,6 +56,47 @@ export default function NewProjectPage() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files?.length) return;
+
+    setIsUploading(true);
+    try {
+      for (const file of Array.from(files)) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("folder", "projects");
+
+        const result = await uploadImage(formData);
+        if (result.error) {
+          toast.error(result.error);
+          continue;
+        }
+
+        if (result.url) {
+          setPendingImages((prev) => [
+            ...prev,
+            {
+              tempId: crypto.randomUUID(),
+              url: result.url,
+              alt: file.name.replace(/\.[^/.]+$/, ""),
+              order: prev.length,
+            },
+          ]);
+        }
+      }
+      toast.success("Görseller yüklendi");
+    } catch {
+      toast.error("Görsel yüklenirken hata oluştu");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleDeletePendingImage = (tempId: string) => {
+    setPendingImages((prev) => prev.filter((img) => img.tempId !== tempId));
   };
 
   return (
@@ -161,38 +182,51 @@ export default function NewProjectPage() {
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>Görsel</CardTitle>
+                    <CardTitle>Görseller</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    {imageUrl ? (
-                      <div className="relative aspect-video rounded-lg overflow-hidden mb-4">
-                        <Image
-                          src={imageUrl}
-                          alt="Proje görseli"
-                          fill
-                          className="object-cover"
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {pendingImages.map((image) => (
+                        <div
+                          key={image.tempId}
+                          className="relative group aspect-square rounded-lg overflow-hidden border"
+                        >
+                          <Image
+                            src={image.url}
+                            alt={image.alt}
+                            fill
+                            className="object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => handleDeletePendingImage(image.tempId)}
+                            className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        </div>
+                      ))}
+                      <label className="aspect-square rounded-lg border-2 border-dashed border-slate-300 flex flex-col items-center justify-center cursor-pointer hover:border-primary transition-colors">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          className="hidden"
+                          onChange={handleImageUpload}
+                          disabled={isUploading}
                         />
-                      </div>
-                    ) : null}
-                    <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-slate-300 rounded-lg cursor-pointer hover:border-[#49202d] transition-colors">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={handleImageUpload}
-                        disabled={isUploading}
-                      />
-                      {isUploading ? (
-                        <Loader2 className="h-8 w-8 text-slate-400 animate-spin" />
-                      ) : (
-                        <>
-                          <Upload className="h-8 w-8 text-slate-400 mb-2" />
-                          <span className="text-sm text-slate-500">
-                            {imageUrl ? "Görseli Değiştir" : "Görsel Yükle"}
-                          </span>
-                        </>
-                      )}
-                    </label>
+                        {isUploading ? (
+                          <Loader2 className="h-8 w-8 text-slate-400 animate-spin" />
+                        ) : (
+                          <>
+                            <Upload className="h-8 w-8 text-slate-400 mb-2" />
+                            <span className="text-xs text-slate-500">
+                              Görsel Ekle
+                            </span>
+                          </>
+                        )}
+                      </label>
+                    </div>
                   </CardContent>
                 </Card>
               </div>

@@ -124,6 +124,7 @@ export async function createProduct(data: {
   description?: string;
   isActive?: boolean;
   order?: number;
+  pendingImages?: Array<{ url: string; alt: string; order: number }>;
 }) {
   await requireAuth();
 
@@ -146,6 +147,19 @@ export async function createProduct(data: {
     isActive: data.isActive ?? true,
     order: data.order ?? 0,
   });
+
+  // Create image records if pending images were provided
+  if (data.pendingImages && data.pendingImages.length > 0) {
+    for (const img of data.pendingImages) {
+      await db.insert(productImage).values({
+        id: generateId(),
+        productId: id,
+        url: img.url,
+        alt: img.alt,
+        order: img.order,
+      });
+    }
+  }
 
   revalidatePath("/admin/products");
   revalidatePath("/prefabrik-evler");

@@ -170,8 +170,6 @@ export const project = pgTable("project", {
   area: text("area").notNull(),
   room: text("room").notNull(),
   location: text("location").notNull(),
-  imageUrl: text("image_url").notNull(),
-  imageAlt: text("image_alt"),
   isActive: boolean("is_active").default(true).notNull(),
   order: integer("order").default(0).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -180,6 +178,22 @@ export const project = pgTable("project", {
     .$onUpdate(() => new Date())
     .notNull(),
 });
+
+// Project Images
+export const projectImage = pgTable(
+  "project_image",
+  {
+    id: text("id").primaryKey(),
+    projectId: text("project_id")
+      .notNull()
+      .references(() => project.id, { onDelete: "cascade" }),
+    url: text("url").notNull(),
+    alt: text("alt").notNull(),
+    order: integer("order").default(0).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [index("project_image_project_idx").on(table.projectId)],
+);
 
 // Blog Posts
 export const blogPost = pgTable("blog_post", {
@@ -233,5 +247,16 @@ export const productImageRelations = relations(productImage, ({ one }) => ({
   product: one(product, {
     fields: [productImage.productId],
     references: [product.id],
+  }),
+}));
+
+export const projectRelations = relations(project, ({ many }) => ({
+  images: many(projectImage),
+}));
+
+export const projectImageRelations = relations(projectImage, ({ one }) => ({
+  project: one(project, {
+    fields: [projectImage.projectId],
+    references: [project.id],
   }),
 }));

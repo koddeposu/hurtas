@@ -9,12 +9,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Loader2, Upload } from "lucide-react";
+import { ArrowLeft, Loader2, Upload, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import { updateProject } from "@/actions/projectActions";
+import {
+  updateProject,
+  addProjectImage,
+  deleteProjectImage,
+} from "@/actions/projectActions";
 import { uploadImage } from "@/actions/uploadActions";
 import { toast } from "sonner";
+
+interface ProjectImage {
+  id: string;
+  url: string;
+  alt: string;
+  order: number;
+}
 
 interface Project {
   id: string;
@@ -22,49 +33,68 @@ interface Project {
   area: string;
   room: string;
   location: string;
-  imageUrl: string;
-  imageAlt: string | null;
   isActive: boolean;
   order: number;
+  images: ProjectImage[];
 }
 
 export function EditProjectForm({ project }: { project: Project }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [imageUrl, setImageUrl] = useState(project.imageUrl);
+  const [images, setImages] = useState<ProjectImage[]>(project.images);
   const [formData, setFormData] = useState({
     title: project.title,
     area: project.area,
     room: project.room,
     location: project.location,
-    imageAlt: project.imageAlt || "",
     isActive: project.isActive,
   });
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = e.target.files;
+    if (!files?.length) return;
 
     setIsUploading(true);
     try {
-      const fd = new FormData();
-      fd.append("file", file);
-      fd.append("folder", "projects");
+      for (const file of Array.from(files)) {
+        const fd = new FormData();
+        fd.append("file", file);
+        fd.append("folder", "projects");
 
-      const result = await uploadImage(fd);
-      if (result.error) {
-        toast.error(result.error);
-        return;
+        const result = await uploadImage(fd);
+        if (result.error) {
+          toast.error(result.error);
+          continue;
+        }
+
+        if (result.url) {
+          const { id } = await addProjectImage(project.id, {
+            url: result.url,
+            alt: file.name.replace(/\.[^/.]+$/, ""),
+            order: images.length,
+          });
+          setImages((prev) => [
+            ...prev,
+            { id, url: result.url, alt: file.name, order: prev.length },
+          ]);
+        }
       }
-      if (result.url) {
-        setImageUrl(result.url);
-        toast.success("Görsel yüklendi");
-      }
+      toast.success("Görseller yüklendi");
     } catch {
-      toast.error("Görsel yüklenemedi");
+      toast.error("Görsel yüklenirken hata oluştu");
     } finally {
       setIsUploading(false);
+    }
+  };
+
+  const handleDeleteImage = async (imageId: string) => {
+    try {
+      await deleteProjectImage(imageId);
+      setImages(images.filter((img) => img.id !== imageId));
+      toast.success("Görsel silindi");
+    } catch {
+      toast.error("Görsel silinirken hata oluştu");
     }
   };
 
@@ -73,10 +103,7 @@ export function EditProjectForm({ project }: { project: Project }) {
     setIsLoading(true);
 
     try {
-      await updateProject(project.id, {
-        ...formData,
-        imageUrl,
-      });
+      await updateProject(project.id, formData);
       toast.success("Proje güncellendi");
       router.push("/admin/projects");
     } catch {
@@ -165,38 +192,51 @@ export function EditProjectForm({ project }: { project: Project }) {
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>Görsel</CardTitle>
+                    <CardTitle>Görseller</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    {imageUrl && (
-                      <div className="relative aspect-video rounded-lg overflow-hidden mb-4">
-                        <Image
-                          src={imageUrl}
-                          alt="Proje görseli"
-                          fill
-                          className="object-cover"
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                      {images.map((image) => (
+                        <div
+                          key={image.id}
+                          className="relative group aspect-square rounded-lg overflow-hidden border"
+                        >
+                          <Image
+                            src={image.url}
+                            alt={image.alt}
+                            fill
+                            className="object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteImage(image.id)}
+                            className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        </div>
+                      ))}
+                      <label className="aspect-square rounded-lg border-2 border-dashed border-slate-300 flex flex-col items-center justify-center cursor-pointer hover:border-primary transition-colors">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          className="hidden"
+                          onChange={handleImageUpload}
+                          disabled={isUploading}
                         />
-                      </div>
-                    )}
-                    <label className="flex flex-col items-center justify-center h-32 border-2 border-dashed border-slate-300 rounded-lg cursor-pointer hover:border-[#49202d] transition-colors">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={handleImageUpload}
-                        disabled={isUploading}
-                      />
-                      {isUploading ? (
-                        <Loader2 className="h-8 w-8 text-slate-400 animate-spin" />
-                      ) : (
-                        <>
-                          <Upload className="h-8 w-8 text-slate-400 mb-2" />
-                          <span className="text-sm text-slate-500">
-                            Görseli Değiştir
-                          </span>
-                        </>
-                      )}
-                    </label>
+                        {isUploading ? (
+                          <Loader2 className="h-8 w-8 text-slate-400 animate-spin" />
+                        ) : (
+                          <>
+                            <Upload className="h-8 w-8 text-slate-400 mb-2" />
+                            <span className="text-xs text-slate-500">
+                              Görsel Ekle
+                            </span>
+                          </>
+                        )}
+                      </label>
+                    </div>
                   </CardContent>
                 </Card>
               </div>

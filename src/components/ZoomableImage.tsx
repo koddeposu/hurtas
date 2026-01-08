@@ -1,4 +1,4 @@
-import Logo from '@/assets/logo.png';
+import Logo from "@/assets/logo.png";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import React from "react";
@@ -8,7 +8,8 @@ export function ZoomableImage({ src, alt }: { src: string; alt: string }) {
   const [isHovered, setIsHovered] = React.useState(false);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    const { left, top, width, height } =
+      e.currentTarget.getBoundingClientRect();
 
     // Fare pozisyonunu yüzde (%) cinsinden hesapla
     const x = ((e.pageX - left) / width) * 100;
@@ -34,7 +35,6 @@ export function ZoomableImage({ src, alt }: { src: string; alt: string }) {
         transition={{ type: "spring", stiffness: 150, damping: 20, mass: 0.5 }}
         style={{ originX: 0.5, originY: 0.5 }}
       >
-
         <Image
           src={src}
           alt={alt}
@@ -42,17 +42,6 @@ export function ZoomableImage({ src, alt }: { src: string; alt: string }) {
           className="object-cover select-none"
           draggable={false}
         />
-
-        <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-          <Image
-            src={Logo}
-            alt="Filigran"
-            width={200}
-            height={200}
-            className="opacity-40 select-none"
-            draggable={false}
-          />
-        </div>
       </motion.div>
     </div>
   );

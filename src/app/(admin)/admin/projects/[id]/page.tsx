@@ -1,5 +1,5 @@
 import { requireAuth } from "@/lib/requireAuth";
-import { getProjectById } from "@/actions/projectActions";
+import { getProjectByIdWithImages } from "@/actions/projectActions";
 import { notFound } from "next/navigation";
 import { EditProjectForm } from "./edit-form";
 
@@ -12,7 +12,7 @@ export default async function EditProjectPage({
 }: EditProjectPageProps) {
   await requireAuth();
   const { id } = await params;
-  const project = await getProjectById(id);
+  const project = await getProjectByIdWithImages(id);
 
   if (!project) {
     notFound();
