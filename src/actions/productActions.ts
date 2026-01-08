@@ -76,7 +76,7 @@ export async function getProductById(id: string) {
   };
 }
 
-export async function getProductsWithImages() {
+export async function getProductsWithImages(categoryId?: string) {
   const products = await db
     .select({
       product: product,
@@ -87,8 +87,13 @@ export async function getProductsWithImages() {
     .where(eq(product.isActive, true))
     .orderBy(asc(product.order));
 
+  // Filter by category if provided
+  const filteredProducts = categoryId
+    ? products.filter((p) => p.product.categoryId === categoryId)
+    : products;
+
   const productsWithImages = await Promise.all(
-    products.map(async (p) => {
+    filteredProducts.map(async (p) => {
       const images = await db
         .select()
         .from(productImage)

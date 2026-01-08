@@ -47,6 +47,47 @@ export interface Product {
   bath: string;
 }
 
+// DB Product type - matches what getProductsWithImages() returns
+export interface DBProductImage {
+  id: string;
+  productId: string;
+  url: string;
+  alt: string;
+  order: number;
+  createdAt: Date;
+}
+
+export interface DBCategory {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  order: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface DBProduct {
+  id: string;
+  categoryId: string | null;
+  name: string;
+  slug: string;
+  area: string;
+  room: string;
+  floor: string;
+  bath: string;
+  height: string;
+  price: string | null;
+  oldPrice: string | null;
+  description: string | null;
+  isActive: boolean;
+  order: number;
+  createdAt: Date;
+  updatedAt: Date;
+  category: DBCategory | null;
+  images: DBProductImage[];
+}
+
 // Mock Product
 export const MOCK_PRODUCT: Product[] = [
   {

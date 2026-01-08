@@ -7,25 +7,34 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
-const menuItems = [
-  { href: '/', label: 'Ana Sayfa', icon: Home },
-  { href: '/hakkimizda', label: 'Hakkımızda', icon: Info },
-  {
-    href: '/prefabrik-evler',
-    label: 'Prefabrik Evler',
-    icon: Building2,
-    subItems: [
-      { href: '/prefabrik-evler?kategori=Tek Katlı', label: 'Tek Katlı' },
-      { href: '/prefabrik-evler?kategori=Çift Katlı', label: 'Çift Katlı' },
-      { href: '/prefabrik-evler?kategori=Çelik Ev', label: 'Çelik Ev' },
-    ]
-  },
-  { href: '/projelerimiz', label: 'Projelerimiz', icon: FolderKanban },
-  { href: '/blog', label: 'Blog', icon: BookOpen },
-  { href: '/iletisim', label: 'İletişim', icon: Mail },
-];
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+}
 
-const Navbar = () => {
+interface NavbarProps {
+  categories?: Category[];
+}
+
+const Navbar = ({ categories = [] }: NavbarProps) => {
+  // Build menu items with dynamic categories
+  const menuItems = [
+    { href: '/', label: 'Ana Sayfa', icon: Home },
+    { href: '/hakkimizda', label: 'Hakkımızda', icon: Info },
+    {
+      href: '/prefabrik-evler',
+      label: 'Prefabrik Evler',
+      icon: Building2,
+      subItems: categories.map((cat) => ({
+        href: `/prefabrik-evler/${cat.slug}`,
+        label: cat.name,
+      })),
+    },
+    { href: '/projelerimiz', label: 'Projelerimiz', icon: FolderKanban },
+    { href: '/blog', label: 'Blog', icon: BookOpen },
+    { href: '/iletisim', label: 'İletişim', icon: Mail },
+  ];
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [desktopDropdownOpen, setDesktopDropdownOpen] = useState(false);
   const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);

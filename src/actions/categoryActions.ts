@@ -26,6 +26,15 @@ export async function getCategoryById(id: string) {
   return result[0] ?? null;
 }
 
+export async function getCategoryBySlug(slug: string) {
+  const result = await db
+    .select()
+    .from(category)
+    .where(eq(category.slug, slug))
+    .limit(1);
+  return result[0] ?? null;
+}
+
 export async function createCategory(data: {
   name: string;
   description?: string;

@@ -1,19 +1,24 @@
 "use client";
 import { ProductCard } from "@/components/ProductCard";
 import {
-  CATEGORIES,
-  Category,
-  MOCK_PRODUCT,
-  Product,
+  DBCategory,
+  DBProduct,
   SORT_OPTIONS,
   SortFilterProps,
   SortType,
 } from "@/types/product";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpDown, ChevronRight, Filter, Info, X } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { ProjectGalleryModal } from "./ModalSliderImage";
+
+interface ProductsClientProps {
+  products: DBProduct[];
+  categories: DBCategory[];
+  activeCategory?: string; // category slug, undefined = all products
+}
 
 const HeroSection = () => (
   <section className="pt-32 pb-16 ">
@@ -36,13 +41,13 @@ const HeroSection = () => (
 
 interface MobileFilterButtonProps {
   onClick: () => void;
-  activeTab: Category;
+  activeCategoryName?: string;
 }
 
 // Mobile Filter Button Component
 const MobileFilterButton = ({
   onClick,
-  activeTab,
+  activeCategoryName,
 }: MobileFilterButtonProps) => (
   <div className="lg:hidden mb-6 flex items-center gap-3">
     <button
@@ -52,25 +57,25 @@ const MobileFilterButton = ({
       <Filter size={18} />
       Filtrele & Sırala
     </button>
-    {activeTab !== "Tümü" && (
+    {activeCategoryName && (
       <span className="px-4 py-2 bg-slate-100 text-slate-600 rounded-xl text-xs font-bold">
-        {activeTab}
+        {activeCategoryName}
       </span>
     )}
   </div>
 );
 
 interface CategoryFilterProps {
-  activeTab: Category;
-  onSelect: (category: Category) => void;
-  isMobile?: boolean;
+  activeSlug?: string; // current category slug, undefined = all
+  categories: DBCategory[];
+  onMobileClose?: () => void;
 }
 
 // Category Filter Component
 const CategoryFilter = ({
-  activeTab,
-  onSelect,
-  isMobile = false,
+  activeSlug,
+  categories,
+  onMobileClose,
 }: CategoryFilterProps) => (
   <div>
     <div className="flex items-center gap-2 mb-8 text-[#49202d]">
@@ -80,22 +85,40 @@ const CategoryFilter = ({
       </span>
     </div>
     <nav className="flex flex-col gap-2">
-      {CATEGORIES.map((cat) => (
-        <button
-          key={cat}
-          onClick={() => onSelect(cat)}
+      {/* "Tümü" link - all products */}
+      <Link
+        href="/prefabrik-evler"
+        onClick={onMobileClose}
+        className={`flex items-center justify-between px-5 py-4 rounded-2xl font-bold transition-all text-sm ${
+          !activeSlug
+            ? "bg-primary text-white shadow-lg shadow-[#49202d]/20"
+            : "bg-transparent text-slate-400 hover:bg-slate-50"
+        }`}
+      >
+        Tümü
+        <ChevronRight
+          size={16}
+          className={!activeSlug ? "opacity-100" : "opacity-0"}
+        />
+      </Link>
+      {/* Category links */}
+      {categories.map((cat) => (
+        <Link
+          key={cat.id}
+          href={`/prefabrik-evler/${cat.slug}`}
+          onClick={onMobileClose}
           className={`flex items-center justify-between px-5 py-4 rounded-2xl font-bold transition-all text-sm ${
-            activeTab === cat
+            activeSlug === cat.slug
               ? "bg-primary text-white shadow-lg shadow-[#49202d]/20"
               : "bg-transparent text-slate-400 hover:bg-slate-50"
           }`}
         >
-          {cat}
+          {cat.name}
           <ChevronRight
             size={16}
-            className={activeTab === cat ? "opacity-100" : "opacity-0"}
+            className={activeSlug === cat.slug ? "opacity-100" : "opacity-0"}
           />
-        </button>
+        </Link>
       ))}
     </nav>
   </div>
@@ -169,22 +192,22 @@ const InfoCard = ({ compact = false }: InfoCardProps) => {
 };
 
 interface DesktopSidebarProps {
-  activeTab: Category;
+  activeSlug?: string;
   sortBy: SortType;
-  onCategorySelect: (category: Category) => void;
+  categories: DBCategory[];
   onSortSelect: (sort: SortType) => void;
 }
 
 // Desktop Sidebar Component
 const DesktopSidebar = ({
-  activeTab,
+  activeSlug,
   sortBy,
-  onCategorySelect,
+  categories,
   onSortSelect,
 }: DesktopSidebarProps) => (
   <aside className="hidden lg:block w-full lg:w-1/4 space-y-8">
     <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
-      <CategoryFilter activeTab={activeTab} onSelect={onCategorySelect} />
+      <CategoryFilter activeSlug={activeSlug} categories={categories} />
     </div>
 
     <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
@@ -198,9 +221,9 @@ const DesktopSidebar = ({
 interface MobileFilterPanelProps {
   isOpen: boolean;
   onClose: () => void;
-  activeTab: Category;
+  activeSlug?: string;
   sortBy: SortType;
-  onCategorySelect: (category: Category) => void;
+  categories: DBCategory[];
   onSortSelect: (sort: SortType) => void;
 }
 
@@ -208,9 +231,9 @@ interface MobileFilterPanelProps {
 const MobileFilterPanel = ({
   isOpen,
   onClose,
-  activeTab,
+  activeSlug,
   sortBy,
-  onCategorySelect,
+  categories,
   onSortSelect,
 }: MobileFilterPanelProps) => (
   <AnimatePresence>
@@ -245,12 +268,9 @@ const MobileFilterPanel = ({
             </div>
 
             <CategoryFilter
-              activeTab={activeTab}
-              onSelect={(cat) => {
-                onCategorySelect(cat);
-                onClose();
-              }}
-              isMobile
+              activeSlug={activeSlug}
+              categories={categories}
+              onMobileClose={onClose}
             />
 
             <SortFilter
@@ -269,45 +289,41 @@ const MobileFilterPanel = ({
   </AnimatePresence>
 );
 
-// ... (HeroSection, MobileFilterButton, CategoryFilter, SortFilter, InfoCard, DesktopSidebar, MobileFilterPanel, ProductGrid bileşenleri aynı kalıyor, dokunmanıza gerek yok) ...
-
-// 1. Mantığı içeren yeni bir alt bileşen oluşturuyoruz
-const ProductsClient = () => {
-  const searchParams = useSearchParams();
-  const kategoriFromURL = searchParams.get("kategori");
-
-  const [activeTab, setActiveTab] = useState<Category>("Tümü");
+// Main ProductsClient component
+const ProductsClient = ({
+  products,
+  categories,
+  activeCategory,
+}: ProductsClientProps) => {
   const [sortBy, setSortBy] = useState<SortType>("default");
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  useEffect(() => {
-    if (kategoriFromURL) {
-      const validCategory = CATEGORIES.find((cat) => cat === kategoriFromURL);
-      if (validCategory) {
-        setActiveTab(validCategory as Category);
-      }
-    }
-  }, [kategoriFromURL]);
+  const [selectedProduct, setSelectedProduct] = useState<DBProduct | null>(
+    null,
+  );
 
-  const getFilteredAndSortedProducts = () => {
-    let filtered = MOCK_PRODUCT.filter(
-      (p) => activeTab === "Tümü" || p.category === activeTab,
-    );
+  // Get active category name for display
+  const activeCategoryName = activeCategory
+    ? categories.find((c) => c.slug === activeCategory)?.name
+    : undefined;
+
+  const getSortedProducts = () => {
+    // Products are already filtered by category on the server side
+    let sorted = [...products];
 
     if (sortBy === "price-asc") {
-      filtered = [...filtered].sort((a, b) => {
-        const priceA = a.price === "null" ? 0 : Number(a.price);
-        const priceB = b.price === "null" ? 0 : Number(b.price);
+      sorted = sorted.sort((a, b) => {
+        const priceA = !a.price || a.price === "null" ? 0 : Number(a.price);
+        const priceB = !b.price || b.price === "null" ? 0 : Number(b.price);
         return priceA - priceB;
       });
     } else if (sortBy === "price-desc") {
-      filtered = [...filtered].sort((a, b) => {
-        const priceA = a.price === "null" ? 0 : Number(a.price);
-        const priceB = b.price === "null" ? 0 : Number(b.price);
+      sorted = sorted.sort((a, b) => {
+        const priceA = !a.price || a.price === "null" ? 0 : Number(a.price);
+        const priceB = !b.price || b.price === "null" ? 0 : Number(b.price);
         return priceB - priceA;
       });
     }
-    return filtered;
+    return sorted;
   };
 
   return (
@@ -315,13 +331,10 @@ const ProductsClient = () => {
       <ProjectGalleryModal
         projects={
           selectedProduct
-            ? selectedProduct.img.map((imageItem, i) => ({
+            ? selectedProduct.images.map((image, i) => ({
                 id: i,
-                img:
-                  typeof imageItem.src === "string"
-                    ? `/product/${imageItem.src}`
-                    : imageItem.src,
-                title: imageItem.alt,
+                img: image.url,
+                title: image.alt,
               }))
             : []
         }
@@ -334,29 +347,51 @@ const ProductsClient = () => {
       <section className=" max-w-[1400px] pb-20">
         <MobileFilterButton
           onClick={() => setIsFilterOpen(true)}
-          activeTab={activeTab}
+          activeCategoryName={activeCategoryName}
         />
 
         <div className="flex flex-col lg:flex-row gap-12">
           <DesktopSidebar
-            activeTab={activeTab}
+            activeSlug={activeCategory}
             sortBy={sortBy}
-            onCategorySelect={(cat: Category) => setActiveTab(cat)}
+            categories={categories}
             onSortSelect={(sort: SortType) => setSortBy(sort)}
           />
 
           <div className="flex-1">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <AnimatePresence mode="popLayout">
-                {getFilteredAndSortedProducts().map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    fullscreenChange={() => setSelectedProduct(product)}
-                  />
-                ))}
-              </AnimatePresence>
-            </div>
+            {products.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-20 px-6 bg-white rounded-[2.5rem] border border-slate-100">
+                <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-6">
+                  <Filter size={32} className="text-slate-400" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">
+                  Ürün Bulunamadı
+                </h3>
+                <p className="text-slate-500 text-center max-w-md mb-6">
+                  {activeCategoryName
+                    ? `"${activeCategoryName}" kategorisinde henüz ürün bulunmuyor.`
+                    : "Henüz ürün eklenmemiş."}
+                </p>
+                <Link
+                  href="/prefabrik-evler"
+                  className="px-6 py-3 bg-primary text-white rounded-xl font-bold text-sm hover:bg-primary/90 transition"
+                >
+                  Tüm Ürünleri Gör
+                </Link>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <AnimatePresence mode="popLayout">
+                  {getSortedProducts().map((product) => (
+                    <ProductCard
+                      key={product.id}
+                      product={product}
+                      fullscreenChange={() => setSelectedProduct(product)}
+                    />
+                  ))}
+                </AnimatePresence>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -364,9 +399,9 @@ const ProductsClient = () => {
       <MobileFilterPanel
         isOpen={isFilterOpen}
         onClose={() => setIsFilterOpen(false)}
-        activeTab={activeTab}
+        activeSlug={activeCategory}
         sortBy={sortBy}
-        onCategorySelect={setActiveTab}
+        categories={categories}
         onSortSelect={setSortBy}
       />
     </div>

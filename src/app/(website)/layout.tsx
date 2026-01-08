@@ -1,3 +1,4 @@
+import { getCategories } from "@/actions/categoryActions";
 import ClientLayout from "@/components/ClientLayout";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -102,11 +103,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const categories = await getCategories();
+
   return (
     <html lang="tr">
       <head>
@@ -161,7 +164,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ClientLayout>{children}</ClientLayout>
+        <ClientLayout categories={categories}>{children}</ClientLayout>
       </body>
     </html>
   );

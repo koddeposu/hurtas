@@ -21,19 +21,39 @@ import {
 import Image from "next/image";
 import React from "react";
 
-// MOCK_PRODUCT'tan gelen gerçek type'ı import et
-import { Product } from "@/types/product";
+// DB Product type for detail page
+interface DBProductImage {
+  id: string;
+  url: string;
+  alt: string;
+  order: number;
+}
+
+interface DetailProduct {
+  id: string;
+  name: string;
+  slug: string;
+  area: string;
+  room: string;
+  floor: string;
+  bath: string;
+  height: string;
+  price: string | null;
+  oldPrice: string | null;
+  description: string | null;
+  images: DBProductImage[];
+}
 
 interface ProductPageClientProps {
-  product: Product;
+  product: DetailProduct;
 }
 
 interface ProductImageProps {
-  product: Product;
+  product: DetailProduct;
 }
 
 interface ProductPriceProps {
-  product: Product;
+  product: DetailProduct;
 }
 
 export function ProductImage({ product }: ProductImageProps) {
@@ -66,23 +86,23 @@ export function ProductImage({ product }: ProductImageProps) {
           className="w-full overflow-hidden rounded-[1rem] md:rounded-[2rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] border-2 md:border-[8px] border-white"
         >
           <CarouselContent>
-            {product.img.map((item, index) => (
+            {product.images.map((item, index) => (
               <CarouselItem key={index} className="basis-full">
                 <div
                   className="relative aspect-video w-full"
                   onContextMenu={handleContextMenu}
                   onDragStart={handleDragStart}
                 >
-                  <ZoomableImage src={`/product/${item.src}`} alt={item.alt} />
+                  <ZoomableImage src={item.url} alt={item.alt} />
                 </div>
               </CarouselItem>
             ))}
           </CarouselContent>
         </Carousel>
 
-        {product.img.length > 1 && (
+        {product.images.length > 1 && (
           <div className="absolute bottom-5 md:bottom-10 z-20 flex w-full justify-center gap-2">
-            {product.img.map((_, index) => (
+            {product.images.map((_, index) => (
               <motion.div
                 key={index}
                 onClick={() => api?.scrollTo(index)}
@@ -100,7 +120,7 @@ export function ProductImage({ product }: ProductImageProps) {
       </div>
 
       <div className="relative flex items-center flex-wrap gap-3 mt-4">
-        {product.img.map((item, index) => (
+        {product.images.map((item, index) => (
           <div
             className="border-3 border-white rounded-lg overflow-hidden shadow-[0_0_100px_1px_rgba(0,0,0,0.01)]"
             key={index}
@@ -108,7 +128,7 @@ export function ProductImage({ product }: ProductImageProps) {
             onContextMenu={handleContextMenu}
           >
             <Image
-              src={`/product/${item.src}`}
+              src={item.url}
               alt={item.alt}
               width={100}
               height={100}
@@ -249,6 +269,8 @@ function TrustFeatures() {
 }
 
 function ProductDescription({ product }: ProductPriceProps) {
+  if (!product.description) return null;
+
   return (
     <div className="mt-8 md:mt-16 space-y-4 md:space-y-8 pr-10">
       <div className="flex items-center gap-3 text-[#49202d]">
@@ -256,14 +278,9 @@ function ProductDescription({ product }: ProductPriceProps) {
         <h2 className="text-xl font-black tracking-tight">Ürün Açıklaması</h2>
       </div>
       <div className="prose prose-slate max-w-none">
-        {product?.description?.map((text, i) => (
-          <p
-            key={i}
-            className="text-slate-500 text-sm md:text-lg leading-relaxed font-medium mt-4"
-          >
-            {text}
-          </p>
-        ))}
+        <p className="text-slate-500 text-sm md:text-lg leading-relaxed font-medium mt-4">
+          {product.description}
+        </p>
       </div>
     </div>
   );

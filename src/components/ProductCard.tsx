@@ -5,17 +5,25 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import { Product } from "@/types/product";
+import { DBProduct, Product } from "@/types/product";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Home, Maximize2, Ruler } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-const formatPrice = (price: string | null) => {
+const formatPrice = (price: string | null | undefined) => {
   if (!price || price === "null") return null;
   return new Intl.NumberFormat("tr-TR").format(Number(price));
 };
+
+// Support both DBProduct (from database) and Product (from mock data)
+type ProductCardProduct = DBProduct | Product;
+
+// Helper to check if product is from DB
+function isDBProduct(product: ProductCardProduct): product is DBProduct {
+  return 'images' in product;
+}
 
 export const ProductCard = ({
   product,
@@ -24,12 +32,30 @@ export const ProductCard = ({
 }: {
   bestseller?: boolean;
   fullscreenChange: () => void;
-  product: Product;
+  product: ProductCardProduct;
 }) => {
   const router = useRouter();
 
+  // Get images array - handle both formats
+  const images = isDBProduct(product)
+    ? product.images.map((img) => ({ src: img.url, alt: img.alt }))
+    : product.img.map((img) => ({
+        src: typeof img.src === 'string' ? `/product/${img.src}` : img.src,
+        alt: img.alt,
+      }));
+
+  // Get category name - handle both formats
+  const categoryName = isDBProduct(product)
+    ? product.category?.name
+    : product.category;
+
+  // Get slug for detail page
+  const detailSlug = isDBProduct(product)
+    ? product.slug
+    : `${product.slug}-${product.id}`;
+
   const goDetail = () => {
-    router.push(`/urun-detay/${product.slug}-${product.id}`);
+    router.push(`/urun-detay/${detailSlug}`);
   };
   const [api, setApi] = React.useState<CarouselApi | null>(null);
   const [current, setCurrent] = React.useState(0);
@@ -69,11 +95,11 @@ export const ProductCard = ({
         <div className="relative">
           <Carousel setApi={setApi} className="w-full">
             <CarouselContent>
-              {product.img.map((item, index) => (
+              {images.map((item, index) => (
                 <CarouselItem key={index} className="basis-full">
                   <div className="relative aspect-video w-full bg-slate-100">
                     <Image
-                      src={`/product/${item.src}`}
+                      src={item.src}
                       alt={item.alt}
                       fill
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -110,9 +136,9 @@ export const ProductCard = ({
           </Carousel>
 
           {/* DOTS */}
-          {product.img.length > 1 && (
+          {images.length > 1 && (
             <div className="absolute bottom-3 z-20 flex w-full justify-center gap-2">
-              {product.img.map((_, index) => (
+              {images.map((_, index) => (
                 <motion.div
                   key={index}
                   onClick={() => api?.scrollTo(index)}
@@ -143,11 +169,13 @@ export const ProductCard = ({
             </div>
           )}
 
-          <div className="absolute right-4 top-4 bg-white/90 backdrop-blur-md px-4 py-1 rounded-full shadow-sm z-10">
-            <span className="text-[9px] font-black text-primary uppercase tracking-widest">
-              {product.category}
-            </span>
-          </div>
+          {categoryName && (
+            <div className="absolute right-4 top-4 bg-white/90 backdrop-blur-md px-4 py-1 rounded-full shadow-sm z-10">
+              <span className="text-[9px] font-black text-primary uppercase tracking-widest">
+                {categoryName}
+              </span>
+            </div>
+          )}
           <div className="px-6 pt-4">
             <h3 className="text-xl font-black text-slate-900 mb-2">
               {product.name}

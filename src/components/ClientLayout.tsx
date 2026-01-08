@@ -5,11 +5,21 @@ import Navbar from "@/components/navbar";
 import { usePathname } from "next/navigation";
 import BottomBar from "./bottomBar";
 
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+interface ClientLayoutProps {
+  children: React.ReactNode;
+  categories?: Category[];
+}
+
 export default function ClientLayout({
   children,
-}: {
-  children: React.ReactNode;
-}) {
+  categories = [],
+}: ClientLayoutProps) {
   const pathname = usePathname();
 
   const hideLayout = pathname.startsWith("/katalog");
@@ -18,7 +28,7 @@ export default function ClientLayout({
   return (
     <>
       <div className="fixed w-full h-screen -z-10 bg-primary/10 opacity-10 blur-in-sm " />
-      <Navbar />
+      <Navbar categories={categories} />
 
       <main className="relative overflow-hidden">
         <div className={`w-full ${hideLayout && "h-screen"} ${!hideLayout2 && "p-5"}`}>

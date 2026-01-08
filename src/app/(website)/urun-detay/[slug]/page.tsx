@@ -1,5 +1,5 @@
+import { getProductBySlug } from '@/actions/productActions';
 import ProductPageClient from '@/components/ProductPageClient';
-import { MOCK_PRODUCT } from "@/types/product";
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -10,8 +10,7 @@ type Props = {
 // Metadata oluştur
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const productId = slug.split('-').pop();
-  const product = MOCK_PRODUCT.find(p => p.id === productId);
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     return {
@@ -20,12 +19,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   }
 
-  const firstImage = product.img[0]?.src;
-  const imageUrl = `https://ctprefabrik.com/urun-detay/${firstImage}`;
+  const firstImage = product.images[0]?.url;
+  const imageUrl = firstImage || 'https://ctprefabrik.com/og-image.png';
 
   // Açıklama oluştur
-  const description = product.description && product.description.length > 0
-    ? product.description[0].substring(0, 160)
+  const description = product.description
+    ? product.description.substring(0, 160)
     : `${product.name} - ${product.room ? product.room + ' oda' : ''} ${product.bath ? product.bath + ' banyo' : ''} prefabrik ev modeli. Uygun fiyatlarla hemen teslim.`;
 
   const keywords = [
@@ -89,31 +88,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-// Static paths oluştur (tüm ürünler için)
-export async function generateStaticParams() {
-  return MOCK_PRODUCT.map((product) => {
-    // Slug oluştur: ürün-adı-id formatında
-    const slug = `${product.name
-      .toLowerCase()
-      .replace(/ğ/g, 'g')
-      .replace(/ü/g, 'u')
-      .replace(/ş/g, 's')
-      .replace(/ı/g, 'i')
-      .replace(/ö/g, 'o')
-      .replace(/ç/g, 'c')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '')}-${product.id}`;
-
-    return {
-      slug,
-    };
-  });
-}
-
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-  const productId = slug.split('-').pop();
-  const product = MOCK_PRODUCT.find(p => p.id === productId);
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     notFound();
@@ -124,10 +101,8 @@ export default async function ProductPage({ params }: Props) {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: product.name,
-    image: product.img.map(img => `https://ctprefabrik.com/urun-detay/${img.src}`),
-    description: product.description && product.description.length > 0
-      ? product.description.join(' ')
-      : `${product.name} prefabrik ev modeli`,
+    image: product.images.map(img => img.url),
+    description: product.description || `${product.name} prefabrik ev modeli`,
     brand: {
       '@type': 'Brand',
       name: 'CT Prefabrik',
