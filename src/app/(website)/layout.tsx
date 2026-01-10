@@ -1,9 +1,8 @@
 import { getCategories } from "@/actions/categoryActions";
-import ClientLayout from "@/components/ClientLayout";
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import type { Viewport } from "next";
 import "@/app/globals.css";
+import ClientLayout from "@/components/ClientLayout";
+import type { Metadata, Viewport } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://ctprefabrik.com"),
@@ -109,7 +108,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const categories = await getCategories();
-
+  console.log("ENV CHECK:", {
+    DATABASE_URL: process.env.DATABASE_URL,
+    NODE_ENV: process.env.NODE_ENV,
+  });
   return (
     <html lang="tr">
       <head>

@@ -70,7 +70,7 @@ export function ProjectGalleryModal({
   return (
     <Modal isShow={isOpen} onClose={onClose}>
       <div className="h-screen flex items-center justify-center p-5">
-        <div className="max-w-[1000px] w-full">
+        <div className="max-w-[1200px] w-full">
           {/* MAIN SLIDER */}
           <div className="relative">
             <Carousel

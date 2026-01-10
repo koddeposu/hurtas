@@ -1,30 +1,30 @@
 "use client";
-import { MOCK_PRODUCT, Product } from '@/types/product';
-import { AnimatePresence, motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { ProjectGalleryModal } from '../ModalSliderImage';
-import { ProductCard } from '../ProductCard';
+import { MOCK_PRODUCT, Product } from "@/types/product";
+import { AnimatePresence, motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { ProjectGalleryModal } from "../ModalSliderImage";
+import { ProductCard } from "../ProductCard";
 
 export const BestSellingHouses = () => {
-  const router = useRouter()
+  const router = useRouter();
   const data = MOCK_PRODUCT.filter((e) => e.category === "Çelik Ev");
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
-
-
   return (
     <>
-
       <ProjectGalleryModal
         projects={
           selectedProduct
             ? selectedProduct.img.map((imageItem, i) => ({
-              id: i,
-              // ÖNEMLİ: imageItem içindeki src'yi almalı ve path'i doğru kurmalıyız
-              img: typeof imageItem.src === 'string' ? `/product/${imageItem.src}` : imageItem.src,
-              title: imageItem.alt,
-            }))
+                id: i,
+                // ÖNEMLİ: imageItem içindeki src'yi almalı ve path'i doğru kurmalıyız
+                img:
+                  typeof imageItem.src === "string"
+                    ? `/product/${imageItem.src}`
+                    : imageItem.src,
+                title: imageItem.alt,
+              }))
             : []
         }
         isOpen={!!selectedProduct}
@@ -33,7 +33,6 @@ export const BestSellingHouses = () => {
 
       <section className="font-[family-name:var(--font-poppins)] overflow-hidden">
         <div className="container mx-auto">
-
           {/* Başlık Alanı */}
           <div className="flex flex-col md:flex-row justify-between lg:items-end mb-10 lg:mb-16 gap-6">
             <motion.div
@@ -41,37 +40,50 @@ export const BestSellingHouses = () => {
               whileInView={{ opacity: 1, x: 0 }}
               className="max-w-xl"
             >
-              <h2 className="text-3xl md:text-5xl font-black tracking-tighter leading-none" style={{ color: '#165b39' }}>
+              <h2
+                className="text-3xl md:text-5xl font-black tracking-tighter leading-none"
+                style={{ color: "#165b39" }}
+              >
                 EN ÇOK TERCİH EDİLEN <br />
-                <span style={{ color: '#49202d' }}>PREFABRİK EVLERİMİZ</span>
+                <span style={{ color: "#49202d" }}>PREFABRİK EVLERİMİZ</span>
               </h2>
-              <div className="w-20 h-1 mt-6 rounded-full" style={{ backgroundColor: '#165b39' }} />
+              <div
+                className="w-20 h-1 mt-6 rounded-full"
+                style={{ backgroundColor: "#165b39" }}
+              />
             </motion.div>
 
             <p className="text-slate-400 font-medium text-sm md:text-right max-w-xs uppercase tracking-widest">
-              Yüzlerce aileye yuva olan, en çok tercih edilen prefabrik ev modellerimiz.
+              Yüzlerce aileye yuva olan, en çok tercih edilen prefabrik ev
+              modellerimiz.
             </p>
           </div>
 
           {/* Kartlar Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-            <AnimatePresence mode='popLayout'>
+            <AnimatePresence mode="popLayout">
               {data.map((product) => (
-                <ProductCard key={product.id} product={product} bestseller fullscreenChange={() => setSelectedProduct(product)} />
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  bestseller
+                  fullscreenChange={() => setSelectedProduct(product)}
+                />
               ))}
             </AnimatePresence>
           </div>
 
           {/* Tümünü Gör Butonu (Opsiyonel) */}
           <div className="mt-5 text-center">
-            <button className="text-[10px] font-black tracking-[0.4em] uppercase text-slate-300 hover:text-[#49202d] transition-colors cursor-pointer" onClick={() => router.push('/prefabrik-evler')}>
+            <button
+              className="text-[10px] font-black tracking-[0.4em] uppercase text-slate-300 hover:text-[#49202d] transition-colors cursor-pointer"
+              onClick={() => router.push("/prefabrik-evler")}
+            >
               TÜM MODELLERİ KEŞFEDİN
             </button>
           </div>
         </div>
       </section>
     </>
-
   );
 };
-

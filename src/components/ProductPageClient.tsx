@@ -17,9 +17,11 @@ import {
   MessageCircle,
   Phone,
   Ruler,
+  ZoomIn,
 } from "lucide-react";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
+import { ProjectGalleryModal } from "./ModalSliderImage";
 
 // DB Product type for detail page
 interface DBProductImage {
@@ -59,6 +61,9 @@ interface ProductPriceProps {
 export function ProductImage({ product }: ProductImageProps) {
   const [api, setApi] = React.useState<CarouselApi | null>(null);
   const [current, setCurrent] = React.useState(0);
+  const [selectedProduct, setSelectedProduct] = useState<DetailProduct | null>(
+    null
+  );
 
   React.useEffect(() => {
     if (!api) return;
@@ -79,66 +84,92 @@ export function ProductImage({ product }: ProductImageProps) {
   };
 
   return (
-    <div className="relative">
+    <>
+      <ProjectGalleryModal
+        projects={
+          selectedProduct
+            ? selectedProduct.images.map((imageItem, i) => ({
+                id: i,
+                img: imageItem.url,
+                title: imageItem.alt,
+              }))
+            : []
+        }
+        isOpen={!!selectedProduct}
+        onClose={() => setSelectedProduct(null)}
+      />
       <div className="relative">
-        <Carousel
-          setApi={setApi}
-          className="w-full overflow-hidden rounded-[1rem] md:rounded-[2rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] border-2 md:border-[8px] border-white"
-        >
-          <CarouselContent>
-            {product.images.map((item, index) => (
-              <CarouselItem key={index} className="basis-full">
-                <div
-                  className="relative aspect-video w-full"
-                  onContextMenu={handleContextMenu}
-                  onDragStart={handleDragStart}
-                >
-                  <ZoomableImage src={item.url} alt={item.alt} />
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+        <div className="relative group">
+          <Carousel
+            setApi={setApi}
+            className="w-full overflow-hidden rounded-[1rem] md:rounded-[2rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] border-2 md:border-[8px] border-white"
+          >
+            <CarouselContent>
+              {product.images.map((item, index) => (
+                <CarouselItem key={index} className="basis-full">
+                  <div
+                    className="relative aspect-video w-full"
+                    onContextMenu={handleContextMenu}
+                    onDragStart={handleDragStart}
+                  >
+                    <ZoomableImage src={item.url} alt={item.alt} />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
 
-        {product.images.length > 1 && (
-          <div className="absolute bottom-5 md:bottom-10 z-20 flex w-full justify-center gap-2">
-            {product.images.map((_, index) => (
-              <motion.div
-                key={index}
-                onClick={() => api?.scrollTo(index)}
-                animate={{
-                  width: current === index ? 22 : 10,
-                }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className={`h-2.5 rounded-full cursor-pointer ${
-                  current === index ? "bg-secondary" : "bg-white/70"
+          {/* Yakınlaştırma İkonu */}
+          <button
+            onClick={() => setSelectedProduct(product)}
+            className="absolute top-8 right-8 z-30 bg-white/90 hover:bg-white p-2.5 rounded-full shadow-lg transition-all"
+            aria-label="Resmi büyüt"
+          >
+            <ZoomIn />
+          </button>
+
+          {product.images.length > 1 && (
+            <div className="absolute bottom-5 md:bottom-10 z-20 flex w-full justify-center gap-2">
+              {product.images.map((_, index) => (
+                <motion.div
+                  key={index}
+                  onClick={() => api?.scrollTo(index)}
+                  animate={{
+                    width: current === index ? 22 : 10,
+                  }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className={`h-2.5 rounded-full cursor-pointer ${
+                    current === index ? "bg-secondary" : "bg-white/70"
+                  }`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="relative flex items-center flex-wrap gap-3 mt-4">
+          {product.images.map((item, index) => (
+            <div
+              className="border-3 border-white rounded-lg overflow-hidden shadow-[0_0_100px_1px_rgba(0,0,0,0.01)]"
+              key={index}
+              onClick={() => api?.scrollTo(index)}
+              onContextMenu={handleContextMenu}
+            >
+              <Image
+                src={item.url}
+                alt={item.alt}
+                width={100}
+                height={100}
+                draggable={false}
+                className={`w-16 h-16 min-w-10 transition-opacity cursor-pointer object-cover select-none ${
+                  current === index ? "opacity-100" : "opacity-40"
                 }`}
               />
-            ))}
-          </div>
-        )}
+            </div>
+          ))}
+        </div>
       </div>
-
-      <div className="relative flex items-center flex-wrap gap-3 mt-4">
-        {product.images.map((item, index) => (
-          <div
-            className="border-3 border-white rounded-lg overflow-hidden shadow-[0_0_100px_1px_rgba(0,0,0,0.01)]"
-            key={index}
-            onClick={() => api?.scrollTo(index)}
-            onContextMenu={handleContextMenu}
-          >
-            <Image
-              src={item.url}
-              alt={item.alt}
-              width={100}
-              height={100}
-              draggable={false}
-              className={`w-16 h-16 min-w-10 transition-opacity cursor-pointer object-cover select-none ${current === index ? "opacity-100" : "opacity-40"}`}
-            />
-          </div>
-        ))}
-      </div>
-    </div>
+    </>
   );
 }
 
@@ -186,7 +217,7 @@ function ProductPrice({ product }: ProductPriceProps) {
         </div>
       )}
       <div className="text-4xl font-black text-slate-900 tracking-tight mb-2">
-        {product?.price} TL
+        {formatPrice(product?.price)} TL
       </div>
       <p className="text-slate-400 text-xs font-medium italic">
         Ücretsiz Kurulum
@@ -194,7 +225,10 @@ function ProductPrice({ product }: ProductPriceProps) {
     </div>
   );
 }
-
+const formatPrice = (price: string | null | undefined) => {
+  if (!price || price === "null") return null;
+  return new Intl.NumberFormat("tr-TR").format(Number(price));
+};
 function ProductPriceMobile({ product }: ProductPriceProps) {
   const oldPriceNum = product.oldPrice ? Number(product.oldPrice) : 0;
 
@@ -208,7 +242,7 @@ function ProductPriceMobile({ product }: ProductPriceProps) {
         </div>
       )}
       <div className="text-xl font-black text-slate-900 tracking-tight mb-2">
-        {product?.price} TL
+        {formatPrice(product?.price)} TL
       </div>
       <p className="text-slate-400 text-xs font-medium italic">
         Ücretsiz Kurulum
@@ -223,7 +257,10 @@ function ProductActions() {
 
   const handleWhatsApp = () => {
     const encodedMessage = encodeURIComponent(whatsappMessage);
-    const whatsappUrl = `https://wa.me/${phoneNumber.replace(/\+/g, "")}?text=${encodedMessage}`;
+    const whatsappUrl = `https://wa.me/${phoneNumber.replace(
+      /\+/g,
+      ""
+    )}?text=${encodedMessage}`;
     window.open(whatsappUrl, "_blank");
   };
 
@@ -278,7 +315,7 @@ function ProductDescription({ product }: ProductPriceProps) {
         <h2 className="text-xl font-black tracking-tight">Ürün Açıklaması</h2>
       </div>
       <div className="prose prose-slate max-w-none">
-        <p className="text-slate-500 text-sm md:text-lg leading-relaxed font-medium mt-4">
+        <p className="text-slate-500 text-sm md:text-lg leading-relaxed font-medium mt-4 whitespace-pre-line">
           {product.description}
         </p>
       </div>
