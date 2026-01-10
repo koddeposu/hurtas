@@ -40,7 +40,7 @@ export default function ClientLayout({
       {!hideLayout && (
         <section className="flex justify-center">
           <div className="w-full">
-            <Footer />
+            <Footer categories={categories} />
           </div>
         </section>
       )}

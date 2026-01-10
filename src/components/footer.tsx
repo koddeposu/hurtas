@@ -9,7 +9,18 @@ import {
   MapPin,
   Phone
 } from 'lucide-react';
+import Link from 'next/link';
 import { useState } from 'react';
+
+interface Category {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+interface FooterProps {
+  categories?: Category[];
+}
 
 const pageLink = [
   { name: "Hakkımızda", href: "/hakkimizda" },
@@ -19,12 +30,7 @@ const pageLink = [
   { name: "İletişim", href: "/iletisim" },
 ]
 
-const services = [
-  { href: '/prefabrik-evler?kategori=Tek Katlı', name: 'Tek Katlı Prefabrik' },
-  { href: '/prefabrik-evler?kategori=Çift Katlı', name: 'Çift Katlı Prefabrik' },
-  { href: '/prefabrik-evler?kategori=Çelik Ev', name: 'Çelik Ev' },
-]
-const Footer = () => {
+const Footer = ({ categories = [] }: FooterProps) => {
   const currentYear = new Date().getFullYear();
   const [copiedAddress, setCopiedAddress] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
@@ -120,9 +126,14 @@ const Footer = () => {
           <div className="lg:col-span-2 space-y-6">
             <h4 className="text-sm font-black uppercase tracking-[0.2em]" style={{ color: '#49202d' }}>Hizmetler</h4>
             <ul className="space-y-4">
-              {services.map((item, index) => (
-                <li key={index}>
-                  <a href={item.href} className="text-sm font-semibold text-slate-500 hover:text-[#165b39] transition-colors">{item.name}</a>
+              {categories.slice(0, 5).map((cat) => (
+                <li key={cat.id}>
+                  <Link
+                    href={`/prefabrik-evler/${cat.slug}`}
+                    className="text-sm font-semibold text-slate-500 hover:text-[#165b39] transition-colors"
+                  >
+                    {cat.name}
+                  </Link>
                 </li>
               ))}
             </ul>

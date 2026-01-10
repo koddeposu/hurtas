@@ -16,6 +16,7 @@ import {
   addProjectImage,
   deleteProjectImage,
   updateProjectImagesOrder,
+  updateProjectImageAlt,
 } from "@/actions/projectActions";
 import { uploadImage } from "@/actions/uploadActions";
 import { toast } from "sonner";
@@ -23,6 +24,7 @@ import {
   SortableImageGrid,
   type SortableImage,
 } from "@/components/admin/sortable-image-grid";
+import { AltTextEditDialog } from "@/components/admin/alt-text-edit-dialog";
 
 interface ProjectImage {
   id: string;
@@ -47,6 +49,11 @@ export function EditProjectForm({ project }: { project: Project }) {
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [images, setImages] = useState<ProjectImage[]>(project.images);
+  const [editingImage, setEditingImage] = useState<{
+    id: string;
+    alt: string;
+  } | null>(null);
+  const [isUpdatingAlt, setIsUpdatingAlt] = useState(false);
   const [formData, setFormData] = useState({
     title: project.title,
     area: project.area,
@@ -117,6 +124,29 @@ export function EditProjectForm({ project }: { project: Project }) {
     } catch {
       setImages(previousImages);
       toast.error("Sıralama kaydedilemedi");
+    }
+  };
+
+  const handleEditAlt = (id: string, currentAlt: string) => {
+    setEditingImage({ id, alt: currentAlt });
+  };
+
+  const handleSaveAlt = async (newAlt: string) => {
+    if (!editingImage) return;
+    setIsUpdatingAlt(true);
+    try {
+      await updateProjectImageAlt(editingImage.id, newAlt);
+      setImages(
+        images.map((img) =>
+          img.id === editingImage.id ? { ...img, alt: newAlt } : img
+        )
+      );
+      toast.success("Alt metin güncellendi");
+      setEditingImage(null);
+    } catch {
+      toast.error("Alt metin güncellenemedi");
+    } finally {
+      setIsUpdatingAlt(false);
     }
   };
 
@@ -223,6 +253,7 @@ export function EditProjectForm({ project }: { project: Project }) {
                       onDelete={handleDeleteImage}
                       onUpload={handleImageUpload}
                       isUploading={isUploading}
+                      onEditAlt={handleEditAlt}
                     />
                   </CardContent>
                 </Card>
@@ -264,6 +295,14 @@ export function EditProjectForm({ project }: { project: Project }) {
               </div>
             </div>
           </form>
+
+          <AltTextEditDialog
+            open={!!editingImage}
+            onOpenChange={(open) => !open && setEditingImage(null)}
+            currentAlt={editingImage?.alt || ""}
+            onSave={handleSaveAlt}
+            isLoading={isUpdatingAlt}
+          />
         </main>
       </div>
     </div>

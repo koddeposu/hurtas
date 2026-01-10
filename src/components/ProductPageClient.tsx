@@ -65,6 +65,9 @@ export function ProductImage({ product }: ProductImageProps) {
     null
   );
 
+  const getImageAlt = (alt: string, index: number) =>
+    alt?.trim() ? alt : `${product.name} - ${index + 1}`;
+
   React.useEffect(() => {
     if (!api) return;
     setCurrent(api.selectedScrollSnap());
@@ -91,7 +94,7 @@ export function ProductImage({ product }: ProductImageProps) {
             ? selectedProduct.images.map((imageItem, i) => ({
                 id: i,
                 img: imageItem.url,
-                title: imageItem.alt,
+                title: getImageAlt(imageItem.alt, i),
               }))
             : []
         }
@@ -112,7 +115,7 @@ export function ProductImage({ product }: ProductImageProps) {
                     onContextMenu={handleContextMenu}
                     onDragStart={handleDragStart}
                   >
-                    <ZoomableImage src={item.url} alt={item.alt} />
+                    <ZoomableImage src={item.url} alt={getImageAlt(item.alt, index)} />
                   </div>
                 </CarouselItem>
               ))}
@@ -157,7 +160,7 @@ export function ProductImage({ product }: ProductImageProps) {
             >
               <Image
                 src={item.url}
-                alt={item.alt}
+                alt={getImageAlt(item.alt, index)}
                 width={100}
                 height={100}
                 draggable={false}

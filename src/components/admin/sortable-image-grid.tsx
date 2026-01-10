@@ -18,7 +18,7 @@ import {
   arrayMove,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical, X, Upload, Loader2 } from "lucide-react";
+import { GripVertical, X, Upload, Loader2, Pencil } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
@@ -32,9 +32,10 @@ export interface SortableImage {
 interface SortableImageItemProps {
   image: SortableImage;
   onDelete: (id: string) => void;
+  onEditAlt?: (id: string, currentAlt: string) => void;
 }
 
-function SortableImageItem({ image, onDelete }: SortableImageItemProps) {
+function SortableImageItem({ image, onDelete, onEditAlt }: SortableImageItemProps) {
   const {
     attributes,
     listeners,
@@ -84,6 +85,18 @@ function SortableImageItem({ image, onDelete }: SortableImageItemProps) {
       >
         <X className="h-4 w-4" />
       </button>
+
+      {/* Edit alt text button - bottom left */}
+      {onEditAlt && (
+        <button
+          type="button"
+          onClick={() => onEditAlt(image.id, image.alt)}
+          className="absolute bottom-2 left-2 p-1 bg-blue-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
+          title="Alt metin düzenle"
+        >
+          <Pencil className="h-4 w-4" />
+        </button>
+      )}
     </div>
   );
 }
@@ -94,6 +107,7 @@ interface SortableImageGridProps {
   onDelete: (id: string) => void;
   onUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isUploading: boolean;
+  onEditAlt?: (id: string, currentAlt: string) => void;
 }
 
 export function SortableImageGrid({
@@ -102,6 +116,7 @@ export function SortableImageGrid({
   onDelete,
   onUpload,
   isUploading,
+  onEditAlt,
 }: SortableImageGridProps) {
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -146,6 +161,7 @@ export function SortableImageGrid({
               key={image.id}
               image={image}
               onDelete={onDelete}
+              onEditAlt={onEditAlt}
             />
           ))}
 

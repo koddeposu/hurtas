@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { db } from "@/db/drizzle";
 import { contactSubmission } from "@/db/schema";
 import { requireAuth } from "@/lib/requireAuth";
+import { sendContactNotification } from "@/lib/email";
 
 function generateId() {
   return crypto.randomUUID();
@@ -23,6 +24,15 @@ export async function submitContactForm(data: {
     name: data.name,
     phone: data.phone,
     message: data.message ?? null,
+  });
+
+  // Send email notification (fire and forget - don't fail form if email fails)
+  sendContactNotification({
+    name: data.name,
+    phone: data.phone,
+    message: data.message,
+  }).catch((error) => {
+    console.error("Email notification failed:", error);
   });
 
   return { success: true };

@@ -4,6 +4,7 @@ import { CoreValues } from "@/components/home-page/core-values";
 import { Features } from "@/components/home-page/features";
 import { Hero4 } from "@/components/home-page/hero";
 import { WhoWeAre } from "@/components/home-page/who-we-are";
+import { getFavoritesForHomepage } from "@/actions/favoriteActions";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -57,7 +58,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Page() {
+export default async function Page() {
+  const favorites = await getFavoritesForHomepage();
+
   return (
     <>
       {/* Website Schema - Ana Sayfa için */}
@@ -220,11 +223,13 @@ export default function Page() {
           </div>
         </section>
 
-        <section className="flex justify-center pt-10 md:pt-0 lg:pg-0">
-          <div className="max-w-[1280px] w-full">
-            <BestSellingHouses />
-          </div>
-        </section>
+        {favorites.length > 0 && (
+          <section className="flex justify-center pt-10 md:pt-0 lg:pg-0">
+            <div className="max-w-[1280px] w-full">
+              <BestSellingHouses favorites={favorites} />
+            </div>
+          </section>
+        )}
 
         <section className="flex justify-center pt-20 lg:mt-0">
           <div className="max-w-[1280px] w-full">

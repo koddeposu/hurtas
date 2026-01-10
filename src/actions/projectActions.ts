@@ -245,3 +245,17 @@ export async function updateProjectImagesOrder(
 
   return { success: true };
 }
+
+export async function updateProjectImageAlt(imageId: string, alt: string) {
+  await requireAuth();
+
+  await db
+    .update(projectImage)
+    .set({ alt })
+    .where(eq(projectImage.id, imageId));
+
+  revalidatePath("/admin/projects");
+  revalidatePath("/projelerimiz");
+
+  return { success: true };
+}

@@ -24,6 +24,7 @@ import {
   addProductImage,
   deleteProductImage,
   updateProductImagesOrder,
+  updateProductImageAlt,
 } from "@/actions/productActions";
 import { uploadImage } from "@/actions/uploadActions";
 import { toast } from "sonner";
@@ -31,6 +32,7 @@ import {
   SortableImageGrid,
   type SortableImage,
 } from "@/components/admin/sortable-image-grid";
+import { AltTextEditDialog } from "@/components/admin/alt-text-edit-dialog";
 
 interface ProductImage {
   id: string;
@@ -72,6 +74,11 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [images, setImages] = useState<ProductImage[]>(product.images);
+  const [editingImage, setEditingImage] = useState<{
+    id: string;
+    alt: string;
+  } | null>(null);
+  const [isUpdatingAlt, setIsUpdatingAlt] = useState(false);
   const [formData, setFormData] = useState({
     categoryId: product.categoryId || "",
     name: product.name,
@@ -169,6 +176,29 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
     } catch {
       setImages(previousImages);
       toast.error("Sıralama kaydedilemedi");
+    }
+  };
+
+  const handleEditAlt = (id: string, currentAlt: string) => {
+    setEditingImage({ id, alt: currentAlt });
+  };
+
+  const handleSaveAlt = async (newAlt: string) => {
+    if (!editingImage) return;
+    setIsUpdatingAlt(true);
+    try {
+      await updateProductImageAlt(editingImage.id, newAlt);
+      setImages(
+        images.map((img) =>
+          img.id === editingImage.id ? { ...img, alt: newAlt } : img
+        )
+      );
+      toast.success("Alt metin güncellendi");
+      setEditingImage(null);
+    } catch {
+      toast.error("Alt metin güncellenemedi");
+    } finally {
+      setIsUpdatingAlt(false);
     }
   };
 
@@ -324,6 +354,7 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                       onDelete={handleDeleteImage}
                       onUpload={handleImageUpload}
                       isUploading={isUploading}
+                      onEditAlt={handleEditAlt}
                     />
                   </CardContent>
                 </Card>
@@ -393,6 +424,14 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
               </div>
             </div>
           </form>
+
+          <AltTextEditDialog
+            open={!!editingImage}
+            onOpenChange={(open) => !open && setEditingImage(null)}
+            currentAlt={editingImage?.alt || ""}
+            onSave={handleSaveAlt}
+            isLoading={isUpdatingAlt}
+          />
         </main>
       </div>
     </div>

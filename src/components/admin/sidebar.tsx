@@ -1,11 +1,13 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   FolderTree,
   Package,
+  Star,
   Building2,
   FileText,
   MessageSquare,
@@ -15,6 +17,7 @@ import {
 import { cn } from "@/lib/utils";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { getUnreadCount } from "@/actions/contactActions";
 
 const menuItems = [
   {
@@ -31,6 +34,11 @@ const menuItems = [
     title: "Ürünler",
     href: "/admin/products",
     icon: Package,
+  },
+  {
+    title: "Favoriler",
+    href: "/admin/favorites",
+    icon: Star,
   },
   {
     title: "Projeler",
@@ -52,6 +60,13 @@ const menuItems = [
 export function AdminSidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    getUnreadCount()
+      .then((count) => setUnreadCount(count))
+      .catch(() => setUnreadCount(0));
+  }, [pathname]);
 
   const handleLogout = async () => {
     await authClient.signOut();
@@ -79,6 +94,8 @@ export function AdminSidebar() {
                 ? pathname === "/admin"
                 : pathname.startsWith(item.href);
 
+            const showBadge = item.href === "/admin/contacts" && unreadCount > 0;
+
             return (
               <Link
                 key={item.href}
@@ -92,6 +109,16 @@ export function AdminSidebar() {
               >
                 <item.icon className="h-5 w-5" />
                 {item.title}
+                {showBadge && (
+                  <span className={cn(
+                    "ml-auto flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs font-medium",
+                    isActive
+                      ? "bg-white text-primary"
+                      : "bg-red-500 text-white"
+                  )}>
+                    {unreadCount}
+                  </span>
+                )}
               </Link>
             );
           })}

@@ -1,29 +1,30 @@
 "use client";
-import { MOCK_PRODUCT, Product } from "@/types/product";
+import { DBProduct } from "@/types/product";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ProjectGalleryModal } from "../ModalSliderImage";
 import { ProductCard } from "../ProductCard";
 
-export const BestSellingHouses = () => {
+interface BestSellingHousesProps {
+  favorites: DBProduct[];
+}
+
+export const BestSellingHouses = ({ favorites }: BestSellingHousesProps) => {
   const router = useRouter();
-  const data = MOCK_PRODUCT.filter((e) => e.category === "Çelik Ev");
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<DBProduct | null>(
+    null,
+  );
 
   return (
     <>
       <ProjectGalleryModal
         projects={
           selectedProduct
-            ? selectedProduct.img.map((imageItem, i) => ({
+            ? selectedProduct.images.map((image, i) => ({
                 id: i,
-                // ÖNEMLİ: imageItem içindeki src'yi almalı ve path'i doğru kurmalıyız
-                img:
-                  typeof imageItem.src === "string"
-                    ? `/product/${imageItem.src}`
-                    : imageItem.src,
-                title: imageItem.alt,
+                img: image.url,
+                title: image.alt,
               }))
             : []
         }
@@ -62,7 +63,7 @@ export const BestSellingHouses = () => {
           {/* Kartlar Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             <AnimatePresence mode="popLayout">
-              {data.map((product) => (
+              {favorites.map((product) => (
                 <ProductCard
                   key={product.id}
                   product={product}

@@ -162,7 +162,7 @@ export async function createProduct(data: {
   }
 
   revalidatePath("/admin/products");
-  revalidatePath("/prefabrik-evler");
+  revalidatePath("/prefabrik-evler", "layout");
 
   return { id, slug };
 }
@@ -207,7 +207,7 @@ export async function updateProduct(
   await db.update(product).set(updateData).where(eq(product.id, id));
 
   revalidatePath("/admin/products");
-  revalidatePath("/prefabrik-evler");
+  revalidatePath("/prefabrik-evler", "layout");
 
   return { success: true };
 }
@@ -219,7 +219,7 @@ export async function deleteProduct(id: string) {
   await db.delete(product).where(eq(product.id, id));
 
   revalidatePath("/admin/products");
-  revalidatePath("/prefabrik-evler");
+  revalidatePath("/prefabrik-evler", "layout");
 
   return { success: true };
 }
@@ -245,7 +245,7 @@ export async function addProductImage(
   });
 
   revalidatePath("/admin/products");
-  revalidatePath("/prefabrik-evler");
+  revalidatePath("/prefabrik-evler", "layout");
 
   return { id };
 }
@@ -256,7 +256,7 @@ export async function deleteProductImage(imageId: string) {
   await db.delete(productImage).where(eq(productImage.id, imageId));
 
   revalidatePath("/admin/products");
-  revalidatePath("/prefabrik-evler");
+  revalidatePath("/prefabrik-evler", "layout");
 
   return { success: true };
 }
@@ -287,7 +287,7 @@ export async function updateProductImagesOrder(
   }
 
   revalidatePath("/admin/products");
-  revalidatePath("/prefabrik-evler");
+  revalidatePath("/prefabrik-evler", "layout");
 
   return { success: true };
 }
@@ -305,7 +305,22 @@ export async function updateProductsOrder(
   }
 
   revalidatePath("/admin/products");
-  revalidatePath("/prefabrik-evler");
+  revalidatePath("/prefabrik-evler", "layout");
+
+  return { success: true };
+}
+
+export async function updateProductImageAlt(imageId: string, alt: string) {
+  await requireAuth();
+
+  await db
+    .update(productImage)
+    .set({ alt })
+    .where(eq(productImage.id, imageId));
+
+  revalidatePath("/admin/products");
+  revalidatePath("/prefabrik-evler", "layout");
+  revalidatePath("/urun-detay", "layout");
 
   return { success: true };
 }

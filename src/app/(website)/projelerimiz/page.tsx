@@ -7,9 +7,9 @@ export default async function ProjectsPage() {
   // Transform database format to UI format
   const projects = dbProjects.map((project) => ({
     id: project.id,
-    img: project.images.map((img) => ({
+    img: project.images.map((img, index) => ({
       src: img.url,
-      alt: img.alt,
+      alt: img.alt?.trim() ? img.alt : `${project.title} - ${index + 1}`,
     })),
     title: project.title,
     area: project.area,

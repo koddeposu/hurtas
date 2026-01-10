@@ -227,6 +227,23 @@ export const contactSubmission = pgTable("contact_submission", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
+// Favorites (Featured Products for Homepage)
+export const favorite = pgTable(
+  "favorite",
+  {
+    id: text("id").primaryKey(),
+    productId: text("product_id")
+      .notNull()
+      .references(() => product.id, { onDelete: "cascade" }),
+    order: integer("order").default(0).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("favorite_product_idx").on(table.productId),
+    index("favorite_order_idx").on(table.order),
+  ],
+);
+
 // ============================================
 // Relations for Admin Panel Tables
 // ============================================
@@ -241,6 +258,7 @@ export const productRelations = relations(product, ({ one, many }) => ({
     references: [category.id],
   }),
   images: many(productImage),
+  favorites: many(favorite),
 }));
 
 export const productImageRelations = relations(productImage, ({ one }) => ({
@@ -258,5 +276,12 @@ export const projectImageRelations = relations(projectImage, ({ one }) => ({
   project: one(project, {
     fields: [projectImage.projectId],
     references: [project.id],
+  }),
+}));
+
+export const favoriteRelations = relations(favorite, ({ one }) => ({
+  product: one(product, {
+    fields: [favorite.productId],
+    references: [product.id],
   }),
 }));
