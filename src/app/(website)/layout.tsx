@@ -5,13 +5,12 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ctprefabrik.com"),
   title: {
     default: "Sakarya CT Prefabrik Evler",
     template: "%s | Sakarya CT Prefabrik Evler",
   },
   description:
-    "Prefabrik ev,  çelik ev ve konteyner çözümleri! Hızlı kurulum, modern tasarımlar, Sakarya CT Prefabrik 20 yıllık deneyim. Ücretsiz keşif +90 537 518 30 06.",
+    "Prefabrik ev, çelik ev ve konteyner çözümleri! Hızlı kurulum, modern tasarımlar, Sakarya CT Prefabrik 20 yıllık deneyim. Ücretsiz keşif +90 537 518 30 06.",
   keywords: [
     "prefabrik ev",
     "prefabrik ev fiyatları",
@@ -28,7 +27,6 @@ export const metadata: Metadata = {
   creator: "CT Prefabrik",
   publisher: "CT Prefabrik",
 
-  // Open Graph
   openGraph: {
     type: "website",
     locale: "tr_TR",
@@ -47,15 +45,13 @@ export const metadata: Metadata = {
     ],
   },
 
-  // Twitter
   twitter: {
     card: "summary_large_image",
     title: "CT Prefabrik | Prefabrik Ev Modelleri",
     description: "Türkiye'nin en kaliteli prefabrik ev üreticisi",
-    images: ["/og-image.jpg"],
+    images: ["/og-image-2.png"],
   },
 
-  // Robots
   robots: {
     index: true,
     follow: true,
@@ -68,22 +64,24 @@ export const metadata: Metadata = {
     },
   },
 
-  // Verification
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
-    yandex: "your-yandex-verification-code",
+    yandex: "d1e22bf8dd1eb29e",
   },
 
-  // Alternates
   alternates: {
     canonical: "https://ctprefabrik.com",
   },
 
-  // Other
   category: "Real Estate",
 
+  // ✅ BURASINI DEĞİŞTİRİN
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/logo.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [{ url: "/logo.png", sizes: "180x180", type: "image/png" }],
     shortcut: "/favicon.ico",
   },
 };
