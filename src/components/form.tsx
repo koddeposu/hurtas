@@ -10,6 +10,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { useState } from "react";
+import { Turnstile } from "@marsidev/react-turnstile";
 import { submitContactForm } from "@/actions/contactActions";
 
 export const LeadForm = () => {
@@ -17,7 +18,9 @@ export const LeadForm = () => {
     name: "",
     phone: "",
     message: "",
+    website: "", // honeypot field
   });
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -27,11 +30,22 @@ export const LeadForm = () => {
     setIsSubmitting(true);
     setError(null);
 
+    // Validate turnstile token
+    if (!turnstileToken) {
+      setError("Lütfen doğrulamayı bekleyin ve tekrar deneyin.");
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
-      const result = await submitContactForm(formData);
+      const result = await submitContactForm({
+        ...formData,
+        turnstileToken,
+      });
       if (result.success) {
         setIsSuccess(true);
-        setFormData({ name: "", phone: "", message: "" });
+        setFormData({ name: "", phone: "", message: "", website: "" });
+        setTurnstileToken("");
       } else {
         setError("Form gönderilirken bir hata oluştu. Lütfen tekrar deneyin.");
       }
@@ -204,6 +218,30 @@ export const LeadForm = () => {
                         ></textarea>
                       </div>
                     </div>
+
+                    {/* Honeypot field - hidden from humans, bots will fill it */}
+                    <div
+                      style={{ position: "absolute", left: "-9999px" }}
+                      aria-hidden="true"
+                    >
+                      <input
+                        type="text"
+                        name="website"
+                        value={formData.website}
+                        onChange={handleChange}
+                        tabIndex={-1}
+                        autoComplete="off"
+                      />
+                    </div>
+
+                    {/* Cloudflare Turnstile - invisible CAPTCHA */}
+                    <Turnstile
+                      siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                      onSuccess={setTurnstileToken}
+                      onError={() => setTurnstileToken("")}
+                      onExpire={() => setTurnstileToken("")}
+                      options={{ size: "invisible" }}
+                    />
 
                     {error && (
                       <p className="text-red-500 text-sm font-medium ml-1">

@@ -16,7 +16,35 @@ export async function submitContactForm(data: {
   name: string;
   phone: string;
   message?: string;
-}) {
+  website?: string; // honeypot field
+  turnstileToken: string;
+}): Promise<{ success: boolean; error?: string }> {
+  // 1. Honeypot check - if filled, it's a bot
+  if (data.website) {
+    // Silently reject spam without giving feedback to bots
+    return { success: false, error: "spam_detected" };
+  }
+
+  // 2. Turnstile verification
+  const turnstileResponse = await fetch(
+    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        secret: process.env.TURNSTILE_SECRET_KEY!,
+        response: data.turnstileToken,
+      }),
+    }
+  );
+
+  const turnstileResult = await turnstileResponse.json();
+  if (!turnstileResult.success) {
+    console.error("Turnstile verification failed:", turnstileResult);
+    return { success: false, error: "verification_failed" };
+  }
+
+  // 3. Proceed with form submission
   const id = generateId();
 
   await db.insert(contactSubmission).values({

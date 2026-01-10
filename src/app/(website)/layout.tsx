@@ -5,6 +5,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://ctprefabrik.com"),
   title: {
     default: "Sakarya CT Prefabrik Evler",
     template: "%s | Sakarya CT Prefabrik Evler",
@@ -107,10 +108,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const categories = await getCategories();
-  console.log("ENV CHECK:", {
-    DATABASE_URL: process.env.DATABASE_URL,
-    NODE_ENV: process.env.NODE_ENV,
-  });
+
   return (
     <html lang="tr">
       <head>
