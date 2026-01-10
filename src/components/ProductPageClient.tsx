@@ -315,7 +315,7 @@ function ProductDescription({ product }: ProductPriceProps) {
         <h2 className="text-xl font-black tracking-tight">Ürün Açıklaması</h2>
       </div>
       <div className="prose prose-slate max-w-none">
-        <p className="text-slate-500 text-sm md:text-lg leading-relaxed font-medium mt-4 whitespace-pre-line">
+        <p className="text-black text-sm md:text-lg leading-relaxed font-[400] mt-4 whitespace-pre-line">
           {product.description}
         </p>
       </div>
