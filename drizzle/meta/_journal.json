@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1767534935696,
-      "tag": "0000_gray_hardball",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1767715113982,
-      "tag": "0001_bouncy_kat_farrell",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1768078858615,
-      "tag": "0002_flashy_ronan",
+      "when": 1768082415040,
+      "tag": "0000_fantastic_prowler",
       "breakpoints": true
     }
   ]

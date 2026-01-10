@@ -188,7 +188,7 @@ export const ProductCard = ({
                   <Ruler size={14} />
                 </div>
                 <span className="text-xs font-bold text-slate-500">
-                  {product.area}
+                  {product.area} m<sup>2</sup>
                 </span>
               </div>
 

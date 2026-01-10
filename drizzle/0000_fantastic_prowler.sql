@@ -23,8 +23,9 @@ CREATE TABLE "blog_post" (
 	"category" text NOT NULL,
 	"image_url" text NOT NULL,
 	"image_alt" text,
-	"read_time" text,
+	"read_time" integer DEFAULT 1,
 	"is_published" boolean DEFAULT false NOT NULL,
+	"order" integer DEFAULT 0 NOT NULL,
 	"published_at" timestamp,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
@@ -49,6 +50,13 @@ CREATE TABLE "contact_submission" (
 	"message" text,
 	"is_read" boolean DEFAULT false NOT NULL,
 	"is_archived" boolean DEFAULT false NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "favorite" (
+	"id" text PRIMARY KEY NOT NULL,
+	"product_id" text NOT NULL,
+	"order" integer DEFAULT 0 NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
@@ -88,13 +96,20 @@ CREATE TABLE "project" (
 	"area" text NOT NULL,
 	"room" text NOT NULL,
 	"location" text NOT NULL,
-	"image_url" text NOT NULL,
-	"image_alt" text,
 	"is_active" boolean DEFAULT true NOT NULL,
 	"order" integer DEFAULT 0 NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "project_slug_unique" UNIQUE("slug")
+);
+--> statement-breakpoint
+CREATE TABLE "project_image" (
+	"id" text PRIMARY KEY NOT NULL,
+	"project_id" text NOT NULL,
+	"url" text NOT NULL,
+	"alt" text NOT NULL,
+	"order" integer DEFAULT 0 NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "session" (
@@ -107,12 +122,6 @@ CREATE TABLE "session" (
 	"user_agent" text,
 	"user_id" text NOT NULL,
 	CONSTRAINT "session_token_unique" UNIQUE("token")
-);
---> statement-breakpoint
-CREATE TABLE "todo" (
-	"id" integer PRIMARY KEY NOT NULL,
-	"text" text NOT NULL,
-	"done" boolean DEFAULT false NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "user" (
@@ -136,11 +145,16 @@ CREATE TABLE "verification" (
 );
 --> statement-breakpoint
 ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "favorite" ADD CONSTRAINT "favorite_product_id_product_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."product"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "product" ADD CONSTRAINT "product_category_id_category_id_fk" FOREIGN KEY ("category_id") REFERENCES "public"."category"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "product_image" ADD CONSTRAINT "product_image_product_id_product_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."product"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "project_image" ADD CONSTRAINT "project_image_project_id_project_id_fk" FOREIGN KEY ("project_id") REFERENCES "public"."project"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "account_userId_idx" ON "account" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "favorite_product_idx" ON "favorite" USING btree ("product_id");--> statement-breakpoint
+CREATE INDEX "favorite_order_idx" ON "favorite" USING btree ("order");--> statement-breakpoint
 CREATE INDEX "product_category_idx" ON "product" USING btree ("category_id");--> statement-breakpoint
 CREATE INDEX "product_image_product_idx" ON "product_image" USING btree ("product_id");--> statement-breakpoint
+CREATE INDEX "project_image_project_idx" ON "project_image" USING btree ("project_id");--> statement-breakpoint
 CREATE INDEX "session_userId_idx" ON "session" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "verification_identifier_idx" ON "verification" USING btree ("identifier");

@@ -62,7 +62,7 @@ export function ProductImage({ product }: ProductImageProps) {
   const [api, setApi] = React.useState<CarouselApi | null>(null);
   const [current, setCurrent] = React.useState(0);
   const [selectedProduct, setSelectedProduct] = useState<DetailProduct | null>(
-    null
+    null,
   );
 
   const getImageAlt = (alt: string, index: number) =>
@@ -115,7 +115,10 @@ export function ProductImage({ product }: ProductImageProps) {
                     onContextMenu={handleContextMenu}
                     onDragStart={handleDragStart}
                   >
-                    <ZoomableImage src={item.url} alt={getImageAlt(item.alt, index)} />
+                    <ZoomableImage
+                      src={item.url}
+                      alt={getImageAlt(item.alt, index)}
+                    />
                   </div>
                 </CarouselItem>
               ))}
@@ -200,7 +203,7 @@ function ProductFeatures({ product }: ProductPriceProps) {
       {product.height && (
         <div className="flex items-center gap-2 text-slate-600">
           <ArrowUp size={16} className="text-[#49202d]" />
-          <span className="text-sm font-bold">{product.height} yükseklik</span>
+          <span className="text-sm font-bold">{product.height}m yükseklik</span>
         </div>
       )}
     </div>
@@ -262,7 +265,7 @@ function ProductActions() {
     const encodedMessage = encodeURIComponent(whatsappMessage);
     const whatsappUrl = `https://wa.me/${phoneNumber.replace(
       /\+/g,
-      ""
+      "",
     )}?text=${encodedMessage}`;
     window.open(whatsappUrl, "_blank");
   };

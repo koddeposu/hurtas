@@ -116,9 +116,11 @@ export function FavoritesClient({
     startTransition(async () => {
       try {
         const result = await addFavorite(selectedProduct);
-        if (result.success) {
+        if (result.success && result.favorite) {
           toast.success("Ürün favorilere eklendi");
           setSelectedProduct("");
+          // Add to favorites list
+          setItems((prev) => [...prev, result.favorite as Favorite]);
           // Remove from available products
           setAvailableProducts((prev) =>
             prev.filter((p) => p.id !== selectedProduct),
