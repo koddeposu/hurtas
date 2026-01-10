@@ -19,6 +19,7 @@ export const metadata: Metadata = {
     "prefabrik konut",
     "modüler ev",
     "CT Prefabrik",
+    "ctprefabrik",
     "prefabrik ev üreticisi",
     "uygun fiyatlı prefabrik",
     "prefabrik villa",
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
       "Türkiye'nin en kaliteli prefabrik ev üreticisi. Uygun fiyatlı, TSE onaylı prefabrik ev modelleri.",
     images: [
       {
-        url: "https://ctprefabrik.com/og-image.jpg",
+        url: "https://ctprefabrik.com/og-image-2.png",
         width: 1200,
         height: 630,
         alt: "CT Prefabrik",
