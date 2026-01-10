@@ -227,3 +227,21 @@ export async function updateProjectImageOrder(imageId: string, order: number) {
 
   return { success: true };
 }
+
+export async function updateProjectImagesOrder(
+  items: { id: string; order: number }[],
+) {
+  await requireAuth();
+
+  for (const item of items) {
+    await db
+      .update(projectImage)
+      .set({ order: item.order })
+      .where(eq(projectImage.id, item.id));
+  }
+
+  revalidatePath("/admin/projects");
+  revalidatePath("/projelerimiz");
+
+  return { success: true };
+}

@@ -17,22 +17,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  ArrowLeft,
-  Loader2,
-  Upload,
-  X,
-  Image as ImageIcon,
-} from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 import {
   updateProduct,
   addProductImage,
   deleteProductImage,
+  updateProductImagesOrder,
 } from "@/actions/productActions";
 import { uploadImage } from "@/actions/uploadActions";
 import { toast } from "sonner";
+import {
+  SortableImageGrid,
+  type SortableImage,
+} from "@/components/admin/sortable-image-grid";
 
 interface ProductImage {
   id: string;
@@ -153,6 +151,24 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
       toast.success("Görsel silindi");
     } catch {
       toast.error("Görsel silinirken hata oluştu");
+    }
+  };
+
+  const handleReorderImages = async (reorderedImages: SortableImage[]) => {
+    const previousImages = [...images];
+    setImages(reorderedImages);
+
+    try {
+      await updateProductImagesOrder(
+        reorderedImages.map((img, index) => ({
+          id: img.id,
+          order: index,
+        }))
+      );
+      toast.success("Sıralama kaydedildi");
+    } catch {
+      setImages(previousImages);
+      toast.error("Sıralama kaydedilemedi");
     }
   };
 
@@ -302,50 +318,13 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                     <CardTitle>Görseller</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                      {images.map((image) => (
-                        <div
-                          key={image.id}
-                          className="relative group aspect-square rounded-lg overflow-hidden border"
-                        >
-                          <Image
-                            src={
-                              image.url.startsWith("/") ? image.url : image.url
-                            }
-                            alt={image.alt}
-                            fill
-                            className="object-cover"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => handleDeleteImage(image.id)}
-                            className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
-                            <X className="h-4 w-4" />
-                          </button>
-                        </div>
-                      ))}
-                      <label className="aspect-square rounded-lg border-2 border-dashed border-slate-300 flex flex-col items-center justify-center cursor-pointer hover:border-primary transition-colors">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          multiple
-                          className="hidden"
-                          onChange={handleImageUpload}
-                          disabled={isUploading}
-                        />
-                        {isUploading ? (
-                          <Loader2 className="h-8 w-8 text-slate-400 animate-spin" />
-                        ) : (
-                          <>
-                            <Upload className="h-8 w-8 text-slate-400 mb-2" />
-                            <span className="text-xs text-slate-500">
-                              Görsel Ekle
-                            </span>
-                          </>
-                        )}
-                      </label>
-                    </div>
+                    <SortableImageGrid
+                      images={images}
+                      onReorder={handleReorderImages}
+                      onDelete={handleDeleteImage}
+                      onUpload={handleImageUpload}
+                      isUploading={isUploading}
+                    />
                   </CardContent>
                 </Card>
               </div>

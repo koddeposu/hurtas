@@ -17,12 +17,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeft, Loader2, Upload, X } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 import { createProduct } from "@/actions/productActions";
 import { uploadImage } from "@/actions/uploadActions";
 import { toast } from "sonner";
+import {
+  SortableImageGrid,
+  type SortableImage,
+} from "@/components/admin/sortable-image-grid";
 
 interface PendingImage {
   tempId: string;
@@ -124,6 +127,17 @@ export function NewProductForm({ categories }: NewProductFormProps) {
 
   const handleDeletePendingImage = (tempId: string) => {
     setPendingImages((prev) => prev.filter((img) => img.tempId !== tempId));
+  };
+
+  const handleReorderPendingImages = (reorderedImages: SortableImage[]) => {
+    setPendingImages(
+      reorderedImages.map((img, index) => ({
+        tempId: img.id,
+        url: img.url,
+        alt: img.alt,
+        order: index,
+      }))
+    );
   };
 
   return (
@@ -282,48 +296,18 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                     <CardTitle>Görseller</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      {pendingImages.map((image) => (
-                        <div
-                          key={image.tempId}
-                          className="relative group aspect-square rounded-lg overflow-hidden border"
-                        >
-                          <Image
-                            src={image.url}
-                            alt={image.alt}
-                            fill
-                            className="object-cover"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => handleDeletePendingImage(image.tempId)}
-                            className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
-                            <X className="h-4 w-4" />
-                          </button>
-                        </div>
-                      ))}
-                      <label className="aspect-square rounded-lg border-2 border-dashed border-slate-300 flex flex-col items-center justify-center cursor-pointer hover:border-primary transition-colors">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          multiple
-                          className="hidden"
-                          onChange={handleImageUpload}
-                          disabled={isUploading}
-                        />
-                        {isUploading ? (
-                          <Loader2 className="h-8 w-8 text-slate-400 animate-spin" />
-                        ) : (
-                          <>
-                            <Upload className="h-8 w-8 text-slate-400 mb-2" />
-                            <span className="text-xs text-slate-500">
-                              Görsel Ekle
-                            </span>
-                          </>
-                        )}
-                      </label>
-                    </div>
+                    <SortableImageGrid
+                      images={pendingImages.map((img) => ({
+                        id: img.tempId,
+                        url: img.url,
+                        alt: img.alt,
+                        order: img.order,
+                      }))}
+                      onReorder={handleReorderPendingImages}
+                      onDelete={handleDeletePendingImage}
+                      onUpload={handleImageUpload}
+                      isUploading={isUploading}
+                    />
                   </CardContent>
                 </Card>
               </div>
