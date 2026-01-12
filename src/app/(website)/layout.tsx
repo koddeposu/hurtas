@@ -118,6 +118,7 @@ export default async function RootLayout({
           name="google-site-verification"
           content="-eKu2_9KxeaM_RgTv1LMwIx2955IHuOtoSJYUdxScT0"
         />
+
         {/* Google Analytics */}
         <script
           async
@@ -127,9 +128,9 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-XXXXXXXXXX');
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-B77049HMXP');
             `,
           }}
         />
