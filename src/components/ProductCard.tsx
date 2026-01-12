@@ -1,4 +1,3 @@
-import Logo from "@/assets/logo.png"; // Logo import et
 import {
   Carousel,
   CarouselApi,
@@ -111,6 +110,7 @@ export const ProductCard = ({
 
                     <button
                       onClick={fullscreenChange}
+                      aria-label="Resmi Buyult"
                       className="absolute bottom-4 right-4 text-white bg-black/30 rounded-md w-10 h-10  flex items-center justify-center cursor-pointer hover:scale-110 duration-200"
                     >
                       <Maximize2 size={20} className="text-white" />

@@ -1,12 +1,12 @@
-'use client'
+"use client";
 
-import HeroImage from '@/assets/home-hero.webp';
-import { motion } from 'framer-motion';
-import { ArrowRight, CheckCircle, MousePointer2, Play } from 'lucide-react';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { Modal } from '../ui/modal';
+import HeroImage from "@/assets/home-hero.webp";
+import { motion } from "framer-motion";
+import { ArrowRight, CheckCircle, MousePointer2, Play } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Modal } from "../ui/modal";
 
 function AnimatedGradientText() {
   return (
@@ -49,7 +49,7 @@ export const Hero4 = () => {
   return (
     <section className="relative   pt-5 lg:pt-20 pb-12">
       <Modal isShow={modal} onClose={() => setModal(false)}>
-        <div className='h-screen flex items-center justify-center p-5'>
+        <div className="h-screen flex items-center justify-center p-5">
           <div className=" max-h-[600px] max-w-[600px] w-full h-full bg-transparent rounded-xl overflow-hidden">
             <iframe
               title="Prefabrik Ev 3D"
@@ -60,7 +60,6 @@ export const Hero4 = () => {
             />
           </div>
         </div>
-
       </Modal>
 
       {/* Arka Plan Dekorasyonu (Soft Işıklar) */}
@@ -69,7 +68,6 @@ export const Hero4 = () => {
 
       <div className="h-full flex items-center">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
-
           {/* SOL TARAF: BAŞLIK VE CTA */}
           <div className="lg:col-span-6 space-y-5 lg:space-y-8 relative z-20">
             <motion.div
@@ -82,7 +80,9 @@ export const Hero4 = () => {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
                 </span>
-                <span className="text-emerald-700 text-[10px] lg:ext-xs font-bold uppercase tracking-widest">30 GÜNDE ANAHTAR TESLİM</span>
+                <span className="text-emerald-700 text-[10px] lg:ext-xs font-bold uppercase tracking-widest">
+                  30 GÜNDE ANAHTAR TESLİM
+                </span>
               </div>
 
               <h1 className="text-5xl md:text-7xl font-black text-slate-900 leading-[1.05] tracking-tight">
@@ -91,7 +91,9 @@ export const Hero4 = () => {
               </h1>
               <AnimatedGradientText />
               <p className="mt-6 text-md lg:text-lg text-slate-500 font-medium max-w-lg leading-relaxed">
-                Geleneksel betonarme süreçlerini geride bırakın. Modern mimari, sarsılmaz çelik konstrüksiyon ve estetik tasarımı bir araya getiriyoruz.
+                Geleneksel betonarme süreçlerini geride bırakın. Modern mimari,
+                sarsılmaz çelik konstrüksiyon ve estetik tasarımı bir araya
+                getiriyoruz.
               </p>
             </motion.div>
 
@@ -102,10 +104,16 @@ export const Hero4 = () => {
               transition={{ delay: 0.3, duration: 0.8 }}
               className="flex flex-row lg:flex-wrap gap-4 w-full"
             >
-              <button onClick={() => router.push('/projelerimiz')} className="cursor-pointer px-3 py-2 lg:px-8 lg:py-4 bg-slate-900 text-white rounded-[1.5rem] font-bold text-xs lg:text-sm flex items-center gap-3 hover:bg-emerald-600 transition-all shadow-xl shadow-slate-200 w-full lg:w-fit justify-center">
+              <button
+                onClick={() => router.push("/projelerimiz")}
+                className="cursor-pointer px-3 py-2 lg:px-8 lg:py-4 bg-slate-900 text-white rounded-[1.5rem] font-bold text-xs lg:text-sm flex items-center gap-3 hover:bg-emerald-600 transition-all shadow-xl shadow-slate-200 w-full lg:w-fit justify-center"
+              >
                 Projeleri İncele <ArrowRight size={18} />
               </button>
-              <button onClick={() => setModal(true)} className="cursor-pointer px-3 py-2 lg:px-8 lg:py-4 bg-white text-slate-900 border border-slate-100 rounded-[1.5rem] font-bold text-xs lg:text-sm flex items-center gap-3 hover:bg-slate-50 transition-all shadow-sm w-full lg:w-fit justify-center">
+              <button
+                onClick={() => setModal(true)}
+                className="cursor-pointer px-3 py-2 lg:px-8 lg:py-4 bg-white text-slate-900 border border-slate-100 rounded-[1.5rem] font-bold text-xs lg:text-sm flex items-center gap-3 hover:bg-slate-50 transition-all shadow-sm w-full lg:w-fit justify-center"
+              >
                 <div className="w-8 h-8 bg-secondary/15 rounded-full flex items-center justify-center">
                   <Play size={14} className="text-secondary fill-secondary" />
                 </div>
@@ -120,8 +128,15 @@ export const Hero4 = () => {
               transition={{ delay: 0.6 }}
               className="flex flex-wrap gap-6 lg:pt-4"
             >
-              {['Deprem Dayanımlı', 'A++ Enerji Verimliliği', 'Özel Mimari Çizim'].map((item, i) => (
-                <div key={i} className="flex items-center gap-2 text-xs font-bold text-slate-400">
+              {[
+                "Deprem Dayanımlı",
+                "A++ Enerji Verimliliği",
+                "Özel Mimari Çizim",
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-2 text-xs font-bold text-slate-400"
+                >
                   <CheckCircle size={14} className="text-secondary" />
                   {item}
                 </div>
@@ -131,7 +146,6 @@ export const Hero4 = () => {
 
           {/* SAĞ TARAF: YUMUŞAK BOX GÖRSEL VE FLOATING CARDS */}
           <div className="lg:col-span-6 relative">
-
             {/* Ana Görsel Kutusu */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9, rotate: 2 }}
@@ -141,7 +155,16 @@ export const Hero4 = () => {
             >
               <div className="absolute inset-0 bg-emerald-500/5 rounded-[3.5rem] translate-x-4 translate-y-4 -z-10" />
               <div className="rounded-[3.5rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] border-[8px] border-white">
-                <Image src={HeroImage} alt='prefabrik-ev' className='object-cover w-full  lg:h-[550px]' />
+                <Image
+                  src={HeroImage}
+                  width={945}
+                  height={630}
+                  quality={60}
+                  alt="prefabrik-ev"
+                  priority
+                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 945px"
+                  className="object-cover w-full lg:h-[550px]"
+                />
               </div>
             </motion.div>
 
@@ -156,8 +179,12 @@ export const Hero4 = () => {
                   <MousePointer2 size={24} />
                 </div>
                 <div>
-                  <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest leading-none mb-1">Teslim Süresi</p>
-                  <p className="text-xl font-bold text-slate-900 tracking-tighter">Sadece 4 Hafta</p>
+                  <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest leading-none mb-1">
+                    Teslim Süresi
+                  </p>
+                  <p className="text-xl font-bold text-slate-900 tracking-tighter">
+                    Sadece 4 Hafta
+                  </p>
                 </div>
               </div>
             </motion.div>
@@ -165,21 +192,37 @@ export const Hero4 = () => {
             {/* Yüzen Bilgi Kartı 2 (Güven) */}
             <motion.div
               animate={{ y: [0, 15, 0] }}
-              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 0.5,
+              }}
               className="absolute -bottom-10 -left-10 z-20 bg-slate-900 p-8 rounded-[2.5rem] shadow-2xl text-white hidden md:block"
             >
               <div className="space-y-2">
                 <div className="flex -space-x-3 mb-4">
-                  {[1, 2, 3].map(i => (
-                    <img key={i} src={`https://i.pravatar.cc/100?img=${i + 20}`} className="w-10 h-10 rounded-full border-2 border-slate-900" alt="avatar" />
+                  {[1, 2, 3].map((i) => (
+                    <img
+                      key={i}
+                      src={`https://i.pravatar.cc/100?img=${i + 20}`}
+                      className="w-10 h-10 rounded-full border-2 border-slate-900"
+                      alt="avatar"
+                    />
                   ))}
-                  <div className="w-10 h-10 rounded-full bg-secondary border-2 border-slate-900 flex items-center justify-center text-[10px] font-bold">+120</div>
+                  <div className="w-10 h-10 rounded-full bg-secondary border-2 border-slate-900 flex items-center justify-center text-[10px] font-bold">
+                    +120
+                  </div>
                 </div>
-                <p className="text-sm font-bold italic">"Hayalimdeki evi beklediğimden <br /> daha hızlı teslim aldım."</p>
-                <p className="text-[10px] text-slate-400 uppercase tracking-widest font-medium">Ahmet Y. - Sakarya</p>
+                <p className="text-sm font-bold italic">
+                  "Hayalimdeki evi beklediğimden <br /> daha hızlı teslim
+                  aldım."
+                </p>
+                <p className="text-[10px] text-slate-400 uppercase tracking-widest font-medium">
+                  Ahmet Y. - Sakarya
+                </p>
               </div>
             </motion.div>
-
           </div>
         </div>
       </div>
@@ -197,4 +240,3 @@ export const Hero4 = () => {
     </section>
   );
 };
-

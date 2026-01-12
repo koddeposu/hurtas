@@ -1,10 +1,10 @@
+import { getFavoritesForHomepage } from "@/actions/favoriteActions";
 import { LeadForm } from "@/components/form";
 import { BestSellingHouses } from "@/components/home-page/best-selling-houses";
 import { CoreValues } from "@/components/home-page/core-values";
 import { Features } from "@/components/home-page/features";
 import { Hero4 } from "@/components/home-page/hero";
 import { WhoWeAre } from "@/components/home-page/who-we-are";
-import { getFavoritesForHomepage } from "@/actions/favoriteActions";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -74,7 +74,8 @@ export default async function Page() {
             url: "https://ctprefabrik.com",
             potentialAction: {
               "@type": "SearchAction",
-              target: "https://ctprefabrik.com/urunler?q={search_term_string}",
+              target:
+                "https://ctprefabrik.com/urun-detay?q={search_term_string}",
               "query-input": "required name=search_term_string",
             },
           }),

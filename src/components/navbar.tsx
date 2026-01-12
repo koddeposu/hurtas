@@ -1,11 +1,25 @@
 "use client";
-import Logo from '@/assets/logo.png';
-import { AnimatePresence, motion } from 'framer-motion';
-import { BookOpen, Building2, Check, ChevronDown, Copy, File, FolderKanban, Home, Info, Mail, Menu, Phone, X } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+import Logo from "@/assets/logo.webp";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  BookOpen,
+  Building2,
+  Check,
+  ChevronDown,
+  Copy,
+  File,
+  FolderKanban,
+  Home,
+  Info,
+  Mail,
+  Menu,
+  Phone,
+  X,
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 interface Category {
   id: string;
@@ -20,20 +34,20 @@ interface NavbarProps {
 const Navbar = ({ categories = [] }: NavbarProps) => {
   // Build menu items with dynamic categories
   const menuItems = [
-    { href: '/', label: 'Ana Sayfa', icon: Home },
-    { href: '/hakkimizda', label: 'Hakkımızda', icon: Info },
+    { href: "/", label: "Ana Sayfa", icon: Home },
+    { href: "/hakkimizda", label: "Hakkımızda", icon: Info },
     {
-      href: '/prefabrik-evler',
-      label: 'Prefabrik Evler',
+      href: "/prefabrik-evler",
+      label: "Prefabrik Evler",
       icon: Building2,
       subItems: categories.map((cat) => ({
         href: `/prefabrik-evler/${cat.slug}`,
         label: cat.name,
       })),
     },
-    { href: '/projelerimiz', label: 'Projelerimiz', icon: FolderKanban },
-    { href: '/blog', label: 'Blog', icon: BookOpen },
-    { href: '/iletisim', label: 'İletişim', icon: Mail },
+    { href: "/projelerimiz", label: "Projelerimiz", icon: FolderKanban },
+    { href: "/blog", label: "Blog", icon: BookOpen },
+    { href: "/iletisim", label: "İletişim", icon: Mail },
   ];
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [desktopDropdownOpen, setDesktopDropdownOpen] = useState(false);
@@ -44,10 +58,10 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
 
   const isActive = (path: string) => pathname === path;
 
-  const copyToClipboard = async (text: string, type: 'phone' | 'email') => {
+  const copyToClipboard = async (text: string, type: "phone" | "email") => {
     try {
       await navigator.clipboard.writeText(text);
-      if (type === 'phone') {
+      if (type === "phone") {
         setCopiedPhone(true);
         setTimeout(() => setCopiedPhone(false), 2000);
       } else {
@@ -55,7 +69,7 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
         setTimeout(() => setCopiedEmail(false), 2000);
       }
     } catch (err) {
-      console.error('Kopyalama başarısız:', err);
+      console.error("Kopyalama başarısız:", err);
     }
   };
 
@@ -72,9 +86,11 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
             <Link href="/">
               <Image
                 src={Logo}
-                alt="Sakarya Aktaş"
-                width={200}
-                height={200}
+                alt="ctprefabrik"
+                width={96}
+                height={56}
+                quality={60}
+                priority
                 className="h-8 md:h-10 w-auto"
               />
             </Link>
@@ -90,11 +106,19 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                     onMouseLeave={() => setDesktopDropdownOpen(false)}
                   >
                     <button
-                      className={`hover:text-primary transition flex items-center gap-1 ${pathname.startsWith(item.href) ? 'text-secondary' : 'text-slate-800'
-                        }`}
+                      className={`hover:text-primary transition flex items-center gap-1 ${
+                        pathname.startsWith(item.href)
+                          ? "text-secondary"
+                          : "text-slate-800"
+                      }`}
                     >
                       {item.label}
-                      <ChevronDown size={16} className={`transition-transform ${desktopDropdownOpen ? 'rotate-180' : ''}`} />
+                      <ChevronDown
+                        size={16}
+                        className={`transition-transform ${
+                          desktopDropdownOpen ? "rotate-180" : ""
+                        }`}
+                      />
                     </button>
 
                     <AnimatePresence>
@@ -110,8 +134,11 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                             <Link
                               key={subItem.href}
                               href={subItem.href}
-                              className={`block px-5 py-3 hover:bg-slate-50 transition ${pathname === subItem.href ? 'text-secondary bg-slate-50' : 'text-slate-700'
-                                }`}
+                              className={`block px-5 py-3 hover:bg-slate-50 transition ${
+                                pathname === subItem.href
+                                  ? "text-secondary bg-slate-50"
+                                  : "text-slate-700"
+                              }`}
                             >
                               {subItem.label}
                             </Link>
@@ -123,8 +150,9 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                 ) : (
                   <Link
                     href={item.href}
-                    className={`hover:text-primary transition ${isActive(item.href) ? 'text-secondary' : 'text-slate-800'
-                      }`}
+                    className={`hover:text-primary transition ${
+                      isActive(item.href) ? "text-secondary" : "text-slate-800"
+                    }`}
                   >
                     {item.label}
                   </Link>
@@ -151,6 +179,7 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
 
           {/* Mobile Menu Button */}
           <button
+            aria-label="Menüyü aç"
             onClick={() => setMobileMenuOpen(true)}
             className="lg:hidden w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-800 hover:bg-slate-200 transition-colors"
           >
@@ -208,11 +237,14 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                       return (
                         <div key={item.href}>
                           <button
-                            onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)}
-                            className={`w-full flex items-center justify-between px-5 py-4 rounded-2xl font-bold transition-all text-sm ${pathname.startsWith(item.href)
-                                ? 'bg-primary text-white shadow-lg shadow-primary/20'
-                                : 'bg-transparent text-slate-600 hover:bg-slate-50'
-                              }`}
+                            onClick={() =>
+                              setMobileDropdownOpen(!mobileDropdownOpen)
+                            }
+                            className={`w-full flex items-center justify-between px-5 py-4 rounded-2xl font-bold transition-all text-sm ${
+                              pathname.startsWith(item.href)
+                                ? "bg-primary text-white shadow-lg shadow-primary/20"
+                                : "bg-transparent text-slate-600 hover:bg-slate-50"
+                            }`}
                           >
                             <div className="flex items-center gap-4">
                               <Icon size={20} />
@@ -220,7 +252,9 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                             </div>
                             <ChevronDown
                               size={18}
-                              className={`transition-transform ${mobileDropdownOpen ? 'rotate-180' : ''}`}
+                              className={`transition-transform ${
+                                mobileDropdownOpen ? "rotate-180" : ""
+                              }`}
                             />
                           </button>
 
@@ -228,7 +262,7 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                             {mobileDropdownOpen && (
                               <motion.div
                                 initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: 'auto', opacity: 1 }}
+                                animate={{ height: "auto", opacity: 1 }}
                                 exit={{ height: 0, opacity: 0 }}
                                 transition={{ duration: 0.2 }}
                                 className="overflow-hidden"
@@ -239,10 +273,11 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                                       key={subItem.href}
                                       href={subItem.href}
                                       onClick={() => setMobileMenuOpen(false)}
-                                      className={`block px-5 py-3 rounded-xl text-sm font-semibold transition-all ${pathname === subItem.href
-                                          ? 'bg-secondary text-white'
-                                          : 'text-slate-600 hover:bg-slate-50'
-                                        }`}
+                                      className={`block px-5 py-3 rounded-xl text-sm font-semibold transition-all ${
+                                        pathname === subItem.href
+                                          ? "bg-secondary text-white"
+                                          : "text-slate-600 hover:bg-slate-50"
+                                      }`}
                                     >
                                       {subItem.label}
                                     </Link>
@@ -260,10 +295,11 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                         key={item.href}
                         href={item.href}
                         onClick={() => setMobileMenuOpen(false)}
-                        className={`flex items-center gap-4 px-5 py-4 rounded-2xl font-bold transition-all text-sm ${active
-                            ? 'bg-primary text-white shadow-lg shadow-primary/20'
-                            : 'bg-transparent text-slate-600 hover:bg-slate-50'
-                          }`}
+                        className={`flex items-center gap-4 px-5 py-4 rounded-2xl font-bold transition-all text-sm ${
+                          active
+                            ? "bg-primary text-white shadow-lg shadow-primary/20"
+                            : "bg-transparent text-slate-600 hover:bg-slate-50"
+                        }`}
                       >
                         <Icon size={20} />
                         {item.label}
@@ -301,14 +337,19 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                     {/* Phone */}
                     <div className="relative">
                       <button
-                        onClick={() => copyToClipboard('+905551234567', 'phone')}
+                        onClick={() =>
+                          copyToClipboard("+905551234567", "phone")
+                        }
                         className="w-full text-left text-sm font-semibold text-slate-800 hover:text-primary transition flex items-center justify-between group bg-white rounded-lg px-3 py-2"
                       >
                         <span>📞 +90 537 518 30 06</span>
                         {copiedPhone ? (
                           <Check size={16} className="text-secondary" />
                         ) : (
-                          <Copy size={16} className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
+                          <Copy
+                            size={16}
+                            className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-400"
+                          />
                         )}
                       </button>
 
@@ -329,14 +370,19 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                     {/* Email */}
                     <div className="relative">
                       <button
-                        onClick={() => copyToClipboard('info@sakaryaaktas.com', 'email')}
+                        onClick={() =>
+                          copyToClipboard("info@sakaryaaktas.com", "email")
+                        }
                         className="w-full text-left text-sm font-semibold text-slate-800 hover:text-primary transition flex items-center justify-between group bg-white rounded-lg px-3 py-2"
                       >
                         <span>📧 info@ctprefabrik.com</span>
                         {copiedEmail ? (
                           <Check size={16} className="text-secondary" />
                         ) : (
-                          <Copy size={16} className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-400" />
+                          <Copy
+                            size={16}
+                            className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-400"
+                          />
                         )}
                       </button>
 
