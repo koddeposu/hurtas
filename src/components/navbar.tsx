@@ -1,5 +1,6 @@
 "use client";
 import Logo from "@/assets/logo.webp";
+import { trackPhoneClick } from "@/lib/gtag";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   BookOpen,
@@ -311,7 +312,9 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                 {/* Action Buttons */}
                 <div className="space-y-3 pt-6 border-t border-slate-200">
                   <a
-                    href="tel:+905375183006"
+                    onClick={(e) => {
+                      trackPhoneClick();
+                    }}
                     className="bg-[linear-gradient(10deg,#49202d,hsl(150.43deg_95%_22.16%))] text-white px-5 py-4 rounded-xl flex items-center justify-center gap-2 font-bold hover:opacity-90 transition w-full"
                   >
                     <Phone size={18} fill="currentColor" />
