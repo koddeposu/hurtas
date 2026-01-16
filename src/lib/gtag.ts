@@ -4,7 +4,7 @@ export const trackWhatsAppClick = () => {
   if (typeof window !== "undefined" && window.gtag) {
     // WhatsApp dönüşümü
     window.gtag("event", "conversion", {
-      send_to: "AW-17869486943",
+      send_to: "AW-17869545270/zDvHCL7a5uYbELa-7shC",
       event_category: "engagement",
       event_label: "whatsapp_click",
     });
@@ -13,11 +13,10 @@ export const trackWhatsAppClick = () => {
 
 export const trackPhoneClick = () => {
   if (typeof window !== "undefined" && window.gtag) {
-    // Telefon araması dönüşümü
     window.gtag("event", "conversion", {
-      send_to: "AW-17869486943",
-      event_category: "engagement",
-      event_label: "phone_click",
+      send_to: "AW-17869545270/zDvHCL7a5uYbELa-7shC",
+      value: 1.0,
+      currency: "TRY",
     });
   }
 };
