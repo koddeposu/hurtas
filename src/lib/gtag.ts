@@ -2,11 +2,9 @@
 
 export const trackWhatsAppClick = () => {
   if (typeof window !== "undefined" && window.gtag) {
-    // WhatsApp dönüşümü
     window.gtag("event", "conversion", {
-      send_to: "AW-17869545270/zDvHCL7a5uYbELa-7shC",
-      event_category: "engagement",
-      event_label: "whatsapp_click",
+      // BURADAKİ LABEL'I WHATSAPP DÖNÜŞÜMÜNDEN ALIN
+      send_to: "AW-17869545270/BURAYA_WHATSAPP_LABELINI_YAZ",
     });
   }
 };
@@ -14,13 +12,13 @@ export const trackWhatsAppClick = () => {
 export const trackPhoneClick = () => {
   if (typeof window !== "undefined" && window.gtag) {
     window.gtag("event", "conversion", {
-      send_to: "AW-17869545270/zDvHCL7a5uYbELa-7shC",
+      // BURADAKİ LABEL'I TELEFON DÖNÜŞÜMÜNDEN ALIN
+      send_to: "AW-17869545270/BURAYA_TELEFON_LABELINI_YAZ",
       value: 1.0,
       currency: "TRY",
     });
   }
 };
-
 // TypeScript için
 declare global {
   interface Window {

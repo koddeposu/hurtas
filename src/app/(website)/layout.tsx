@@ -125,18 +125,33 @@ export default async function RootLayout({
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-B77049HMXP"
         ></script>
-        <script></script>
+        {/* Google Tag (gtag.js) */}
+        {/* Sadece bir tane script yüklemek yeterli, AW veya G- fark etmez */}
+        <script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=AW-17869545270`}
+        ></script>
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-B77049HMXP');
-            `,
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      // 1. Google Analytics Bağlantısı
+      gtag('config', 'G-B77049HMXP');
+
+      // 2. Google Ads Ana Bağlantısı (Az önce paylaştığın kod)
+      gtag('config', 'AW-17869545270');
+
+      // 3. Web Sitesi Telefon Araması Dönüşümü (Daha önce paylaştığın kod)
+      // Bu kod, sitedeki numarayı otomatik olarak takip numarasına çevirir.
+      gtag('config', 'AW-17869545270/c6tyCK_3kekbELa-7shC', {
+        'phone_conversion_number': '+90 537 518 30 06'
+      });
+    `,
           }}
         />
-
         {/* Organization Schema */}
         <script
           type="application/ld+json"
