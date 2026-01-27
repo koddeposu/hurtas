@@ -1,5 +1,6 @@
 import { getCategories } from "@/actions/categoryActions";
 import "@/app/globals.css";
+import { AnalyticsWrapper } from "@/components/analytics-wrapper";
 import ClientLayout from "@/components/ClientLayout";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -181,7 +182,9 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ClientLayout categories={categories}>{children}</ClientLayout>
+        <AnalyticsWrapper>
+          <ClientLayout categories={categories}>{children}</ClientLayout>
+        </AnalyticsWrapper>
       </body>
     </html>
   );

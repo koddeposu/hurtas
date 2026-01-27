@@ -1,12 +1,13 @@
+import { relations } from "drizzle-orm";
 import {
-  pgTable,
-  integer,
-  text,
-  timestamp,
   boolean,
   index,
+  integer,
+  pgTable,
+  serial,
+  text,
+  timestamp,
 } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -243,6 +244,23 @@ export const favorite = pgTable(
     index("favorite_order_idx").on(table.order),
   ],
 );
+
+export const pageViews = pgTable("page_views", {
+  id: serial("id").primaryKey(),
+  page: text("page").notNull(),
+  userAgent: text("user_agent"),
+  ip: text("ip"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const buttonClicks = pgTable("button_clicks", {
+  id: serial("id").primaryKey(),
+  buttonId: text("button_id").notNull(),
+  page: text("page").notNull(),
+  userAgent: text("user_agent"),
+  ip: text("ip"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
 
 // ============================================
 // Relations for Admin Panel Tables

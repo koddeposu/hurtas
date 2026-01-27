@@ -1,16 +1,17 @@
-import { requireAuth } from "@/lib/requireAuth";
-import { AdminSidebar } from "@/components/admin/sidebar";
-import { AdminHeader } from "@/components/admin/header";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Package, Building2, FileText, MessageSquare } from "lucide-react";
-import Link from "next/link";
-import { getProducts } from "@/actions/productActions";
-import { getProjects } from "@/actions/projectActions";
 import { getBlogPosts } from "@/actions/blogActions";
 import {
   getContactSubmissions,
   getUnreadCount,
 } from "@/actions/contactActions";
+import { getProducts } from "@/actions/productActions";
+import { getProjects } from "@/actions/projectActions";
+import { AnalyticsDashboard } from "@/components/admin/analytics-dashboard";
+import { AdminHeader } from "@/components/admin/header";
+import { AdminSidebar } from "@/components/admin/sidebar";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { requireAuth } from "@/lib/requireAuth";
+import { Building2, FileText, MessageSquare, Package } from "lucide-react";
+import Link from "next/link";
 
 export default async function AdminDashboard() {
   const session = await requireAuth();
@@ -96,6 +97,11 @@ export default async function AdminDashboard() {
                 </Card>
               </Link>
             ))}
+          </div>
+
+          {/* Analytics Dashboard - YENİ EKLEME */}
+          <div className="mb-8">
+            <AnalyticsDashboard />
           </div>
 
           {/* Quick Actions */}

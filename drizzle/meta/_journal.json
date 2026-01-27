@@ -8,6 +8,13 @@
       "when": 1768082415040,
       "tag": "0000_fantastic_prowler",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1769515735033,
+      "tag": "0001_neat_smiling_tiger",
+      "breakpoints": true
     }
   ]
 }
