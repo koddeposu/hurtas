@@ -6,6 +6,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { ZoomableImage } from "@/components/ZoomableImage";
+import { handleCall, handleWhatsApp } from "@/lib/analytics/googleAds";
 import { motion } from "framer-motion";
 import {
   ArrowUp,
@@ -260,19 +261,6 @@ function ProductPriceMobile({ product }: ProductPriceProps) {
 function ProductActions() {
   const phoneNumber = "+905375183006";
   const whatsappMessage = "Merhaba, CT Prefabrik sitesinden ulaşıyorum.";
-
-  const handleWhatsApp = () => {
-    const encodedMessage = encodeURIComponent(whatsappMessage);
-    const whatsappUrl = `https://wa.me/${phoneNumber.replace(
-      /\+/g,
-      "",
-    )}?text=${encodedMessage}`;
-    window.open(whatsappUrl, "_blank");
-  };
-
-  const handleCall = () => {
-    window.location.href = `tel:${phoneNumber}`;
-  };
 
   return (
     <div className="space-y-4">

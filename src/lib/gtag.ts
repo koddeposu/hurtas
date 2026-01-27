@@ -1,22 +1,25 @@
 // lib/gtag.ts
 
-export const trackWhatsAppClick = () => {
+export const trackWhatsAppClick = (callback?: () => void) => {
   if (typeof window !== "undefined" && window.gtag) {
     window.gtag("event", "conversion", {
-      // BURADAKİ LABEL'I WHATSAPP DÖNÜŞÜMÜNDEN ALIN
-      send_to: "AW-17869545270/BURAYA_WHATSAPP_LABELINI_YAZ",
+      send_to: "AW-17869545270/c6tyCK_3kekbELa-7shC",
+      event_callback: callback,
     });
+  } else {
+    // gtag yoksa bile kullanıcıyı kaybetme
+    callback?.();
   }
 };
 
-export const trackPhoneClick = () => {
+export const trackPhoneClick = (callback?: () => void) => {
   if (typeof window !== "undefined" && window.gtag) {
     window.gtag("event", "conversion", {
-      // BURADAKİ LABEL'I TELEFON DÖNÜŞÜMÜNDEN ALIN
-      send_to: "AW-17869545270/BURAYA_TELEFON_LABELINI_YAZ",
-      value: 1.0,
-      currency: "TRY",
+      send_to: "AW-17869545270/c6tyCK_3kekbELa-7shC",
+      event_callback: callback,
     });
+  } else {
+    callback?.();
   }
 };
 // TypeScript için

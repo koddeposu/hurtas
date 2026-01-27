@@ -1,24 +1,9 @@
 "use client";
 
-import { trackPhoneClick, trackWhatsAppClick } from "@/lib/gtag";
+import { handleCall, handleWhatsApp } from "@/lib/analytics/googleAds";
 import { MessageCircle, Phone } from "lucide-react";
 
 const BottomBar = () => {
-  const phoneNumber = "+905375183006";
-  const whatsappMessage = "Merhaba, CT Prefabrik sitesinden ulaşıyorum.";
-
-  const handleWhatsApp = () => {
-    trackWhatsAppClick();
-    const encodedMessage = encodeURIComponent(whatsappMessage);
-    const whatsappUrl = `https://wa.me/${phoneNumber.replace(/\+/g, "")}?text=${encodedMessage}`;
-    window.open(whatsappUrl, "_blank");
-  };
-
-  const handleCall = () => {
-    trackPhoneClick();
-    window.location.href = `tel:${phoneNumber}`;
-  };
-
   return (
     <div className="fixed bottom-0 inset-x-0 z-[100] p-6 md:hidden">
       <div className="bg-white/80 backdrop-blur-2xl rounded-[2.5rem] grid-cols-2 grid w-full overflow-hidden h-14 shadow-[0_-10px_40px_rgba(0,0,0,0.08)]">

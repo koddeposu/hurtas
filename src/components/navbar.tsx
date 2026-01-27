@@ -1,6 +1,6 @@
 "use client";
 import Logo from "@/assets/logo.webp";
-import { trackPhoneClick } from "@/lib/gtag";
+import { handleCall } from "@/lib/analytics/googleAds";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   BookOpen,
@@ -164,12 +164,12 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
 
           {/* Desktop Action Buttons */}
           <div className="hidden md:flex items-center gap-3">
-            <a
-              href="tel:+905375183006"
+            <button
+              onClick={handleCall}
               className="bg-[linear-gradient(10deg,#49202d,hsl(150.43deg_95%_22.16%))] text-white px-5 py-2.5 rounded-lg flex items-center gap-2 font-bold hover:opacity-90 transition"
             >
               <Phone size={18} fill="currentColor" /> Bizi Arayın
-            </a>
+            </button>
             <Link
               href="/katalog"
               className="bg-slate-900 text-white px-5 py-2.5 rounded-lg flex items-center gap-2 font-bold hover:bg-slate-800 transition"
@@ -311,15 +311,13 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
 
                 {/* Action Buttons */}
                 <div className="space-y-3 pt-6 border-t border-slate-200">
-                  <a
-                    onClick={(e) => {
-                      trackPhoneClick();
-                    }}
+                  <button
+                    onClick={handleCall}
                     className="bg-[linear-gradient(10deg,#49202d,hsl(150.43deg_95%_22.16%))] text-white px-5 py-4 rounded-xl flex items-center justify-center gap-2 font-bold hover:opacity-90 transition w-full"
                   >
                     <Phone size={18} fill="currentColor" />
                     Bizi Arayın
-                  </a>
+                  </button>
                   <Link
                     href="/katalog"
                     onClick={() => setMobileMenuOpen(false)}
