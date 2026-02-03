@@ -14,12 +14,7 @@ export const WhoWeAre = () => {
       <div className="container mx-auto max-w-7xl">
         {/* Üst Başlık Grubu */}
         <div className="flex flex-col lg:flex-row justify-between lg:items-end gap-4 lg:gap-8 mb-8 lg:mb-16">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="max-w-2xl"
-          >
+          <div className="max-w-2xl">
             <div className="flex items-center gap-2 mb-4">
               <span className="w-8 h-[2px] bg-secondary"></span>
               <span className="text-secondary font-bold uppercase tracking-[0.2em] text-xs">
@@ -30,7 +25,7 @@ export const WhoWeAre = () => {
               Geleneksel Yapıdan <br />
               <span className="text-slate-400">Daha Fazlası.</span>
             </h2>
-          </motion.div>
+          </div>
 
           <motion.p
             initial={{ opacity: 0 }}
@@ -46,11 +41,7 @@ export const WhoWeAre = () => {
         {/* Yumuşak Box Grid (Bento Mix) */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 lg:gap-8">
           {/* ANA GÖRSEL KUTUSU (Sol - 8 Col) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            className="md:col-span-8 bg-[#F8FAFC] rounded-[3rem] p-4 shadow-sm border border-slate-100 flex flex-col"
-          >
+          <div className="md:col-span-8 bg-[#F8FAFC] rounded-[3rem] p-4 shadow-sm border border-slate-100 flex flex-col">
             <div className="relative h-[400px] w-full overflow-hidden rounded-[2.5rem]">
               <Image
                 src={HeroImage}
@@ -85,15 +76,12 @@ export const WhoWeAre = () => {
                 <ArrowRight size={20} />
               </button>
             </div>
-          </motion.div>
+          </div>
 
           {/* SAĞ KOLON KUTULARI (4 Col) */}
           <div className="md:col-span-4 flex flex-col gap-8">
             {/* Güven Kutusu */}
-            <motion.div
-              whileHover="hover"
-              className="bg-white p-10 rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-slate-50 flex-1 relative overflow-hidden"
-            >
+            <div className="bg-white p-10 rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-slate-50 flex-1 relative overflow-hidden">
               <div className="absolute -right-8 -top-8 w-32 h-32 bg-emerald-50 rounded-full opacity-50" />
               <ShieldCheck className="text-secondary w-10 h-10 mb-6 relative z-10" />
               <h4 className="text-xl font-bold mb-2">Statik Güven</h4>
@@ -101,7 +89,7 @@ export const WhoWeAre = () => {
                 Yüksek dayanımlı çelik gövdelerimizle, sismik güvenlikte
                 standartların üzerine çıkıyoruz.
               </p>
-            </motion.div>
+            </div>
 
             {/* Doğa Kutusu */}
             <motion.div
@@ -119,11 +107,7 @@ export const WhoWeAre = () => {
           </div>
 
           {/* ALT SATIR: HIZLI BİLGİ KUTULARI */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="md:col-span-4 bg-white p-10 rounded-[3rem] shadow-sm border border-slate-100 flex items-center gap-6"
-          >
+          <div className="md:col-span-4 bg-white p-10 rounded-[3rem] shadow-sm border border-slate-100 flex items-center gap-6">
             <div className="w-16 h-16 bg-slate-50 rounded-3xl flex items-center justify-center shrink-0">
               <Zap className="text-amber-400 fill-amber-400" size={24} />
             </div>
@@ -135,13 +119,9 @@ export const WhoWeAre = () => {
                 Zaman Tasarrufu
               </p>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="md:col-span-4 bg-slate-900 p-10 rounded-[3rem] text-white flex items-center gap-6"
-          >
+          <div className="md:col-span-4 bg-slate-900 p-10 rounded-[3rem] text-white flex items-center gap-6">
             <div className="w-16 h-16 bg-white/10 rounded-3xl flex items-center justify-center shrink-0">
               <PencilRuler className="text-white" size={24} />
             </div>
@@ -151,18 +131,14 @@ export const WhoWeAre = () => {
                 Estetik Çözümler
               </p>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="md:col-span-4 bg-secondary p-10 rounded-[3rem] text-white flex flex-col justify-center items-center text-center"
-          >
+          <div className="md:col-span-4 bg-secondary p-10 rounded-[3rem] text-white flex flex-col justify-center items-center text-center">
             <div className="text-4xl font-black tracking-tighter">50+</div>
             <p className="text-xs font-bold uppercase tracking-widest opacity-80">
               Yıllık Tecrübe
             </p>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

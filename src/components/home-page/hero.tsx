@@ -70,11 +70,7 @@ export const Hero4 = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
           {/* SOL TARAF: BAŞLIK VE CTA */}
           <div className="lg:col-span-6 space-y-5 lg:space-y-8 relative z-20">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-            >
+            <div>
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 rounded-full mb-2 lg:mb-6">
                 <span className="relative flex h-2 w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
@@ -95,15 +91,10 @@ export const Hero4 = () => {
                 sarsılmaz çelik konstrüksiyon ve estetik tasarımı bir araya
                 getiriyoruz.
               </p>
-            </motion.div>
+            </div>
 
             {/* Buton Grubu */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
-              className="flex flex-row lg:flex-wrap gap-4 w-full"
-            >
+            <div className="flex flex-row lg:flex-wrap gap-4 w-full">
               <button
                 onClick={() => router.push("/projelerimiz")}
                 className="cursor-pointer px-3 py-2 lg:px-8 lg:py-4 bg-slate-900 text-white rounded-[1.5rem] font-bold text-xs lg:text-sm flex items-center gap-3 hover:bg-emerald-600 transition-all shadow-xl shadow-slate-200 w-full lg:w-fit justify-center"
@@ -119,15 +110,10 @@ export const Hero4 = () => {
                 </div>
                 Canlı Önizleme
               </button>
-            </motion.div>
+            </div>
 
             {/* Hızlı Bilgi Maddeleri */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              className="flex flex-wrap gap-6 lg:pt-4"
-            >
+            <div className="flex flex-wrap gap-6 lg:pt-4">
               {[
                 "Deprem Dayanımlı",
                 "A++ Enerji Verimliliği",
@@ -141,18 +127,13 @@ export const Hero4 = () => {
                   {item}
                 </div>
               ))}
-            </motion.div>
+            </div>
           </div>
 
           {/* SAĞ TARAF: YUMUŞAK BOX GÖRSEL VE FLOATING CARDS */}
           <div className="lg:col-span-6 relative">
             {/* Ana Görsel Kutusu */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, rotate: 2 }}
-              animate={{ opacity: 1, scale: 1, rotate: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              className="relative z-10"
-            >
+            <div className="relative z-10">
               <div className="absolute inset-0 bg-emerald-500/5 rounded-[3.5rem] translate-x-4 translate-y-4 -z-10" />
               <div className="rounded-[3.5rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] border-[8px] border-white">
                 <Image
@@ -166,7 +147,7 @@ export const Hero4 = () => {
                   className="object-cover w-full lg:h-[550px]"
                 />
               </div>
-            </motion.div>
+            </div>
 
             {/* Yüzen Bilgi Kartı 1 (Hız) */}
             <motion.div

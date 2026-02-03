@@ -1,5 +1,4 @@
 "use client";
-import { motion } from "framer-motion";
 import { Hammer, Leaf, Users, Wrench } from "lucide-react";
 
 export const CoreValues = () => {
@@ -43,32 +42,22 @@ export const CoreValues = () => {
       <div className="container mx-auto max-w-7xl">
         {/* Minimalist Başlık */}
         <div className="text-center mb-5 lg:mb-16 space-y-3">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+          <h2
             className="text-2xl md:text-4xl font-black tracking-tighter"
             style={{ color: "#165b39" }}
           >
             PREFABRİK EVLERDE DEĞERLERİMİZ{" "}
             <span style={{ color: "#49202d" }}>& GÜCÜMÜZ</span>
-          </motion.h2>
-          <motion.div
-            initial={{ width: 0 }}
-            whileInView={{ width: "60px" }}
-            className="h-1 bg-slate-100 mx-auto rounded-full"
-          />
+          </h2>
+          <div className="h-1 bg-slate-200 mx-auto rounded-full w-[60px]" />
         </div>
 
         {/* Yan Yana Soft Box Yapısı */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {values.map((v, i) => (
-            <motion.div
+            <div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
-              whileHover={{ y: -8 }}
-              className={`group relative bg-white border border-slate-100 p-4 lg:p-8 rounded-[1.5rem] lg:rounded-[2.5rem] transition-all duration-500 flex gap-4 lg:gap-0 lg:flex-col items-center lg:text-center ${v.borderColor}`}
+              className={` group relative bg-white border border-slate-200 p-4 lg:p-8 rounded-[1.5rem] lg:rounded-[2.5rem] transition-all duration-500 flex gap-4 lg:gap-0 lg:flex-col items-center lg:text-center ${v.borderColor}`}
             >
               {/* Arka Plan Glow (Sadece Hover'da Kendi Renginde) */}
               <div
@@ -94,11 +83,11 @@ export const CoreValues = () => {
               </div>
 
               {/* Kibar Alt Çizgi Detayı (Sadece Hover'da Kendi Renginde) */}
-              <motion.div
+              <div
                 className="w-0 h-1 mt-6 rounded-full transition-all duration-500 group-hover:w-10"
                 style={{ backgroundColor: v.brandColor }}
               />
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
