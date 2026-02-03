@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Image from "next/image";
 
 import Airbnb from "@/assets/referans/airbnb.webp";
@@ -43,32 +42,19 @@ export const logos = [
 
 export const Referans = () => {
   return (
-    <section className="overflow-hidden relative py-16 space-y-10">
-
-      {/* ÜST SATIR */}
-      <motion.div
-        animate={{ x: ["0%", "-100%"] }}
-        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-        className="flex items-center gap-24 min-w-full"
-      >
-        {[...Array(2)].map((_, i) => (
-          <div key={i} className="flex items-center gap-24">
-            {logos.map((logo, index) => (
-              <div
-                key={index}
-                className="relative w-40 h-20 "
-              >
-                <Image
-                  src={logo}
-                  alt="Referans"
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            ))}
+    <section className="relative overflow-hidden py-16">
+      <div className="flex w-max animate-marquee gap-24">
+        {[...logos, ...logos].map((logo, index) => (
+          <div key={index} className="relative w-40 h-20 shrink-0">
+            <Image
+              src={logo}
+              alt="Referans"
+              loading="lazy"
+              className="object-contain"
+            />
           </div>
         ))}
-      </motion.div>
+      </div>
     </section>
   );
 };
