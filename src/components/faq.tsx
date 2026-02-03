@@ -84,10 +84,7 @@ const FAQ = () => {
         <div className="grid lg:grid-cols-12 gap-16 items-start">
           {/* SOL: BAŞLIK ALANI (Sticky) */}
           <div className="lg:col-span-5 lg:sticky lg:top-32 space-y-8">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-            >
+            <div>
               <div className="flex items-center gap-4 mb-4">
                 <Crosshair color="#49202d" />
                 <span className="text-[#49202d] font-black text-xs uppercase tracking-[0.5em]">
@@ -104,17 +101,14 @@ const FAQ = () => {
                   Teknik Sorular & Yanıtlar
                 </p>
               </div>
-            </motion.div>
+            </div>
           </div>
 
           {/* SAĞ: AKORDİYON ALANI */}
           <div className="lg:col-span-7 space-y-6">
             {questions.map((faq, i) => (
-              <motion.div
+              <div
                 key={faq.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
                 className={`group relative overflow-hidden transition-all duration-500 border ${
                   activeId === faq.id
                     ? "bg-white border-[#165b39]/20 shadow-[0_30px_60px_-20px_rgba(0,0,0,0.05)]"
@@ -202,7 +196,7 @@ const FAQ = () => {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>

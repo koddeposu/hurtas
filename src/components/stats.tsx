@@ -1,5 +1,5 @@
 "use client";
-import { animate, motion } from "framer-motion";
+import { animate } from "framer-motion";
 import { Award, Home, MapPin, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -79,14 +79,7 @@ export const Stats = () => {
       <div className="container mx-auto  max-w-7xl">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {stats.map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              viewport={{ once: true }}
-              className="group relative"
-            >
+            <div key={i} className="group relative">
               {/* Soft Box Kartı */}
               <div className="bg-white p-8 rounded-[2rem] border border-slate-50 shadow-[0_20px_50px_rgba(0,0,0,0.03)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.06)] transition-all duration-700 relative z-10 overflow-hidden">
                 {/* Köşe Teknik Vektör (Blueprint Hissi) */}
@@ -134,7 +127,7 @@ export const Stats = () => {
               <div className="absolute -bottom-6 -right-2 text-7xl font-black opacity-[0.02] select-none -z-0">
                 0{i + 1}
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
 
