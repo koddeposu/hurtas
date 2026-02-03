@@ -245,14 +245,6 @@ export const favorite = pgTable(
   ],
 );
 
-export const pageViews = pgTable("page_views", {
-  id: serial("id").primaryKey(),
-  page: text("page").notNull(),
-  userAgent: text("user_agent"),
-  ip: text("ip"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
 export const buttonClicks = pgTable("button_clicks", {
   id: serial("id").primaryKey(),
   buttonId: text("button_id").notNull(),
