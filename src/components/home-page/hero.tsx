@@ -134,11 +134,12 @@ export const Hero4 = () => {
           <div className="lg:col-span-6 relative">
             {/* Ana Görsel Kutusu */}
             <div className="relative z-10">
-              <div className="absolute inset-0 bg-emerald-500/5 rounded-[3.5rem] translate-x-4 translate-y-4 -z-10" />
-              <div className="rounded-[3.5rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] border-[8px] border-white ">
+              <div className="absolute inset-0 bg-emerald-500/5 rounded-[3.5rem] translate-x-4 translate-y-4 -z-10 will-change-transform" />
+              <div className="rounded-[3.5rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] border-[8px] border-white relative h-[320px] sm:h-[400px] lg:h-[550px]">
                 <Image
                   src={HeroImage}
                   alt="prefabrik-ev"
+                  fill
                   priority
                   quality={60}
                   className="object-cover"
