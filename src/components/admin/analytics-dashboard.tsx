@@ -2,7 +2,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Eye, MessageCircle, Phone, TrendingUp } from "lucide-react";
+import { MessageCircle, Phone } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface Stats {
@@ -86,7 +86,7 @@ export function AnalyticsDashboard() {
       </div>
 
       {/* İletişim İstatistikleri - Öne Çıkan */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card className="border-2 border-green-500 bg-gradient-to-br from-green-50 to-white">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-sm font-medium text-green-700">
@@ -116,7 +116,7 @@ export function AnalyticsDashboard() {
             <p className="text-xs text-gray-600 mt-1">Toplam arama</p>
           </CardContent>
         </Card>
-
+        {/*
         <Card className="border-2 border-orange-500 bg-gradient-to-br from-orange-50 to-white">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-sm font-medium text-orange-700">
@@ -130,11 +130,11 @@ export function AnalyticsDashboard() {
             </p>
             <p className="text-xs text-gray-600 mt-1">İletişim oranı</p>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
 
       {/* Ziyaret İstatistikleri */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-600">
@@ -179,12 +179,12 @@ export function AnalyticsDashboard() {
             <p className="text-xs text-gray-600 mt-1">Sayfa görüntüleme</p>
           </CardContent>
         </Card>
-      </div>
+      </div> */}
 
       {/* Detaylı İstatistikler */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* En Çok Ziyaret Edilen Sayfalar */}
-        <Card>
+      {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4"> */}
+      {/* En Çok Ziyaret Edilen Sayfalar */}
+      {/* <Card>
           <CardHeader>
             <CardTitle className="text-base">
               En Çok Ziyaret Edilen Sayfalar
@@ -213,10 +213,10 @@ export function AnalyticsDashboard() {
               )}
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
 
-        {/* Buton Tıklamaları */}
-        <Card>
+      {/* Buton Tıklamaları */}
+      {/* <Card>
           <CardHeader>
             <CardTitle className="text-base">Buton Tıklamaları</CardTitle>
           </CardHeader>
@@ -267,8 +267,8 @@ export function AnalyticsDashboard() {
               )}
             </div>
           </CardContent>
-        </Card>
-      </div>
+        </Card> */}
+      {/* </div> */}
     </div>
   );
 }
