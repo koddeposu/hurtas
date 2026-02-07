@@ -1,8 +1,7 @@
 import { getCategories } from "@/actions/categoryActions";
 import "@/app/globals.css";
-import BottomBar from "@/components/bottomBar";
-import Footer from "@/components/footer";
-import Navbar from "@/components/navbar";
+import { AnalyticsWrapper } from "@/components/analytics-wrapper";
+import ClientLayout from "@/components/ClientLayout";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
@@ -183,15 +182,9 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="fixed w-full h-screen -z-10 bg-primary/10 opacity-10 blur-in-sm " />
-        <Navbar categories={categories} />
-
-        <main className="relative overflow-hidden">
-          <div className={`w-full p-5`}>{children}</div>
-        </main>
-        <BottomBar />
-
-        <Footer categories={categories} />
+        <AnalyticsWrapper>
+          <ClientLayout categories={categories}>{children}</ClientLayout>
+        </AnalyticsWrapper>
       </body>
     </html>
   );
