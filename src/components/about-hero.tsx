@@ -70,6 +70,7 @@ const AboutHero = () => {
             <div className="absolute z-20 w-full md:w-[80%] h-[300px] md:h-[500px] rounded-[3rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)]  ">
               <Image
                 src={Hero2}
+                fill
                 className="w-full h-full object-cover"
                 alt="Türkiye geneli prefabrik çelik yapı üretimi"
               />
@@ -79,6 +80,7 @@ const AboutHero = () => {
             <div className="absolute z-30   top-2/4 -right-4 md:top-1/4 w-[50%] h-[200px] md:h-[300px] rounded-[2.5rem] overflow-hidden shadow-2xl border-[10px] border-white">
               <Image
                 src={MissionImage}
+                fill
                 className="w-full h-full object-cover"
                 alt="prefabrik-evler"
                 quality={40}

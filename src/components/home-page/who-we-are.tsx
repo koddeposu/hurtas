@@ -49,7 +49,6 @@ export const WhoWeAre = () => {
                 fill
                 loading="lazy"
                 quality={55}
-                sizes="(max-width: 768px) 100vw, 900px"
                 className="object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700"
               />
               <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl flex items-center gap-2 shadow-sm">

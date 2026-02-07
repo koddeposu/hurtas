@@ -135,16 +135,13 @@ export const Hero4 = () => {
             {/* Ana Görsel Kutusu */}
             <div className="relative z-10">
               <div className="absolute inset-0 bg-emerald-500/5 rounded-[3.5rem] translate-x-4 translate-y-4 -z-10" />
-              <div className="rounded-[3.5rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] border-[8px] border-white">
+              <div className="rounded-[3.5rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)] border-[8px] border-white ">
                 <Image
                   src={HeroImage}
-                  width={945}
-                  height={630}
-                  quality={60}
                   alt="prefabrik-ev"
                   priority
-                  sizes="(max-width: 768px) 100vw, (max-width: 1280px) 90vw, 945px"
-                  className="object-cover w-full lg:h-[550px]"
+                  quality={60}
+                  className="object-cover"
                 />
               </div>
             </div>
