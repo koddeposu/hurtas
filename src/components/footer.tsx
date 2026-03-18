@@ -55,7 +55,7 @@ const Footer = ({ categories = [] }: FooterProps) => {
   };
 
   return (
-    <footer className="bg-white pt-20 pb-10 px-6 font-[family-name:var(--font-poppins)]">
+    <footer className="safe-area-footer bg-white px-6 pt-20 pb-10 font-[family-name:var(--font-poppins)]">
       <div className="container mx-auto max-w-7xl">
 
         {/* Üst CTA Alanı: Yumuşak bir geçiş kutusu */}

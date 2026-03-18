@@ -5,34 +5,33 @@ import { MessageCircle, Phone } from "lucide-react";
 
 const BottomBar = () => {
   return (
-    <div className="fixed bottom-0 inset-x-0 z-[100] p-6 md:hidden">
-      <div className="bg-white/80 backdrop-blur-2xl rounded-[2.5rem] grid-cols-2 grid w-full overflow-hidden h-14 shadow-[0_-10px_40px_rgba(0,0,0,0.08)]">
+    <div
+      className="fixed inset-x-0 bottom-0 z-[100]     md:hidden bg-primary "
+      style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 1rem)" }}
+    >
+      <div className="mx-auto grid  w-full max-w-md grid-cols-2 overflow-hidden  py-2">
         <button
+          type="button"
           onClick={handleCall}
-          className="flex-1 bg-primary text-white h-full flex items-center shadow-xl w-full justify-center gap-2"
+          className="flex h-full  flex-col items-center justify-center gap-2 bg-primary text-white  py-1"
         >
+          <Phone size={20} fill="currentColor" />
           <div className="flex flex-col items-start">
             <span className="text-sm font-black">Şimdi Ara</span>
           </div>
-          <div className="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center">
-            <Phone size={20} fill="currentColor" />
-          </div>
         </button>
 
         <button
+          type="button"
           onClick={handleWhatsApp}
-          className="flex-1 text-white h-full flex items-center shadow-xl bg-secondary justify-center gap-2"
+          className="flex h-full  flex-col items-center justify-center gap-2 bg-primary text-white"
         >
+          <MessageCircle size={20} fill="currentColor" />
           <div className="flex flex-col items-start">
             <span className="text-sm font-black">Whatsapp</span>
           </div>
-          <div className="w-9 h-9 bg-white/20 rounded-lg flex items-center justify-center">
-            <MessageCircle size={20} fill="currentColor" />
-          </div>
         </button>
       </div>
-
-      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent -z-10" />
     </div>
   );
 };

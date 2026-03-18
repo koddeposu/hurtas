@@ -550,7 +550,7 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
             className="absolute inset-0 bg-black/45"
           />
 
-          <aside className="absolute right-0 top-0 flex h-full w-[86%] max-w-sm flex-col overflow-hidden border-l border-slate-200 bg-white shadow-[0_24px_80px_-28px_rgba(15,23,42,0.35)] pb-30">
+          <aside className="absolute right-0 top-0 flex h-full w-[86%] max-w-sm flex-col overflow-hidden border-l border-slate-200 bg-white shadow-[0_24px_80px_-28px_rgba(15,23,42,0.35)] pb-24">
             <div className="flex items-center justify-between border-b border-slate-200 px-4 py-4">
               <Link
                 href="/"
@@ -583,16 +583,6 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
             </div>
 
             <div className="flex-1 overflow-y-auto px-4 py-4">
-              <div className="rounded-[1.5rem] border border-slate-200 bg-[#f8f7f3] px-4 py-4">
-                <p className="text-[10px] font-black uppercase tracking-[0.24em] text-secondary">
-                  Hızlı Menü
-                </p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">
-                  Tek katlı, çift katlı ve çelik ev modellerini hızlıca
-                  inceleyin ya da bizimle hemen iletişime geçin.
-                </p>
-              </div>
-
               <div className="mt-4 grid gap-3">
                 <Link
                   href="/"

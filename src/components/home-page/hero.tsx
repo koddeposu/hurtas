@@ -1,8 +1,13 @@
 "use client";
 
-import HeroSlideImage1 from "@/assets/hero/home-page-1.webp";
-import HeroSlideImage2 from "@/assets/hero/home-page-3.webp";
-import HeroSlideImage3 from "@/assets/hero/home-page-5.webp";
+import HeroSlideImage1 from "@/assets/hero/desktop/d-hero-1.webp";
+import HeroSlideImage2 from "@/assets/hero/desktop/d-hero-2.webp";
+import HeroSlideImage3 from "@/assets/hero/desktop/d-hero-3.webp";
+
+import HeroMobilSlideImage1 from "@/assets/hero/mobil/m-hero-1.webp";
+import HeroMobilSlideImage2 from "@/assets/hero/mobil/m-hero-2.webp";
+import HeroMobilSlideImage3 from "@/assets/hero/mobil/m-hero-3.webp";
+
 import { handleCall, handleWhatsApp } from "@/lib/analytics/googleAds";
 import { CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
@@ -15,18 +20,21 @@ const SLIDES = [
     title: "Sakarya'dan Türkiye'ye Prefabrik Ev Çözümü",
     desc: "Modern mimari, çelik konstrüksiyon gücü ve hızlı teslim avantajını tek projede buluşturuyoruz.",
     image: HeroSlideImage1,
+    mobilImage: HeroMobilSlideImage1,
   },
   {
     id: 2,
     title: "2+1, 3+1 ve Villa Tipi Modeller",
     desc: "İhtiyacınıza uygun plan, doğru metraj ve net üretim takvimiyle prefabrik yapılar tasarlıyoruz.",
     image: HeroSlideImage2,
+    mobilImage: HeroMobilSlideImage2,
   },
   {
     id: 3,
     title: "Keşiften Montaja Tek Ekip",
     desc: "Projelendirme, üretim, sevkiyat ve montaj süreci CT Prefabrik koordinasyonuyla üçlü değil tek akış halinde ilerler.",
     image: HeroSlideImage3,
+    mobilImage: HeroMobilSlideImage3,
   },
 ];
 
@@ -63,14 +71,31 @@ export const Hero4 = () => {
       `}</style>
       <div className="absolute inset-x-0 top-0 -z-10 h-full bg-[radial-gradient(circle_at_top_right,rgba(15,23,42,0.18),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(2,6,23,0.16),transparent_38%)]" />
 
-      <div className="relative h-[100svh] min-h-[100svh]  lg:h-[600px] xl:h-[711px] lg:min-h-0">
+      <div className="relative h-[calc(100svh_-_6rem_-_env(safe-area-inset-bottom))] min-h-[calc(100svh_-_6rem_-_env(safe-area-inset-bottom))] max-h-[calc(100svh_-_6rem_-_env(safe-area-inset-bottom))] lg:h-[600px] xl:h-[711px] lg:min-h-0">
         <div
           key={activeSlide.id}
           className="absolute inset-0 w-full transition-opacity duration-700"
         >
-          <div className="absolute inset-0 hero-zoom">
+          <div className="absolute inset-0 hero-zoom hidden md:flex">
             <Image
               src={activeSlide.image}
+              alt={activeSlide.title}
+              fill
+              preload
+              fetchPriority="high"
+              loading="eager"
+              quality={55}
+              placeholder="blur"
+              sizes="100vw"
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/72 via-black/48 to-slate-950/36" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(15,23,42,0.24),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(0,0,0,0.3),transparent_38%)]" />
+          </div>
+
+          <div className="absolute inset-0 hero-zoom md:hidden">
+            <Image
+              src={activeSlide.mobilImage}
               alt={activeSlide.title}
               fill
               preload
@@ -93,11 +118,11 @@ export const Hero4 = () => {
               CT Prefabrik Üretim Güvencesi
             </div>
 
-            <h1 className="mt-5 max-w-2xl text-4xl font-black leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="mt-5  max-w-2xl overflow-hidden text-3xl font-semibold leading-tight tracking-tight text-white line-clamp-3  sm:text-5xl lg:h-auto lg:line-clamp-none lg:text-6xl">
               {activeSlide.title}
             </h1>
 
-            <p className="mt-4 max-w-2xl text-sm font-medium leading-7 text-slate-200 sm:text-base">
+            <p className="mt-4  max-w-2xl overflow-hidden text-sm font-medium leading-7 text-slate-200 line-clamp-3  sm:text-base lg:h-auto lg:line-clamp-none">
               {activeSlide.desc}
             </p>
 

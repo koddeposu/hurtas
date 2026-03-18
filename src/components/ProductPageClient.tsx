@@ -320,8 +320,8 @@ function ProductDescription({ product }: ProductPriceProps) {
 export default function ProductPageClient({ product }: ProductPageClientProps) {
   function Desktop() {
     return (
-      <main className="bg-white min-h-screen">
-        <section className="pt-30">
+      <main className=" min-h-screen">
+        <section className="lg:mt-60 xl:mt-20">
           <div className="container mx-auto max-w-7xl">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-16 items-start">
               <div className="lg:col-span-7">
@@ -354,8 +354,8 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
 
   function Mobile() {
     return (
-      <main className="bg-white min-h-screen">
-        <section className="pt-20">
+      <main className=" min-h-screen">
+        <section className="pt-14">
           <div className="container mx-auto max-w-7xl">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-16 items-start">
               <div className="lg:col-span-7">

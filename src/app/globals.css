@@ -121,12 +121,17 @@
 }
 
 @layer base {
+  html {
+    background-color: white;
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
 
   body {
     background-color: white;
+    min-height: 100dvh;
     font-family:
       var(--font-geist-sans),
       system-ui,
@@ -148,6 +153,10 @@
     animation: marquee 25s linear infinite;
     will-change: transform;
   }
+}
+
+.safe-area-footer {
+  padding-bottom: calc(2.5rem + env(safe-area-inset-bottom));
 }
 
 /* Blog Content Styles */

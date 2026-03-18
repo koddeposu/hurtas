@@ -53,7 +53,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
   const heroImage = projects[0]?.img[0];
 
   return (
-    <main className="bg-white min-h-screen flex items-center justify-center flex-col w-full">
+    <main className=" min-h-screen flex items-center justify-center flex-col w-full">
       <Modal isShow={modal} onClose={() => setModal(false)}>
         <div className="h-screen flex items-center justify-center p-5">
           <div className="max-h-[600px] max-w-[600px] w-full h-full bg-transparent rounded-xl overflow-hidden">
@@ -76,7 +76,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
         />
       )}
 
-      <section className="relative mb-12 w-full overflow-hidden bg-[#f8f7f3]">
+      <section className="relative mb-12 w-full overflow-hidden bg-[#f8f7f3] lg:pt-44 xl:pt-0">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none [background-image:linear-gradient(#49202d_1px,transparent_1px),linear-gradient(90deg,#49202d_1px,transparent_1px)] [background-size:56px_56px]" />
         <div className="mx-auto flex w-full max-w-[1280px] items-center px-4 py-10 sm:px-6 grid   lg:grid-cols-2 lg:gap-14 lg:px-8 lg:py-14">
           <div className="relative z-10 space-y-7 ">
@@ -203,7 +203,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
         </div>
       </section>
 
-      <div className="max-w-[1280px] w-full mt-20">
+      <div className="max-w-[1280px] w-full ">
         <section className="pb-32">
           <div className="">
             {projects.length > 0 ? (
