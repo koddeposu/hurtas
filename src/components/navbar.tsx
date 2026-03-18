@@ -138,7 +138,6 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
   const showMainNavbar = isAtTop;
   const showCompact = !isAtTop && showCompactNavbar;
-  const mobilePanelTopClass = "top-[5.25rem]";
 
   const isExactActive = (href: string) => pathname === href;
   const isSectionActive = (href: string) =>
@@ -551,152 +550,179 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
             className="absolute inset-0 bg-black/45"
           />
 
-          <div
-            className={`absolute right-3 w-[calc(100%-1.5rem)] max-w-sm overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl sm:right-5 ${mobilePanelTopClass}`}
-          >
-            <div className="grid">
+          <aside className="absolute right-0 top-0 flex h-full w-[86%] max-w-sm flex-col overflow-hidden border-l border-slate-200 bg-white shadow-[0_24px_80px_-28px_rgba(15,23,42,0.35)] pb-30">
+            <div className="flex items-center justify-between border-b border-slate-200 px-4 py-4">
               <Link
                 href="/"
                 prefetch={false}
                 onClick={closeMobileMenu}
-                className={`border-b border-slate-100 px-4 py-3 text-sm font-extrabold uppercase tracking-[0.1em] ${
-                  isExactActive("/") ? "text-primary" : "text-slate-800"
-                }`}
+                className="inline-flex items-center gap-3"
               >
-                Ana Sayfa
-              </Link>
-
-              <div className="border-b border-slate-100 px-4 py-3">
-                <button
-                  type="button"
-                  onClick={() => setIsMobileCorporateOpen((prev) => !prev)}
-                  className="mb-2 inline-flex w-full items-center justify-between text-xs font-bold uppercase tracking-[0.18em] text-slate-500"
-                >
-                  Kurumsal
-                  <ChevronDown
-                    className={`h-4 w-4 transition-transform ${
-                      isMobileCorporateOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-                {isMobileCorporateOpen ? (
-                  <div className="grid gap-1.5">
-                    {CORPORATE_LINKS.map((item) => (
-                      <Link
-                        key={`mobile-corporate-${item.href}`}
-                        href={item.href}
-                        prefetch={false}
-                        onClick={closeMobileMenu}
-                        className={`text-sm font-semibold transition-colors ${
-                          isSectionActive(item.href)
-                            ? "text-primary"
-                            : "text-slate-700 hover:text-secondary"
-                        }`}
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                ) : null}
-              </div>
-
-              <div className="border-b border-slate-100 px-4 py-3">
-                <button
-                  type="button"
-                  onClick={() => setIsMobileCategoriesOpen((prev) => !prev)}
-                  className="mb-2 inline-flex w-full items-center justify-between text-xs font-bold uppercase tracking-[0.18em] text-slate-500"
-                >
-                  Prefabrik Evler
-                  <ChevronDown
-                    className={`h-4 w-4 transition-transform ${
-                      isMobileCategoriesOpen ? "rotate-180" : ""
-                    }`}
-                  />
-                </button>
-                {isMobileCategoriesOpen ? (
-                  <div className="grid gap-1.5">
-                    <Link
-                      href="/prefabrik-evler"
-                      prefetch={false}
-                      onClick={closeMobileMenu}
-                      className={`text-sm font-semibold transition-colors ${
-                        pathname === "/prefabrik-evler"
-                          ? "text-primary"
-                          : "text-slate-700 hover:text-secondary"
-                      }`}
-                    >
-                      Tüm Modeller
-                    </Link>
-                    {categories.map((item) => (
-                      <Link
-                        key={`mobile-category-${item.id}`}
-                        href={`/prefabrik-evler/${item.slug}`}
-                        prefetch={false}
-                        onClick={closeMobileMenu}
-                        className={`text-sm font-semibold transition-colors ${
-                          pathname === `/prefabrik-evler/${item.slug}`
-                            ? "text-primary"
-                            : "text-slate-700 hover:text-secondary"
-                        }`}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
-                ) : null}
-              </div>
-
-              {NAV_LINKS.map((item) => (
-                <Link
-                  key={`mobile-nav-${item.href}`}
-                  href={item.href}
-                  prefetch={false}
-                  onClick={closeMobileMenu}
-                  className={`border-b border-slate-100 px-4 py-3 text-sm font-semibold transition-colors last:border-b-0 ${
-                    isSectionActive(item.href)
-                      ? "text-primary"
-                      : "text-slate-700 hover:bg-slate-50"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              ))}
-
-              <Link
-                href="/katalog"
-                prefetch={false}
-                onClick={closeMobileMenu}
-                className="border-t border-slate-100 px-4 py-3 text-center text-sm font-bold text-slate-900 transition-colors hover:bg-slate-50"
-              >
-                <span className="inline-flex items-center gap-2">
-                  <FileText className="h-4 w-4" />
-                  Katalog
+                <Image
+                  src={Logo}
+                  alt="CT Prefabrik"
+                  width={52}
+                  height={31}
+                  quality={40}
+                  sizes="52px"
+                  className="h-8 w-auto"
+                />
+                <span className="text-sm font-black uppercase tracking-[0.08em] text-slate-900">
+                  CT <span className="text-primary">Prefabrik</span>
                 </span>
               </Link>
 
               <button
                 type="button"
-                onClick={() => {
-                  closeMobileMenu();
-                  handleWhatsApp();
-                }}
-                className="bg-secondary px-4 py-3 text-center text-sm font-bold text-white transition-colors hover:bg-[#1d7048]"
+                aria-label="Menüyü kapat"
+                onClick={closeMobileMenu}
+                className="rounded-xl border border-slate-200 p-2 text-slate-700 transition-colors hover:bg-slate-50"
               >
-                WhatsApp ile Yaz
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  closeMobileMenu();
-                  handleCall();
-                }}
-                className="bg-slate-900 px-4 py-3 text-center text-sm font-bold text-white transition-colors hover:bg-slate-800"
-              >
-                Hemen Ara
+                <X className="h-5 w-5" />
               </button>
             </div>
-          </div>
+
+            <div className="flex-1 overflow-y-auto px-4 py-4">
+              <div className="rounded-[1.5rem] border border-slate-200 bg-[#f8f7f3] px-4 py-4">
+                <p className="text-[10px] font-black uppercase tracking-[0.24em] text-secondary">
+                  Hızlı Menü
+                </p>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  Tek katlı, çift katlı ve çelik ev modellerini hızlıca
+                  inceleyin ya da bizimle hemen iletişime geçin.
+                </p>
+              </div>
+
+              <div className="mt-4 grid gap-3">
+                <Link
+                  href="/"
+                  prefetch={false}
+                  onClick={closeMobileMenu}
+                  className={`rounded-2xl border px-4 py-3 text-sm font-extrabold uppercase tracking-[0.1em] transition-all duration-200 ${
+                    isExactActive("/")
+                      ? "border-primary bg-primary text-white"
+                      : "border-slate-200 bg-white text-slate-800 hover:border-slate-200 hover:bg-slate-50"
+                  }`}
+                >
+                  Ana Sayfa
+                </Link>
+
+                <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+                  <button
+                    type="button"
+                    onClick={() => setIsMobileCorporateOpen((prev) => !prev)}
+                    className="inline-flex w-full items-center justify-between text-xs font-black uppercase tracking-[0.18em] text-slate-500"
+                  >
+                    Kurumsal
+                    <ChevronDown
+                      className={`h-4 w-4 transition-transform ${
+                        isMobileCorporateOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                  {isMobileCorporateOpen ? (
+                    <div className="mt-3 grid gap-2">
+                      {CORPORATE_LINKS.map((item) => (
+                        <Link
+                          key={`mobile-corporate-${item.href}`}
+                          href={item.href}
+                          prefetch={false}
+                          onClick={closeMobileMenu}
+                          className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
+                            isSectionActive(item.href)
+                              ? "bg-primary/8 text-primary"
+                              : "text-slate-700 hover:bg-slate-50 hover:text-secondary"
+                          }`}
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+
+                <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+                  <button
+                    type="button"
+                    onClick={() => setIsMobileCategoriesOpen((prev) => !prev)}
+                    className="inline-flex w-full items-center justify-between text-xs font-black uppercase tracking-[0.18em] text-slate-500"
+                  >
+                    Prefabrik Evler
+                    <ChevronDown
+                      className={`h-4 w-4 transition-transform ${
+                        isMobileCategoriesOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                  {isMobileCategoriesOpen ? (
+                    <div className="mt-3 grid gap-2">
+                      <Link
+                        href="/prefabrik-evler"
+                        prefetch={false}
+                        onClick={closeMobileMenu}
+                        className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
+                          pathname === "/prefabrik-evler"
+                            ? "bg-primary/8 text-primary"
+                            : "text-slate-700 hover:bg-slate-50 hover:text-secondary"
+                        }`}
+                      >
+                        Tüm Modeller
+                      </Link>
+                      {categories.map((item) => (
+                        <Link
+                          key={`mobile-category-${item.id}`}
+                          href={`/prefabrik-evler/${item.slug}`}
+                          prefetch={false}
+                          onClick={closeMobileMenu}
+                          className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
+                            pathname === `/prefabrik-evler/${item.slug}`
+                              ? "bg-primary/8 text-primary"
+                              : "text-slate-700 hover:bg-slate-50 hover:text-secondary"
+                          }`}
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
+                    </div>
+                  ) : null}
+                </div>
+
+                <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+                  <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+                    Diğer Sayfalar
+                  </p>
+                  <div className="mt-3 grid gap-2">
+                    {NAV_LINKS.map((item) => (
+                      <Link
+                        key={`mobile-nav-${item.href}`}
+                        href={item.href}
+                        prefetch={false}
+                        onClick={closeMobileMenu}
+                        className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
+                          isSectionActive(item.href)
+                            ? "bg-primary/8 text-primary"
+                            : "text-slate-700 hover:bg-slate-50 hover:text-secondary"
+                        }`}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                    <Link
+                      href="/katalog"
+                      prefetch={false}
+                      onClick={closeMobileMenu}
+                      className="rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50 hover:text-secondary"
+                    >
+                      <span className="inline-flex items-center gap-2">
+                        <FileText className="h-4 w-4" />
+                        Katalog
+                      </span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </aside>
         </div>
       ) : null}
     </>
