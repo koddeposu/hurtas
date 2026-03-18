@@ -1,6 +1,6 @@
 "use server";
 
-import { eq, desc, asc } from "drizzle-orm";
+import { and, eq, desc, asc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db/drizzle";
 import { product, productImage, category } from "@/db/schema";
@@ -109,6 +109,49 @@ export async function getProductsWithImages(categoryId?: string) {
   );
 
   return productsWithImages;
+}
+
+export async function getProductsPreview(categoryId?: string, limit?: number) {
+  const filters = [eq(product.isActive, true)];
+
+  if (categoryId) {
+    filters.push(eq(product.categoryId, categoryId));
+  }
+
+  let query = db
+    .select({
+      product: product,
+      category: category,
+    })
+    .from(product)
+    .leftJoin(category, eq(product.categoryId, category.id))
+    .where(and(...filters))
+    .orderBy(asc(product.order), desc(product.createdAt));
+
+  if (limit) {
+    query = query.limit(limit) as typeof query;
+  }
+
+  const rows = await query;
+
+  const previews = await Promise.all(
+    rows.map(async (row) => {
+      const images = await db
+        .select()
+        .from(productImage)
+        .where(eq(productImage.productId, row.product.id))
+        .orderBy(asc(productImage.order))
+        .limit(1);
+
+      return {
+        ...row.product,
+        category: row.category,
+        image: images[0] ?? null,
+      };
+    }),
+  );
+
+  return previews;
 }
 
 export async function createProduct(data: {

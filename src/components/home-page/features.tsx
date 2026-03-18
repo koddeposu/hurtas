@@ -1,4 +1,3 @@
-"use client";
 import { Gem, Ruler, Shield, Smile, Star, Zap } from "lucide-react";
 
 export const Features = () => {
@@ -42,7 +41,7 @@ export const Features = () => {
   ];
 
   return (
-    <section className="relative overflow-hidden font-[family-name:var(--font-poppins)]">
+    <section className="relative  font-[family-name:var(--font-poppins)]">
       {/* Arka Plan Büyük Yazı Efekti (Mimari Dergi Hissi) */}
       <div className="absolute top-10 left-[0%] text-[15vw] font-black text-slate-100/80 select-none leading-none z-0">
         CT PREFABRİK
@@ -60,16 +59,17 @@ export const Features = () => {
                 </span>
               </div>
 
-              <h2 className="text-3xl md:text-6xl font-black tracking-tighter  text-slate-900 leading-[1.1] mb-8">
+              <h2 className="mb-6 text-2xl font-black leading-[1.1] tracking-tighter text-slate-900 md:text-5xl">
                 Neden <br />
                 <span style={{ color: "#49202d" }}>CT</span> Prefabrik Ev?
               </h2>
 
-              <div className="relative pl-8 border-l-2 border-slate-100 space-y-6">
-                <p className="text-xl text-slate-500 font-medium leading-relaxed italic">
-                  "Güven ve kalite üzerine inşa edilmiş bir gelecek sunuyoruz."
+              <div className="relative space-y-5 border-l-2 border-slate-100 pl-7">
+                <p className="text-lg font-medium italic leading-relaxed text-slate-500">
+                  &quot;Güven ve kalite üzerine inşa edilmiş bir gelecek
+                  sunuyoruz.&quot;
                 </p>
-                <p className="text-slate-400 text-sm leading-relaxed max-w-sm">
+                <p className="max-w-sm text-sm leading-6 text-slate-400">
                   Geleneksel yapıların hantallığından uzak, modern yaşamın tüm
                   ihtiyaçlarını karşılayan bütünsel bir deneyim.
                 </p>
@@ -79,11 +79,11 @@ export const Features = () => {
 
           {/* SAĞ TARAF: Merdiven Tipi (Staggered) Özellik Listesi */}
           <div className="lg:col-span-7">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-12 gap-x-8">
+            <div className="grid grid-cols-1 gap-x-7 gap-y-10 md:grid-cols-2">
               {features.map((item, index) => (
                 <div
                   key={item.id}
-                  className={`group relative pt-12 ${index % 2 !== 0 ? "md:mt-16" : ""}`}
+                  className={`group relative pt-10  ${index % 2 !== 0 ? "md:mt-12" : ""}`}
                 >
                   {/* Sayısal Gösterge ve İnce Çizgi */}
                   <div className="absolute top-0 left-0 flex items-center gap-4 w-full">
@@ -97,17 +97,17 @@ export const Features = () => {
                   </div>
 
                   {/* Soft Box İçerik */}
-                  <div className="bg-white rounded-tr-[3rem] rounded-bl-[3rem] p-8 border border-slate-50 shadow-[0_10px_40px_rgba(0,0,0,0.02)] group-hover:shadow-[0_30px_60px_rgba(0,0,0,0.05)] transition-all duration-500">
+                  <div className="border-slate-200 shadow-md rounded-bl-[2.5rem] rounded-tr-[2.5rem] border border-slate-50 bg-white p-7 shadow-[0_10px_40px_rgba(0,0,0,0.02)] transition-all duration-500 group-hover:shadow-[0_30px_60px_rgba(0,0,0,0.05)]">
                     <div
-                      className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 text-white shadow-lg"
+                      className="mb-5 flex h-11 w-11 items-center justify-center rounded-2xl text-white shadow-lg"
                       style={{ backgroundColor: item.color }}
                     >
                       {item.icon}
                     </div>
-                    <h3 className="text-xl font-bold text-slate-900 mb-3 tracking-tight">
+                    <h3 className="mb-2 text-lg font-bold tracking-tight text-slate-900">
                       {item.title}
                     </h3>
-                    <p className="text-xs text-slate-400 font-bold uppercase tracking-widest">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
                       CT Standartları
                     </p>
                   </div>

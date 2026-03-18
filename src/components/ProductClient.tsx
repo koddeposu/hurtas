@@ -1,338 +1,382 @@
 "use client";
+
 import { ProductCard } from "@/components/ProductCard";
+import { getProductFaqsByCategory } from "@/components/page-faq-content";
+import { SeoFaqSection } from "@/components/seo-faq-section";
+import { DBCategory, DBProduct } from "@/types/product";
 import {
-  DBCategory,
-  DBProduct,
-  SORT_OPTIONS,
-  SortFilterProps,
-  SortType,
-} from "@/types/product";
-import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpDown, ChevronRight, Filter, Info, X } from "lucide-react";
+  ArrowUpRight,
+  Building2,
+  Filter,
+  Home,
+  Layers3,
+  ShieldCheck,
+} from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ProjectGalleryModal } from "./ModalSliderImage";
 
 interface ProductsClientProps {
   products: DBProduct[];
   categories: DBCategory[];
-  activeCategory?: string; // category slug, undefined = all products
+  activeCategory?: string;
 }
 
-const HeroSection = () => (
-  <section className="pt-32 pb-16 ">
-    <div className="container mx-auto max-w-[1400px] relative">
-      <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -z-10" />
-      <div className="border-b border-slate-200 pb-10">
-        <h1 className="text-[10px] font-black tracking-[0.4em] text-[#49202d] uppercase mb-4 block">
-          Prefabrik Ev Modelleri
-        </h1>
-        <h2 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter">
-          PROJE{" "}
-          <span className="text-slate-300 italic font-serif">
-            SEÇKİSİ . 2026
-          </span>
-        </h2>
-      </div>
-    </div>
-  </section>
-);
+type CategoryKey = "all" | "single" | "double" | "steel";
 
-interface MobileFilterButtonProps {
-  onClick: () => void;
-  activeCategoryName?: string;
+const CURRENT_YEAR = new Date().getFullYear();
+
+function getCategoryKey(categoryName?: string): CategoryKey {
+  if (!categoryName) return "all";
+  if (categoryName.includes("Tek Kat")) return "single";
+  if (categoryName.includes("Çift Kat") || categoryName.includes("Dubleks")) {
+    return "double";
+  }
+  if (categoryName.includes("Çelik")) return "steel";
+  return "all";
 }
 
-// Mobile Filter Button Component
-const MobileFilterButton = ({
-  onClick,
-  activeCategoryName,
-}: MobileFilterButtonProps) => (
-  <div className="lg:hidden mb-6 flex items-center gap-3">
-    <button
-      onClick={onClick}
-      className="flex items-center gap-2 px-6 py-4 bg-primary text-white rounded-2xl font-bold text-sm shadow-lg"
-    >
-      <Filter size={18} />
-      Filtrele & Sırala
-    </button>
-    {activeCategoryName && (
-      <span className="px-4 py-2 bg-slate-100 text-slate-600 rounded-xl text-xs font-bold">
-        {activeCategoryName}
-      </span>
-    )}
-  </div>
-);
+function getCategoryHref(categories: DBCategory[], matcher: string) {
+  const matchedCategory = categories.find((category) =>
+    category.name.includes(matcher),
+  );
 
-interface CategoryFilterProps {
-  activeSlug?: string; // current category slug, undefined = all
-  categories: DBCategory[];
-  onMobileClose?: () => void;
+  return matchedCategory
+    ? `/prefabrik-evler/${matchedCategory.slug}`
+    : "/prefabrik-evler";
 }
 
-// Category Filter Component
-const CategoryFilter = ({
-  activeSlug,
+function getPageContent(categoryName?: string) {
+  const categoryKey = getCategoryKey(categoryName);
+
+  if (categoryKey === "single") {
+    return {
+      eyebrow: "Tek Katlı Prefabrik Ev Seçkisi",
+      title: `Tek Katlı Prefabrik Ev Fiyatları ve Modelleri`,
+      description:
+        "Tek katlı prefabrik ev modellerini metrekare, oda planı ve yaşam ihtiyaçlarına göre inceleyin. Fiyatları etkileyen detayları ve anahtar teslim kapsamını net biçimde değerlendirin.",
+      seoTitle: `Tek Katlı Prefabrik Ev Fiyatları ${CURRENT_YEAR}`,
+      seoDescription:
+        "Tek katlı prefabrik ev fiyatları ve modelleri değerlendirilirken sadece başlangıç fiyatlarına değil, malzeme kalitesi, anahtar teslim kapsamı, ruhsat uygunluğu, enerji verimliliği ve arsa koşullarına birlikte bakmak gerekir. Doğru planlandığında tek katlı prefabrik evler hem ekonomik hem de uzun ömürlü bir yaşam çözümü sunar.",
+      seoCards: [
+        {
+          title: `Tek Katlı Prefabrik Ev Fiyatları ${CURRENT_YEAR}`,
+          text: "Tek katlı prefabrik ev fiyatları 2026 yılında metrekare, oda sayısı, çatı sistemi, cephe detayları, yalıtım seviyesi ve anahtar teslim kapsamına göre değişir. Hammadde ve üretim maliyetlerindeki hareketlilik fiyatları etkileyebilir; ancak prefabrik evler hâlâ betonarme yapılara göre daha kontrollü ve çoğu zaman daha ekonomik bir çözüm sunar. Sağlıklı bir karşılaştırma için yalnızca başlangıç rakamına değil, teklifin içinde hangi uygulama kalemlerinin bulunduğuna da dikkat edilmelidir.",
+        },
+        {
+          title: "Tek Katlı Prefabrik Ev Modelleri ve Fiyat Karşılaştırması",
+          text: "Tek katlı prefabrik ev modelleri; 1+1, 2+1, 3+1 ve daha geniş plan alternatifleriyle farklı yaşam ihtiyaçlarına hitap eder. Model seçerken arsa yapısı, aile büyüklüğü, oda dağılımı, mutfak-salon ilişkisi ve kullanım alışkanlıkları dikkate alınmalıdır. Modern çizgili ya da klasik görünümlü modeller arasında karar verirken sadece görsele değil, iç planın günlük yaşama ne kadar uyduğuna bakmak daha doğru sonuç verir.",
+        },
+        {
+          title: "Tek Katlı Prefabrik Ev Alırken Nelere Dikkat Edilmeli?",
+          text: "Prefabrik ev alırken dikkat edilmesi gereken en önemli konular ruhsat uygunluğu, inşaat malzemelerinin kalitesi, ısı yalıtımı, teslim süresi ve montaj kapsamıdır. Teklif alınırken nakliye, montaj, iç kapılar, ıslak hacimler, elektrik altyapısı ve çatı sistemi gibi başlıkların dahil olup olmadığı net görülmelidir. En ucuz teklif her zaman en iyi çözüm anlamına gelmez; önemli olan uzun ömürlü kullanım sağlayacak kalite-fiyat dengesidir.",
+        },
+        {
+          title: "Arazi Uygunluğu, Enerji Verimliliği ve Ruhsat Süreci",
+          text: "Tek katlı prefabrik evler için düz ve ulaşımı kolay araziler avantaj sağlar; ancak asıl belirleyici unsur arsanın imar uygunluğu ve ruhsat süreçleridir. Bunun yanında enerji verimliliği sunan duvar sistemleri, çatı yalıtımı ve kaliteli doğrama çözümleri uzun vadede ısınma ve soğutma maliyetlerini düşürür. Doğru malzeme tercihleriyle prefabrik evlerde konforlu ve ekonomik bir yaşam kurmak mümkündür.",
+        },
+        {
+          title: "Tek Katlı Prefabrik Evlerin Avantajları Nelerdir?",
+          text: "Tek katlı prefabrik evler hızlı kurulum, dengeli maliyet, kolay bakım ve sade yaşam planı avantajıyla öne çıkar. Özellikle erişilebilir kullanım isteyen aileler, yaşlı bireyler veya pratik yaşam alanı arayan kullanıcılar için tek katlı planlar hem konfor hem de fonksiyon açısından güçlü bir tercih oluşturur.",
+        },
+        {
+          title: "Tek Katlı Prefabrik Evlerde Isı Yalıtımı Neden Önemli?",
+          text: "Isı yalıtımı, tek katlı prefabrik evlerde hem yaşam konforunu hem de enerji maliyetlerini doğrudan etkiler. Doğru duvar sistemi, çatı çözümü ve pencere kalitesi sayesinde kış aylarında ısı kaybı azalır, yaz aylarında ise iç mekan daha dengeli kalır. Bu da uzun vadede daha ekonomik kullanım sağlar.",
+        },
+      ],
+    };
+  }
+
+  if (categoryKey === "double") {
+    return {
+      eyebrow: "Çift Katlı Prefabrik Ev Seçkisi",
+      title: "Çift Katlı Prefabrik Ev Fiyatları ve Modelleri",
+      description:
+        "Dubleks prefabrik ev modellerini geniş yaşam planı, cephe dili ve teslim kapsamına göre karşılaştırın. Çift katlı çözümlerde fiyatı ve planı etkileyen ana unsurları birlikte görün.",
+      seoTitle: `Çift Katlı Prefabrik Ev Fiyatları ve Modelleri ${CURRENT_YEAR}`,
+      seoDescription:
+        "Çift katlı prefabrik ev modelleri geniş yaşam alanı, ferah plan ve villa hissi arayan kullanıcılar için güçlü bir seçenektir. Dubleks prefabrik ev fiyatlarını değerlendirirken kat planı, cephe malzemesi, balkon-teras detayları ve anahtar teslim kapsamı birlikte okunmalıdır.",
+      seoCards: [
+        {
+          title: "Dubleks Prefabrik Ev Fiyatları ve Modelleri",
+          text: "Dubleks prefabrik ev fiyatları; kat planı, merdiven çözümü, balkon-teras detayları, cephe malzemesi ve anahtar teslim beklentisine göre şekillenir. Büyük metrekareli yapılar sunmasına rağmen çift katlı prefabrik evler, doğru planlama ile hâlâ avantajlı bir maliyet-performans dengesi oluşturabilir. Fiyat karşılaştırması yaparken sadece m2 büyüklüğüne değil, tasarım ve uygulama kapsamına da birlikte bakılmalıdır.",
+        },
+        {
+          title: "Çift Katlı Prefabrik Evlerde Konforlu Planlama",
+          text: "Çift katlı prefabrik evler yaşam alanını iki kata yayarak salon, mutfak, banyo ve yatak odaları arasında daha konforlu bir ayrım kurulmasını sağlar. Geniş aileler, üst katta özel yaşam alanı isteyen kullanıcılar ve villa tipi plan hayal edenler için dubleks prefabrik çözümler oldukça güçlüdür. İhtiyaca göre oda sayısı, pencere düzeni, balkon ve dış cephe dili kişiselleştirilebilir.",
+        },
+        {
+          title: "Çift Katlı Prefabrik Ev Alırken Nelere Bakılmalı?",
+          text: "Taşıyıcı sistem kalitesi, katlar arası plan dengesi, ısı ve ses yalıtımı, ruhsat uygunluğu ve teslim kapsamı dikkatle değerlendirilmelidir. Özellikle çift katlı yapılarda proje çözümünün sağlam olması, deprem güvenliği ve uzun ömürlü kullanım açısından kritik öneme sahiptir. Teklif alınırken hangi malzemelerin kullanıldığı ve montaj sonrası hangi kalemlerin teslim edildiği mutlaka netleştirilmelidir.",
+        },
+        {
+          title: "Neden Çift Katlı Prefabrik Ev Tercih Edilir?",
+          text: "Çift katlı prefabrik evler geniş yaşam alanı sunarken hızlı kurulum, ekonomik üretim ve modern tasarım avantajlarını da beraberinde getirir. Ferah oda planları, teras ve balkon gibi detaylarla zenginleşen dubleks prefabrik yapılar, uzun yıllar kullanılabilecek konforlu bir yaşam alanı oluşturmak isteyenler için dikkat çeken bir seçenektir.",
+        },
+        {
+          title: "Prefabrik Ev Kaç Katlı Olabilir?",
+          text: "Prefabrik ev projelerinde en yaygın çözümler tek katlı ve çift katlı planlardır. Özellikle dubleks prefabrik evler, geniş yaşam alanı ihtiyacını ekonomik ve hızlı bir üretim modeliyle karşılamak isteyen kullanıcılar için güçlü bir alternatiftir. Kat sayısı planlanırken arsa imarı ve kullanım senaryosu birlikte değerlendirilmelidir.",
+        },
+        {
+          title:
+            "Çift Katlı Prefabrik Evlerde Dış Cephe ve Tasarım Seçenekleri",
+          text: "Çift katlı prefabrik evlerde geniş pencere açıklıkları, balkon-teras çözümleri, modern cephe çizgileri ve farklı renk kombinasyonları ile güçlü bir dış görünüm elde edilebilir. Tasarım detayları yalnızca estetik değil, aynı zamanda iç mekan ışığı ve yaşam kalitesi açısından da önemli katkı sağlar.",
+        },
+      ],
+    };
+  }
+
+  if (categoryKey === "steel") {
+    return {
+      eyebrow: "Çelik Ev Seçkisi",
+      title: "Çelik Ev Fiyatları ve Modelleri",
+      description:
+        "Çelik prefabrik ev modellerini, anahtar teslim çelik konstrüksiyon ev fiyatlarını ve projelendirme sürecini tek sayfada inceleyin. Dayanıklılık, modern tasarım ve teknik kaliteyi bir arada değerlendirin.",
+      seoTitle: `Çelik Prefabrik Ev Modelleri ve Fiyatları ${CURRENT_YEAR}`,
+      seoDescription:
+        "Çelik prefabrik ev modelleri, anahtar teslim çelik konstrüksiyon ev fiyatları ve çelik prefabrik ev yapımı hakkında doğru karar vermek için teknik kalite, yalıtım seviyesi, teslim kapsamı ve kullanım ömrü birlikte değerlendirilmelidir.",
+      seoCards: [
+        {
+          title: "Çelik Prefabrik Ev Modelleri ve Fiyatları",
+          text: "Çelik prefabrik ev modelleri ve fiyatları; taşıyıcı sistem detayları, cephe çözümleri, çelik kalınlığı, yalıtım seviyesi ve yaşam planına göre değişir. Anahtar teslim çelik konstrüksiyon ev fiyatları değerlendirilirken yalnızca kaba yapı değil, proje içeriğinin hangi detayları kapsadığı da dikkatle okunmalıdır. Tek katlı çelik ev, villa tipi çelik ev ve özel planlı çelik yapı teklifleri bu nedenle farklı fiyat seviyelerinde olabilir.",
+        },
+        {
+          title: "Çelik Prefabrik Ev Yapımı Nasıl İlerler?",
+          text: "Çelik prefabrik ev yapımı keşif, proje geliştirme, üretim, sevkiyat ve montaj adımlarından oluşur. Üretimin kontrollü ortamda ilerlemesi, sahadaki iş yükünü azaltır ve süreci klasik yapılara kıyasla daha planlı hale getirir. Özellikle çelik konstrüksiyon hazır ev çözümlerinde doğru proje yönetimi hem teslim süresini hem de uygulama kalitesini doğrudan etkiler.",
+        },
+        {
+          title: "Çelik Konstrüksiyon Hazır Ev Alırken Nelere Dikkat Edilmeli?",
+          text: "Malzeme kalitesi, teknik detay çözümü, ısı yalıtımı, nem ve ısı davranışı, teslim kapsamı ve garanti yaklaşımı en önemli başlıklardır. Çelik konstrüksiyon hazır ev alırken yalnızca fiyat odaklı ilerlemek yerine, kullanılan malzemenin standardını ve uygulama disiplinini birlikte değerlendirmek gerekir. Güçlü teknik altyapı, uzun ömürlü ve güvenli kullanım için belirleyici olur.",
+        },
+        {
+          title: "Çelik Evlerde Konfor, Dayanıklılık ve Uzun Ömür",
+          text: "Çelik ev modelleri modern tasarım dili, güçlü taşıyıcı sistem ve yüksek yalıtım performansı ile öne çıkar. Doğru projelendirme yapıldığında çelik evler dört mevsim konforlu kullanım sağlar ve uzun vadeli enerji maliyetlerini kontrol altında tutar. Bu nedenle çelik ev fiyatları değerlendirilirken sadece ilk yatırım değil, kullanım ömrü ve yaşam kalitesi de hesaba katılmalıdır.",
+        },
+        {
+          title: "Tek Katlı Çelik Ev Fiyatları Neye Göre Değişir?",
+          text: "Tek katlı çelik ev fiyatları; metrekare, taşıyıcı sistem kalitesi, duvar ve çatı çözümleri, yalıtım seviyesi ve anahtar teslim kapsamına göre değişir. Basit m2 hesabı yerine teknik detaylarla birlikte yapılan değerlendirme, daha doğru fiyat analizi sağlar.",
+        },
+        {
+          title:
+            "Anahtar Teslim Çelik Konstrüksiyon Ev Fiyatları Neden Farklıdır?",
+          text: "Anahtar teslim çelik konstrüksiyon ev fiyatları firmadan firmaya değişebilir çünkü her teklif aynı kapsamı içermez. Bazı projelerde iç mekan çözümleri, ıslak hacim detayları, doğrama sistemi veya montaj sonrası teslim kalemleri farklı olabilir. Bu yüzden teklif karşılaştırması yapılırken kapsama odaklanmak gerekir.",
+        },
+      ],
+    };
+  }
+
+  return {
+    eyebrow: "CT Prefabrik Ürün Seçkisi",
+    title: "Prefabrik Ev Modelleri ve Fiyatları",
+    description:
+      "Tek katlı prefabrik ev, çift katlı prefabrik ev, çelik ev, prefabrik villa ve farklı yaşam çözümlerini tek sayfada inceleyin. Model, fiyat ve teslim kapsamını ihtiyacınıza göre karşılaştırın.",
+    seoTitle: `Prefabrik Ev Modelleri ve Fiyatları ${CURRENT_YEAR}`,
+    seoDescription:
+      "Prefabrik ev modelleri, prefabrik villa, dubleks prefabrik, çelik prefabrik ev modelleri fiyatları ve konteyner ev çözümleri arasında doğru karar verebilmek için model yapısı, proje kapsamı, üretim kalitesi ve fiyat-performans dengesi birlikte değerlendirilmelidir.",
+    seoCards: [
+      {
+        title: "Prefabrik Ev Modelleri ve Fiyatları",
+        text: "Prefabrik ev modelleri ve fiyatları; metrekare, plan tipi, malzeme seviyesi, cephe detayları ve anahtar teslim kapsamına göre değişir. Tek katlı prefabrik ev, çift katlı prefabrik ev ve çelik prefabrik ev modelleri arasında doğru karşılaştırma yapmak için yalnızca fiyat listesine değil, yaşam beklentisine ve uygulama içeriğine birlikte bakmak gerekir.",
+      },
+      {
+        title: "Prefabrik Villa, Dubleks Prefabrik ve Çelik Ev Seçenekleri",
+        text: "Prefabrik villa çözümleri, dubleks prefabrik ev planları ve çelik konstrüksiyon hazır ev modelleri farklı yaşam beklentilerine yanıt verir. Daha geniş ve ferah plan isteyen kullanıcılar için çift katlı çözümler öne çıkarken, teknik dayanım ve modern çizgi isteyenler çelik ev modellerine yönelir. Her modelin avantajı arsa yapısı, kullanım amacı ve bütçe doğrultusunda değerlendirilmelidir.",
+      },
+      {
+        title:
+          "Konteyner Ev, Anahtar Teslim Çelik Konstrüksiyon Ev ve Teslim Süreci",
+        text: "Konteyner ev modelleri, konteyner ev fiyatları ve anahtar teslim çelik konstrüksiyon ev fiyatları proje kapsamına göre değişkenlik gösterir. Özellikle hızlı yerleşim, modüler kullanım veya pratik çözüm arayanlar için konteyner evler güçlü bir alternatif sunar. Sağlıklı karar için üretim kalitesi, teslim süresi, yalıtım yapısı ve uygulama içeriği birlikte incelenmelidir.",
+      },
+      {
+        title: "Prefabrik Ev Alırken Doğru Karar Nasıl Verilir?",
+        text: "Prefabrik ev satın alırken ruhsat uygunluğu, zemin durumu, enerji verimliliği, üretim kalitesi ve satış sonrası yaklaşım en önemli başlıklardır. Markalar arası karşılaştırma yapılırken sadece kampanya veya başlangıç fiyatına odaklanmak yerine, uzun ömürlü kullanım sağlayacak teknik kaliteyi görmek daha doğru sonuç verir. Bu yaklaşım hem bütçeyi korur hem de daha güvenli bir yatırım süreci sağlar.",
+      },
+      {
+        title: "Prefabrik Ev, Konteyner Ev ve Çelik Ev Arasındaki Farklar",
+        text: "Prefabrik ev, konteyner ev ve çelik ev çözümleri farklı ihtiyaçlara hitap eder. Prefabrik evler plan çeşitliliği ve uygun maliyet dengesiyle öne çıkarken, çelik evler teknik dayanım ve modern çizgi arayan kullanıcılar için güçlü bir seçenektir. Konteyner ev modelleri ise hızlı yerleşim ve modüler kullanım avantajı sunar.",
+      },
+      {
+        title: "Anahtar Teslim Yapılarda Neler Sorgulanmalı?",
+        text: "Anahtar teslim bir yapı satın alınırken teklifin hangi işleri kapsadığı ayrıntılı biçimde görülmelidir. Üretim standardı, montaj, elektrik altyapısı, ıslak hacim çözümleri, iç kapılar, pencere sistemleri ve yalıtım düzeyi gibi başlıkların açık yazılması, daha güvenli bir satın alma süreci sağlar.",
+      },
+    ],
+  };
+}
+
+function getFaqContent(categoryName?: string) {
+  const categoryKey = getCategoryKey(categoryName);
+
+  if (categoryKey === "single") {
+    return {
+      title: "Tek Katlı Prefabrik Evler İçin",
+      accent: "En Çok Aranan Sorular",
+      description:
+        "Tek katlı prefabrik ev fiyatları, modelleri, anahtar teslim kapsam, ruhsat süreci ve Sakarya uygulamaları hakkında kullanıcıların en çok aradığı soruları burada topladık.",
+    };
+  }
+
+  if (categoryKey === "double") {
+    return {
+      title: "Çift Katlı Prefabrik Evler İçin",
+      accent: "En Çok Aranan Sorular",
+      description:
+        "Dubleks prefabrik ev fiyatları, çift katlı plan seçenekleri, anahtar teslim kapsam, ruhsat süreci ve Sakarya uygulamaları hakkında en çok sorulan başlıkları burada yanıtladık.",
+    };
+  }
+
+  if (categoryKey === "steel") {
+    return {
+      title: "Çelik Evler İçin",
+      accent: "En Çok Aranan Sorular",
+      description:
+        "Çelik prefabrik ev modelleri, çelik ev fiyatları, anahtar teslim çelik konstrüksiyon ev kapsamı, yalıtım ve uygulama süreci hakkında en çok aranan soruları burada bulabilirsiniz.",
+    };
+  }
+
+  return {
+    title: "Prefabrik Evler Sayfası İçin",
+    accent: "En Çok Aranan Sorular",
+    description:
+      "Prefabrik ev modelleri, çelik prefabrik ev fiyatları, dubleks prefabrik çözümler, prefabrik villa seçenekleri ve anahtar teslim kapsam hakkında kullanıcıların en çok aradığı soruları burada topladık.",
+  };
+}
+
+function TopCategoryFilters({
   categories,
-  onMobileClose,
-}: CategoryFilterProps) => (
-  <div>
-    <div className="flex items-center gap-2 mb-8 text-[#49202d]">
-      <Filter size={18} />
-      <span className="font-black text-xs uppercase tracking-widest">
-        Kategoriler
-      </span>
-    </div>
-    <nav className="flex flex-col gap-2">
-      {/* "Tümü" link - all products */}
-      <Link
-        href="/prefabrik-evler"
-        onClick={onMobileClose}
-        className={`flex items-center justify-between px-5 py-4 rounded-2xl font-bold transition-all text-sm ${
-          !activeSlug
-            ? "bg-primary text-white shadow-lg shadow-[#49202d]/20"
-            : "bg-transparent text-slate-400 hover:bg-slate-50"
-        }`}
-      >
-        Tümü
-        <ChevronRight
-          size={16}
-          className={!activeSlug ? "opacity-100" : "opacity-0"}
-        />
-      </Link>
-      {/* Category links */}
-      {categories.map((cat) => (
-        <Link
-          key={cat.id}
-          href={`/prefabrik-evler/${cat.slug}`}
-          onClick={onMobileClose}
-          className={`flex items-center justify-between px-5 py-4 rounded-2xl font-bold transition-all text-sm ${
-            activeSlug === cat.slug
-              ? "bg-primary text-white shadow-lg shadow-[#49202d]/20"
-              : "bg-transparent text-slate-400 hover:bg-slate-50"
-          }`}
-        >
-          {cat.name}
-          <ChevronRight
-            size={16}
-            className={activeSlug === cat.slug ? "opacity-100" : "opacity-0"}
-          />
-        </Link>
-      ))}
-    </nav>
-  </div>
-);
+  activeCategory,
+}: {
+  categories: DBCategory[];
+  activeCategory?: string;
+}) {
+  const filterItems = [
+    {
+      label: "Tümü",
+      href: "/prefabrik-evler",
+      active: !activeCategory,
+      icon: Home,
+    },
+    {
+      label: "Tek Katlı",
+      href: getCategoryHref(categories, "Tek Kat"),
+      active:
+        !!activeCategory &&
+        categories
+          .find((item) => item.slug === activeCategory)
+          ?.name.includes("Tek Kat") === true,
+      icon: Building2,
+    },
+    {
+      label: "Çift Katlı",
+      href: getCategoryHref(categories, "Çift Kat"),
+      active:
+        !!activeCategory &&
+        categories
+          .find((item) => item.slug === activeCategory)
+          ?.name.includes("Çift Kat") === true,
+      icon: Layers3,
+    },
+    {
+      label: "Çelik Ev",
+      href: getCategoryHref(categories, "Çelik"),
+      active:
+        !!activeCategory &&
+        categories
+          .find((item) => item.slug === activeCategory)
+          ?.name.includes("Çelik") === true,
+      icon: ShieldCheck,
+    },
+  ];
 
-// Sort Filter Component
-const SortFilter = ({ sortBy, onSelect }: SortFilterProps) => (
-  <div>
-    <div className="flex items-center gap-2 mb-8 text-[#49202d]">
-      <ArrowUpDown size={18} />
-      <span className="font-black text-xs uppercase tracking-widest">
-        Sıralama
-      </span>
-    </div>
-    <nav className="flex flex-col gap-2">
-      {SORT_OPTIONS.map((option) => (
-        <button
-          key={option.value}
-          onClick={() => onSelect(option?.value)}
-          className={`flex items-center justify-between px-5 py-4 rounded-2xl font-bold transition-all text-sm ${
-            sortBy === option.value
-              ? "bg-primary text-white shadow-lg shadow-[#49202d]/20"
-              : "bg-transparent text-slate-400 hover:bg-slate-50"
-          }`}
-        >
-          {option.label}
-          <ChevronRight
-            size={16}
-            className={sortBy === option.value ? "opacity-100" : "opacity-0"}
-          />
-        </button>
-      ))}
-    </nav>
-  </div>
-);
-
-interface InfoCardProps {
-  compact?: boolean;
-}
-
-const InfoCard = ({ compact = false }: InfoCardProps) => {
-  const router = useRouter();
-  const handle = () => router.push("/iletisim");
   return (
-    <div
-      onClick={handle}
-      className={`bg-primary ${compact ? "p-6" : "p-8"} rounded-[2${compact ? "" : ".5"}rem] text-white relative overflow-hidden group cursor-pointer`}
-    >
-      <div className="relative z-10">
-        <Info
-          className={`${compact ? "mb-3" : "mb-4"} opacity-50`}
-          size={compact ? 20 : 24}
-        />
-        <p
-          className={`font-bold ${compact ? "text-xs" : "text-sm"} leading-relaxed`}
-        >
-          Aradığınız ölçüde bir proje bulamadınız mı? Size özel çizim
-          yapabiliriz.
-        </p>
-        <button
-          className={`${compact ? "mt-4 text-[9px]" : "mt-6 text-[10px]"} font-black uppercase tracking-widest border-b border-white/30 pb-1 hover:border-white transition-all`}
-        >
-          Destek Al
-        </button>
-      </div>
-      <div
-        className={`absolute ${compact ? "-bottom-8 -right-8 w-24 h-24" : "-bottom-10 -right-10 w-32 h-32"} bg-white/5 rounded-full group-hover:scale-150 transition-transform duration-700`}
-      />
+    <div className="flex flex-wrap gap-3">
+      {filterItems.map((item) => {
+        const Icon = item.icon;
+
+        return (
+          <Link
+            key={item.label}
+            href={item.href}
+            className={`inline-flex items-center gap-2 rounded-full border px-4 py-3 text-xs font-black uppercase tracking-[0.14em] transition-all duration-300 ${
+              item.active
+                ? "border-primary bg-primary text-white shadow-[0_18px_40px_-28px_rgba(73,32,45,0.55)]"
+                : "border-slate-200 bg-white text-slate-700 hover:-translate-y-0.5 hover:border-slate-200 hover:shadow-[0_16px_38px_-30px_rgba(15,23,42,0.18)]"
+            }`}
+          >
+            <Icon className="h-4 w-4" />
+            {item.label}
+          </Link>
+        );
+      })}
     </div>
   );
-};
-
-interface DesktopSidebarProps {
-  activeSlug?: string;
-  sortBy: SortType;
-  categories: DBCategory[];
-  onSortSelect: (sort: SortType) => void;
 }
 
-// Desktop Sidebar Component
-const DesktopSidebar = ({
-  activeSlug,
-  sortBy,
-  categories,
-  onSortSelect,
-}: DesktopSidebarProps) => (
-  <aside className="hidden lg:block w-full lg:w-1/4 space-y-8">
-    <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
-      <CategoryFilter activeSlug={activeSlug} categories={categories} />
-    </div>
+function SeoFooter({
+  title,
+  description,
+  cards,
+}: {
+  title: string;
+  description: string;
+  cards: Array<{ title: string; text: string }>;
+}) {
+  return (
+    <section className="mt-14 rounded-[2rem] border border-slate-200 bg-[#f7f5ef] p-6 shadow-[0_24px_60px_-50px_rgba(15,23,42,0.22)] md:p-8 lg:p-10">
+      <div className="max-w-4xl">
+        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
+          CT PREFABRİK
+        </p>
+        <h2 className="mt-3 text-3xl font-black leading-tight tracking-tight text-slate-900 md:text-5xl">
+          {title}
+        </h2>
+        <p className="mt-5 text-base font-medium leading-8 text-slate-600">
+          {description}
+        </p>
+      </div>
 
-    <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-100">
-      <SortFilter sortBy={sortBy} onSelect={onSortSelect} />
-    </div>
-
-    <InfoCard />
-  </aside>
-);
-
-interface MobileFilterPanelProps {
-  isOpen: boolean;
-  onClose: () => void;
-  activeSlug?: string;
-  sortBy: SortType;
-  categories: DBCategory[];
-  onSortSelect: (sort: SortType) => void;
+      <div className="mt-8 grid gap-5 md:grid-cols-2">
+        {cards.map((card) => (
+          <article
+            key={card.title}
+            className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-[0_18px_40px_-34px_rgba(15,23,42,0.12)]"
+          >
+            <h3 className="text-xl font-black leading-snug tracking-tight text-slate-900 md:text-2xl">
+              {card.title}
+            </h3>
+            <p className="mt-4 text-base font-medium leading-8 text-slate-600">
+              {card.text}
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
 }
 
-// Mobile Filter Panel Component
-const MobileFilterPanel = ({
-  isOpen,
-  onClose,
-  activeSlug,
-  sortBy,
-  categories,
-  onSortSelect,
-}: MobileFilterPanelProps) => (
-  <AnimatePresence>
-    {isOpen && (
-      <>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={onClose}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
-        />
-
-        <motion.div
-          initial={{ x: "-100%" }}
-          animate={{ x: 0 }}
-          exit={{ x: "-100%" }}
-          transition={{ type: "spring", damping: 30, stiffness: 300 }}
-          className="fixed left-0 top-0 h-full w-[85%] max-w-sm bg-white z-50 lg:hidden overflow-y-auto"
-        >
-          <div className="p-6 space-y-6">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-200">
-              <h2 className="text-xl font-black text-slate-900">
-                Filtrele & Sırala
-              </h2>
-              <button
-                onClick={onClose}
-                className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition-colors"
-              >
-                <X size={20} />
-              </button>
-            </div>
-
-            <CategoryFilter
-              activeSlug={activeSlug}
-              categories={categories}
-              onMobileClose={onClose}
-            />
-
-            <SortFilter
-              sortBy={sortBy}
-              onSelect={(sort) => {
-                onSortSelect(sort);
-                onClose();
-              }}
-            />
-
-            <InfoCard compact />
-          </div>
-        </motion.div>
-      </>
-    )}
-  </AnimatePresence>
-);
-
-// Main ProductsClient component
 const ProductsClient = ({
   products,
   categories,
   activeCategory,
 }: ProductsClientProps) => {
-  const [sortBy, setSortBy] = useState<SortType>("default");
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<DBProduct | null>(
     null,
   );
 
-  // Get active category name for display
   const activeCategoryName = activeCategory
-    ? categories.find((c) => c.slug === activeCategory)?.name
+    ? categories.find((category) => category.slug === activeCategory)?.name
     : undefined;
 
-  const getSortedProducts = () => {
-    // Products are already filtered by category on the server side
-    let sorted = [...products];
-
-    if (sortBy === "price-asc") {
-      sorted = sorted.sort((a, b) => {
-        const priceA = !a.price || a.price === "null" ? 0 : Number(a.price);
-        const priceB = !b.price || b.price === "null" ? 0 : Number(b.price);
-        return priceA - priceB;
-      });
-    } else if (sortBy === "price-desc") {
-      sorted = sorted.sort((a, b) => {
-        const priceA = !a.price || a.price === "null" ? 0 : Number(a.price);
-        const priceB = !b.price || b.price === "null" ? 0 : Number(b.price);
-        return priceB - priceA;
-      });
-    }
-    return sorted;
-  };
+  const content = getPageContent(activeCategoryName);
+  const faqContent = getFaqContent(activeCategoryName);
+  const faqItems = getProductFaqsByCategory(activeCategoryName);
 
   return (
-    <div className="max-w-[1280px] w-full">
+    <div className="w-full max-w-[1280px]">
       <ProjectGalleryModal
         projects={
           selectedProduct
-            ? selectedProduct.images.map((image, i) => ({
-                id: i,
+            ? selectedProduct.images.map((image, index) => ({
+                id: index,
                 img: image.url,
                 title: image.alt,
               }))
@@ -342,68 +386,78 @@ const ProductsClient = ({
         onClose={() => setSelectedProduct(null)}
       />
 
-      <HeroSection />
+      <section className="pb-10 pt-14 lg:pb-12 lg:pt-18">
+        <div className="relative py-2">
+          <div className="mx-auto max-w-4xl text-center">
+            <p className="text-[10px] font-black uppercase tracking-[0.32em] text-secondary">
+              {content.eyebrow}
+            </p>
+            <h1 className="mt-3 text-2xl font-black leading-tight tracking-tight text-slate-900 md:text-4xl lg:text-5xl">
+              {content.title}
+            </h1>
+            <p className="mx-auto mt-3 max-w-3xl text-sm font-medium leading-7 text-slate-600">
+              {content.description}
+            </p>
 
-      <section className=" max-w-[1400px] pb-20">
-        <MobileFilterButton
-          onClick={() => setIsFilterOpen(true)}
-          activeCategoryName={activeCategoryName}
-        />
-
-        <div className="flex flex-col lg:flex-row gap-12">
-          <DesktopSidebar
-            activeSlug={activeCategory}
-            sortBy={sortBy}
-            categories={categories}
-            onSortSelect={(sort: SortType) => setSortBy(sort)}
-          />
-
-          <div className="flex-1">
-            {products.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-20 px-6 bg-white rounded-[2.5rem] border border-slate-100">
-                <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-6">
-                  <Filter size={32} className="text-slate-400" />
-                </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">
-                  Ürün Bulunamadı
-                </h3>
-                <p className="text-slate-500 text-center max-w-md mb-6">
-                  {activeCategoryName
-                    ? `"${activeCategoryName}" kategorisinde henüz ürün bulunmuyor.`
-                    : "Henüz ürün eklenmemiş."}
-                </p>
-                <Link
-                  href="/prefabrik-evler"
-                  className="px-6 py-3 bg-primary text-white rounded-xl font-bold text-sm hover:bg-primary/90 transition"
-                >
-                  Tüm Ürünleri Gör
-                </Link>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <AnimatePresence mode="popLayout">
-                  {getSortedProducts().map((product) => (
-                    <ProductCard
-                      key={product.id}
-                      product={product}
-                      fullscreenChange={() => setSelectedProduct(product)}
-                    />
-                  ))}
-                </AnimatePresence>
-              </div>
-            )}
+            <div className="mt-6 flex justify-center border-t border-slate-200 pt-5">
+              <TopCategoryFilters
+                categories={categories}
+                activeCategory={activeCategory}
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      <MobileFilterPanel
-        isOpen={isFilterOpen}
-        onClose={() => setIsFilterOpen(false)}
-        activeSlug={activeCategory}
-        sortBy={sortBy}
-        categories={categories}
-        onSortSelect={setSortBy}
-      />
+      <section className="pb-20">
+        {products.length === 0 ? (
+          <div className="flex flex-col items-center justify-center rounded-[2rem] border border-slate-200 bg-white px-6 py-20">
+            <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-slate-100">
+              <Filter size={32} className="text-slate-400" />
+            </div>
+            <h3 className="text-xl font-black text-slate-900">
+              Ürün Bulunamadı
+            </h3>
+            <p className="mt-2 max-w-md text-center text-slate-500">
+              {activeCategoryName
+                ? `"${activeCategoryName}" kategorisinde henüz ürün bulunmuyor.`
+                : "Henüz ürün eklenmemiş."}
+            </p>
+            <Link
+              href="/prefabrik-evler"
+              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-primary/90"
+            >
+              Tüm Ürünleri Gör
+              <ArrowUpRight className="h-4 w-4" />
+            </Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {products.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                fullscreenChange={() => setSelectedProduct(product)}
+              />
+            ))}
+          </div>
+        )}
+
+        <SeoFooter
+          title={content.seoTitle}
+          description={content.seoDescription}
+          cards={content.seoCards}
+        />
+
+        <div className="mt-14">
+          <SeoFaqSection
+            title={faqContent.title}
+            accent={faqContent.accent}
+            description={faqContent.description}
+            items={faqItems}
+          />
+        </div>
+      </section>
     </div>
   );
 };

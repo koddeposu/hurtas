@@ -127,7 +127,9 @@ export default async function BlogPostPage({
             src={post.imageUrl}
             alt={post.imageAlt || post.title}
             fill
-            priority
+            preload
+            fetchPriority="high"
+            loading="eager"
             className="object-cover"
           />
         </div>

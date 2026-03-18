@@ -87,10 +87,10 @@ export const ProductCard = ({
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.9 }}
-      className="group w-full flex flex-col justify-between text-left bg-white overflow-hidden rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 "
+      className="group flex w-full flex-col justify-between overflow-hidden rounded-[1.75rem] border border-slate-100 bg-white text-left shadow-sm transition-all duration-500 hover:shadow-2xl "
     >
       {/* SLIDER */}
-      <div className="relative rounded-tr-[2rem] rounded-tl-[2rem] overflow-hidden">
+      <div className="relative overflow-hidden rounded-tl-[1.75rem] rounded-tr-[1.75rem]">
         <div className="relative">
           <Carousel setApi={setApi} className="w-full">
             <CarouselContent>
@@ -110,7 +110,7 @@ export const ProductCard = ({
                     <button
                       onClick={fullscreenChange}
                       aria-label="Resmi Buyult"
-                      className="absolute bottom-4 right-4 text-white bg-black/30 rounded-md w-10 h-10  flex items-center justify-center cursor-pointer hover:scale-110 duration-200"
+                      className="absolute bottom-4 right-4 flex h-9 w-9 items-center justify-center rounded-md bg-black/30 text-white duration-200 hover:scale-110"
                     >
                       <Maximize2 size={20} className="text-white" />
                     </button>
@@ -161,18 +161,18 @@ export const ProductCard = ({
               </span>
             </div>
           )}
-          <div className="px-6 pt-4">
-            <h3 className="text-xl font-black text-slate-900 mb-2">
+          <div className="px-5 pt-4">
+            <h3 className="mb-1.5 text-lg font-black text-slate-900">
               {product.name}
             </h3>
 
             {product.price && (
-              <div className="flex items-center gap-2 mb-4">
-                <p className="text-lg font-bold text-secondary">
+              <div className="mb-3 flex items-center gap-2">
+                <p className="text-base font-bold text-secondary">
                   {formatPrice(product.price)} ₺
                 </p>
                 {product.oldPrice && (
-                  <p className="text-md font-bold text-slate-500 line-through">
+                  <p className="text-sm font-bold text-slate-500 line-through">
                     {formatPrice(product.oldPrice)} ₺
                   </p>
                 )}
@@ -180,7 +180,7 @@ export const ProductCard = ({
             )}
           </div>
           {/* CONTENT */}
-          <div className="px-6 pb-6">
+          <div className="px-5 pb-5">
             <div className="grid grid-cols-2 gap-4 border-t border-slate-50 pt-4">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-lg bg-slate-50 flex items-center justify-center text-[#49202d]">
@@ -201,7 +201,7 @@ export const ProductCard = ({
               </div>
             </div>
 
-            <div className="w-full mt-6 py-4 bg-slate-900 text-white rounded-2xl font-bold text-xs uppercase tracking-widest flex items-center justify-center gap-2 group-hover:bg-primary transition-all">
+            <div className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-900 py-3.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white transition-all group-hover:bg-primary">
               İncele <ArrowUpRight size={14} />
             </div>
           </div>

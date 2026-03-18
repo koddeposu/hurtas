@@ -1,6 +1,6 @@
 "use server";
 
-import { eq, asc, desc } from "drizzle-orm";
+import { eq, asc, desc, inArray } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db/drizzle";
 import { project, projectImage } from "@/db/schema";
@@ -26,23 +26,27 @@ export async function getProjects(activeOnly: boolean = false) {
 
 export async function getProjectsWithImages(activeOnly: boolean = false) {
   const projects = await getProjects(activeOnly);
+  if (projects.length === 0) return [];
 
-  const projectsWithImages = await Promise.all(
-    projects.map(async (p) => {
-      const images = await db
-        .select()
-        .from(projectImage)
-        .where(eq(projectImage.projectId, p.id))
-        .orderBy(asc(projectImage.order));
+  const projectIds = projects.map((p) => p.id);
+  const images = await db
+    .select()
+    .from(projectImage)
+    .where(inArray(projectImage.projectId, projectIds))
+    .orderBy(asc(projectImage.order));
 
-      return {
-        ...p,
-        images,
-      };
-    })
-  );
+  const imagesByProjectId = new Map<string, typeof images>();
 
-  return projectsWithImages;
+  for (const image of images) {
+    const existingImages = imagesByProjectId.get(image.projectId) ?? [];
+    existingImages.push(image);
+    imagesByProjectId.set(image.projectId, existingImages);
+  }
+
+  return projects.map((p) => ({
+    ...p,
+    images: imagesByProjectId.get(p.id) ?? [],
+  }));
 }
 
 export async function getProjectById(id: string) {

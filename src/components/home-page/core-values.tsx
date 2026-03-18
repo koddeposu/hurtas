@@ -1,4 +1,3 @@
-"use client";
 import { Hammer, Leaf, Users, Wrench } from "lucide-react";
 
 export const CoreValues = () => {
@@ -41,9 +40,9 @@ export const CoreValues = () => {
     <section className="font-[family-name:var(--font-poppins)]  overflow-hidden">
       <div className="container mx-auto max-w-7xl">
         {/* Minimalist Başlık */}
-        <div className="text-center mb-5 lg:mb-16 space-y-3">
+        <div className="mb-4 space-y-2 text-center lg:mb-12">
           <h2
-            className="text-2xl md:text-4xl font-black tracking-tighter"
+            className="text-xl font-black tracking-tighter md:text-3xl"
             style={{ color: "#165b39" }}
           >
             PREFABRİK EVLERDE DEĞERLERİMİZ{" "}
@@ -53,11 +52,11 @@ export const CoreValues = () => {
         </div>
 
         {/* Yan Yana Soft Box Yapısı */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {values.map((v, i) => (
             <div
               key={i}
-              className={` group relative bg-white border border-slate-200 p-4 lg:p-8 rounded-[1.5rem] lg:rounded-[2.5rem] transition-all duration-500 flex gap-4 lg:gap-0 lg:flex-col items-center lg:text-center ${v.borderColor}`}
+              className={` group relative bg-white border border-slate-200 p-4 lg:p-6 rounded-[1.5rem] lg:rounded-[2rem] transition-all duration-500 flex gap-4 lg:gap-0 lg:flex-col items-center lg:text-center ${v.borderColor}`}
             >
               {/* Arka Plan Glow (Sadece Hover'da Kendi Renginde) */}
               <div
@@ -67,17 +66,17 @@ export const CoreValues = () => {
 
               {/* İkon Alanı */}
               <div
-                className={`w-10 h-10 lg:w-20 lg:h-20 ${v.lightBg} rounded-[0.75rem] lg:rounded-[2rem] flex items-center justify-center lg:mb-6 transition-all duration-500 group-hover:scale-110 shadow-sm`}
+                className={`w-10 h-10 lg:w-16 lg:h-16 ${v.lightBg} rounded-[0.75rem] lg:rounded-[1.5rem] flex items-center justify-center lg:mb-5 transition-all duration-500 group-hover:scale-110 shadow-sm`}
                 style={{ color: v.brandColor }}
               >
                 {v.icon}
               </div>
               <div className="">
                 {/* Yazı Alanı */}
-                <h3 className="text-md lg:text-lg font-bold text-slate-900 mb-2 leading-tight">
+                <h3 className="text-sm lg:text-base font-bold text-slate-900 mb-1.5 leading-tight">
                   {v.title}
                 </h3>
-                <p className="text-[10px] lg:text-xs font-semibold uppercase tracking-widest text-slate-400">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-400">
                   {v.desc}
                 </p>
               </div>

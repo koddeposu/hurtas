@@ -96,56 +96,89 @@ export default async function ProductPage({ params }: Props) {
     notFound();
   }
 
+  const imageUrls = product.images.map((img) => img.url);
+  const pageUrl = `https://ctprefabrik.com/urun-detay/${slug}`;
+  const productDescription =
+    product.description ||
+    `${product.name} prefabrik ev modeli. ${
+      product.room ? `${product.room} oda planı, ` : ""
+    }${
+      product.floor ? `${product.floor} katlı yapı çözümü, ` : ""
+    }CT Prefabrik tarafından sunulan yaşam alanı modeli.`;
+
+  const additionalProperty = [
+    product.area && {
+      "@type": "PropertyValue",
+      name: "Metrekare",
+      value: product.area,
+      unitText: "m²",
+    },
+    product.room && {
+      "@type": "PropertyValue",
+      name: "Oda Sayısı",
+      value: product.room,
+    },
+    product.bath && {
+      "@type": "PropertyValue",
+      name: "Banyo Sayısı",
+      value: product.bath,
+    },
+    product.floor && {
+      "@type": "PropertyValue",
+      name: "Kat Sayısı",
+      value: product.floor,
+    },
+    product.height && {
+      "@type": "PropertyValue",
+      name: "Tavan Yüksekliği",
+      value: product.height,
+      unitText: "m",
+    },
+  ].filter(Boolean);
+
+  const offer = product.price
+    ? {
+        "@type": "Offer",
+        url: pageUrl,
+        priceCurrency: "TRY",
+        price: product.price,
+        availability: "https://schema.org/InStock",
+        itemCondition: "https://schema.org/NewCondition",
+        seller: {
+          "@type": "Organization",
+          name: "CT Prefabrik",
+          url: "https://ctprefabrik.com",
+        },
+      }
+    : undefined;
+
   // JSON-LD Schema Markup
   const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "@id": `${pageUrl}#product`,
+    url: pageUrl,
+    mainEntityOfPage: pageUrl,
     name: product.name,
-    image: product.images.map(img => img.url),
-    description: product.description || `${product.name} prefabrik ev modeli`,
+    sku: product.id,
+    mpn: product.slug,
+    image: imageUrls,
+    description: productDescription,
+    category: product.category?.name || "Prefabrik Ev",
     brand: {
-      '@type': 'Brand',
-      name: 'CT Prefabrik',
+      "@type": "Brand",
+      name: "CT Prefabrik",
     },
-    offers: {
-      '@type': 'Offer',
-      url: `https://ctprefabrik.com/urun-detay/${slug}`,
-      priceCurrency: 'TRY',
-      price: product.price || undefined,
-      priceValidUntil: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      availability: 'https://schema.org/InStock',
-      seller: {
-        '@type': 'Organization',
-        name: 'CT Prefabrik',
-      },
+    manufacturer: {
+      "@type": "Organization",
+      name: "CT Prefabrik",
+      url: "https://ctprefabrik.com",
     },
-    // Ek özellikler
-    additionalProperty: [
-      product.room && {
-        '@type': 'PropertyValue',
-        name: 'Oda Sayısı',
-        value: product.room,
-      },
-      product.bath && {
-        '@type': 'PropertyValue',
-        name: 'Banyo Sayısı',
-        value: product.bath,
-      },
-      product.floor && {
-        '@type': 'PropertyValue',
-        name: 'Kat Sayısı',
-        value: product.floor,
-      },
-      product.height && {
-        '@type': 'PropertyValue',
-        name: 'Yükseklik',
-        value: product.height,
-      },
-    ].filter(Boolean),
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: '4.8',
-      reviewCount: '127',
+    additionalProperty,
+    ...(offer ? { offers: offer } : {}),
+    potentialAction: {
+      "@type": "ViewAction",
+      target: pageUrl,
     },
   };
 

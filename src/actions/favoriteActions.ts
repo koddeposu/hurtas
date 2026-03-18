@@ -92,6 +92,49 @@ export async function getFavoritesForHomepage() {
   }
 }
 
+export async function getFavoritesPreviewForHomepage(limit?: number) {
+  try {
+    let query = db
+      .select({
+        favorite: favorite,
+        product: product,
+        category: category,
+      })
+      .from(favorite)
+      .innerJoin(product, eq(favorite.productId, product.id))
+      .leftJoin(category, eq(product.categoryId, category.id))
+      .where(eq(product.isActive, true))
+      .orderBy(asc(favorite.order));
+
+    if (limit) {
+      query = query.limit(limit) as typeof query;
+    }
+
+    const favorites = await query;
+
+    const favoritesWithImages = await Promise.all(
+      favorites.map(async (f) => {
+        const images = await db
+          .select()
+          .from(productImage)
+          .where(eq(productImage.productId, f.product.id))
+          .orderBy(asc(productImage.order))
+          .limit(1);
+
+        return {
+          ...f.product,
+          category: f.category,
+          image: images[0] ?? null,
+        };
+      }),
+    );
+
+    return favoritesWithImages;
+  } catch {
+    return [];
+  }
+}
+
 // Add a product to favorites
 export async function addFavorite(productId: string) {
   await requireAuth();

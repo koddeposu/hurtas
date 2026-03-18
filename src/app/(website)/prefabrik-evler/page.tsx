@@ -1,5 +1,6 @@
 import { getCategories } from "@/actions/categoryActions";
 import { getProductsWithImages } from "@/actions/productActions";
+import { PRODUCTS_FAQS } from "@/components/page-faq-content";
 import ProductsClient from "@/components/ProductClient";
 import { Metadata } from "next";
 import { Suspense } from "react";
@@ -51,17 +52,37 @@ const ProductsPage = async () => {
   ]);
 
   return (
-    <main className="flex items-center justify-center flex-col">
-      <Suspense
-        fallback={
-          <div className="h-screen flex items-center justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#49202d]"></div>
-          </div>
-        }
-      >
-        <ProductsClient products={products} categories={categories} />
-      </Suspense>
-    </main>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: PRODUCTS_FAQS.map((item) => ({
+              "@type": "Question",
+              name: item.question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: item.answer,
+              },
+            })),
+          }),
+        }}
+      />
+
+      <main className="flex items-center justify-center flex-col">
+        <Suspense
+          fallback={
+            <div className="h-screen flex items-center justify-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#49202d]"></div>
+            </div>
+          }
+        >
+          <ProductsClient products={products} categories={categories} />
+        </Suspense>
+      </main>
+    </>
   );
 };
 

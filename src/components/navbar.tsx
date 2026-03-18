@@ -1,26 +1,22 @@
 "use client";
+
 import Logo from "@/assets/logo.webp";
-import { handleCall } from "@/lib/analytics/googleAds";
-import { AnimatePresence, motion } from "framer-motion";
+import { handleCall, handleWhatsApp } from "@/lib/analytics/googleAds";
 import {
-  BookOpen,
-  Building2,
-  Check,
   ChevronDown,
-  Copy,
-  File,
-  FolderKanban,
-  Home,
-  Info,
+  Clock3,
+  FileText,
   Mail,
+  MapPin,
   Menu,
-  Phone,
+  PhoneCall,
+  Send,
   X,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Category {
   id: string;
@@ -32,381 +28,663 @@ interface NavbarProps {
   categories?: Category[];
 }
 
+const COMPANY = {
+  phoneDisplay: "+90 537 518 30 06",
+  phoneHref: "+905375183006",
+  email: "info@ctprefabrik.com",
+  address: "Soğucak, Kervan/1 Sokak No: 2/4, Söğütlü / Sakarya",
+  workHours: "Pzt - Cmt 09:00 - 18:00",
+};
+
+const CORPORATE_LINKS = [
+  { href: "/hakkimizda", label: "Hakkımızda" },
+  { href: "/iletisim", label: "İletişim" },
+];
+
+const NAV_LINKS = [
+  { href: "/projelerimiz", label: "Projelerimiz" },
+  { href: "/blog", label: "Blog" },
+];
+
 const Navbar = ({ categories = [] }: NavbarProps) => {
-  // Build menu items with dynamic categories
-  const menuItems = [
-    { href: "/", label: "Ana Sayfa", icon: Home },
-    { href: "/hakkimizda", label: "Hakkımızda", icon: Info },
-    {
-      href: "/prefabrik-evler",
-      label: "Prefabrik Evler",
-      icon: Building2,
-      subItems: categories.map((cat) => ({
-        href: `/prefabrik-evler/${cat.slug}`,
-        label: cat.name,
-      })),
-    },
-    { href: "/projelerimiz", label: "Projelerimiz", icon: FolderKanban },
-    { href: "/blog", label: "Blog", icon: BookOpen },
-    { href: "/iletisim", label: "İletişim", icon: Mail },
-  ];
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [desktopDropdownOpen, setDesktopDropdownOpen] = useState(false);
-  const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
-  const [copiedPhone, setCopiedPhone] = useState(false);
-  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileCorporateOpen, setIsMobileCorporateOpen] = useState(false);
+  const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(true);
+  const [isAtTop, setIsAtTop] = useState(true);
+  const [showCompactNavbar, setShowCompactNavbar] = useState(false);
+  const [mainNavbarHeight, setMainNavbarHeight] = useState(260);
   const pathname = usePathname();
+  const lastScrollYRef = useRef(0);
+  const isAtTopRef = useRef(true);
+  const showCompactNavbarRef = useRef(false);
+  const tickingRef = useRef(false);
+  const scrollFrameRef = useRef<number | null>(null);
+  const mainNavbarRef = useRef<HTMLElement | null>(null);
 
-  const isActive = (path: string) => pathname === path;
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
 
-  const copyToClipboard = async (text: string, type: "phone" | "email") => {
-    try {
-      await navigator.clipboard.writeText(text);
-      if (type === "phone") {
-        setCopiedPhone(true);
-        setTimeout(() => setCopiedPhone(false), 2000);
-      } else {
-        setCopiedEmail(true);
-        setTimeout(() => setCopiedEmail(false), 2000);
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    const updateMainNavbarHeight = () => {
+      if (!mainNavbarRef.current) return;
+
+      const nextHeight = Math.round(
+        mainNavbarRef.current.getBoundingClientRect().height,
+      );
+
+      if (nextHeight > 0) {
+        setMainNavbarHeight(nextHeight);
       }
-    } catch (err) {
-      console.error("Kopyalama başarısız:", err);
-    }
-  };
+    };
+
+    updateMainNavbarHeight();
+    window.addEventListener("resize", updateMainNavbarHeight);
+
+    return () => {
+      window.removeEventListener("resize", updateMainNavbarHeight);
+    };
+  }, []);
+
+  useEffect(() => {
+    const updateNavbarState = () => {
+      const currentY = window.scrollY;
+      const pageTop = currentY <= mainNavbarHeight;
+      const deltaY = currentY - lastScrollYRef.current;
+      const nextCompactState = pageTop
+        ? false
+        : deltaY < -6
+          ? true
+          : deltaY > 6
+            ? false
+            : showCompactNavbarRef.current;
+
+      if (pageTop !== isAtTopRef.current) {
+        isAtTopRef.current = pageTop;
+        setIsAtTop(pageTop);
+      }
+
+      if (nextCompactState !== showCompactNavbarRef.current) {
+        showCompactNavbarRef.current = nextCompactState;
+        setShowCompactNavbar(nextCompactState);
+      }
+
+      lastScrollYRef.current = currentY;
+      tickingRef.current = false;
+    };
+
+    const handleScroll = () => {
+      if (tickingRef.current) return;
+      tickingRef.current = true;
+      scrollFrameRef.current = window.requestAnimationFrame(updateNavbarState);
+    };
+
+    updateNavbarState();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (scrollFrameRef.current !== null) {
+        window.cancelAnimationFrame(scrollFrameRef.current);
+      }
+    };
+  }, [mainNavbarHeight]);
+
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+  const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
+  const showMainNavbar = isAtTop;
+  const showCompact = !isAtTop && showCompactNavbar;
+  const mobilePanelTopClass = "top-[5.25rem]";
+
+  const isExactActive = (href: string) => pathname === href;
+  const isSectionActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
+  const isCorporateActive = CORPORATE_LINKS.some((item) =>
+    isSectionActive(item.href),
+  );
+  const isProductsActive = pathname.startsWith("/prefabrik-evler");
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 flex justify-center p-4">
-        <motion.nav
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="bg-white shadow-lg rounded-xl flex items-center justify-between px-4 md:px-8 py-3 w-full max-w-7xl"
-        >
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link href="/">
-              <Image
-                src={Logo}
-                alt="ctprefabrik"
-                width={96}
-                height={56}
-                quality={60}
-                priority
-                className="h-8 md:h-10 w-auto"
-              />
-            </Link>
-          </div>
-
-          {/* Desktop Menu Items */}
-          <ul className="hidden lg:flex items-center gap-8 text-[15px] font-semibold text-slate-800">
-            {menuItems.map((item) => (
-              <li key={item.href} className="relative">
-                {item.subItems ? (
-                  <div
-                    onMouseEnter={() => setDesktopDropdownOpen(true)}
-                    onMouseLeave={() => setDesktopDropdownOpen(false)}
-                  >
-                    <button
-                      className={`hover:text-primary transition flex items-center gap-1 ${
-                        pathname.startsWith(item.href)
-                          ? "text-secondary"
-                          : "text-slate-800"
-                      }`}
-                    >
-                      {item.label}
-                      <ChevronDown
-                        size={16}
-                        className={`transition-transform ${
-                          desktopDropdownOpen ? "rotate-180" : ""
-                        }`}
-                      />
-                    </button>
-
-                    <AnimatePresence>
-                      {desktopDropdownOpen && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.2 }}
-                          className="absolute top-full left-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-slate-100 overflow-hidden"
-                        >
-                          {item.subItems.map((subItem) => (
-                            <Link
-                              key={subItem.href}
-                              href={subItem.href}
-                              className={`block px-5 py-3 hover:bg-slate-50 transition ${
-                                pathname === subItem.href
-                                  ? "text-secondary bg-slate-50"
-                                  : "text-slate-700"
-                              }`}
-                            >
-                              {subItem.label}
-                            </Link>
-                          ))}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                ) : (
-                  <Link
-                    href={item.href}
-                    className={`hover:text-primary transition ${
-                      isActive(item.href) ? "text-secondary" : "text-slate-800"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                )}
-              </li>
-            ))}
-          </ul>
-
-          {/* Desktop Action Buttons */}
-          <div className="hidden md:flex items-center gap-3">
-            <button
-              onClick={handleCall}
-              className="bg-[linear-gradient(10deg,#49202d,hsl(150.43deg_95%_22.16%))] text-white px-5 py-2.5 rounded-lg flex items-center gap-2 font-bold hover:opacity-90 transition"
-            >
-              <Phone size={18} fill="currentColor" /> Bizi Arayın
-            </button>
+      <header
+        ref={mainNavbarRef}
+        className={`fixed inset-x-0 top-0 z-50 hidden transition-transform duration-300 lg:block ${
+          showMainNavbar
+            ? "translate-y-0"
+            : "-translate-y-full pointer-events-none"
+        }`}
+      >
+        <div className="w-full bg-white shadow-[0_20px_40px_-28px_rgba(15,23,42,0.45)]">
+          <div className="flex min-h-11 flex-wrap items-center justify-center gap-x-6 gap-y-2 bg-slate-950 px-4 py-2 text-xs font-semibold text-slate-100 sm:justify-between sm:px-6">
             <Link
-              href="/katalog"
-              className="bg-slate-900 text-white px-5 py-2.5 rounded-lg flex items-center gap-2 font-bold hover:bg-slate-800 transition"
+              href="/iletisim"
+              prefetch={false}
+              className="inline-flex items-center gap-2 transition-colors hover:text-emerald-300"
             >
-              <File size={18} /> Katalog
+              <Send className="h-3.5 w-3.5 text-secondary" />
+              Ücretsiz Teklif Alın
+            </Link>
+            <a
+              href={`tel:${COMPANY.phoneHref}`}
+              className="inline-flex items-center gap-2 transition-colors hover:text-emerald-300"
+            >
+              <PhoneCall className="h-3.5 w-3.5 text-secondary" />
+              {COMPANY.phoneDisplay}
+            </a>
+            <a
+              href={`mailto:${COMPANY.email}`}
+              className="inline-flex items-center gap-2 transition-colors hover:text-emerald-300"
+            >
+              <Mail className="h-3.5 w-3.5 text-secondary" />
+              {COMPANY.email}
+            </a>
+            <Link
+              href="/iletisim"
+              prefetch={false}
+              className="inline-flex items-center gap-2 transition-colors hover:text-emerald-300"
+            >
+              <MapPin className="h-3.5 w-3.5 text-secondary" />
+              Söğütlü / Sakarya
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            aria-label="Menüyü aç"
-            onClick={() => setMobileMenuOpen(true)}
-            className="lg:hidden w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-800 hover:bg-slate-200 transition-colors"
-          >
-            <Menu size={22} />
-          </button>
-        </motion.nav>
-      </header>
-
-      {/* Mobile Menu Panel */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setMobileMenuOpen(false)}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] lg:hidden"
-            />
-
-            {/* Slide Panel */}
-            <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="fixed right-0 top-0 h-full w-[85%] max-w-sm bg-white z-[70] lg:hidden overflow-y-auto shadow-2xl"
+          <div className="grid gap-5 bg-white px-4 py-5 sm:px-6 xl:grid-cols-[auto_1fr_1fr_1fr] xl:items-center xl:gap-8">
+            <Link
+              href="/"
+              prefetch={false}
+              className="inline-flex items-center gap-4 self-start"
+              onClick={closeMobileMenu}
             >
-              <div className="p-6 space-y-8">
-                {/* Header */}
-                <div className="flex items-center justify-between pb-6 border-b border-slate-200">
-                  <Image
-                    src={Logo}
-                    alt="Sakarya Aktaş"
-                    width={150}
-                    height={150}
-                    className="h-8 w-auto"
-                  />
-                  <button
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-slate-200 transition-colors"
-                  >
-                    <X size={20} />
-                  </button>
-                </div>
+              <span className="inline-flex rounded-2xl border border-slate-200 bg-white p-2 shadow-sm">
+                <Image
+                  src={Logo}
+                  alt="CT Prefabrik"
+                  priority
+                  className="h-12 w-auto"
+                />
+              </span>
+              <span className="leading-tight">
+                <span className="block text-xl font-black uppercase tracking-tight text-primary">
+                  CT Prefabrik
+                </span>
+                <span className="block text-xs font-semibold uppercase tracking-[0.24em] text-secondary">
+                  Çelik Yapı ve Yaşam Alanları
+                </span>
+              </span>
+            </Link>
 
-                {/* Menu Items */}
-                <nav className="flex flex-col gap-2">
-                  {menuItems.map((item) => {
-                    const Icon = item.icon;
-                    const active = isActive(item.href);
+            <div className="grid gap-3 sm:grid-cols-2 xl:col-span-3 xl:grid-cols-3">
+              <div className="rounded-2xl border border-slate-200/80 px-4 py-3">
+                <p className="inline-flex items-center gap-2 text-lg font-bold text-slate-900">
+                  <PhoneCall className="h-4 w-4 text-secondary" />
+                  Telefon
+                </p>
+                <a
+                  href={`tel:${COMPANY.phoneHref}`}
+                  className="mt-1 block text-sm font-medium text-slate-600 transition-colors hover:text-primary"
+                >
+                  {COMPANY.phoneDisplay}
+                </a>
+              </div>
 
-                    if (item.subItems) {
-                      return (
-                        <div key={item.href}>
-                          <button
-                            onClick={() =>
-                              setMobileDropdownOpen(!mobileDropdownOpen)
-                            }
-                            className={`w-full flex items-center justify-between px-5 py-4 rounded-2xl font-bold transition-all text-sm ${
-                              pathname.startsWith(item.href)
-                                ? "bg-primary text-white shadow-lg shadow-primary/20"
-                                : "bg-transparent text-slate-600 hover:bg-slate-50"
-                            }`}
-                          >
-                            <div className="flex items-center gap-4">
-                              <Icon size={20} />
-                              {item.label}
-                            </div>
-                            <ChevronDown
-                              size={18}
-                              className={`transition-transform ${
-                                mobileDropdownOpen ? "rotate-180" : ""
-                              }`}
-                            />
-                          </button>
+              <div className="rounded-2xl border border-slate-200/80 px-4 py-3">
+                <p className="inline-flex items-center gap-2 text-lg font-bold text-slate-900">
+                  <MapPin className="h-4 w-4 text-secondary" />
+                  Lokasyon
+                </p>
+                <p className="mt-1 text-sm font-medium text-slate-600">
+                  {COMPANY.address}
+                </p>
+              </div>
 
-                          <AnimatePresence>
-                            {mobileDropdownOpen && (
-                              <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                transition={{ duration: 0.2 }}
-                                className="overflow-hidden"
-                              >
-                                <div className="ml-4 mt-2 space-y-1">
-                                  {item.subItems.map((subItem) => (
-                                    <Link
-                                      key={subItem.href}
-                                      href={subItem.href}
-                                      onClick={() => setMobileMenuOpen(false)}
-                                      className={`block px-5 py-3 rounded-xl text-sm font-semibold transition-all ${
-                                        pathname === subItem.href
-                                          ? "bg-secondary text-white"
-                                          : "text-slate-600 hover:bg-slate-50"
-                                      }`}
-                                    >
-                                      {subItem.label}
-                                    </Link>
-                                  ))}
-                                </div>
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        </div>
-                      );
-                    }
+              <div className="rounded-2xl border border-slate-200/80 px-4 py-3 sm:col-span-2 xl:col-span-1">
+                <p className="inline-flex items-center gap-2 text-lg font-bold text-slate-900">
+                  <Clock3 className="h-4 w-4 text-secondary" />
+                  Çalışma Saatleri
+                </p>
+                <p className="mt-1 text-sm font-medium text-slate-600">
+                  {COMPANY.workHours}
+                </p>
+              </div>
+            </div>
+          </div>
 
-                    return (
+          <div className="flex min-h-16 items-center gap-2 bg-secondary px-4 sm:px-6">
+            <nav className="hidden items-center gap-2 lg:flex">
+              <Link
+                href="/"
+                prefetch={false}
+                className={`rounded-full px-4 py-2 text-sm font-bold uppercase tracking-[0.03em] transition-colors ${
+                  isExactActive("/")
+                    ? "bg-white text-secondary"
+                    : "text-white hover:bg-white/15"
+                }`}
+              >
+                Ana Sayfa
+              </Link>
+
+              <div className="group relative">
+                <button
+                  type="button"
+                  className={`inline-flex items-center gap-1 rounded-full px-4 py-2 text-sm font-bold uppercase tracking-[0.03em] transition-colors ${
+                    isCorporateActive
+                      ? "bg-white text-secondary"
+                      : "text-white group-hover:bg-white/15"
+                  }`}
+                >
+                  Kurumsal
+                  <ChevronDown className="h-4 w-4" />
+                </button>
+                <div className="invisible absolute left-0 top-full z-50 w-56 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100">
+                  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl">
+                    {CORPORATE_LINKS.map((item) => (
                       <Link
                         key={item.href}
                         href={item.href}
-                        onClick={() => setMobileMenuOpen(false)}
-                        className={`flex items-center gap-4 px-5 py-4 rounded-2xl font-bold transition-all text-sm ${
-                          active
-                            ? "bg-primary text-white shadow-lg shadow-primary/20"
-                            : "bg-transparent text-slate-600 hover:bg-slate-50"
+                        prefetch={false}
+                        className={`block border-b border-slate-100 px-4 py-3 text-sm font-semibold transition-colors last:border-b-0 ${
+                          isSectionActive(item.href)
+                            ? "bg-slate-50 text-primary"
+                            : "text-slate-700 hover:bg-slate-50 hover:text-secondary"
                         }`}
                       >
-                        <Icon size={20} />
                         {item.label}
                       </Link>
-                    );
-                  })}
-                </nav>
-
-                {/* Action Buttons */}
-                <div className="space-y-3 pt-6 border-t border-slate-200">
-                  <button
-                    onClick={handleCall}
-                    className="bg-[linear-gradient(10deg,#49202d,hsl(150.43deg_95%_22.16%))] text-white px-5 py-4 rounded-xl flex items-center justify-center gap-2 font-bold hover:opacity-90 transition w-full"
-                  >
-                    <Phone size={18} fill="currentColor" />
-                    Bizi Arayın
-                  </button>
-                  <Link
-                    href="/katalog"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="bg-slate-900 text-white px-5 py-4 rounded-xl flex items-center justify-center gap-2 font-bold hover:bg-slate-800 transition w-full"
-                  >
-                    <File size={18} />
-                    Katalog
-                  </Link>
-                </div>
-
-                {/* Contact Info */}
-                <div className="pt-6 border-t border-slate-200">
-                  <div className="bg-slate-50 rounded-2xl p-4 space-y-3">
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                      İletişim
-                    </p>
-
-                    {/* Phone */}
-                    <div className="relative">
-                      <button
-                        onClick={() =>
-                          copyToClipboard("+905551234567", "phone")
-                        }
-                        className="w-full text-left text-sm font-semibold text-slate-800 hover:text-primary transition flex items-center justify-between group bg-white rounded-lg px-3 py-2"
-                      >
-                        <span>📞 +90 537 518 30 06</span>
-                        {copiedPhone ? (
-                          <Check size={16} className="text-secondary" />
-                        ) : (
-                          <Copy
-                            size={16}
-                            className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-400"
-                          />
-                        )}
-                      </button>
-
-                      <AnimatePresence>
-                        {copiedPhone && (
-                          <motion.div
-                            initial={{ opacity: 0, y: 5 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 5 }}
-                            className="absolute -top-8 left-1/2 -translate-x-1/2 bg-secondary text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg whitespace-nowrap"
-                          >
-                            ✓ Kopyalandı!
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-
-                    {/* Email */}
-                    <div className="relative">
-                      <button
-                        onClick={() =>
-                          copyToClipboard("info@sakaryaaktas.com", "email")
-                        }
-                        className="w-full text-left text-sm font-semibold text-slate-800 hover:text-primary transition flex items-center justify-between group bg-white rounded-lg px-3 py-2"
-                      >
-                        <span>📧 info@ctprefabrik.com</span>
-                        {copiedEmail ? (
-                          <Check size={16} className="text-secondary" />
-                        ) : (
-                          <Copy
-                            size={16}
-                            className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-400"
-                          />
-                        )}
-                      </button>
-
-                      <AnimatePresence>
-                        {copiedEmail && (
-                          <motion.div
-                            initial={{ opacity: 0, y: 5 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 5 }}
-                            className="absolute -top-8 left-1/2 -translate-x-1/2 bg-secondary text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg whitespace-nowrap"
-                          >
-                            ✓ Kopyalandı!
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+
+              <div className="group relative">
+                <button
+                  type="button"
+                  className={`inline-flex items-center gap-1 rounded-full px-4 py-2 text-sm font-bold uppercase tracking-[0.03em] transition-colors ${
+                    isProductsActive
+                      ? "bg-white text-secondary"
+                      : "text-white group-hover:bg-white/15"
+                  }`}
+                >
+                  Prefabrik Evler
+                  <ChevronDown className="h-4 w-4" />
+                </button>
+                <div className="invisible absolute left-0 top-full z-50 w-72 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100">
+                  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl">
+                    <Link
+                      href="/prefabrik-evler"
+                      prefetch={false}
+                      className={`block border-b border-slate-100 px-4 py-3 text-sm font-semibold transition-colors ${
+                        pathname === "/prefabrik-evler"
+                          ? "bg-slate-50 text-primary"
+                          : "text-slate-700 hover:bg-slate-50 hover:text-secondary"
+                      }`}
+                    >
+                      Tüm Modeller
+                    </Link>
+                    {categories.map((item) => (
+                      <Link
+                        key={item.id}
+                        href={`/prefabrik-evler/${item.slug}`}
+                        prefetch={false}
+                        className={`block border-b border-slate-100 px-4 py-3 text-sm font-semibold transition-colors last:border-b-0 ${
+                          pathname === `/prefabrik-evler/${item.slug}`
+                            ? "bg-slate-50 text-primary"
+                            : "text-slate-700 hover:bg-slate-50 hover:text-secondary"
+                        }`}
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {NAV_LINKS.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  prefetch={false}
+                  className={`rounded-full px-4 py-2 text-sm font-bold uppercase tracking-[0.03em] transition-colors ${
+                    isSectionActive(item.href)
+                      ? "bg-white text-secondary"
+                      : "text-white hover:bg-white/15"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </nav>
+
+            <div className="ml-auto flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleWhatsApp}
+                className="hidden rounded-xl bg-secondary px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#1d7048] sm:inline-flex"
+              >
+                WhatsApp
+              </button>
+              <Link
+                href="/katalog"
+                prefetch={false}
+                className="rounded-xl bg-slate-950 px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-slate-900"
+              >
+                Katalog
+              </Link>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <header
+        className={`fixed inset-x-0 top-0 z-50 translate-y-0 transition-transform duration-300 ${
+          showCompact
+            ? "lg:pointer-events-auto lg:translate-y-0"
+            : "lg:pointer-events-none lg:-translate-y-[140%]"
+        }`}
+      >
+        <div className="flex min-h-[5.25rem] w-full items-center gap-3 border-b border-slate-200 bg-white/95 px-4 shadow-[0_12px_34px_-26px_rgba(15,23,42,0.9)] backdrop-blur sm:px-6">
+          <Link
+            href="/"
+            prefetch={false}
+            className="inline-flex items-center gap-3"
+            onClick={closeMobileMenu}
+          >
+            <span className="inline-flex rounded-xl border border-slate-200 bg-white p-1.5">
+              <Image src={Logo} alt="CT Prefabrik" className="h-9 w-auto" />
+            </span>
+            <span className="text-sm font-black uppercase tracking-[0.08em] text-slate-900 sm:text-base">
+              CT <span className="text-primary">Prefabrik</span>
+            </span>
+          </Link>
+
+          <nav className="hidden items-center gap-2 lg:flex">
+            <Link
+              href="/"
+              prefetch={false}
+              className={`rounded-full px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] transition-colors ${
+                isExactActive("/")
+                  ? "bg-primary text-white"
+                  : "text-slate-700 hover:bg-primary/5 hover:text-primary"
+              }`}
+            >
+              Ana Sayfa
+            </Link>
+
+            <div className="group relative">
+              <button
+                type="button"
+                className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] transition-colors ${
+                  isCorporateActive
+                    ? "bg-primary text-white"
+                    : "text-slate-700 group-hover:bg-primary/5 group-hover:text-primary"
+                }`}
+              >
+                Kurumsal
+                <ChevronDown className="h-3.5 w-3.5" />
+              </button>
+              <div className="invisible absolute left-0 top-full z-50 w-56 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100">
+                <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
+                  {CORPORATE_LINKS.map((item) => (
+                    <Link
+                      key={`compact-corporate-${item.href}`}
+                      href={item.href}
+                      prefetch={false}
+                      className={`block border-b border-slate-100 px-4 py-3 text-sm font-semibold transition-colors last:border-b-0 ${
+                        isSectionActive(item.href)
+                          ? "bg-slate-50 text-primary"
+                          : "text-slate-700 hover:bg-slate-50 hover:text-secondary"
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="group relative">
+              <button
+                type="button"
+                className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] transition-colors ${
+                  isProductsActive
+                    ? "bg-primary text-white"
+                    : "text-slate-700 group-hover:bg-primary/5 group-hover:text-primary"
+                }`}
+              >
+                Prefabrik Evler
+                <ChevronDown className="h-3.5 w-3.5" />
+              </button>
+              <div className="invisible absolute left-0 top-full z-50 w-72 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100">
+                <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
+                  <Link
+                    href="/prefabrik-evler"
+                    prefetch={false}
+                    className={`block border-b border-slate-100 px-4 py-3 text-sm font-semibold transition-colors ${
+                      pathname === "/prefabrik-evler"
+                        ? "bg-slate-50 text-primary"
+                        : "text-slate-700 hover:bg-slate-50 hover:text-secondary"
+                    }`}
+                  >
+                    Tüm Modeller
+                  </Link>
+                  {categories.map((item) => (
+                    <Link
+                      key={`compact-category-${item.id}`}
+                      href={`/prefabrik-evler/${item.slug}`}
+                      prefetch={false}
+                      className={`block border-b border-slate-100 px-4 py-3 text-sm font-semibold transition-colors last:border-b-0 ${
+                        pathname === `/prefabrik-evler/${item.slug}`
+                          ? "bg-slate-50 text-primary"
+                          : "text-slate-700 hover:bg-slate-50 hover:text-secondary"
+                      }`}
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {NAV_LINKS.map((item) => (
+              <Link
+                key={`compact-nav-${item.href}`}
+                href={item.href}
+                prefetch={false}
+                className={`rounded-full px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] transition-colors ${
+                  isSectionActive(item.href)
+                    ? "bg-primary text-white"
+                    : "text-slate-700 hover:bg-primary/5 hover:text-primary"
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+
+          <div className="ml-auto flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleCall}
+              className="hidden rounded-xl bg-secondary px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] text-white transition-colors hover:bg-[#1d7048] lg:inline-flex"
+            >
+              Ara
+            </button>
+            <button
+              type="button"
+              aria-label={isMobileMenuOpen ? "Menüyü kapat" : "Menüyü aç"}
+              onClick={toggleMobileMenu}
+              className="rounded-xl border border-slate-300 p-2 text-slate-700 lg:hidden"
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {isMobileMenuOpen ? (
+        <div className="fixed inset-0 z-[60] lg:hidden">
+          <button
+            type="button"
+            aria-label="Menüyü kapat"
+            onClick={closeMobileMenu}
+            className="absolute inset-0 bg-black/45"
+          />
+
+          <div
+            className={`absolute right-3 w-[calc(100%-1.5rem)] max-w-sm overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl sm:right-5 ${mobilePanelTopClass}`}
+          >
+            <div className="grid">
+              <Link
+                href="/"
+                prefetch={false}
+                onClick={closeMobileMenu}
+                className={`border-b border-slate-100 px-4 py-3 text-sm font-extrabold uppercase tracking-[0.1em] ${
+                  isExactActive("/") ? "text-primary" : "text-slate-800"
+                }`}
+              >
+                Ana Sayfa
+              </Link>
+
+              <div className="border-b border-slate-100 px-4 py-3">
+                <button
+                  type="button"
+                  onClick={() => setIsMobileCorporateOpen((prev) => !prev)}
+                  className="mb-2 inline-flex w-full items-center justify-between text-xs font-bold uppercase tracking-[0.18em] text-slate-500"
+                >
+                  Kurumsal
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${
+                      isMobileCorporateOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                {isMobileCorporateOpen ? (
+                  <div className="grid gap-1.5">
+                    {CORPORATE_LINKS.map((item) => (
+                      <Link
+                        key={`mobile-corporate-${item.href}`}
+                        href={item.href}
+                        prefetch={false}
+                        onClick={closeMobileMenu}
+                        className={`text-sm font-semibold transition-colors ${
+                          isSectionActive(item.href)
+                            ? "text-primary"
+                            : "text-slate-700 hover:text-secondary"
+                        }`}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+
+              <div className="border-b border-slate-100 px-4 py-3">
+                <button
+                  type="button"
+                  onClick={() => setIsMobileCategoriesOpen((prev) => !prev)}
+                  className="mb-2 inline-flex w-full items-center justify-between text-xs font-bold uppercase tracking-[0.18em] text-slate-500"
+                >
+                  Prefabrik Evler
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${
+                      isMobileCategoriesOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+                {isMobileCategoriesOpen ? (
+                  <div className="grid gap-1.5">
+                    <Link
+                      href="/prefabrik-evler"
+                      prefetch={false}
+                      onClick={closeMobileMenu}
+                      className={`text-sm font-semibold transition-colors ${
+                        pathname === "/prefabrik-evler"
+                          ? "text-primary"
+                          : "text-slate-700 hover:text-secondary"
+                      }`}
+                    >
+                      Tüm Modeller
+                    </Link>
+                    {categories.map((item) => (
+                      <Link
+                        key={`mobile-category-${item.id}`}
+                        href={`/prefabrik-evler/${item.slug}`}
+                        prefetch={false}
+                        onClick={closeMobileMenu}
+                        className={`text-sm font-semibold transition-colors ${
+                          pathname === `/prefabrik-evler/${item.slug}`
+                            ? "text-primary"
+                            : "text-slate-700 hover:text-secondary"
+                        }`}
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+
+              {NAV_LINKS.map((item) => (
+                <Link
+                  key={`mobile-nav-${item.href}`}
+                  href={item.href}
+                  prefetch={false}
+                  onClick={closeMobileMenu}
+                  className={`border-b border-slate-100 px-4 py-3 text-sm font-semibold transition-colors last:border-b-0 ${
+                    isSectionActive(item.href)
+                      ? "text-primary"
+                      : "text-slate-700 hover:bg-slate-50"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+
+              <Link
+                href="/katalog"
+                prefetch={false}
+                onClick={closeMobileMenu}
+                className="border-t border-slate-100 px-4 py-3 text-center text-sm font-bold text-slate-900 transition-colors hover:bg-slate-50"
+              >
+                <span className="inline-flex items-center gap-2">
+                  <FileText className="h-4 w-4" />
+                  Katalog
+                </span>
+              </Link>
+
+              <button
+                type="button"
+                onClick={() => {
+                  closeMobileMenu();
+                  handleWhatsApp();
+                }}
+                className="bg-secondary px-4 py-3 text-center text-sm font-bold text-white transition-colors hover:bg-[#1d7048]"
+              >
+                WhatsApp ile Yaz
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  closeMobileMenu();
+                  handleCall();
+                }}
+                className="bg-slate-900 px-4 py-3 text-center text-sm font-bold text-white transition-colors hover:bg-slate-800"
+              >
+                Hemen Ara
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 };

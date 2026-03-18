@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
@@ -21,6 +21,7 @@ export default function ClientLayout({
   categories = [],
 }: ClientLayoutProps) {
   const pathname = usePathname();
+  const isHomepage = pathname === "/";
 
   const hideLayout = pathname.startsWith("/katalog");
   const hideLayout2 = pathname.startsWith("/iletisim");
@@ -30,8 +31,14 @@ export default function ClientLayout({
       <div className="fixed w-full h-screen -z-10 bg-primary/10 opacity-10 blur-in-sm " />
       <Navbar categories={categories} />
 
-      <main className="relative overflow-hidden">
-        <div className={`w-full ${hideLayout && "h-screen"} ${!hideLayout2 && "p-5"}`}>
+      <main
+        className={`relative overflow-hidden ${
+          isHomepage ? "" : "pt-16 lg:pt-[13rem]"
+        }`}
+      >
+        <div
+          className={`w-full ${hideLayout && "h-screen"} ${!hideLayout2 && "px-5 pb-5"}`}
+        >
           {children}
         </div>
       </main>

@@ -1,11 +1,42 @@
-import { getFavoritesForHomepage } from "@/actions/favoriteActions";
-import { LeadForm } from "@/components/form";
-import { BestSellingHouses } from "@/components/home-page/best-selling-houses";
-import { CoreValues } from "@/components/home-page/core-values";
+import { getCategories } from "@/actions/categoryActions";
 import { Features } from "@/components/home-page/features";
 import { Hero4 } from "@/components/home-page/hero";
-import { WhoWeAre } from "@/components/home-page/who-we-are";
+import { HomepageFaq, HOMEPAGE_FAQS } from "@/components/home-page/homepage-faq";
+import { HomepageBlogSection } from "@/components/home-page/homepage-blog-section";
+import { HomepageFavoritesSection } from "@/components/home-page/homepage-favorites-section";
+import { HomepageProductSliders } from "@/components/home-page/homepage-product-sliders";
+import { ProductCategoryCards } from "@/components/home-page/product-category-cards";
+import { SectionSkeleton } from "@/components/home-page/section-skeleton";
+import { ServiceRegions } from "@/components/home-page/service-regions";
+import { TrustMetrics } from "@/components/home-page/trust-metrics";
 import { Metadata } from "next";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+
+const DeferredLeadForm = dynamic(
+  () => import("@/components/form").then((mod) => mod.LeadForm),
+  {
+    loading: () => <SectionSkeleton heightClassName="h-[420px]" />,
+  },
+);
+
+const DeferredBrandStory = dynamic(
+  () =>
+    import("@/components/home-page/brand-story").then((mod) => mod.BrandStory),
+  {
+    loading: () => <SectionSkeleton heightClassName="h-[420px]" />,
+  },
+);
+
+const DeferredProcessJourney = dynamic(
+  () =>
+    import("@/components/home-page/process-journey").then(
+      (mod) => mod.ProcessJourney,
+    ),
+  {
+    loading: () => <SectionSkeleton heightClassName="h-[520px]" />,
+  },
+);
 
 export const metadata: Metadata = {
   title: "CT Prefabrik | Türkiye'nin En Kaliteli Prefabrik Ev Üreticisi",
@@ -59,11 +90,20 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const favorites = await getFavoritesForHomepage();
+  const categories = await getCategories();
+
+  const getCategoryHref = (matcher: string) => {
+    const matchedCategory = categories.find((category) =>
+      category.name.includes(matcher),
+    );
+
+    return matchedCategory
+      ? `/prefabrik-evler/${matchedCategory.slug}`
+      : "/prefabrik-evler";
+  };
 
   return (
     <>
-      {/* Website Schema - Ana Sayfa için */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -82,7 +122,6 @@ export default async function Page() {
         }}
       />
 
-      {/* Organization Schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -114,7 +153,6 @@ export default async function Page() {
         }}
       />
 
-      {/* Local Business Schema */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -154,87 +192,109 @@ export default async function Page() {
         }}
       />
 
-      {/* FAQ Schema - Sık Sorulan Sorular varsa */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "Prefabrik ev fiyatları ne kadar?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "CT Prefabrik ev fiyatları model ve özelliklerine göre değişmektedir. Detaylı fiyat bilgisi için ürünlerimizi inceleyebilir veya bizimle iletişime geçebilirsiniz.",
-                },
+            mainEntity: HOMEPAGE_FAQS.map((item) => ({
+              "@type": "Question",
+              name: item.question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: item.answer,
               },
-              {
-                "@type": "Question",
-                name: "Prefabrik ev ne kadar sürede teslim edilir?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "CT Prefabrik evlerimiz hızlı üretim ve montaj süreciyle 30-45 gün içerisinde teslim edilmektedir.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Prefabrik evler depreme dayanıklı mı?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Evet, CT Prefabrik evler TSE standartlarında üretilmekte ve deprem yönetmeliklerine uygun olarak tasarlanmaktadır.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Prefabrik ev garantisi var mı?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "CT Prefabrik tüm ürünlerinde 10 yıl resmi garanti sunmaktadır.",
-                },
-              },
-            ],
+            })),
           }),
         }}
       />
 
-      <main className="min-h-screen space-y-5 lg:space-y-24">
-        <section className="flex justify-center">
-          <div className="max-w-[1280px] w-full mt-20">
+      <main className="min-h-screen space-y-4 lg:space-y-18">
+        <section className="-mx-5">
+          <div className="w-full">
             <Hero4 />
           </div>
         </section>
 
-        <section className="flex justify-center py-5 lg:py-20">
+        <section className="flex justify-center mt-15">
           <div className="max-w-[1280px] w-full">
-            <CoreValues />
+            <div className="mb-4 md:mb-5">
+              <TrustMetrics />
+            </div>
+            <ProductCategoryCards
+              items={[
+                {
+                  title: "Tek Katlı Prefabrik Ev",
+                  description:
+                    "Farklı metrekare ve oda dağılımlarına sahip tek katlı modelleri inceleyin.",
+                  href: getCategoryHref("Tek Kat"),
+                  icon: "single",
+                },
+                {
+                  title: "Dubleks Prefabrik Ev (Çift Katlı)",
+                  description:
+                    "Geniş yaşam ihtiyaçları için çift katlı prefabrik ev seçeneklerine geçin.",
+                  href: getCategoryHref("Çift Kat"),
+                  icon: "duplex",
+                },
+                {
+                  title: "Çelik Ev",
+                  description:
+                    "Dayanıklı tasarım diliyle hazırlanan çelik ev ürünlerimizi keşfedin.",
+                  href: getCategoryHref("Çelik"),
+                  icon: "steel",
+                },
+              ]}
+            />
           </div>
         </section>
 
-        <section className="flex justify-center py-16 lg:py-0">
+        <Suspense fallback={<SectionSkeleton heightClassName="h-[520px]" />}>
+          <HomepageProductSliders categories={categories} />
+        </Suspense>
+
+        <section className="flex justify-center py-6 lg:py-10">
           <div className="max-w-[1280px] w-full">
-            <WhoWeAre />
+            <DeferredBrandStory />
           </div>
         </section>
 
-        <section className="flex justify-center py-6 lg:py-30">
+        <section className="flex justify-center py-4 lg:py-12">
+          <div className="max-w-[1280px] w-full">
+            <ServiceRegions />
+          </div>
+        </section>
+
+        <section className="flex justify-center py-8 lg:py-4">
+          <div className="max-w-[1280px] w-full">
+            <DeferredProcessJourney />
+          </div>
+        </section>
+
+        <section className="flex justify-center py-5 lg:py-18">
           <div className="max-w-[1280px] w-full">
             <Features />
           </div>
         </section>
 
-        {favorites.length > 0 && (
-          <section className="flex justify-center pt-10 md:pt-0 lg:pg-0">
-            <div className="max-w-[1280px] w-full">
-              <BestSellingHouses favorites={favorites} />
-            </div>
-          </section>
-        )}
+        <Suspense fallback={<SectionSkeleton heightClassName="h-[560px]" />}>
+          <HomepageFavoritesSection />
+        </Suspense>
 
-        <section className="flex justify-center pt-20 lg:mt-0">
+        <Suspense fallback={<SectionSkeleton heightClassName="h-[520px]" />}>
+          <HomepageBlogSection />
+        </Suspense>
+
+        <section className="flex justify-center pt-14 lg:mt-0">
           <div className="max-w-[1280px] w-full">
-            <LeadForm />
+            <DeferredLeadForm />
+          </div>
+        </section>
+
+        <section className="flex justify-center py-8 lg:py-12">
+          <div className="max-w-[1280px] w-full">
+            <HomepageFaq />
           </div>
         </section>
       </main>

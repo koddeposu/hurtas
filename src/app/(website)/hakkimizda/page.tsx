@@ -1,26 +1,34 @@
 import AboutPageClient from "@/components/AboutPageClient";
+import { ABOUT_FAQS } from "@/components/page-faq-content";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Hakkımızda | CT Prefabrik - Türkiye'nin Öncü Prefabrik Ev Üreticisi",
+  title:
+    "Hakkımızda | CT Prefabrik Prefabrik Ev, Çelik Ev ve Anahtar Teslim Yapı Çözümleri",
   description:
-    "CT Prefabrik olarak 15 yıldır kaliteli, güvenli ve uygun fiyatlı prefabrik ev üretiyoruz. TSE onaylı malzemeler, profesyonel ekip ve müşteri memnuniyeti odaklı hizmet anlayışımızla yanınızdayız.",
+    "CT Prefabrik hakkında detaylı bilgi alın. Prefabrik ev modelleri, prefabrik ev fiyatları, anahtar teslim prefabrik ev, çelik konstrüksiyon ev, dubleks prefabrik ev, prefabrik villa ve konteyner ev fiyatları odaklı çözümlerimizle Sakarya'dan Türkiye geneline hizmet veriyoruz.",
   keywords: [
     "CT Prefabrik hakkında",
     "ctprefabrik hakkında",
     "prefabrik ev üreticisi",
     "prefabrik firma",
-    "güvenilir prefabrik",
-    "TSE onaylı prefabrik",
-    "CT Prefabrik referanslar",
-    "ctprefabrik referanslar",
-    "prefabrik şirket",
+    "güvenilir prefabrik firma",
+    "prefabrik ev modelleri",
+    "prefabrik ev fiyatları",
+    "anahtar teslim prefabrik ev",
+    "çelik konstrüksiyon ev",
+    "dubleks prefabrik ev",
+    "prefabrik villa",
+    "konteyner ev fiyatları",
+    "Sakarya prefabrik ev",
+    "çelik ev firması",
     "kaliteli prefabrik ev",
   ],
   openGraph: {
-    title: "Hakkımızda | CT Prefabrik",
+    title:
+      "Hakkımızda | CT Prefabrik Prefabrik Ev ve Çelik Ev Uzmanlığı",
     description:
-      "CT Prefabrik olarak 14 yıldır kaliteli ve güvenli prefabrik ev üretiyoruz.",
+      "CT Prefabrik'in prefabrik ev modelleri, çelik konstrüksiyon ev çözümleri, anahtar teslim yapı yaklaşımı ve Sakarya merkezli hizmet gücü hakkında bilgi alın.",
     url: "https://ctprefabrik.com/hakkimizda",
     siteName: "CT Prefabrik",
     images: [
@@ -28,7 +36,7 @@ export const metadata: Metadata = {
         url: "/og-about.jpg",
         width: 1200,
         height: 630,
-        alt: "CT Prefabrik Hakkımızda",
+        alt: "CT Prefabrik hakkında prefabrik ev ve çelik ev çözümleri",
       },
     ],
     locale: "tr_TR",
@@ -36,9 +44,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hakkımızda | CT Prefabrik",
+    title: "Hakkımızda | CT Prefabrik Prefabrik Ev ve Çelik Ev Çözümleri",
     description:
-      "CT Prefabrik olarak 14 yıldır kaliteli ve güvenli prefabrik ev üretiyoruz.",
+      "Prefabrik ev fiyatları, anahtar teslim prefabrik ev, çelik ev ve prefabrik villa çözümlerinde CT Prefabrik yaklaşımını inceleyin.",
     images: ["/og-about.jpg"],
   },
   alternates: {
@@ -62,13 +70,14 @@ export default function AboutPage() {
             "@type": "AboutPage",
             name: "Hakkımızda",
             description:
-              "CT Prefabrik hakkında bilgiler, misyon, vizyon ve değerlerimiz",
+              "CT Prefabrik hakkında bilgiler, prefabrik ev modelleri, çelik ev çözümleri ve anahtar teslim yapı yaklaşımımız",
             url: "https://ctprefabrik.com/hakkimizda",
             mainEntity: {
               "@type": "Organization",
               name: "CT Prefabrik",
               foundingDate: "2010",
-              description: "Türkiye'nin öncü prefabrik ev üreticisi",
+              description:
+                "Prefabrik ev, çelik konstrüksiyon ev, dubleks prefabrik ev, prefabrik villa ve konteyner yapı çözümleri sunan üretici firma",
               url: "https://ctprefabrik.com",
               logo: "https://ctprefabrik.com/logo.png",
               address: {
@@ -120,48 +129,14 @@ export default function AboutPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "FAQPage",
-            mainEntity: [
-              {
-                "@type": "Question",
-                name: "CT Prefabrik kaç yıldır faaliyet gösteriyor?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "CT Prefabrik 2010 yılından bu yana 15 yıldır prefabrik ev sektöründe hizmet vermektedir.",
-                },
+            mainEntity: ABOUT_FAQS.map((item) => ({
+              "@type": "Question",
+              name: item.question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: item.answer,
               },
-              {
-                "@type": "Question",
-                name: "CT Prefabrik hangi bölgelerde hizmet veriyor?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "CT Prefabrik Türkiye'nin tüm illerine prefabrik ev üretimi ve montaj hizmeti sunmaktadır.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "CT Prefabrik'in kalite belgeleri var mı?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "Evet, CT Prefabrik TSE belgeli olup, tüm ürünlerimiz TSE standartlarında üretilmektedir. Ayrıca ISO kalite yönetim belgelerimiz mevcuttur.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Kaç adet projeye imza attınız?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "CT Prefabrik olarak bugüne kadar 5000+ başarılı projeye imza atmış bulunmaktayız.",
-                },
-              },
-              {
-                "@type": "Question",
-                name: "Müşteri memnuniyeti oranınız nedir?",
-                acceptedAnswer: {
-                  "@type": "Answer",
-                  text: "CT Prefabrik olarak %98 müşteri memnuniyeti oranıyla sektörde öncü konumdayız.",
-                },
-              },
-            ],
+            })),
           }),
         }}
       />
@@ -176,7 +151,8 @@ export default function AboutPage() {
             name: "CT Prefabrik",
             url: "https://ctprefabrik.com",
             logo: "https://ctprefabrik.com/logo.png",
-            description: "Türkiye'nin öncü prefabrik ev üreticisi",
+            description:
+              "Prefabrik ev modelleri, prefabrik ev fiyatları, anahtar teslim prefabrik ev, çelik konstrüksiyon ev ve prefabrik villa çözümleri sunan üretici marka",
             foundingDate: "2010",
             numberOfEmployees: {
               "@type": "QuantitativeValue",

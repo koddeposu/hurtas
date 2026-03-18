@@ -1,15 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
-import {
-  CheckCircle,
-  CheckCircle2,
-  Home,
-  MapPin,
-  Play,
-  Ruler,
-} from "lucide-react";
-import Image from "next/image";
+import { PROJECTS_FAQS } from "@/components/page-faq-content";
+import { SeoFaqSection } from "@/components/seo-faq-section";
 import {
   Carousel,
   CarouselApi,
@@ -17,6 +9,16 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { Modal } from "@/components/ui/modal";
+import {
+  CheckCircle,
+  CheckCircle2,
+  Images,
+  Home,
+  MapPin,
+  Play,
+  Ruler,
+} from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 interface ImageType {
@@ -44,18 +46,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
   >(null);
   const selectedProject =
     selectedProjectIndex !== null ? projects[selectedProjectIndex] : null;
-
-  const [api, setApi] = useState<CarouselApi | null>(null);
-  const [current, setCurrent] = useState(0);
-
-  useEffect(() => {
-    if (!api) return;
-
-    setCurrent(api.selectedScrollSnap());
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap());
-    });
-  }, [api]);
+  const heroImage = projects[0]?.img[0];
 
   return (
     <main className="bg-white min-h-screen flex items-center justify-center flex-col w-full">
@@ -81,143 +72,128 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
         />
       )}
 
-      <section className="w-full bg-[#fdfdfd] mb-28">
-        <div className="absolute -top-24 -right-24 w-[600px] h-[600px] bg-primary/[0.03] rounded-full blur-3xl pointer-events-none  min-h-[90vh]" />
-        <div
-          className="absolute bottom-0 left-0 w-full h-full opacity-[0.02] pointer-events-none  min-h-[90vh]"
-          style={{
-            backgroundImage:
-              "linear-gradient(#49202d 1px, transparent 1px), linear-gradient(90deg, #49202d 1px, transparent 1px)",
-            backgroundSize: "60px 60px",
-          }}
-        />
-      </section>
-
-      <section className="relative flex items-center w-full max-w-[1280px]">
-        <div className="container relative z-10 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-            <div className="lg:col-span-6 space-y-8 relative z-20">
-              <motion.div
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8 }}
-              >
+      <section className="relative mb-12 w-full overflow-hidden bg-[#f8f7f3]">
+        <div className="absolute inset-0 opacity-[0.03] pointer-events-none [background-image:linear-gradient(#49202d_1px,transparent_1px),linear-gradient(90deg,#49202d_1px,transparent_1px)] [background-size:56px_56px]" />
+        <div className="mx-auto flex w-full max-w-[1280px] items-center px-4 py-10 sm:px-6 lg:grid lg:grid-cols-12 lg:gap-14 lg:px-8 lg:py-14">
+          <div className="relative z-10 space-y-7 lg:col-span-6">
+            <div>
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 rounded-full mb-6">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
-                  </span>
+                  <span className="inline-flex h-2 w-2 rounded-full bg-secondary" />
                   <span className="text-emerald-700 text-xs font-bold uppercase tracking-widest">
                     30 GÜNDE ANAHTAR TESLİM
                   </span>
                 </div>
 
-                <h1 className="text-5xl md:text-7xl font-black text-slate-900 leading-[1.05] tracking-tight">
+                <h1 className="text-4xl font-black leading-[1.05] tracking-tight text-slate-900 md:text-6xl">
                   Sınırları Aşan <br />
                   <span className="text-secondary/90">Yapılar</span>
                 </h1>
-                <p className="mt-6 text-lg text-slate-500 font-medium max-w-lg leading-relaxed">
+                <p className="mt-5 max-w-xl text-base font-medium leading-8 text-slate-500 md:text-lg">
                   Sadece bir ev değil, doğayla barışık, yüksek mühendislik
                   içeren ve estetiği merkeze alan modüler yaşamlar kuruyoruz.
                 </p>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.8 }}
-                className="flex flex-wrap gap-4"
-              >
-                <button
-                  onClick={() => setModal(true)}
-                  className="cursor-pointer px-8 py-4 bg-white text-slate-900 border border-slate-100 rounded-[1.5rem] font-bold text-sm flex items-center gap-3 hover:bg-slate-50 transition-all shadow-sm"
-                >
-                  <div className="w-8 h-8 bg-secondary/15 rounded-full flex items-center justify-center">
-                    <Play size={14} className="text-secondary fill-secondary" />
-                  </div>
-                  Canlı Önizleme
-                </button>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.6 }}
-                className="flex flex-wrap gap-6 pt-4"
-              >
-                {[
-                  "Deprem Dayanımlı",
-                  "A++ Enerji Verimliliği",
-                  "Özel Mimari Çizim",
-                ].map((item, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-2 text-xs font-bold text-slate-400"
-                  >
-                    <CheckCircle size={14} className="text-secondary" />
-                    {item}
-                  </div>
-                ))}
-              </motion.div>
             </div>
 
-            <div className="lg:col-span-6 relative h-[600px] flex items-center justify-center">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9, rotate: 2 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                transition={{ duration: 1.2 }}
-                className="relative w-[85%] h-[80%] z-10"
+            <div className="flex flex-wrap gap-4">
+              <button
+                onClick={() => setModal(true)}
+                className="cursor-pointer rounded-[1.5rem] border border-slate-200 bg-white px-6 py-4 text-sm font-bold text-slate-900 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-200 hover:bg-slate-50"
               >
-                <div className="relative w-full h-full rounded-[4rem] overflow-hidden border-[12px] border-white">
-                  <video
-                    src="/proje-video.webm"
-                    autoPlay
-                    playsInline
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-tr from-[#49202d]/40 to-transparent" />
-                </div>
-              </motion.div>
+                <span className="flex items-center gap-3">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary/15">
+                    <Play size={14} className="fill-secondary text-secondary" />
+                  </span>
+                  Canlı Önizleme
+                </span>
+              </button>
+            </div>
 
-              <motion.div
-                animate={{ y: [0, -20, 0] }}
-                transition={{
-                  duration: 5,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="absolute top-10 left-0 bg-white/90 backdrop-blur-xl p-6 rounded-[2.5rem] shadow-xl border border-white z-20 flex items-center gap-5"
-              >
-                <div className="w-14 h-14 bg-primary rounded-2xl flex items-center justify-center text-white shadow-lg">
-                  <Ruler size={28} />
+            <div className="flex flex-wrap gap-5 pt-1">
+              {[
+                "Deprem Dayanımlı",
+                "A++ Enerji Verimliliği",
+                "Özel Mimari Çizim",
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="flex items-center gap-2 text-xs font-bold text-slate-500"
+                >
+                  <CheckCircle size={14} className="text-secondary" />
+                  {item}
                 </div>
-                <div>
-                  <div className="text-xl font-black text-slate-900 tracking-tight">
-                    Hassas Ölçüm
+              ))}
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-3">
+              {[
+                { value: `${projects.length}+`, label: "Tamamlanan Proje" },
+                { value: "Türkiye", label: "Geneli Hizmet" },
+                { value: "Tek Ekip", label: "Keşif ve Montaj" },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className="rounded-[1.5rem] border border-slate-200 bg-white px-4 py-4 shadow-[0_18px_40px_-34px_rgba(15,23,42,0.12)]"
+                >
+                  <div className="text-lg font-black tracking-tight text-slate-900">
+                    {item.value}
                   </div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                    Milimetrik Çelik Yapı
+                  <p className="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
+                    {item.label}
                   </p>
                 </div>
-              </motion.div>
+              ))}
+            </div>
+          </div>
 
-              <motion.div
-                animate={{ y: [0, 20, 0] }}
-                transition={{
-                  duration: 6,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 1,
-                }}
-                className="absolute bottom-20 right-0 bg-white/95 backdrop-blur-xl p-6 rounded-[2.5rem] shadow-xl border border-white z-20 flex items-center gap-4"
-              >
-                <div className="w-10 h-10 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-600">
-                  <CheckCircle2 size={24} />
+          <div className="relative mt-8 lg:col-span-6 lg:mt-0">
+            <div className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0_24px_60px_-40px_rgba(15,23,42,0.22)]">
+              <div className="relative aspect-[16/11] w-full">
+                {heroImage ? (
+                  <Image
+                    src={heroImage.src}
+                    alt={heroImage.alt}
+                    fill
+                    preload
+                    fetchPriority="high"
+                    loading="eager"
+                    sizes="(max-width: 1024px) 100vw, 42vw"
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="h-full w-full bg-gradient-to-br from-[#f1ede4] via-white to-[#eef6f1]" />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#49202d]/45 via-[#49202d]/10 to-transparent" />
+              </div>
+
+              <div className="grid gap-3 border-t border-slate-200 bg-white p-4 sm:grid-cols-2">
+                <div className="flex items-center gap-3 rounded-[1.25rem] border border-slate-200 bg-[#f8f7f3] px-4 py-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-white">
+                    <Ruler size={20} />
+                  </div>
+                  <div>
+                    <div className="text-sm font-black tracking-tight text-slate-900">
+                      Hassas Ölçüm
+                    </div>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-500">
+                      Milimetrik proje disiplini
+                    </p>
+                  </div>
                 </div>
-                <span className="font-bold text-slate-800 tracking-tight pr-4">
-                  Depreme Dayanıklı
-                </span>
-              </motion.div>
+
+                <div className="flex items-center gap-3 rounded-[1.25rem] border border-slate-200 bg-[#f8f7f3] px-4 py-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+                    <CheckCircle2 size={20} />
+                  </div>
+                  <div>
+                    <div className="text-sm font-black tracking-tight text-slate-900">
+                      Güvenli Uygulama
+                    </div>
+                    <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-slate-500">
+                      Depreme dayanıklı çözümler
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -246,6 +222,15 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
             )}
           </div>
         </section>
+
+        <section className="pb-24">
+          <SeoFaqSection
+            title="Projelerimiz Sayfası İçin"
+            accent="En Çok Aranan Sorular"
+            description="Prefabrik ev projeleri, çelik ev referansları, dubleks prefabrik uygulamalar ve tamamlanan yaşam alanları hakkında kullanıcıların en çok aradığı soruları bu bölümde topladık."
+            items={PROJECTS_FAQS}
+          />
+        </section>
       </div>
     </main>
   );
@@ -260,96 +245,56 @@ const ProjectCard = ({
   index: number;
   onProjectClick: (idx: number) => void;
 }) => {
-  const [api, setApi] = useState<CarouselApi | null>(null);
-  const [current, setCurrent] = useState(0);
-
-  useEffect(() => {
-    if (!api) return;
-
-    setCurrent(api.selectedScrollSnap());
-    api.on("select", () => {
-      setCurrent(api.selectedScrollSnap());
-    });
-  }, [api]);
-
   // Don't render if no images
   if (project.img.length === 0) return null;
+  const coverImage = project.img[0];
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1 }}
+    <div
       onClick={() => onProjectClick(index)}
-      className="relative cursor-pointer group"
+      className="group relative cursor-pointer"
     >
-      <Carousel
-        setApi={setApi}
-        className="w-full overflow-hidden rounded-[1rem] md:rounded-[2rem] border-white bg-white"
-      >
-        <CarouselContent>
-          {project.img.map((item, imgIndex) => (
-            <CarouselItem key={imgIndex} className="basis-full relative">
-              <div className="relative w-full aspect-[4/3] md:aspect-[16/9] overflow-hidden">
-                <Image
-                  src={item.src}
-                  alt={item.alt}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-      </Carousel>
-
-      {/* Dot Göstergeleri */}
-      {project.img.length > 1 && (
-        <div className="absolute bottom-5 md:bottom-10 z-20 flex w-full justify-center gap-2">
-          {project.img.map((_, dotIdx) => (
-            <button
-              key={dotIdx}
-              onClick={(e) => {
-                e.stopPropagation(); // Kartın click eventini tetiklemesin
-                api?.scrollTo(dotIdx);
-              }}
-              className="p-1" // Tıklama alanını genişletmek için
-            >
-              <motion.div
-                animate={{ width: current === dotIdx ? 22 : 10 }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className={`h-2.5 rounded-full transition-colors ${
-                  current === dotIdx ? "bg-secondary" : "bg-white/70"
-                }`}
-              />
-            </button>
-          ))}
+      <div className="relative overflow-hidden rounded-[1rem] border border-slate-200 bg-white shadow-[0_20px_44px_-34px_rgba(15,23,42,0.16)] transition-all duration-200 group-hover:-translate-y-1 group-hover:border-slate-200 group-hover:shadow-[0_24px_52px_-34px_rgba(15,23,42,0.22)] md:rounded-[2rem]">
+        <div className="relative aspect-[4/3] w-full overflow-hidden md:aspect-[16/9]">
+          <Image
+            src={coverImage.src}
+            alt={coverImage.alt}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+          />
         </div>
-      )}
 
-      {/* Overlay Bilgileri */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#49202d]/60 via-[#49202d]/10 to-transparent p-4 flex flex-col justify-end pointer-events-none rounded-[1rem] md:rounded-[2rem]">
-        <h3 className="text-white text-xl font-black mb-4">{project.title}</h3>
-        <div className="flex gap-6">
-          <div className="flex flex-col items-center gap-1">
-            <Ruler className="text-white/60" size={18} />
-            <span className="text-white font-bold text-sm">{project.area}</span>
+        <div className="space-y-4 p-5 md:p-6">
+          <div className="flex items-start justify-between gap-4">
+            <h3 className="text-xl font-black text-slate-900 md:text-2xl">
+              {project.title}
+            </h3>
+            {project.img.length > 1 ? (
+              <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-[#f8f7f3] px-3 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600">
+                <Images className="h-3.5 w-3.5 text-secondary" />
+                {project.img.length} Görsel
+              </div>
+            ) : null}
           </div>
-          <div className="w-[1px] h-8 bg-white/20" />
-          <div className="flex flex-col items-center gap-1">
-            <Home className="text-white/60" size={18} />
-            <span className="text-white font-bold text-sm">{project.room}</span>
-          </div>
-          <div className="w-[1px] h-8 bg-white/20" />
-          <div className="flex flex-col items-center gap-1">
-            <MapPin className="text-white/60" size={18} />
-            <span className="text-white font-bold text-sm">{project.loc}</span>
+
+          <div className="flex flex-wrap gap-4 text-sm font-bold text-slate-600">
+            <div className="flex items-center gap-2">
+              <Ruler className="text-secondary" size={16} />
+              <span>{project.area}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Home className="text-secondary" size={16} />
+              <span>{project.room}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <MapPin className="text-secondary" size={16} />
+              <span>{project.loc}</span>
+            </div>
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
@@ -382,7 +327,6 @@ function ProjectGalleryModal({
   useEffect(() => {
     if (isOpen && api) {
       api.scrollTo(0, true);
-      setCurrent(0);
     }
   }, [isOpen, api]);
 
@@ -405,7 +349,6 @@ function ProjectGalleryModal({
                         alt={image.alt}
                         fill
                         className="object-cover"
-                        priority
                       />
                     </div>
                   </CarouselItem>

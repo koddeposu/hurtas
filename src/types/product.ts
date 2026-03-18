@@ -88,6 +88,27 @@ export interface DBProduct {
   images: DBProductImage[];
 }
 
+export interface DBProductPreview {
+  id: string;
+  categoryId: string | null;
+  name: string;
+  slug: string;
+  area: string;
+  room: string;
+  floor: string;
+  bath: string;
+  height: string;
+  price: string | null;
+  oldPrice: string | null;
+  description: string | null;
+  isActive: boolean;
+  order: number;
+  createdAt: Date;
+  updatedAt: Date;
+  category: DBCategory | null;
+  image: DBProductImage | null;
+}
+
 // Mock Product
 export const MOCK_PRODUCT: Product[] = [
   {
