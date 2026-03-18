@@ -53,6 +53,7 @@ export async function createCategory(data: {
     order: data.order ?? 0,
   });
 
+  revalidatePath("/", "layout");
   revalidatePath("/admin/categories");
   revalidatePath("/prefabrik-evler");
 
@@ -84,6 +85,7 @@ export async function updateCategory(
 
   await db.update(category).set(updateData).where(eq(category.id, id));
 
+  revalidatePath("/", "layout");
   revalidatePath("/admin/categories");
   revalidatePath("/prefabrik-evler");
 
@@ -95,6 +97,7 @@ export async function deleteCategory(id: string) {
 
   await db.delete(category).where(eq(category.id, id));
 
+  revalidatePath("/", "layout");
   revalidatePath("/admin/categories");
   revalidatePath("/prefabrik-evler");
 
@@ -113,6 +116,7 @@ export async function updateCategoriesOrder(
       .where(eq(category.id, item.id));
   }
 
+  revalidatePath("/", "layout");
   revalidatePath("/admin/categories");
   revalidatePath("/prefabrik-evler");
 
