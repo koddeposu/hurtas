@@ -68,7 +68,7 @@ export function ProcessJourney() {
 
             <div className="grid gap-3 sm:grid-cols-3">
               <div className="rounded-[1.5rem] border border-slate-200 bg-[#f8f7f3] p-4">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-700">
                   Hizmet Alanı
                 </p>
                 <p className="mt-2 text-lg font-black tracking-tight text-slate-900">
@@ -81,7 +81,7 @@ export function ProcessJourney() {
               </div>
 
               <div className="rounded-[1.5rem] border border-slate-200 bg-[#f8f7f3] p-4">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-700">
                   Süreç Yapısı
                 </p>
                 <p className="mt-2 text-lg font-black tracking-tight text-secondary">
@@ -94,7 +94,7 @@ export function ProcessJourney() {
               </div>
 
               <div className="rounded-[1.5rem] border border-slate-200 bg-[#f8f7f3] p-4">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-700">
                   Odak Noktası
                 </p>
                 <p className="mt-2 text-lg font-black tracking-tight text-slate-900">

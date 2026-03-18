@@ -69,7 +69,7 @@ export const Features = () => {
                   &quot;Güven ve kalite üzerine inşa edilmiş bir gelecek
                   sunuyoruz.&quot;
                 </p>
-                <p className="max-w-sm text-sm leading-6 text-slate-400">
+                <p className="max-w-sm text-sm leading-6 text-slate-600">
                   Geleneksel yapıların hantallığından uzak, modern yaşamın tüm
                   ihtiyaçlarını karşılayan bütünsel bir deneyim.
                 </p>
@@ -107,7 +107,7 @@ export const Features = () => {
                     <h3 className="mb-2 text-lg font-bold tracking-tight text-slate-900">
                       {item.title}
                     </h3>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-600">
                       CT Standartları
                     </p>
                   </div>

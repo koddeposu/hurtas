@@ -29,9 +29,9 @@ export function HomeProductCard({
             src={product.image.url}
             alt={product.image.alt}
             fill
-            quality={58}
+            quality={50}
             className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-            sizes="(min-width: 1280px) 22vw, (min-width: 768px) 45vw, 100vw"
+            sizes="(min-width: 1280px) 21vw, (min-width: 768px) 43vw, 92vw"
           />
         ) : null}
 
@@ -59,7 +59,7 @@ export function HomeProductCard({
               {formatPrice(product.price)} ₺
             </p>
             {product.oldPrice ? (
-              <p className="text-sm font-bold text-slate-400 line-through">
+              <p className="text-sm font-bold text-slate-500 line-through">
                 {formatPrice(product.oldPrice)} ₺
               </p>
             ) : null}

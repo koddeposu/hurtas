@@ -109,7 +109,7 @@ export const LeadForm = () => {
                     </span>{" "}
                     Alın.
                   </h2>
-                  <p className="mt-4 text-sm font-medium leading-7 text-emerald-50/70">
+                  <p className="mt-4 text-sm font-medium leading-7 text-white/90">
                     Hayalinizdeki prefabrik ev projesini uzman ekibimizle
                     planlayın. Size en uygun çözümü ve bütçeyi birlikte
                     belirleyelim.
@@ -179,7 +179,7 @@ export const LeadForm = () => {
                     <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                       {/* Ad Soyad */}
                       <div className="space-y-2">
-                        <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                        <label className="text-xs font-black text-slate-600 uppercase tracking-widest ml-1">
                           Adınız Soyadınız
                         </label>
                         <div className="relative group">
@@ -200,7 +200,7 @@ export const LeadForm = () => {
 
                       {/* Telefon */}
                       <div className="space-y-2">
-                        <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                        <label className="text-xs font-black text-slate-600 uppercase tracking-widest ml-1">
                           Telefon Numaranız
                         </label>
                         <div className="relative group">
@@ -222,7 +222,7 @@ export const LeadForm = () => {
 
                     {/* Mesaj */}
                     <div className="space-y-2">
-                      <label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                      <label className="text-xs font-black text-slate-600 uppercase tracking-widest ml-1">
                         Mesajınız / Hayalinizdeki Ev
                       </label>
                       <div className="relative group">
@@ -292,7 +292,7 @@ export const LeadForm = () => {
                       )}
                     </motion.button>
 
-                    <p className="text-center text-[10px] text-slate-400 font-medium">
+                    <p className="text-center text-[10px] text-slate-600 font-medium">
                       Verileriniz KVKK kapsamında korunmaktadır. Formu
                       göndererek{" "}
                       <span className="underline cursor-pointer">

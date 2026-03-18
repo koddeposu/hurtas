@@ -176,11 +176,11 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
               {COMPANY.phoneDisplay}
             </a>
             <a
-              href={`mailto:${COMPANY.email}`}
+              href="/iletisim"
               className="inline-flex items-center gap-2 transition-colors hover:text-emerald-300"
             >
               <Mail className="h-3.5 w-3.5 text-secondary" />
-              {COMPANY.email}
+              E-Posta Gönderin
             </a>
             <Link
               href="/iletisim"
@@ -199,11 +199,17 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
               className="inline-flex items-center gap-4 self-start"
               onClick={closeMobileMenu}
             >
-              <span className="inline-flex rounded-2xl border border-slate-200 bg-white p-2 shadow-sm">
+              <span className="inline-flex  p-2 ">
                 <Image
                   src={Logo}
                   alt="CT Prefabrik"
-                  priority
+                  preload
+                  fetchPriority="high"
+                  loading="eager"
+                  width={80}
+                  height={48}
+                  quality={40}
+                  sizes="80px"
                   className="h-12 w-auto"
                 />
               </span>
@@ -385,15 +391,23 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
             : "lg:pointer-events-none lg:-translate-y-[140%]"
         }`}
       >
-        <div className="flex min-h-[5.25rem] w-full items-center gap-3 border-b border-slate-200 bg-white/95 px-4 shadow-[0_12px_34px_-26px_rgba(15,23,42,0.9)] backdrop-blur sm:px-6">
+        <div className="flex min-h-[5.25rem] w-full items-center gap-3 border-b border-slate-200 bg-white/95 px-4 shadow-[0_12px_34px_-26px_rgba(15,23,42,0.9)] backdrop-blur sm:px-5 m">
           <Link
             href="/"
             prefetch={false}
             className="inline-flex items-center gap-3"
             onClick={closeMobileMenu}
           >
-            <span className="inline-flex rounded-xl border border-slate-200 bg-white p-1.5">
-              <Image src={Logo} alt="CT Prefabrik" className="h-9 w-auto" />
+            <span className="inline-flex ">
+              <Image
+                src={Logo}
+                alt="CT Prefabrik"
+                width={60}
+                height={36}
+                quality={40}
+                sizes="60px"
+                className="h-9 w-auto"
+              />
             </span>
             <span className="text-sm font-black uppercase tracking-[0.08em] text-slate-900 sm:text-base">
               CT <span className="text-primary">Prefabrik</span>

@@ -103,7 +103,7 @@ export const Stats = () => {
                   <h3 className="text-4xl md:text-5xl font-black tracking-tighter text-slate-900">
                     <Counter value={item.value} suffix={item.suffix} />
                   </h3>
-                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-300">
+                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-700">
                     {item.label}
                   </p>
                 </div>
@@ -111,7 +111,7 @@ export const Stats = () => {
                 {/* Alt Detay (Kısa Açıklama) */}
                 <div className="mt-6 flex items-center gap-3">
                   <div className="h-[1px] w-6 bg-slate-100 group-hover:w-10 transition-all duration-500" />
-                  <span className="text-[10px] font-bold text-slate-400 italic">
+                  <span className="text-[10px] font-bold text-slate-700 italic">
                     {item.desc}
                   </span>
                 </div>

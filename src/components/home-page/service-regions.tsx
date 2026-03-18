@@ -110,7 +110,7 @@ export function ServiceRegions() {
               <Truck className="h-5 w-5" />
             </div>
 
-            <p className="mt-5 text-[10px] font-black uppercase tracking-[0.22em] text-emerald-100/80">
+            <p className="mt-5 text-[10px] font-black uppercase tracking-[0.22em] text-white/90">
               Operasyon Vurgusu
             </p>
             <h3 className="mt-3 text-2xl font-black leading-tight tracking-tight">
@@ -131,13 +131,13 @@ export function ServiceRegions() {
 
             <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
               <div className="rounded-2xl border border-white/10 bg-white/8 p-4">
-                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-100/70">
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/85">
                   Ana Pazar
                 </p>
                 <p className="mt-2 text-lg font-black">Sakarya Prefabrik Ev</p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/8 p-4">
-                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-emerald-100/70">
+                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/85">
                   Hizmet Alanı
                 </p>
                 <p className="mt-2 text-lg font-black">Tüm Türkiye</p>

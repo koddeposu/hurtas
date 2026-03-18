@@ -25,7 +25,7 @@ export function BestSellingHouses({ favorites }: BestSellingHousesProps) {
             />
           </div>
 
-          <p className="max-w-xs text-sm font-medium uppercase tracking-[0.16em] text-slate-400 md:text-right">
+          <p className="max-w-xs text-sm font-medium uppercase tracking-[0.16em] text-slate-600 md:text-right">
             Yüzlerce aileye yuva olan, en çok incelenen prefabrik ev
             modellerimiz.
           </p>
@@ -45,7 +45,7 @@ export function BestSellingHouses({ favorites }: BestSellingHousesProps) {
           <Link
             href="/prefabrik-evler"
             prefetch={false}
-            className="cursor-pointer text-[10px] font-black uppercase tracking-[0.3em] text-slate-300 transition-colors hover:text-[#49202d]"
+            className="cursor-pointer text-[10px] font-black uppercase tracking-[0.3em] text-slate-600 transition-colors hover:text-[#49202d]"
           >
             Tüm Modelleri Keşfedin
           </Link>

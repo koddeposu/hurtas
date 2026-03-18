@@ -76,6 +76,7 @@ export const Hero4 = () => {
               preload
               fetchPriority="high"
               loading="eager"
+              quality={55}
               placeholder="blur"
               sizes="100vw"
               className="object-cover"
@@ -156,7 +157,6 @@ export const Hero4 = () => {
               className={`h-2 rounded-full transition-all ${
                 index === current ? "w-9 bg-secondary" : "w-3 bg-white/60"
               }`}
-              aria-label={`Slide ${index + 1}`}
             />
           ))}
 

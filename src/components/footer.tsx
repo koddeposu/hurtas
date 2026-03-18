@@ -92,7 +92,7 @@ const Footer = ({ categories = [] }: FooterProps) => {
             <div className="flex items-center gap-2 text-2xl font-black tracking-tighter" style={{ color: '#165b39' }}>
               <Home className="w-8 h-8" /> CT <span style={{ color: '#49202d' }}>PREFABRİK</span>
             </div>
-            <p className="text-slate-500 text-sm leading-relaxed font-medium max-w-sm">
+            <p className="text-slate-600 text-sm leading-relaxed font-medium max-w-sm">
               Sakarya CT Prefabrik olarak, modern mimariyi çeliğin gücüyle birleştiriyoruz.
               Sizin için güvenli, hızlı ve sürdürülebilir yaşam alanları tasarlıyoruz.
             </p>
@@ -101,6 +101,7 @@ const Footer = ({ categories = [] }: FooterProps) => {
                 <motion.a
                   key={i}
                   href="https://www.instagram.com/ctprefabrikev/"
+                  aria-label="CT Prefabrik Instagram sayfasını aç"
                   whileHover={{ y: -5, scale: 1.1 }}
                   className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-[#165b39] hover:text-white transition-all shadow-sm"
                 >
@@ -116,7 +117,7 @@ const Footer = ({ categories = [] }: FooterProps) => {
             <ul className="space-y-4">
               {pageLink.map((item, index) => (
                 <li key={index} className='cursor-pointer'>
-                  <a href={item.href} className="text-sm font-semibold text-slate-500 hover:text-[#165b39] transition-colors cursor-pointer">{item.name}</a>
+                  <a href={item.href} className="text-sm font-semibold text-slate-600 hover:text-[#165b39] transition-colors cursor-pointer">{item.name}</a>
                 </li>
               ))}
             </ul>
@@ -130,7 +131,7 @@ const Footer = ({ categories = [] }: FooterProps) => {
                 <li key={cat.id}>
                   <Link
                     href={`/prefabrik-evler/${cat.slug}`}
-                    className="text-sm font-semibold text-slate-500 hover:text-[#165b39] transition-colors"
+                    className="text-sm font-semibold text-slate-600 hover:text-[#165b39] transition-colors"
                   >
                     {cat.name}
                   </Link>
@@ -150,12 +151,13 @@ const Footer = ({ categories = [] }: FooterProps) => {
                     <MapPin size={18} />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-medium text-slate-500">
+                    <p className="text-sm font-medium text-slate-600">
                       Soğucak, Kervan/1 Sokak No: 2/4, 54160 <br />Söğütlü / Sakarya
                     </p>
                   </div>
                   <button
-
+                    type="button"
+                    aria-label="Adresi kopyala"
                     className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
                   >
                     {copiedAddress ? (
@@ -187,7 +189,8 @@ const Footer = ({ categories = [] }: FooterProps) => {
                   </div>
                   <p className="text-sm font-bold text-slate-900 flex-1">+90 537 518 30 06</p>
                   <button
-
+                    type="button"
+                    aria-label="Telefon numarasını kopyala"
                     className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
                   >
                     {copiedPhone ? (
@@ -217,9 +220,12 @@ const Footer = ({ categories = [] }: FooterProps) => {
                   <div className="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0 text-[#165b39]">
                     <Mail size={18} />
                   </div>
-                  <p className="text-sm font-medium text-slate-500 flex-1">info@ctprefabrik.com</p>
+                  <p className="text-sm font-medium text-slate-700 flex-1">
+                    E-posta adresini kopyalayın
+                  </p>
                   <button
-
+                    type="button"
+                    aria-label="E-posta adresini kopyala"
                     className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
                   >
                     {copiedEmail ? (
@@ -248,10 +254,10 @@ const Footer = ({ categories = [] }: FooterProps) => {
 
         {/* Alt Bar: Copyright */}
         <div className="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+          <p className="text-[10px] font-bold text-slate-700 uppercase tracking-widest">
             © {currentYear} CT PREFABRİK. TÜM HAKLARI SAKLIDIR.
           </p>
-          <div className="flex gap-8 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+          <div className="flex gap-8 text-[10px] font-bold text-slate-700 uppercase tracking-widest">
             <a href="#" className="hover:text-[#49202d] transition-colors">KVKK</a>
             <a href="#" className="hover:text-[#49202d] transition-colors">YASAL UYARI</a>
           </div>

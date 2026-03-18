@@ -2,7 +2,7 @@ import { getBlogPostBySlug } from "@/actions/blogActions";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Calendar, Clock } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Calendar, Clock } from "lucide-react";
 import { ShareButtons } from "./share-buttons";
 import { convertJsonToHtml } from "@/lib/tiptap-utils";
 
@@ -14,6 +14,76 @@ async function getPostData(slug: string) {
   }
 
   return { post };
+}
+
+function getSuggestedLinks(category?: string | null) {
+  const lowerCategory = category?.toLowerCase() ?? "";
+
+  if (lowerCategory.includes("çelik")) {
+    return [
+      {
+        title: "Çelik Ev Modelleri",
+        description:
+          "Çelik konstrüksiyon ev çözümlerini ve güncel model seçeneklerini inceleyin.",
+        href: "/prefabrik-evler/celik-ev",
+      },
+      {
+        title: "Çelik Ev Projelerimiz",
+        description:
+          "Tamamlanan çelik ev ve modern yaşam alanı uygulamalarını keşfedin.",
+        href: "/projelerimiz",
+      },
+    ];
+  }
+
+  if (lowerCategory.includes("tek kat")) {
+    return [
+      {
+        title: "Tek Katlı Prefabrik Evler",
+        description:
+          "Tek katlı prefabrik ev fiyatları ve modelleri için kategori sayfasına geçin.",
+        href: "/prefabrik-evler/tek-katli",
+      },
+      {
+        title: "Prefabrik Ev Projelerimiz",
+        description:
+          "Tamamlanan tek katlı ve farklı planlı uygulama örneklerini inceleyin.",
+        href: "/projelerimiz",
+      },
+    ];
+  }
+
+  if (lowerCategory.includes("çift kat") || lowerCategory.includes("dubleks")) {
+    return [
+      {
+        title: "Çift Katlı Prefabrik Evler",
+        description:
+          "Dubleks prefabrik ev modelleri ve fiyat seçeneklerini karşılaştırın.",
+        href: "/prefabrik-evler/cift-katli",
+      },
+      {
+        title: "Dubleks Proje Örnekleri",
+        description:
+          "Geniş yaşam planına sahip referans projeleri inceleyerek fikir alın.",
+        href: "/projelerimiz",
+      },
+    ];
+  }
+
+  return [
+    {
+      title: "Prefabrik Ev Modelleri",
+      description:
+        "Tek katlı, çift katlı ve çelik ev kategorilerini tek sayfada karşılaştırın.",
+      href: "/prefabrik-evler",
+    },
+    {
+      title: "Projelerimizi İnceleyin",
+      description:
+        "Tamamlanan prefabrik ev, çelik ev ve dubleks uygulamalarına göz atın.",
+      href: "/projelerimiz",
+    },
+  ];
 }
 
 export async function generateMetadata({
@@ -56,6 +126,7 @@ export default async function BlogPostPage({
   }
 
   const { post } = data;
+  const suggestedLinks = getSuggestedLinks(post.category);
 
   return (
     <main className="min-h-screen bg-white pb-24">
@@ -140,6 +211,44 @@ export default async function BlogPostPage({
             <div dangerouslySetInnerHTML={{ __html: convertJsonToHtml(post.content) }} />
           )}
         </div>
+
+        <section className="mt-14 rounded-[2rem] border border-slate-200 bg-[#f8f7f3] p-6 md:p-8">
+          <div className="max-w-2xl">
+            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
+              İlgili Bağlantılar
+            </p>
+            <h2 className="mt-3 text-2xl font-black tracking-tight text-slate-900 md:text-3xl">
+              Bu İçeriği Okuduktan Sonra Buraya Geçin
+            </h2>
+            <p className="mt-3 text-sm font-medium leading-7 text-slate-600 md:text-base">
+              Blog içeriğini ürün kategorileri ve referans projelerle birlikte
+              incelemek, karar verme sürecini hızlandırır. Aşağıdaki bağlantılar
+              sizi ilgili kategori ve proje sayfalarına taşır.
+            </p>
+          </div>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            {suggestedLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="group rounded-[1.5rem] border border-slate-200 bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-200 hover:shadow-[0_20px_44px_-34px_rgba(15,23,42,0.18)]"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="text-lg font-black text-slate-900">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-sm font-medium leading-7 text-slate-600">
+                      {item.description}
+                    </p>
+                  </div>
+                  <ArrowUpRight className="mt-1 h-5 w-5 shrink-0 text-secondary transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
 
         {/* --- SHARE / FOOTER --- */}
         <div className="mt-16 pt-10 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6">

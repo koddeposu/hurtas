@@ -65,9 +65,9 @@ export function LatestBlogPosts({ posts }: LatestBlogPostsProps) {
                 src={post.imageUrl}
                 alt={post.imageAlt || post.title}
                 fill
-                quality={58}
+                quality={50}
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                sizes="(min-width: 1280px) 20vw, (min-width: 768px) 42vw, 92vw"
+                sizes="(min-width: 1280px) 19vw, (min-width: 768px) 40vw, 92vw"
               />
               <div className="absolute left-4 top-4 rounded-full bg-white/92 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-primary shadow-sm backdrop-blur">
                 {post.category}
@@ -75,7 +75,7 @@ export function LatestBlogPosts({ posts }: LatestBlogPostsProps) {
             </div>
 
             <div className="p-5">
-              <div className="flex flex-wrap items-center gap-3 text-[11px] font-bold text-slate-400">
+              <div className="flex flex-wrap items-center gap-3 text-[11px] font-bold text-slate-600">
                 <span className="inline-flex items-center gap-1.5">
                   <CalendarDays className="h-3.5 w-3.5" />
                   {formatDate(post.publishedAt || post.createdAt)}

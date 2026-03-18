@@ -6,15 +6,26 @@ import { SeoFaqSection } from "@/components/seo-faq-section";
 import { DBCategory, DBProduct } from "@/types/product";
 import {
   ArrowUpRight,
+  BookOpenText,
   Building2,
   Filter,
   Home,
   Layers3,
+  LayoutGrid,
+  Link2,
   ShieldCheck,
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useState } from "react";
-import { ProjectGalleryModal } from "./ModalSliderImage";
+
+const ProjectGalleryModal = dynamic(
+  () =>
+    import("./ModalSliderImage").then((module) => module.ProjectGalleryModal),
+  {
+    ssr: false,
+  },
+);
 
 interface ProductsClientProps {
   products: DBProduct[];
@@ -241,6 +252,84 @@ function getFaqContent(categoryName?: string) {
   };
 }
 
+function getInternalLinks(categoryName?: string) {
+  const categoryKey = getCategoryKey(categoryName);
+
+  if (categoryKey === "single") {
+    return [
+      {
+        title: "Tek Katlı Prefabrik Ev İçerikleri",
+        description:
+          "Blog sayfasında tek katlı prefabrik ev fiyatları, ruhsat ve teslim süreci hakkında içeriklere geçin.",
+        href: "/blog",
+        icon: BookOpenText,
+      },
+      {
+        title: "Tek Katlı Proje Örnekleri",
+        description:
+          "Tamamlanan referans projeler üzerinden plan, metrekare ve dış cephe fikirleri alın.",
+        href: "/projelerimiz",
+        icon: LayoutGrid,
+      },
+    ];
+  }
+
+  if (categoryKey === "double") {
+    return [
+      {
+        title: "Dubleks Prefabrik Rehberleri",
+        description:
+          "Çift katlı prefabrik ev modelleri ve plan önerileri için blog içeriklerine göz atın.",
+        href: "/blog",
+        icon: BookOpenText,
+      },
+      {
+        title: "Çift Katlı Referans Projeler",
+        description:
+          "Dubleks yaşam planı içeren proje uygulamalarını detaylı biçimde inceleyin.",
+        href: "/projelerimiz",
+        icon: LayoutGrid,
+      },
+    ];
+  }
+
+  if (categoryKey === "steel") {
+    return [
+      {
+        title: "Çelik Ev Blog İçerikleri",
+        description:
+          "Çelik konstrüksiyon ev, yalıtım, fiyat ve teknik detaylara dair blog yazılarına geçin.",
+        href: "/blog",
+        icon: BookOpenText,
+      },
+      {
+        title: "Çelik Ev Projeleri",
+        description:
+          "Tamamlanan çelik ev ve modern yaşam alanı uygulamalarını proje sayfasında inceleyin.",
+        href: "/projelerimiz",
+        icon: LayoutGrid,
+      },
+    ];
+  }
+
+  return [
+    {
+      title: "Blog Rehberlerine Geçin",
+      description:
+        "Prefabrik ev fiyatları, modelleri, anahtar teslim süreç ve ruhsat konularını blog yazılarında inceleyin.",
+      href: "/blog",
+      icon: BookOpenText,
+    },
+    {
+      title: "Projelerimizi İnceleyin",
+      description:
+        "Tamamlanan prefabrik ev, dubleks prefabrik ve çelik ev uygulamaları üzerinden fikir alın.",
+      href: "/projelerimiz",
+      icon: LayoutGrid,
+    },
+  ];
+}
+
 function TopCategoryFilters({
   categories,
   activeCategory,
@@ -353,6 +442,65 @@ function SeoFooter({
   );
 }
 
+function InternalLinkSection({
+  items,
+}: {
+  items: Array<{
+    title: string;
+    description: string;
+    href: string;
+    icon: typeof BookOpenText;
+  }>;
+}) {
+  return (
+    <section className="mt-14 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_-50px_rgba(15,23,42,0.16)] md:p-8">
+      <div className="max-w-3xl">
+        <p className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
+          <Link2 className="h-4 w-4" />
+          İlgili Sayfalar
+        </p>
+        <h2 className="mt-3 text-2xl font-black tracking-tight text-slate-900 md:text-3xl">
+          Kategori İncelemesini Blog ve Projelerle Derinleştirin
+        </h2>
+        <p className="mt-3 text-sm font-medium leading-7 text-slate-600 md:text-base">
+          Model seçimi yaparken sadece ürün kartlarına bakmak yerine, ilgili blog
+          içerikleri ve tamamlanan projeler arasında geçiş yapmak daha sağlıklı
+          karar vermenizi sağlar.
+        </p>
+      </div>
+
+      <div className="mt-6 grid gap-4 md:grid-cols-2">
+        {items.map((item) => {
+          const Icon = item.icon;
+
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="group rounded-[1.5rem] border border-slate-200 bg-[#f8f7f3] p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-200 hover:shadow-[0_18px_42px_-34px_rgba(15,23,42,0.18)]"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <h3 className="mt-4 text-lg font-black text-slate-900">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-sm font-medium leading-7 text-slate-600">
+                    {item.description}
+                  </p>
+                </div>
+                <ArrowUpRight className="mt-1 h-5 w-5 shrink-0 text-secondary transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 const ProductsClient = ({
   products,
   categories,
@@ -369,22 +517,21 @@ const ProductsClient = ({
   const content = getPageContent(activeCategoryName);
   const faqContent = getFaqContent(activeCategoryName);
   const faqItems = getProductFaqsByCategory(activeCategoryName);
+  const internalLinks = getInternalLinks(activeCategoryName);
 
   return (
     <div className="w-full max-w-[1280px]">
-      <ProjectGalleryModal
-        projects={
-          selectedProduct
-            ? selectedProduct.images.map((image, index) => ({
-                id: index,
-                img: image.url,
-                title: image.alt,
-              }))
-            : []
-        }
-        isOpen={!!selectedProduct}
-        onClose={() => setSelectedProduct(null)}
-      />
+      {selectedProduct ? (
+        <ProjectGalleryModal
+          projects={selectedProduct.images.map((image, index) => ({
+            id: index,
+            img: image.url,
+            title: image.alt,
+          }))}
+          isOpen
+          onClose={() => setSelectedProduct(null)}
+        />
+      ) : null}
 
       <section className="pb-10 pt-14 lg:pb-12 lg:pt-18">
         <div className="relative py-2">
@@ -448,6 +595,8 @@ const ProductsClient = ({
           description={content.seoDescription}
           cards={content.seoCards}
         />
+
+        <InternalLinkSection items={internalLinks} />
 
         <div className="mt-14">
           <SeoFaqSection

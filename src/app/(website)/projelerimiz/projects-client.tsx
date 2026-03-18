@@ -10,15 +10,19 @@ import {
 } from "@/components/ui/carousel";
 import { Modal } from "@/components/ui/modal";
 import {
+  BookOpenText,
+  Building2,
   CheckCircle,
   CheckCircle2,
-  Images,
   Home,
+  Images,
+  Link2,
   MapPin,
   Play,
   Ruler,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface ImageType {
@@ -74,24 +78,24 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
 
       <section className="relative mb-12 w-full overflow-hidden bg-[#f8f7f3]">
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none [background-image:linear-gradient(#49202d_1px,transparent_1px),linear-gradient(90deg,#49202d_1px,transparent_1px)] [background-size:56px_56px]" />
-        <div className="mx-auto flex w-full max-w-[1280px] items-center px-4 py-10 sm:px-6 lg:grid lg:grid-cols-12 lg:gap-14 lg:px-8 lg:py-14">
-          <div className="relative z-10 space-y-7 lg:col-span-6">
+        <div className="mx-auto flex w-full max-w-[1280px] items-center px-4 py-10 sm:px-6 grid   lg:grid-cols-2 lg:gap-14 lg:px-8 lg:py-14">
+          <div className="relative z-10 space-y-7 ">
             <div>
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 rounded-full mb-6">
-                  <span className="inline-flex h-2 w-2 rounded-full bg-secondary" />
-                  <span className="text-emerald-700 text-xs font-bold uppercase tracking-widest">
-                    30 GÜNDE ANAHTAR TESLİM
-                  </span>
-                </div>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 rounded-full mb-6">
+                <span className="inline-flex h-2 w-2 rounded-full bg-secondary" />
+                <span className="text-emerald-700 text-xs font-bold uppercase tracking-widest">
+                  30 GÜNDE ANAHTAR TESLİM
+                </span>
+              </div>
 
-                <h1 className="text-4xl font-black leading-[1.05] tracking-tight text-slate-900 md:text-6xl">
-                  Sınırları Aşan <br />
-                  <span className="text-secondary/90">Yapılar</span>
-                </h1>
-                <p className="mt-5 max-w-xl text-base font-medium leading-8 text-slate-500 md:text-lg">
-                  Sadece bir ev değil, doğayla barışık, yüksek mühendislik
-                  içeren ve estetiği merkeze alan modüler yaşamlar kuruyoruz.
-                </p>
+              <h1 className="text-4xl font-black leading-[1.05] tracking-tight text-slate-900 md:text-6xl">
+                Sınırları Aşan <br />
+                <span className="text-secondary/90">Yapılar</span>
+              </h1>
+              <p className="mt-5 max-w-xl text-base font-medium leading-8 text-slate-500 md:text-lg">
+                Sadece bir ev değil, doğayla barışık, yüksek mühendislik içeren
+                ve estetiği merkeze alan modüler yaşamlar kuruyoruz.
+              </p>
             </div>
 
             <div className="flex flex-wrap gap-4">
@@ -145,7 +149,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
             </div>
           </div>
 
-          <div className="relative mt-8 lg:col-span-6 lg:mt-0">
+          <div className="relative mt-8  lg:mt-0">
             <div className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0_24px_60px_-40px_rgba(15,23,42,0.22)]">
               <div className="relative aspect-[16/11] w-full">
                 {heroImage ? (
@@ -224,6 +228,67 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
         </section>
 
         <section className="pb-24">
+          <div className="mb-14 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_-50px_rgba(15,23,42,0.16)] md:p-8">
+            <div className="max-w-3xl">
+              <p className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
+                <Link2 className="h-4 w-4" />
+                İlgili Sayfalar
+              </p>
+              <h2 className="mt-3 text-2xl font-black tracking-tight text-slate-900 md:text-3xl">
+                Projeleri İncelerken Kategori ve Blog Sayfalarına da Geçin
+              </h2>
+              <p className="mt-3 text-sm font-medium leading-7 text-slate-600 md:text-base">
+                Proje örnekleri ile birlikte kategori sayfaları ve blog
+                içeriklerini incelemek; fiyat, model ve teslim yaklaşımını daha
+                doğru karşılaştırmanıza yardımcı olur.
+              </p>
+            </div>
+
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              {[
+                {
+                  title: "Prefabrik Ev Kategorileri",
+                  description:
+                    "Tek katlı prefabrik ev, çift katlı prefabrik ev ve çelik ev kategorilerini birlikte inceleyin.",
+                  href: "/prefabrik-evler",
+                  icon: Building2,
+                },
+                {
+                  title: "Blog Rehberlerine Geçin",
+                  description:
+                    "Prefabrik ev modelleri, ruhsat süreci, fiyatlar ve anahtar teslim yapılar hakkında blog içeriklerine ulaşın.",
+                  href: "/blog",
+                  icon: BookOpenText,
+                },
+              ].map((item) => {
+                const Icon = item.icon;
+
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className="group rounded-[1.5rem] border border-slate-200 bg-[#f8f7f3] p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-200 hover:shadow-[0_18px_42px_-34px_rgba(15,23,42,0.18)]"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                          <Icon className="h-5 w-5" />
+                        </div>
+                        <h3 className="mt-4 text-lg font-black text-slate-900">
+                          {item.title}
+                        </h3>
+                        <p className="mt-2 text-sm font-medium leading-7 text-slate-600">
+                          {item.description}
+                        </p>
+                      </div>
+                      <Play className="mt-1 h-5 w-5 shrink-0 rotate-[-45deg] text-secondary transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+
           <SeoFaqSection
             title="Projelerimiz Sayfası İçin"
             accent="En Çok Aranan Sorular"
