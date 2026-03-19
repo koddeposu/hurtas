@@ -1,5 +1,8 @@
 "use client";
 
+import { Input } from "@/components/ui/input";
+import { blogPost, category } from "@/db/schema";
+import { InferSelectModel } from "drizzle-orm";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -8,14 +11,15 @@ import {
   ChevronRight,
   Clock,
   PencilLine,
+  Search,
   Sparkles,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { blogPost } from "@/db/schema";
-import { InferSelectModel } from "drizzle-orm";
+import { useState } from "react";
 
 type BlogPost = InferSelectModel<typeof blogPost>;
+type PrefabricCategory = InferSelectModel<typeof category>;
 
 interface PaginatedBlogPosts {
   posts: BlogPost[];
@@ -28,6 +32,8 @@ interface PaginatedBlogPosts {
 
 interface BlogPageClientProps {
   data: PaginatedBlogPosts;
+  recentPosts: BlogPost[];
+  prefabricCategories: PrefabricCategory[];
 }
 
 function formatDate(date: Date | null) {
@@ -49,9 +55,58 @@ function EmptyState() {
         Henüz Blog Yazısı Yok
       </h3>
       <p className="text-slate-500 max-w-md">
-        Yakında prefabrik yapılar, mimari trendler ve daha fazlası hakkında ilham
-        verici içerikler paylaşılacak.
+        Yakında prefabrik yapılar, mimari trendler ve daha fazlası hakkında
+        ilham verici içerikler paylaşılacak.
       </p>
+    </div>
+  );
+}
+
+function SearchResultsEmpty({ query }: { query: string }) {
+  return (
+    <div className="flex flex-col items-center justify-center rounded-[2rem] border border-dashed border-slate-200 bg-white px-6 py-20 text-center">
+      <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-slate-100">
+        <Search size={32} className="text-slate-400" />
+      </div>
+      <h3 className="mb-3 text-2xl font-black text-slate-900">
+        Sonuc Bulunamadi
+      </h3>
+      <p className="max-w-md text-sm leading-relaxed text-slate-500 md:text-base">
+        &quot;{query}&quot; ile eslesen bir blog yazisi ya da kategori
+        bulunamadi.
+      </p>
+    </div>
+  );
+}
+
+function SearchBox({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <div className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.35)]">
+      <div className="mb-3">
+        <p className="text-[11px] font-black uppercase tracking-[0.28em] text-[#49202d]">
+          Blog Category Arama
+        </p>
+      </div>
+
+      <div className="relative">
+        <Search
+          size={18}
+          className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+        />
+        <Input
+          type="search"
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          placeholder="Blog veya kategori ara"
+          className="h-12 rounded-2xl border-slate-200 bg-slate-50 pl-11 pr-4 text-sm text-slate-700 placeholder:text-slate-400"
+        />
+      </div>
     </div>
   );
 }
@@ -126,7 +181,7 @@ function Pagination({
           >
             {page}
           </Link>
-        )
+        ),
       )}
 
       {hasNextPage && (
@@ -141,12 +196,36 @@ function Pagination({
   );
 }
 
-export function BlogPageClient({ data }: BlogPageClientProps) {
+export function BlogPageClient({
+  data,
+  recentPosts,
+  prefabricCategories,
+}: BlogPageClientProps) {
   const { posts, totalPages, currentPage, hasNextPage, hasPrevPage } = data;
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const normalizedQuery = searchQuery.trim().toLocaleLowerCase("tr-TR");
+  const hasActiveSearch = normalizedQuery.length > 0;
+
+  const filteredPosts = hasActiveSearch
+    ? posts.filter((post) =>
+        [post.title, post.excerpt, post.category].some((value) =>
+          value.toLocaleLowerCase("tr-TR").includes(normalizedQuery),
+        ),
+      )
+    : posts;
+
+  const filteredCategories = hasActiveSearch
+    ? prefabricCategories.filter((item) =>
+        [item.name, item.description ?? ""].some((value) =>
+          value.toLocaleLowerCase("tr-TR").includes(normalizedQuery),
+        ),
+      )
+    : prefabricCategories;
 
   return (
-    <main className=" min-h-screen">
-      <section className="relative pt-24 md:pt-40 pb-24  overflow-hidden bg-white">
+    <main className="min-h-screen bg-white">
+      <section className="relative overflow-hidden bg-white pb-24 pt-24 md:pt-16">
         {/* --- ARKA PLAN VEKTÖREL SÜSLER (Kibar ve Şekilli) --- */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
           {/* Soft Vektör Daire */}
@@ -222,84 +301,179 @@ export function BlogPageClient({ data }: BlogPageClientProps) {
         </div>
       </section>
 
-      {/* --- BLOG GRID (3 COLUMN) --- */}
-      <section className="pb-32 ">
+      <section className="pb-32">
         <div className="container mx-auto max-w-7xl">
+          <div className="mb-10 lg:hidden">
+            <SearchBox value={searchQuery} onChange={setSearchQuery} />
+          </div>
+
           {posts.length === 0 ? (
             <EmptyState />
           ) : (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-16">
-                {posts.map((post, index) => (
-                  <Link
-                    key={post.id}
-                    href={`/blog/${post.slug}`}
-                    className="block h-full"
-                  >
-                    <motion.article
-                      initial={{ opacity: 0, y: 30 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.1 }}
-                      className="group cursor-pointer h-full flex flex-col"
-                    >
-                      {/* Görsel Alanı */}
-                      <div className="relative h-[300px] rounded-[2.5rem] overflow-hidden mb-8 shadow-sm">
-                        <Image
-                          src={post.imageUrl}
-                          alt={post.imageAlt || post.title}
-                          fill
-                          className="object-cover transition-transform duration-700 group-hover:scale-110"
-                        />
-                        {/* Kategori Etiketi */}
-                        <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl shadow-sm">
-                          <span className="text-[10px] font-black text-[#49202d] uppercase tracking-widest">
-                            {post.category}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* İçerik Alanı */}
-                      <div className="px-2 flex-1 flex flex-col">
-                        <div className="flex items-center gap-4 text-slate-400 text-xs font-bold mb-4">
-                          <div className="flex items-center gap-1.5">
-                            <Calendar size={14} />
-                            {formatDate(post.publishedAt || post.createdAt)}
-                          </div>
-                          {post.readTime && (
-                            <div className="flex items-center gap-1.5">
-                              <Clock size={14} />
-                              {post.readTime} dk
+            <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-10 xl:gap-16">
+              <div>
+                {filteredPosts.length === 0 ? (
+                  <SearchResultsEmpty query={searchQuery} />
+                ) : (
+                  <>
+                    <div className="grid grid-cols-1 gap-10 md:grid-cols-2 xl:gap-12">
+                      {filteredPosts.map((post, index) => (
+                        <Link
+                          key={post.id}
+                          href={`/blog/${post.slug}`}
+                          className="block h-full"
+                        >
+                          <motion.article
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            whileHover={{
+                              y: -8,
+                              transition: { duration: 0.25, ease: "easeOut" },
+                            }}
+                            viewport={{ once: true }}
+                            transition={{ delay: index * 0.08 }}
+                            className="group flex h-full cursor-pointer flex-col will-change-transform"
+                          >
+                            <div className="relative mb-8 h-[300px] overflow-hidden rounded-[2.5rem] shadow-sm transition-shadow duration-300 group-hover:shadow-[0_28px_60px_-24px_rgba(15,23,42,0.38)]">
+                              <Image
+                                src={post.imageUrl}
+                                alt={post.imageAlt || post.title}
+                                fill
+                                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                              />
+                              <div className="absolute left-6 top-6 rounded-2xl bg-white/90 px-4 py-2 shadow-sm backdrop-blur-md">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-[#49202d]">
+                                  {post.category}
+                                </span>
+                              </div>
                             </div>
-                          )}
-                        </div>
 
-                        <h3 className="text-2xl font-black text-slate-900 leading-tight mb-4 group-hover:text-[#49202d] transition-colors duration-300">
-                          {post.title}
-                        </h3>
+                            <div className="flex flex-1 flex-col px-2">
+                              <div className="mb-4 flex items-center gap-4 text-xs font-bold text-slate-400">
+                                <div className="flex items-center gap-1.5">
+                                  <Calendar size={14} />
+                                  {formatDate(
+                                    post.publishedAt || post.createdAt,
+                                  )}
+                                </div>
+                                {post.readTime && (
+                                  <div className="flex items-center gap-1.5">
+                                    <Clock size={14} />
+                                    {post.readTime} dk
+                                  </div>
+                                )}
+                              </div>
 
-                        <p className="text-slate-500 line-clamp-2 text-sm leading-relaxed mb-6 font-medium">
-                          {post.excerpt}
-                        </p>
+                              <h3 className="mb-4 text-2xl font-black leading-tight text-slate-900 transition-colors duration-300 group-hover:text-[#49202d]">
+                                {post.title}
+                              </h3>
 
-                        <div className="mt-auto flex items-center gap-2 text-[#49202d] font-black text-xs tracking-widest uppercase group-hover:gap-4 transition-all">
-                          Devamını Oku <ChevronRight size={16} />
-                        </div>
-                      </div>
-                    </motion.article>
-                  </Link>
-                ))}
+                              <p className="mb-6 line-clamp-2 text-sm font-medium leading-relaxed text-slate-500">
+                                {post.excerpt}
+                              </p>
+
+                              <div className="mt-auto flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#49202d] transition-all duration-300 group-hover:gap-4">
+                                Devamını Oku <ChevronRight size={16} />
+                              </div>
+                            </div>
+                          </motion.article>
+                        </Link>
+                      ))}
+                    </div>
+
+                    {!hasActiveSearch && totalPages > 1 && (
+                      <Pagination
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        hasNextPage={hasNextPage}
+                        hasPrevPage={hasPrevPage}
+                      />
+                    )}
+                  </>
+                )}
               </div>
 
-              {totalPages > 1 && (
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  hasNextPage={hasNextPage}
-                  hasPrevPage={hasPrevPage}
-                />
-              )}
-            </>
+              <aside className="hidden lg:block">
+                <div className="sticky top-28 space-y-6">
+                  <SearchBox value={searchQuery} onChange={setSearchQuery} />
+
+                  <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.35)]">
+                    <div className="mb-5 flex items-center justify-between">
+                      <h2 className="text-lg font-black text-slate-900">
+                        Son 4 Gonderi
+                      </h2>
+                      <span className="text-[11px] font-black uppercase tracking-[0.24em] text-slate-400">
+                        Yeni
+                      </span>
+                    </div>
+
+                    <div className="space-y-4">
+                      {recentPosts.map((post) => (
+                        <Link
+                          key={post.id}
+                          href={`/blog/${post.slug}`}
+                          className="group flex items-center gap-4 rounded-[1.5rem] border border-slate-100 p-3 transition-colors hover:border-[#49202d]/15 hover:bg-slate-50"
+                        >
+                          <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl">
+                            <Image
+                              src={post.imageUrl}
+                              alt={post.imageAlt || post.title}
+                              fill
+                              className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            />
+                          </div>
+
+                          <div className="min-w-0">
+                            <p className="mb-2 text-[11px] font-black uppercase tracking-[0.22em] text-[#49202d]">
+                              {post.category}
+                            </p>
+                            <h3 className="line-clamp-2 text-sm font-black leading-snug text-slate-900">
+                              {post.title}
+                            </h3>
+                            <p className="mt-2 text-xs font-medium text-slate-400">
+                              {formatDate(post.publishedAt || post.createdAt)}
+                            </p>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.35)]">
+                    <div className="mb-5">
+                      <h2 className="text-lg font-black text-slate-900">
+                        Prefabrik Ev Kategorilerimiz
+                      </h2>
+                      <p className="mt-2 text-sm leading-relaxed text-slate-500">
+                        Modelleri kategori bazinda hizlica inceleyin.
+                      </p>
+                    </div>
+
+                    <div className="space-y-3">
+                      {filteredCategories.length > 0 ? (
+                        filteredCategories.map((item) => (
+                          <Link
+                            key={item.id}
+                            href={`/prefabrik-evler/${item.slug}`}
+                            className="group flex items-center justify-between rounded-[1.25rem] border border-slate-100 px-4 py-4 text-sm font-bold text-slate-700 transition-colors hover:border-[#49202d]/15 hover:bg-slate-50 hover:text-[#49202d]"
+                          >
+                            <span>{item.name}</span>
+                            <ChevronRight
+                              size={16}
+                              className="transition-transform group-hover:translate-x-1"
+                            />
+                          </Link>
+                        ))
+                      ) : (
+                        <p className="rounded-[1.25rem] border border-dashed border-slate-200 px-4 py-6 text-sm text-slate-500">
+                          Aramaniza uygun kategori bulunamadi.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </aside>
+            </div>
           )}
         </div>
       </section>

@@ -24,6 +24,15 @@ export async function getBlogPosts(publishedOnly: boolean = false) {
   return await query;
 }
 
+export async function getLatestBlogPosts(limit: number = 4) {
+  return await db
+    .select()
+    .from(blogPost)
+    .where(eq(blogPost.isPublished, true))
+    .orderBy(desc(blogPost.publishedAt), desc(blogPost.createdAt))
+    .limit(limit);
+}
+
 export async function getBlogPostsPaginated(options: {
   page?: number;
   limit?: number;

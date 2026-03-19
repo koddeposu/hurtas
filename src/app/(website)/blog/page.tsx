@@ -1,5 +1,6 @@
 import { Metadata } from "next";
-import { getBlogPostsPaginated } from "@/actions/blogActions";
+import { getBlogPostsPaginated, getLatestBlogPosts } from "@/actions/blogActions";
+import { getCategories } from "@/actions/categoryActions";
 import { BlogPageClient } from "./blog-client";
 
 interface BlogPageProps {
@@ -31,11 +32,21 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const params = await searchParams;
   const page = Math.max(1, parseInt(params.page || "1", 10));
 
-  const data = await getBlogPostsPaginated({
-    page,
-    limit: 9,
-    publishedOnly: true,
-  });
+  const [data, recentPosts, prefabricCategories] = await Promise.all([
+    getBlogPostsPaginated({
+      page,
+      limit: 9,
+      publishedOnly: true,
+    }),
+    getLatestBlogPosts(4),
+    getCategories(),
+  ]);
 
-  return <BlogPageClient data={data} />;
+  return (
+    <BlogPageClient
+      data={data}
+      recentPosts={recentPosts}
+      prefabricCategories={prefabricCategories}
+    />
+  );
 }
