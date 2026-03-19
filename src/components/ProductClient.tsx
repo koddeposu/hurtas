@@ -385,10 +385,10 @@ function TopCategoryFilters({
           <Link
             key={item.label}
             href={item.href}
-            className={`inline-flex items-center gap-2 rounded-full border px-4 py-3 text-xs font-black uppercase tracking-[0.14em] transition-all duration-300 ${
+            className={`inline-flex items-center gap-2 rounded-lg border px-4 py-3 text-xs font-black uppercase tracking-[0.14em] transition-all duration-300 ${
               item.active
                 ? "border-primary bg-primary text-white shadow-[0_18px_40px_-28px_rgba(73,32,45,0.55)]"
-                : "border-slate-200 bg-white text-slate-700 hover:-translate-y-0.5 hover:border-slate-200 hover:shadow-[0_16px_38px_-30px_rgba(15,23,42,0.18)]"
+                : "border-slate-300 bg-white text-slate-700 hover:-translate-y-0.5 hover:border-slate-400 hover:shadow-[0_16px_38px_-30px_rgba(15,23,42,0.18)]"
             }`}
           >
             <Icon className="h-4 w-4" />
@@ -410,7 +410,7 @@ function SeoFooter({
   cards: Array<{ title: string; text: string }>;
 }) {
   return (
-    <section className="mt-14 rounded-[2rem] border border-slate-200 bg-[#f7f5ef] p-6 shadow-[0_24px_60px_-50px_rgba(15,23,42,0.22)] md:p-8 lg:p-10">
+    <section className="mt-14 rounded-[1rem] border border-slate-300 bg-[#f7f5ef] p-6 shadow-[0_22px_50px_-40px_rgba(15,23,42,0.16)] md:p-8 lg:p-10">
       <div className="max-w-4xl">
         <p className="text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
           CT PREFABRİK
@@ -427,7 +427,7 @@ function SeoFooter({
         {cards.map((card) => (
           <article
             key={card.title}
-            className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-[0_18px_40px_-34px_rgba(15,23,42,0.12)]"
+            className="rounded-[1rem] border border-slate-300 bg-white p-6 shadow-[0_16px_34px_-28px_rgba(15,23,42,0.12)]"
           >
             <h3 className="text-xl font-black leading-snug tracking-tight text-slate-900 md:text-2xl">
               {card.title}
@@ -453,7 +453,7 @@ function InternalLinkSection({
   }>;
 }) {
   return (
-    <section className="mt-14 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_-50px_rgba(15,23,42,0.16)] md:p-8">
+    <section className="mt-14 rounded-[1rem] border border-slate-300 bg-white p-6 shadow-[0_22px_50px_-40px_rgba(15,23,42,0.14)] md:p-8">
       <div className="max-w-3xl">
         <p className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
           <Link2 className="h-4 w-4" />
@@ -477,11 +477,11 @@ function InternalLinkSection({
             <Link
               key={item.href}
               href={item.href}
-              className="group rounded-[1.5rem] border border-slate-200 bg-[#f8f7f3] p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-200 hover:shadow-[0_18px_42px_-34px_rgba(15,23,42,0.18)]"
+              className="group rounded-[0.9rem] border border-slate-300 bg-[#f8f7f3] p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-400 hover:shadow-[0_18px_42px_-34px_rgba(15,23,42,0.16)]"
             >
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary">
                     <Icon className="h-5 w-5" />
                   </div>
                   <h3 className="mt-4 text-lg font-black text-slate-900">
@@ -558,8 +558,8 @@ const ProductsClient = ({
 
       <section className="pb-20">
         {products.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-[2rem] border border-slate-200 bg-white px-6 py-20">
-            <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-slate-100">
+          <div className="flex flex-col items-center justify-center rounded-[1rem] border border-slate-300 bg-white px-6 py-20">
+            <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-xl bg-slate-100">
               <Filter size={32} className="text-slate-400" />
             </div>
             <h3 className="text-xl font-black text-slate-900">
@@ -572,7 +572,7 @@ const ProductsClient = ({
             </p>
             <Link
               href="/prefabrik-evler"
-              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-primary/90"
+              className="mt-6 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-primary/90"
             >
               Tüm Ürünleri Gör
               <ArrowUpRight className="h-4 w-4" />

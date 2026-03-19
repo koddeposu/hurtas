@@ -81,7 +81,7 @@ export const Stats = () => {
           {stats.map((item, i) => (
             <div key={i} className="group relative">
               {/* Soft Box Kartı */}
-              <div className="bg-white p-8 rounded-[2rem] border border-slate-50 shadow-[0_20px_50px_rgba(0,0,0,0.03)] hover:shadow-[0_40px_80px_rgba(0,0,0,0.06)] transition-all duration-700 relative z-10 overflow-hidden">
+              <div className="relative z-10 overflow-hidden rounded-[1rem] border border-slate-300 bg-white p-8 shadow-[0_18px_38px_-30px_rgba(15,23,42,0.12)] transition-all duration-700 hover:border-slate-400 hover:shadow-[0_28px_54px_-30px_rgba(15,23,42,0.16)]">
                 {/* Köşe Teknik Vektör (Blueprint Hissi) */}
                 <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
                   <div className="w-4 h-4 border-t border-r border-slate-900" />
@@ -89,7 +89,7 @@ export const Stats = () => {
 
                 {/* İkon Rozeti */}
                 <div
-                  className="w-12 h-12 rounded-2xl flex items-center justify-center mb-6 transition-all duration-500 group-hover:scale-110 shadow-sm"
+                  className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg shadow-sm transition-all duration-500 group-hover:scale-105"
                   style={{
                     backgroundColor: `${item.color}10`,
                     color: item.color,

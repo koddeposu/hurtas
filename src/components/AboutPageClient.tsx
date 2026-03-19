@@ -62,7 +62,7 @@ export default function AboutPageClient() {
         <div className="w-full max-w-[1280px]">
           <section className="grid gap-8 lg:grid-cols-[1.02fr_0.98fr] lg:items-center">
             <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 rounded-full border border-secondary/15 bg-secondary/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-secondary">
+              <div className="inline-flex items-center gap-2 rounded-lg border border-secondary/20 bg-secondary/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-secondary">
                 <BadgeCheck className="h-4 w-4" />
                 Hakkımızda
               </div>
@@ -97,14 +97,14 @@ export default function AboutPageClient() {
                 <Link
                   href="/prefabrik-evler"
                   prefetch={false}
-                  className="inline-flex items-center rounded-xl bg-primary px-5 py-3 text-sm font-black text-white transition-colors hover:bg-primary/90"
+                  className="inline-flex items-center rounded-lg bg-primary px-5 py-3 text-sm font-black text-white transition-colors hover:bg-primary/90"
                 >
                   Modelleri İncele
                 </Link>
                 <Link
                   href="/iletisim"
                   prefetch={false}
-                  className="inline-flex items-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-black text-slate-700 transition-colors hover:bg-slate-50"
+                  className="inline-flex items-center rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-black text-slate-700 transition-colors hover:bg-slate-50"
                 >
                   Teklif Alın
                 </Link>
@@ -112,7 +112,7 @@ export default function AboutPageClient() {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="relative min-h-[300px] overflow-hidden rounded-[2rem] border border-slate-200 shadow-[0_24px_60px_-44px_rgba(15,23,42,0.24)] sm:row-span-2">
+              <div className="relative min-h-[300px] overflow-hidden rounded-[1rem] border border-slate-300 shadow-[0_22px_50px_-38px_rgba(15,23,42,0.18)] sm:row-span-2">
                 <Image
                   src={AboutHeroImage}
                   alt="CT Prefabrik hakkında sayfasında prefabrik ev ve çelik ev üretim yaklaşımı"
@@ -125,7 +125,7 @@ export default function AboutPageClient() {
                 />
               </div>
 
-              <div className="relative min-h-[142px] overflow-hidden rounded-[1.75rem] border border-slate-200 shadow-[0_20px_50px_-42px_rgba(15,23,42,0.22)]">
+              <div className="relative min-h-[142px] overflow-hidden rounded-[1rem] border border-slate-300 shadow-[0_18px_42px_-34px_rgba(15,23,42,0.16)]">
                 <Image
                   src={MissionImage}
                   alt="Anahtar teslim prefabrik ev ve çelik konstrüksiyon ev planlama süreci"
@@ -135,7 +135,7 @@ export default function AboutPageClient() {
                 />
               </div>
 
-              <div className="relative min-h-[142px] overflow-hidden rounded-[1.75rem] border border-slate-200 shadow-[0_20px_50px_-42px_rgba(15,23,42,0.22)]">
+              <div className="relative min-h-[142px] overflow-hidden rounded-[1rem] border border-slate-300 shadow-[0_18px_42px_-34px_rgba(15,23,42,0.16)]">
                 <Image
                   src={VisionImage}
                   alt="Prefabrik villa, dubleks prefabrik ev ve konteyner yapı çözümleri planlama görseli"
@@ -154,9 +154,9 @@ export default function AboutPageClient() {
               return (
                 <article
                   key={item.title}
-                  className="rounded-[1.75rem] border border-slate-200 bg-[#f8f7f3] p-5 shadow-[0_18px_50px_-42px_rgba(15,23,42,0.14)]"
+                  className="rounded-[1rem] border border-slate-300 bg-[#f8f7f3] p-5 shadow-[0_16px_36px_-30px_rgba(15,23,42,0.12)]"
                 >
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-secondary/10 text-secondary">
+                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-secondary/10 text-secondary">
                     <Icon className="h-5 w-5" />
                   </div>
                   <h2 className="mt-4 text-xl font-black tracking-tight text-slate-900">
@@ -170,7 +170,7 @@ export default function AboutPageClient() {
             })}
           </section>
 
-          <section className="mt-12 rounded-[2rem] border border-slate-200 bg-[#f7f5ef] p-6 md:p-8">
+          <section className="mt-12 rounded-[1rem] border border-slate-300 bg-[#f7f5ef] p-6 md:p-8">
             <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
               <div className="max-w-xl">
                 <p className="text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
@@ -196,9 +196,9 @@ export default function AboutPageClient() {
                 {PROCESS.map((step, index) => (
                   <div
                     key={step}
-                    className="flex items-start gap-4 rounded-[1.5rem] border border-slate-200 bg-white p-4"
+                    className="flex items-start gap-4 rounded-[0.9rem] border border-slate-300 bg-white p-4"
                   >
-                    <div className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-black text-white">
+                    <div className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-sm font-black text-white">
                       {index + 1}
                     </div>
                     <p className="pt-1 text-sm font-bold leading-6 text-slate-800 md:text-base">
@@ -214,9 +214,9 @@ export default function AboutPageClient() {
             {PRINCIPLES.map((item) => (
               <article
                 key={item.title}
-                className="rounded-[1.75rem] border border-slate-200 bg-white p-6 shadow-[0_18px_50px_-42px_rgba(15,23,42,0.12)]"
+                className="rounded-[1rem] border border-slate-300 bg-white p-6 shadow-[0_16px_36px_-30px_rgba(15,23,42,0.12)]"
               >
-                <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                <div className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary">
                   <Building2 className="h-5 w-5" />
                 </div>
                 <h3 className="mt-4 text-xl font-black leading-snug tracking-tight text-slate-900">
@@ -229,10 +229,10 @@ export default function AboutPageClient() {
             ))}
           </section>
 
-          <section className="mt-12 rounded-[2rem] border border-slate-200 bg-white p-6 md:p-8">
+          <section className="mt-12 rounded-[1rem] border border-slate-300 bg-white p-6 md:p-8">
             <div className="grid gap-6 lg:grid-cols-[1fr_1fr]">
               <div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/8 px-4 py-2 text-[10px] font-black uppercase tracking-[0.22em] text-primary">
+                <div className="inline-flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/8 px-4 py-2 text-[10px] font-black uppercase tracking-[0.22em] text-primary">
                   <ShieldCheck className="h-4 w-4" />
                   SEO Odaklı Hakkımızda İçeriği
                 </div>

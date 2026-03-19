@@ -53,10 +53,10 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
   const heroImage = projects[0]?.img[0];
 
   return (
-    <main className=" min-h-screen flex items-center justify-center flex-col w-full">
+    <main className="flex min-h-screen w-full flex-col items-center justify-center">
       <Modal isShow={modal} onClose={() => setModal(false)}>
-        <div className="h-screen flex items-center justify-center p-5">
-          <div className="max-h-[600px] max-w-[600px] w-full h-full bg-transparent rounded-xl overflow-hidden">
+        <div className="flex h-screen items-center justify-center p-5">
+          <div className="h-full max-h-[600px] w-full max-w-[600px] overflow-hidden rounded-lg border border-slate-300 bg-transparent">
             <iframe
               title="Prefabrik Ev 3D"
               src="https://sketchfab.com/models/489302e595ce444ab5f696e2db29b763/embed?autospin=1&ui_theme=dark"
@@ -81,7 +81,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
         <div className="mx-auto flex w-full max-w-[1280px] items-center px-4 py-10 sm:px-6 grid   lg:grid-cols-2 lg:gap-14 lg:px-8 lg:py-14">
           <div className="relative z-10 space-y-7 ">
             <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-secondary/10 rounded-full mb-6">
+              <div className="mb-6 inline-flex items-center gap-2 rounded-lg border border-secondary/20 bg-secondary/10 px-4 py-2">
                 <span className="inline-flex h-2 w-2 rounded-full bg-secondary" />
                 <span className="text-emerald-700 text-xs font-bold uppercase tracking-widest">
                   30 GÜNDE ANAHTAR TESLİM
@@ -101,10 +101,10 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
             <div className="flex flex-wrap gap-4">
               <button
                 onClick={() => setModal(true)}
-                className="cursor-pointer rounded-[1.5rem] border border-slate-200 bg-white px-6 py-4 text-sm font-bold text-slate-900 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-200 hover:bg-slate-50"
+                className="cursor-pointer rounded-lg border border-slate-300 bg-white px-6 py-4 text-sm font-bold text-slate-900 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-400 hover:bg-slate-50"
               >
                 <span className="flex items-center gap-3">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary/15">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary/15">
                     <Play size={14} className="fill-secondary text-secondary" />
                   </span>
                   Canlı Önizleme
@@ -136,7 +136,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
               ].map((item) => (
                 <div
                   key={item.label}
-                  className="rounded-[1.5rem] border border-slate-200 bg-white px-4 py-4 shadow-[0_18px_40px_-34px_rgba(15,23,42,0.12)]"
+                  className="rounded-[0.9rem] border border-slate-300 bg-white px-4 py-4 shadow-[0_16px_34px_-28px_rgba(15,23,42,0.12)]"
                 >
                   <div className="text-lg font-black tracking-tight text-slate-900">
                     {item.value}
@@ -150,7 +150,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
           </div>
 
           <div className="relative mt-8  lg:mt-0">
-            <div className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0_24px_60px_-40px_rgba(15,23,42,0.22)]">
+            <div className="relative overflow-hidden rounded-[1rem] border border-slate-300 bg-white shadow-[0_22px_48px_-34px_rgba(15,23,42,0.18)]">
               <div className="relative aspect-[16/11] w-full">
                 {heroImage ? (
                   <Image
@@ -170,8 +170,8 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
               </div>
 
               <div className="grid gap-3 border-t border-slate-200 bg-white p-4 sm:grid-cols-2">
-                <div className="flex items-center gap-3 rounded-[1.25rem] border border-slate-200 bg-[#f8f7f3] px-4 py-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-white">
+                <div className="flex items-center gap-3 rounded-[0.85rem] border border-slate-300 bg-[#f8f7f3] px-4 py-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary text-white">
                     <Ruler size={20} />
                   </div>
                   <div>
@@ -184,8 +184,8 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 rounded-[1.25rem] border border-slate-200 bg-[#f8f7f3] px-4 py-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-emerald-50 text-emerald-600">
+                <div className="flex items-center gap-3 rounded-[0.85rem] border border-slate-300 bg-[#f8f7f3] px-4 py-3">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
                     <CheckCircle2 size={20} />
                   </div>
                   <div>
@@ -228,7 +228,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
         </section>
 
         <section className="pb-24">
-          <div className="mb-14 rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_24px_60px_-50px_rgba(15,23,42,0.16)] md:p-8">
+          <div className="mb-14 rounded-[1rem] border border-slate-300 bg-white p-6 shadow-[0_22px_48px_-38px_rgba(15,23,42,0.14)] md:p-8">
             <div className="max-w-3xl">
               <p className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
                 <Link2 className="h-4 w-4" />
@@ -267,11 +267,11 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="group rounded-[1.5rem] border border-slate-200 bg-[#f8f7f3] p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-200 hover:shadow-[0_18px_42px_-34px_rgba(15,23,42,0.18)]"
+                    className="group rounded-[0.9rem] border border-slate-300 bg-[#f8f7f3] p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-400 hover:shadow-[0_18px_42px_-34px_rgba(15,23,42,0.16)]"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                        <div className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary">
                           <Icon className="h-5 w-5" />
                         </div>
                         <h3 className="mt-4 text-lg font-black text-slate-900">
@@ -319,7 +319,7 @@ const ProjectCard = ({
       onClick={() => onProjectClick(index)}
       className="group relative cursor-pointer"
     >
-      <div className="relative overflow-hidden rounded-[1rem] border border-slate-200 bg-white shadow-[0_20px_44px_-34px_rgba(15,23,42,0.16)] transition-all duration-200 group-hover:-translate-y-1 group-hover:border-slate-200 group-hover:shadow-[0_24px_52px_-34px_rgba(15,23,42,0.22)] md:rounded-[2rem]">
+      <div className="relative overflow-hidden rounded-[1rem] border border-slate-300 bg-white shadow-[0_18px_40px_-30px_rgba(15,23,42,0.14)] transition-all duration-200 group-hover:-translate-y-1 group-hover:border-slate-400 group-hover:shadow-[0_22px_46px_-28px_rgba(15,23,42,0.18)]">
         <div className="relative aspect-[4/3] w-full overflow-hidden md:aspect-[16/9]">
           <Image
             src={coverImage.src}
@@ -336,7 +336,7 @@ const ProjectCard = ({
               {project.title}
             </h3>
             {project.img.length > 1 ? (
-              <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-[#f8f7f3] px-3 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600">
+              <div className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-[#f8f7f3] px-3 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600">
                 <Images className="h-3.5 w-3.5 text-secondary" />
                 {project.img.length} Görsel
               </div>
@@ -403,7 +403,7 @@ function ProjectGalleryModal({
           <div className="relative">
             <Carousel
               setApi={setApi}
-              className="w-full overflow-hidden rounded-[1rem] md:rounded-[2rem] border-white border-4 md:border-[8px] bg-white shadow-2xl"
+              className="w-full overflow-hidden rounded-[1rem] border-4 border-white bg-white shadow-2xl md:border-[8px]"
             >
               <CarouselContent>
                 {project.img.map((image, index) => (
@@ -422,7 +422,7 @@ function ProjectGalleryModal({
             </Carousel>
 
             {/* FOTOĞRAF SAYACI (Örn: 1/3) */}
-            <div className="absolute top-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm font-bold">
+            <div className="absolute right-4 top-4 rounded-lg bg-black/50 px-3 py-1 text-sm font-bold text-white">
               {current + 1} / {project.img.length}
             </div>
           </div>

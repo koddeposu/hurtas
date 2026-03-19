@@ -48,7 +48,7 @@ export default function ContactPageClient() {
 
         <div className="container mx-auto max-w-6xl relative z-10 text-center">
           <motion.div {...fadeInUp}>
-            <span className="px-4 py-1.5 rounded-full bg-primary/10 text-[#49202d] text-xs font-black tracking-widest uppercase mb-6 inline-block">
+            <span className="mb-6 inline-block rounded-lg border border-primary/15 bg-primary/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-[#49202d]">
               Bize Ulaşın
             </span>
             <h1 className="text-5xl md:text-7xl font-black text-[#49202d] leading-none tracking-tighter mb-8">
@@ -152,7 +152,7 @@ export default function ContactPageClient() {
           title="CT Prefabrik Merkez Ofis Konumu"
           itemProp="hasMap"
         />
-        <div className="absolute top-10 right-10 bg-white p-6 rounded-2xl shadow-2xl max-w-xs border border-[#49202d]/10">
+        <div className="absolute top-10 right-10 max-w-xs rounded-xl border border-slate-300 bg-white p-6 shadow-[0_20px_44px_-28px_rgba(15,23,42,0.24)]">
           <h4 className="font-black text-[#49202d] mb-2 uppercase text-xs tracking-widest">
             Yol Tarifi
           </h4>
@@ -201,9 +201,9 @@ const ContactCard = ({
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ delay, duration: 0.5 }}
     viewport={{ once: true }}
-    className="group p-10 bg-white border border-slate-100 rounded-[2.5rem] shadow-sm hover:shadow-2xl hover:shadow-[#49202d]/5 hover:-translate-y-2 transition-all duration-500 relative"
+    className="group relative rounded-[1rem] border border-slate-300 bg-white p-10 shadow-[0_16px_36px_-28px_rgba(15,23,42,0.14)] transition-all duration-500 hover:-translate-y-1.5 hover:border-slate-400 hover:shadow-[0_24px_48px_-28px_rgba(15,23,42,0.18)]"
   >
-    <div className="mb-6 w-16 h-16 bg-primary/5 text-[#49202d] rounded-2xl flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-500">
+    <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-lg bg-primary/5 text-[#49202d] transition-colors duration-500 group-hover:bg-primary group-hover:text-white">
       {icon}
     </div>
     <p className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-2">
@@ -232,7 +232,7 @@ const ContactCard = ({
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 5 }}
-            className="absolute -top-10 left-0 bg-secondary text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg whitespace-nowrap"
+            className="absolute -top-10 left-0 whitespace-nowrap rounded-lg bg-secondary px-3 py-1 text-xs font-semibold text-white shadow-lg"
           >
             ✓ Kopyalandı!
           </motion.div>

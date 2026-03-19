@@ -48,9 +48,9 @@ export const ProductCard = ({
     <Link
       href={`/urun-detay/${detailSlug}`}
       prefetch={false}
-      className="group flex w-full flex-col justify-between overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white text-left shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-slate-200 hover:shadow-[0_22px_54px_-34px_rgba(15,23,42,0.22)]"
+      className="group flex w-full flex-col justify-between overflow-hidden rounded-[1rem] border border-slate-300 bg-white text-left shadow-[0_16px_34px_-28px_rgba(15,23,42,0.12)] transition-all duration-200 hover:-translate-y-1 hover:border-slate-400 hover:shadow-[0_22px_44px_-28px_rgba(15,23,42,0.18)]"
     >
-      <div className="relative overflow-hidden rounded-tl-[1.75rem] rounded-tr-[1.75rem]">
+      <div className="relative overflow-hidden rounded-tl-[1rem] rounded-tr-[1rem]">
         <div className="relative aspect-video w-full bg-slate-100">
           <Image
             src={coverImage.src}
@@ -76,19 +76,19 @@ export const ProductCard = ({
           </button>
 
           {bestseller ? (
-            <div className="absolute left-4 top-4 z-10 rounded-full bg-red-600/90 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-white shadow-sm">
+            <div className="absolute left-4 top-4 z-10 rounded-lg bg-red-600/90 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-white shadow-sm">
               Çok Satan
             </div>
           ) : null}
 
           {categoryName ? (
-            <div className="absolute right-4 top-4 z-10 rounded-full bg-white/92 px-4 py-1 text-[9px] font-black uppercase tracking-widest text-primary shadow-sm backdrop-blur">
+            <div className="absolute right-4 top-4 z-10 rounded-lg border border-slate-200/80 bg-white/92 px-4 py-1 text-[9px] font-black uppercase tracking-widest text-primary shadow-sm backdrop-blur">
               {categoryName}
             </div>
           ) : null}
 
           {images.length > 1 ? (
-            <div className="absolute left-4 bottom-4 z-10 inline-flex items-center gap-2 rounded-full bg-white/92 px-3 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-slate-700 shadow-sm backdrop-blur">
+            <div className="absolute left-4 bottom-4 z-10 inline-flex items-center gap-2 rounded-lg border border-slate-200/80 bg-white/92 px-3 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-slate-700 shadow-sm backdrop-blur">
               <Images className="h-3.5 w-3.5 text-secondary" />
               {images.length} Görsel
             </div>
@@ -136,7 +136,7 @@ export const ProductCard = ({
           </div>
         </div>
 
-        <div className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-slate-900 py-3.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white transition-all duration-200 group-hover:bg-primary">
+        <div className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-slate-900 py-3.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white transition-all duration-200 group-hover:bg-primary">
           İncele <ArrowUpRight size={14} />
         </div>
       </div>

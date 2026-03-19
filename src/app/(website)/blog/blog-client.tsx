@@ -47,14 +47,14 @@ function formatDate(date: Date | null) {
 
 function EmptyState() {
   return (
-    <div className="flex flex-col items-center justify-center py-24 text-center">
-      <div className="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-8">
+    <div className="flex flex-col items-center justify-center rounded-[1rem] border border-slate-300 bg-white px-6 py-24 text-center shadow-[0_18px_38px_-28px_rgba(15,23,42,0.12)]">
+      <div className="mb-8 flex h-24 w-24 items-center justify-center rounded-xl bg-slate-100">
         <PencilLine size={40} className="text-slate-300" />
       </div>
-      <h3 className="text-2xl font-black text-slate-900 mb-4">
+      <h3 className="mb-4 text-2xl font-black text-slate-900">
         Henüz Blog Yazısı Yok
       </h3>
-      <p className="text-slate-500 max-w-md">
+      <p className="max-w-md text-slate-500">
         Yakında prefabrik yapılar, mimari trendler ve daha fazlası hakkında
         ilham verici içerikler paylaşılacak.
       </p>
@@ -64,8 +64,8 @@ function EmptyState() {
 
 function SearchResultsEmpty({ query }: { query: string }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-[2rem] border border-dashed border-slate-200 bg-white px-6 py-20 text-center">
-      <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-slate-100">
+    <div className="flex flex-col items-center justify-center rounded-[1rem] border border-dashed border-slate-300 bg-white px-6 py-20 text-center">
+      <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-xl bg-slate-100">
         <Search size={32} className="text-slate-400" />
       </div>
       <h3 className="mb-3 text-2xl font-black text-slate-900">
@@ -87,7 +87,7 @@ function SearchBox({
   onChange: (value: string) => void;
 }) {
   return (
-    <div className="rounded-[2rem] border border-slate-200 bg-white p-5 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.35)]">
+    <div className="rounded-[1rem] border border-slate-300 bg-white p-5 shadow-[0_18px_40px_-30px_rgba(15,23,42,0.18)]">
       <div className="mb-3">
         <p className="text-[11px] font-black uppercase tracking-[0.28em] text-[#49202d]">
           Blog Category Arama
@@ -104,7 +104,7 @@ function SearchBox({
           value={value}
           onChange={(event) => onChange(event.target.value)}
           placeholder="Blog veya kategori ara"
-          className="h-12 rounded-2xl border-slate-200 bg-slate-50 pl-11 pr-4 text-sm text-slate-700 placeholder:text-slate-400"
+          className="h-12 rounded-xl border-slate-300 bg-slate-50 pl-11 pr-4 text-sm text-slate-700 placeholder:text-slate-400"
         />
       </div>
     </div>
@@ -154,11 +154,11 @@ function Pagination({
   };
 
   return (
-    <div className="mt-24 flex justify-center items-center gap-4">
+    <div className="mt-20 flex flex-wrap items-center justify-center gap-3 rounded-[1rem] border border-slate-300 bg-white px-4 py-4 shadow-[0_16px_30px_-24px_rgba(15,23,42,0.1)]">
       {hasPrevPage && (
         <Link
           href={getPageUrl(currentPage - 1)}
-          className="flex items-center gap-2 pr-4 text-[#49202d] font-bold"
+          className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-3 font-bold text-[#49202d] transition-colors hover:border-primary hover:bg-primary hover:text-white"
         >
           <ArrowLeft size={18} /> Önceki
         </Link>
@@ -173,10 +173,10 @@ function Pagination({
           <Link
             key={page}
             href={getPageUrl(page)}
-            className={`w-12 h-12 rounded-full border flex items-center justify-center font-bold transition-all ${
+            className={`flex h-12 w-12 items-center justify-center rounded-lg border font-bold transition-all ${
               currentPage === page
                 ? "bg-primary text-white border-primary"
-                : "border-slate-200 text-slate-400 hover:bg-primary hover:text-white hover:border-primary"
+                : "border-slate-300 text-slate-400 hover:bg-primary hover:text-white hover:border-primary"
             }`}
           >
             {page}
@@ -187,7 +187,7 @@ function Pagination({
       {hasNextPage && (
         <Link
           href={getPageUrl(currentPage + 1)}
-          className="flex items-center gap-2 pl-4 text-[#49202d] font-bold"
+          className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-3 font-bold text-[#49202d] transition-colors hover:border-primary hover:bg-primary hover:text-white"
         >
           Sonraki <ArrowRight size={18} />
         </Link>
@@ -247,7 +247,7 @@ export function BlogPageClient({
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-[#49202d]/10 mb-12"
+              className="mb-12 flex items-center gap-2 rounded-lg border border-[#49202d]/15 bg-primary/5 px-4 py-2"
             >
               <PencilLine size={14} className="text-[#49202d]" />
               <span className="text-[#49202d] text-[10px] font-black uppercase tracking-[0.3em]">
@@ -301,7 +301,7 @@ export function BlogPageClient({
         </div>
       </section>
 
-      <section className="pb-32">
+      <section className="bg-white pb-32">
         <div className="container mx-auto max-w-7xl">
           <div className="mb-10 lg:hidden">
             <SearchBox value={searchQuery} onChange={setSearchQuery} />
@@ -332,23 +332,23 @@ export function BlogPageClient({
                             }}
                             viewport={{ once: true }}
                             transition={{ delay: index * 0.08 }}
-                            className="group flex h-full cursor-pointer flex-col will-change-transform"
+                            className="group flex h-full cursor-pointer flex-col bg-white will-change-transform"
                           >
-                            <div className="relative mb-8 h-[300px] overflow-hidden rounded-[2.5rem] shadow-sm transition-shadow duration-300 group-hover:shadow-[0_28px_60px_-24px_rgba(15,23,42,0.38)]">
+                            <div className="relative mb-6 h-[300px] overflow-hidden rounded-[0.85rem] shadow-sm transition-shadow duration-300 group-hover:shadow-[0_24px_44px_-24px_rgba(15,23,42,0.2)]">
                               <Image
                                 src={post.imageUrl}
                                 alt={post.imageAlt || post.title}
                                 fill
                                 className="object-cover transition-transform duration-300 group-hover:scale-105"
                               />
-                              <div className="absolute left-6 top-6 rounded-2xl bg-white/90 px-4 py-2 shadow-sm backdrop-blur-md">
+                              <div className="absolute left-5 top-5 rounded-lg bg-white/92 px-4 py-2 shadow-sm backdrop-blur-md">
                                 <span className="text-[10px] font-black uppercase tracking-widest text-[#49202d]">
                                   {post.category}
                                 </span>
                               </div>
                             </div>
 
-                            <div className="flex flex-1 flex-col px-2">
+                            <div className="flex flex-1 flex-col px-2 pb-2">
                               <div className="mb-4 flex items-center gap-4 text-xs font-bold text-slate-400">
                                 <div className="flex items-center gap-1.5">
                                   <Calendar size={14} />
@@ -397,7 +397,7 @@ export function BlogPageClient({
                 <div className="sticky top-28 space-y-6">
                   <SearchBox value={searchQuery} onChange={setSearchQuery} />
 
-                  <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.35)]">
+                  <div className="rounded-[1rem] border border-slate-300 bg-white p-6 shadow-[0_18px_40px_-30px_rgba(15,23,42,0.14)]">
                     <div className="mb-5 flex items-center justify-between">
                       <h2 className="text-lg font-black text-slate-900">
                         Son 4 Gonderi
@@ -412,9 +412,9 @@ export function BlogPageClient({
                         <Link
                           key={post.id}
                           href={`/blog/${post.slug}`}
-                          className="group flex items-center gap-4 rounded-[1.5rem] border border-slate-100 p-3 transition-colors hover:border-[#49202d]/15 hover:bg-slate-50"
+                          className="group flex items-center gap-4 rounded-[0.85rem] border border-slate-300 p-3 transition-colors hover:border-[#49202d]/20 hover:bg-slate-50"
                         >
-                          <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl">
+                          <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl">
                             <Image
                               src={post.imageUrl}
                               alt={post.imageAlt || post.title}
@@ -439,7 +439,7 @@ export function BlogPageClient({
                     </div>
                   </div>
 
-                  <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_20px_60px_-35px_rgba(15,23,42,0.35)]">
+                  <div className="rounded-[1rem] border border-slate-300 bg-white p-6 shadow-[0_18px_40px_-30px_rgba(15,23,42,0.14)]">
                     <div className="mb-5">
                       <h2 className="text-lg font-black text-slate-900">
                         Prefabrik Ev Kategorilerimiz
@@ -455,7 +455,7 @@ export function BlogPageClient({
                           <Link
                             key={item.id}
                             href={`/prefabrik-evler/${item.slug}`}
-                            className="group flex items-center justify-between rounded-[1.25rem] border border-slate-100 px-4 py-4 text-sm font-bold text-slate-700 transition-colors hover:border-[#49202d]/15 hover:bg-slate-50 hover:text-[#49202d]"
+                            className="group flex items-center justify-between rounded-[0.75rem] border border-slate-300 px-4 py-4 text-sm font-bold text-slate-700 transition-colors hover:border-[#49202d]/20 hover:bg-slate-50 hover:text-[#49202d]"
                           >
                             <span>{item.name}</span>
                             <ChevronRight
@@ -465,7 +465,7 @@ export function BlogPageClient({
                           </Link>
                         ))
                       ) : (
-                        <p className="rounded-[1.25rem] border border-dashed border-slate-200 px-4 py-6 text-sm text-slate-500">
+                        <p className="rounded-[0.75rem] border border-dashed border-slate-300 px-4 py-6 text-sm text-slate-500">
                           Aramaniza uygun kategori bulunamadi.
                         </p>
                       )}
