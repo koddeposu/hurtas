@@ -90,11 +90,11 @@ export function HomepageCategorySlider({
           type="button"
           onClick={() => api?.scrollPrev()}
           disabled={!canScrollPrev}
-          className="absolute -left-10 top-1/2 z-20 inline-flex  -translate-y-1/2 items-center justify-center   text-black  transition-colors hover:text-secondary disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer hover:scale-110"
+          className="absolute  -left-7 md:-left-10 top-1/2 z-20 inline-flex  -translate-y-1/2 items-center justify-center   text-black  transition-colors hover:text-secondary disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer hover:scale-110"
           aria-label={`${title} önceki`}
         >
           <ChevronLeft
-            className="w-10 h-10 lg:w-20 lg:h-20"
+            className="w-14 h-14 lg:w-20 lg:h-20"
             strokeWidth={0.8}
           />
         </button>
@@ -103,10 +103,13 @@ export function HomepageCategorySlider({
           type="button"
           onClick={() => api?.scrollNext()}
           disabled={!canScrollNext}
-          className="absolute -right-10 top-1/2 z-20 inline-flex  -translate-y-1/2 items-center justify-center text-slate-700  transition-colors  hover:text-secondary disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer hover:scale-110"
+          className="absolute  -right-7 md:-right-10 top-1/2 z-20 inline-flex  -translate-y-1/2 items-center justify-center text-slate-700  transition-colors  hover:text-secondary disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer hover:scale-110"
           aria-label={`${title} sonraki`}
         >
-          <ChevronRight size={75} strokeWidth={0.8} />
+          <ChevronRight
+            strokeWidth={0.8}
+            className="w-14 h-14 lg:w-20 lg:h-20"
+          />
         </button>
 
         <Carousel
