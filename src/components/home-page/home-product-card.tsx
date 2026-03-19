@@ -21,7 +21,7 @@ export function HomeProductCard({
     <Link
       href={`/urun-detay/${product.slug}`}
       prefetch={false}
-      className="group flex h-full flex-col overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-[0_16px_42px_-34px_rgba(15,23,42,0.35)] transition-all duration-300 hover:-translate-y-2 hover:border-slate-200 hover:shadow-[0_28px_72px_-34px_rgba(15,23,42,0.42)]"
+      className="group flex h-full flex-col overflow-hidden rounded-[1rem] border border-slate-300 bg-white shadow-[0_16px_38px_-32px_rgba(15,23,42,0.24)] transition-all duration-300 hover:-translate-y-1.5 hover:border-slate-400 hover:shadow-[0_24px_52px_-30px_rgba(15,23,42,0.3)]"
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
         {product.image ? (
@@ -36,13 +36,13 @@ export function HomeProductCard({
         ) : null}
 
         {badge ? (
-          <div className="absolute left-4 top-4 rounded-full bg-primary/92 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-white shadow-sm">
+          <div className="absolute left-4 top-4 rounded-lg bg-primary/92 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-white shadow-sm">
             {badge}
           </div>
         ) : null}
 
         {product.category?.name ? (
-          <div className="absolute right-4 top-4 rounded-full bg-white/92 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-primary shadow-sm backdrop-blur">
+          <div className="absolute right-4 top-4 rounded-lg border border-slate-200/80 bg-white/92 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-primary shadow-sm backdrop-blur">
             {product.category.name}
           </div>
         ) : null}
@@ -68,7 +68,7 @@ export function HomeProductCard({
 
         <div className="mt-4 grid grid-cols-2 gap-3 border-t border-slate-200 pt-4">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-50 text-primary">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-50 text-primary">
               <Ruler className="h-4 w-4" />
             </div>
             <span className="text-xs font-bold text-slate-500">
@@ -77,7 +77,7 @@ export function HomeProductCard({
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-50 text-primary">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-50 text-primary">
               <Home className="h-4 w-4" />
             </div>
             <span className="text-xs font-bold text-slate-500">

@@ -88,7 +88,7 @@ export const LeadForm = () => {
   return (
     <section ref={sectionRef} className="lg:px-6">
       <div className="container mx-auto max-w-6xl">
-        <div className="overflow-hidden rounded-[3rem] border border-slate-50 bg-white shadow-md">
+        <div className="overflow-hidden rounded-[1.5rem] border border-slate-300 bg-white shadow-[0_22px_52px_-42px_rgba(15,23,42,0.22)]">
           <div className="grid grid-cols-1 lg:grid-cols-12">
             {/* SOL TARAF: Bilgilendirme Alanı */}
             <div className="relative flex flex-col justify-center overflow-hidden bg-secondary p-8 md:p-12 lg:col-span-5">
@@ -148,7 +148,7 @@ export const LeadForm = () => {
                     exit={{ opacity: 0, scale: 0.9 }}
                     className="flex h-full flex-col items-center justify-center space-y-5 py-10 text-center"
                   >
-                    <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600">
+                    <div className="flex h-20 w-20 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
                       <Check size={40} strokeWidth={3} />
                     </div>
                     <div>
@@ -193,7 +193,7 @@ export const LeadForm = () => {
                             value={formData.name}
                             onChange={handleChange}
                             placeholder="Örn: Ahmet Yılmaz"
-                            className="w-full rounded-2xl border border-transparent bg-slate-50 py-3.5 pl-12 pr-4 font-medium text-slate-700 outline-none transition-all placeholder:text-slate-300 focus:border-[#165b39]/30 focus:bg-white focus:ring-4 focus:ring-[#165b39]/5"
+                            className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-4 font-medium text-slate-700 outline-none transition-all placeholder:text-slate-300 focus:border-[#165b39]/40 focus:bg-white focus:ring-4 focus:ring-[#165b39]/5"
                           />
                         </div>
                       </div>
@@ -214,7 +214,7 @@ export const LeadForm = () => {
                             value={formData.phone}
                             onChange={handleChange}
                             placeholder="0 (5xx) 000 00 00"
-                            className="w-full rounded-2xl border border-transparent bg-slate-50 py-3.5 pl-12 pr-4 font-medium text-slate-700 outline-none transition-all placeholder:text-slate-300 focus:border-[#165b39]/30 focus:bg-white focus:ring-4 focus:ring-[#165b39]/5"
+                            className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-4 font-medium text-slate-700 outline-none transition-all placeholder:text-slate-300 focus:border-[#165b39]/40 focus:bg-white focus:ring-4 focus:ring-[#165b39]/5"
                           />
                         </div>
                       </div>
@@ -235,7 +235,7 @@ export const LeadForm = () => {
                           value={formData.message}
                           onChange={handleChange}
                           placeholder="Projenizden kısaca bahsedin..."
-                          className="w-full resize-none rounded-2xl border border-transparent bg-slate-50 py-3.5 pl-12 pr-4 font-medium text-slate-700 outline-none transition-all placeholder:text-slate-300 focus:border-[#165b39]/30 focus:bg-white focus:ring-4 focus:ring-[#165b39]/5"
+                          className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-4 font-medium text-slate-700 outline-none transition-all placeholder:text-slate-300 focus:border-[#165b39]/40 focus:bg-white focus:ring-4 focus:ring-[#165b39]/5"
                         ></textarea>
                       </div>
                     </div>
@@ -277,7 +277,7 @@ export const LeadForm = () => {
                       disabled={isSubmitting}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="flex w-full items-center justify-center gap-3 rounded-2xl py-4 text-sm font-bold tracking-[0.16em] text-white shadow-xl transition-all disabled:cursor-not-allowed disabled:opacity-70"
+                      className="flex w-full items-center justify-center gap-3 rounded-lg py-4 text-sm font-bold tracking-[0.16em] text-white shadow-xl transition-all disabled:cursor-not-allowed disabled:opacity-70"
                       style={{ backgroundColor: "#165b39" }}
                     >
                       {isSubmitting ? (

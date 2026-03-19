@@ -25,20 +25,20 @@ export async function HomepageProductSliders({
   const [singleFloorProducts, doubleFloorProducts, steelHouseProducts] =
     await Promise.all([
       singleFloorCategory
-        ? getProductsPreview(singleFloorCategory.id, 4)
+        ? getProductsPreview(singleFloorCategory.id, 8)
         : Promise.resolve([]),
       doubleFloorCategory
-        ? getProductsPreview(doubleFloorCategory.id, 4)
+        ? getProductsPreview(doubleFloorCategory.id, 8)
         : Promise.resolve([]),
       steelHouseCategory
-        ? getProductsPreview(steelHouseCategory.id, 4)
+        ? getProductsPreview(steelHouseCategory.id, 8)
         : Promise.resolve([]),
     ]);
 
   return (
     <>
       {singleFloorProducts.length > 0 ? (
-        <section className="flex justify-center pt-5 lg:pt-7">
+        <section className="flex justify-center py-5 lg:pt-7">
           <div className="max-w-[1280px] w-full">
             <HomepageCategorySlider
               title="Prefabrik Evler"
@@ -57,7 +57,7 @@ export async function HomepageProductSliders({
       ) : null}
 
       {doubleFloorProducts.length > 0 ? (
-        <section className="flex justify-center pt-3 lg:pt-5">
+        <section className="flex justify-center py-5 lg:pt-5">
           <div className="max-w-[1280px] w-full">
             <HomepageCategorySlider
               title="Prefabrik Evler"
@@ -76,7 +76,7 @@ export async function HomepageProductSliders({
       ) : null}
 
       {steelHouseProducts.length > 0 ? (
-        <section className="flex justify-center pt-3 lg:pt-5">
+        <section className="flex justify-center py-5 lg:pt-5">
           <div className="max-w-[1280px] w-full">
             <HomepageCategorySlider
               title="Evler"

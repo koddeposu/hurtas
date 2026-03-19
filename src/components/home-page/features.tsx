@@ -97,9 +97,9 @@ export const Features = () => {
                   </div>
 
                   {/* Soft Box İçerik */}
-                  <div className="border-slate-200 shadow-md rounded-bl-[2.5rem] rounded-tr-[2.5rem] border border-slate-50 bg-white p-7 shadow-[0_10px_40px_rgba(0,0,0,0.02)] transition-all duration-500 group-hover:shadow-[0_30px_60px_rgba(0,0,0,0.05)]">
+                  <div className="rounded-[0.95rem] border border-slate-300 bg-white p-7 shadow-[0_12px_34px_-26px_rgba(15,23,42,0.18)] transition-all duration-500 group-hover:border-slate-400 group-hover:shadow-[0_22px_46px_-26px_rgba(15,23,42,0.22)]">
                     <div
-                      className="mb-5 flex h-11 w-11 items-center justify-center rounded-2xl text-white shadow-lg"
+                      className="mb-5 flex h-11 w-11 items-center justify-center rounded-lg text-white shadow-lg"
                       style={{ backgroundColor: item.color }}
                     >
                       {item.icon}

@@ -29,7 +29,7 @@ export function LatestBlogPosts({ posts }: LatestBlogPostsProps) {
     <section className="font-[family-name:var(--font-poppins)]">
       <div className="mb-7 flex flex-col gap-4 lg:mb-8 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-2xl">
-          <span className="inline-flex rounded-full bg-secondary/10 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-secondary">
+          <span className="inline-flex rounded-lg border border-secondary/15 bg-secondary/10 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-secondary">
             Prefabrik Ev Blog Yazıları
           </span>
           <h2 className="mt-3 text-2xl font-black tracking-tight text-slate-900 md:text-4xl">
@@ -45,7 +45,7 @@ export function LatestBlogPosts({ posts }: LatestBlogPostsProps) {
         <Link
           href="/blog"
           prefetch={false}
-          className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-200 px-3.5 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-slate-700 transition-colors hover:border-secondary hover:text-secondary"
+          className="inline-flex w-fit items-center gap-2 rounded-lg border border-slate-300 px-3.5 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-slate-700 transition-colors hover:border-secondary hover:text-secondary"
         >
           Tümünü Gör
           <ArrowUpRight className="h-4 w-4" />
@@ -58,7 +58,7 @@ export function LatestBlogPosts({ posts }: LatestBlogPostsProps) {
             key={post.id}
             href={`/blog/${post.slug}`}
             prefetch={false}
-            className="group overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-[0_16px_42px_-34px_rgba(15,23,42,0.35)] transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_24px_60px_-30px_rgba(15,23,42,0.42)]"
+            className="group overflow-hidden rounded-[1rem] border border-slate-300 bg-white shadow-[0_16px_38px_-32px_rgba(15,23,42,0.24)] transition-all duration-300 hover:-translate-y-1.5 hover:border-slate-400 hover:shadow-[0_22px_48px_-28px_rgba(15,23,42,0.28)]"
           >
             <div className="relative h-52 overflow-hidden">
               <Image
@@ -69,7 +69,7 @@ export function LatestBlogPosts({ posts }: LatestBlogPostsProps) {
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                 sizes="(min-width: 1280px) 19vw, (min-width: 768px) 40vw, 92vw"
               />
-              <div className="absolute left-4 top-4 rounded-full bg-white/92 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-primary shadow-sm backdrop-blur">
+              <div className="absolute left-4 top-4 rounded-lg border border-slate-200/80 bg-white/92 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-primary shadow-sm backdrop-blur">
                 {post.category}
               </div>
             </div>

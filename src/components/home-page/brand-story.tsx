@@ -61,9 +61,9 @@ export function BrandStory() {
                 return (
                   <div
                     key={item.title}
-                    className="flex items-start gap-4 rounded-[1.5rem] border border-slate-300/70 bg-white/70 p-4 shadow-[0_18px_45px_-40px_rgba(15,23,42,0.45)] backdrop-blur-sm"
+                    className="flex items-start gap-4 rounded-[0.9rem] border border-slate-300 bg-white/88 p-4 shadow-[0_16px_38px_-34px_rgba(15,23,42,0.28)]"
                   >
-                    <div className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-white">
+                    <div className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary text-white">
                       <Icon className="h-4.5 w-4.5" />
                     </div>
                     <div>
@@ -81,7 +81,7 @@ export function BrandStory() {
           </div>
 
           <div className="grid grid-cols-2 gap-4 lg:gap-5">
-            <div className="relative hidden min-h-[260px] overflow-hidden rounded-[1.75rem] border border-white/60 shadow-[0_28px_80px_-40px_rgba(15,23,42,0.35)] lg:block">
+            <div className="relative hidden min-h-[260px] overflow-hidden  border border-slate-300/80 shadow-[0_22px_58px_-38px_rgba(15,23,42,0.24)] lg:block">
               <Image
                 src={StoryImage2}
                 alt="Tek katlı ve çift katlı prefabrik ev planlama"
@@ -91,8 +91,8 @@ export function BrandStory() {
               />
             </div>
 
-            <div className="grid gap-4 lg:gap-5">
-              <div className="relative min-h-[200px] overflow-hidden rounded-[1.75rem] border border-white/60 shadow-[0_28px_80px_-40px_rgba(15,23,42,0.35)]">
+            <div className="grid gap-4 lg:gap-10">
+              <div className="relative min-h-[200px] overflow-hidden border border-slate-300/80 shadow-[0_22px_58px_-38px_rgba(15,23,42,0.24)]">
                 <Image
                   src={StoryImage1}
                   alt="Prefabrik ev modelleri"
@@ -102,7 +102,7 @@ export function BrandStory() {
                 />
               </div>
 
-              <div className="relative min-h-[200px] overflow-hidden rounded-[1.75rem] border border-white/60 shadow-[0_28px_80px_-40px_rgba(15,23,42,0.35)]">
+              <div className="relative min-h-[200px] overflow-hidden  border border-slate-300/80 shadow-[0_22px_58px_-38px_rgba(15,23,42,0.24)]">
                 <Image
                   src={StoryImage3}
                   alt="Çelik ev ve dubleks prefabrik ev çözümleri"
@@ -113,7 +113,7 @@ export function BrandStory() {
               </div>
             </div>
 
-            <div className="relative col-span-2 min-h-[180px] overflow-hidden rounded-[1.75rem] border border-white/60 shadow-[0_28px_80px_-40px_rgba(15,23,42,0.35)] lg:hidden">
+            <div className="relative col-span-2 min-h-[180px] overflow-hidden border border-slate-300/80 shadow-[0_22px_58px_-38px_rgba(15,23,42,0.24)] lg:hidden">
               <Image
                 src={StoryImage2}
                 alt="Sakarya prefabrik ev üretimi"

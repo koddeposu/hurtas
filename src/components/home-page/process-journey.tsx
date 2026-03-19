@@ -43,10 +43,10 @@ export function ProcessJourney() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(22,91,57,0.08),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(73,32,45,0.07),transparent_22%)]" />
 
       <div className="relative mx-auto max-w-[1440px] px-5 py-8 md:px-8 lg:px-10 lg:py-10">
-        <div className="rounded-[2rem] border border-slate-200/90 bg-white/90 p-5 shadow-[0_24px_70px_-52px_rgba(15,23,42,0.28)] backdrop-blur-sm md:p-7 lg:p-8">
-          <div className="grid gap-6 border-b border-slate-200 pb-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-end lg:gap-8">
+        <div className="rounded-[1rem] border border-slate-300 bg-white/92 p-5 shadow-[0_22px_52px_-42px_rgba(15,23,42,0.2)] md:p-7 lg:p-8">
+          <div className="grid gap-6 border-b border-slate-300/80 pb-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-end lg:gap-8">
             <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-2 rounded-full border border-secondary/15 bg-secondary/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
+              <div className="inline-flex items-center gap-2 rounded-lg border border-secondary/20 bg-secondary/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
                 <BadgeCheck className="h-4 w-4" />
                 Prefabrik Ev Süreci
               </div>
@@ -67,7 +67,7 @@ export function ProcessJourney() {
             </div>
 
             <div className="grid gap-3 sm:grid-cols-3">
-              <div className="rounded-[1.5rem] border border-slate-200 bg-[#f8f7f3] p-4">
+              <div className="rounded-[0.85rem] border border-slate-300 bg-[#f8f7f3] p-4">
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-700">
                   Hizmet Alanı
                 </p>
@@ -80,7 +80,7 @@ export function ProcessJourney() {
                 </p>
               </div>
 
-              <div className="rounded-[1.5rem] border border-slate-200 bg-[#f8f7f3] p-4">
+              <div className="rounded-[0.85rem] border border-slate-300 bg-[#f8f7f3] p-4">
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-700">
                   Süreç Yapısı
                 </p>
@@ -93,7 +93,7 @@ export function ProcessJourney() {
                 </p>
               </div>
 
-              <div className="rounded-[1.5rem] border border-slate-200 bg-[#f8f7f3] p-4">
+              <div className="rounded-[0.85rem] border border-slate-300 bg-[#f8f7f3] p-4">
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-700">
                   Odak Noktası
                 </p>
@@ -115,10 +115,10 @@ export function ProcessJourney() {
               return (
                 <article
                   key={step.id}
-                  className="group rounded-[1.6rem] border border-slate-200 bg-white p-5 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_22px_54px_-40px_rgba(15,23,42,0.35)]"
+                  className="group rounded-[0.95rem] border border-slate-300 bg-white p-5 transition-all duration-300 hover:-translate-y-1.5 hover:border-slate-400 hover:shadow-[0_20px_42px_-30px_rgba(15,23,42,0.22)]"
                 >
                   <div className="flex items-center justify-between gap-4">
-                    <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-secondary/10 text-secondary">
+                    <div className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-secondary/10 text-secondary">
                       <Icon className="h-5 w-5" />
                     </div>
                     <span className="text-sm font-black tracking-tight text-primary/70">

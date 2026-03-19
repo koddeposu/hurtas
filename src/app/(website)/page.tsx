@@ -1,8 +1,11 @@
 import { getCategories } from "@/actions/categoryActions";
 import { Features } from "@/components/home-page/features";
 import { Hero4 } from "@/components/home-page/hero";
-import { HomepageFaq, HOMEPAGE_FAQS } from "@/components/home-page/homepage-faq";
 import { HomepageBlogSection } from "@/components/home-page/homepage-blog-section";
+import {
+  HOMEPAGE_FAQS,
+  HomepageFaq,
+} from "@/components/home-page/homepage-faq";
 import { HomepageFavoritesSection } from "@/components/home-page/homepage-favorites-section";
 import { HomepageProductSliders } from "@/components/home-page/homepage-product-sliders";
 import { ProductCategoryCards } from "@/components/home-page/product-category-cards";

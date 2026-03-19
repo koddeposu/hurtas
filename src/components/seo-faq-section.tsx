@@ -25,10 +25,10 @@ export function SeoFaqSection({
 }: SeoFaqSectionProps) {
   return (
     <section className="font-[family-name:var(--font-poppins)]">
-      <div className="rounded-[2rem] border border-slate-200 bg-[#f8f7f3] p-5 shadow-[0_24px_70px_-52px_rgba(15,23,42,0.24)] md:p-7 lg:p-8">
-        <div className="flex flex-col gap-4 border-b border-slate-200 pb-6 lg:flex-row lg:items-end lg:justify-between">
+      <div className="rounded-[1rem] border border-slate-300 bg-[#f8f7f3] p-5 shadow-[0_22px_50px_-40px_rgba(15,23,42,0.18)] md:p-7 lg:p-8">
+        <div className="flex flex-col gap-4 border-b border-slate-300/80 pb-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-secondary/15 bg-secondary/10 px-3 py-2 text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
+            <div className="inline-flex items-center gap-2 rounded-lg border border-secondary/20 bg-secondary/10 px-3 py-2 text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
               <HelpCircle className="h-4 w-4" />
               Sıkça Sorulan Sorular
             </div>
@@ -49,7 +49,7 @@ export function SeoFaqSection({
           <Link
             href={ctaHref}
             prefetch={false}
-            className="inline-flex w-fit items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-black uppercase tracking-[0.12em] text-slate-700 transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-200 hover:bg-slate-50"
+            className="inline-flex w-fit items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-xs font-black uppercase tracking-[0.12em] text-slate-700 transition-all duration-300 hover:-translate-y-0.5 hover:border-slate-400 hover:bg-slate-50"
           >
             {ctaLabel}
             <ArrowUpRight className="h-4 w-4" />
@@ -60,7 +60,7 @@ export function SeoFaqSection({
           {items.map((item, index) => (
             <details
               key={item.question}
-              className="group h-fit self-start rounded-[1.5rem] border border-slate-200 bg-white p-5 transition-all duration-300 open:shadow-[0_20px_56px_-42px_rgba(15,23,42,0.28)]"
+              className="group h-fit self-start rounded-[0.9rem] border border-slate-300 bg-white p-5 transition-all duration-300 open:border-slate-400 open:shadow-[0_18px_38px_-28px_rgba(15,23,42,0.18)]"
             >
               <summary className="flex cursor-pointer list-none items-start justify-between gap-4 text-left">
                 <div>
@@ -76,7 +76,7 @@ export function SeoFaqSection({
                 </span>
               </summary>
 
-              <p className="mt-4 border-t border-slate-100 pt-4 text-sm font-medium leading-7 text-slate-600">
+              <p className="mt-4 border-t border-slate-200 pt-4 text-sm font-medium leading-7 text-slate-600">
                 {item.answer}
               </p>
             </details>

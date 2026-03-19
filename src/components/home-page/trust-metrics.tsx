@@ -45,11 +45,11 @@ export function TrustMetrics() {
           return (
             <div
               key={item.label}
-              className="group rounded-[1.5rem] border border-slate-200 bg-white/95 p-4 shadow-[0_18px_50px_-42px_rgba(15,23,42,0.25)] backdrop-blur transition-all duration-200 hover:-translate-y-2 hover:shadow-[0_26px_70px_-44px_rgba(15,23,42,0.32)]"
+              className="group rounded-[0.85rem] border border-slate-300 bg-white/95 p-4 shadow-[0_14px_32px_-24px_rgba(15,23,42,0.16)] transition-all duration-200 hover:-translate-y-1 hover:border-slate-400 hover:shadow-[0_20px_40px_-26px_rgba(15,23,42,0.22)]"
             >
               <div className="flex items-start gap-3">
                 <div
-                  className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${item.ring}`}
+                  className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg ${item.ring}`}
                 >
                   <Icon className={`h-5 w-5 ${item.tone}`} />
                 </div>
