@@ -13,10 +13,7 @@ interface HomeProductCardProps {
   badge?: string;
 }
 
-export function HomeProductCard({
-  product,
-  badge,
-}: HomeProductCardProps) {
+export function HomeProductCard({ product, badge }: HomeProductCardProps) {
   return (
     <Link
       href={`/urun-detay/${product.slug}`}
@@ -31,7 +28,7 @@ export function HomeProductCard({
             fill
             quality={50}
             className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-            sizes="(min-width: 1280px) 21vw, (min-width: 768px) 43vw, 92vw"
+            sizes="(min-width: 1280px) 280px, (min-width: 768px) 300px, 90vw"
           />
         ) : null}
 
