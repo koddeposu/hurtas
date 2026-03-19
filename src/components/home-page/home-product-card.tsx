@@ -28,7 +28,7 @@ export function HomeProductCard({ product, badge }: HomeProductCardProps) {
             fill
             quality={40}
             className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-            sizes="(min-width: 1280px) 280px, (min-width: 768px) 300px, 100vw"
+            sizes="(min-width: 1280px) 280px, (min-width: 768px) 300px, 322px"
           />
         ) : null}
 
