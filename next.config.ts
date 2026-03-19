@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: {
     deviceSizes: [320, 480, 560, 640, 768, 1024, 1280],
+    imageSizes: [280, 300, 320, 360],
     qualities: [10, 20, 30, 40, 50, 58, 55, 60, 70, 80, 90, 100],
     remotePatterns: [
       {
