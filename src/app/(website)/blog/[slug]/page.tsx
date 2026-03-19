@@ -1,10 +1,23 @@
 import { getBlogPostBySlug } from "@/actions/blogActions";
-import { notFound } from "next/navigation";
+import { getCategories } from "@/actions/categoryActions";
+import { getProductsPreview } from "@/actions/productActions";
+import { convertJsonToHtml } from "@/lib/tiptap-utils";
+import type { DBProductPreview } from "@/types/product";
+import type { JSONContent } from "@tiptap/core";
+import {
+  ArrowLeft,
+  ArrowUpRight,
+  Calendar,
+  Clock,
+  Home,
+  Layers3,
+  Package,
+  Ruler,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight, Calendar, Clock } from "lucide-react";
+import { notFound } from "next/navigation";
 import { ShareButtons } from "./share-buttons";
-import { convertJsonToHtml } from "@/lib/tiptap-utils";
 
 async function getPostData(slug: string) {
   const post = await getBlogPostBySlug(slug);
@@ -14,6 +27,186 @@ async function getPostData(slug: string) {
   }
 
   return { post };
+}
+
+function getContentSections(content: string | null) {
+  if (!content) return [];
+
+  try {
+    const json = JSON.parse(content) as JSONContent;
+    const nodes = Array.isArray(json.content) ? json.content : [];
+
+    if (nodes.length <= 3) {
+      return [convertJsonToHtml(content)].filter(Boolean);
+    }
+
+    const cut1 = Math.max(1, Math.floor(nodes.length / 3));
+    const cut2 = Math.max(cut1 + 1, Math.floor((nodes.length * 2) / 3));
+    const slices = [
+      nodes.slice(0, cut1),
+      nodes.slice(cut1, cut2),
+      nodes.slice(cut2),
+    ];
+
+    return slices
+      .map((slice) =>
+        slice.length > 0
+          ? convertJsonToHtml(
+              JSON.stringify({
+                ...json,
+                content: slice,
+              }),
+            )
+          : "",
+      )
+      .filter(Boolean);
+  } catch {
+    return [convertJsonToHtml(content)].filter(Boolean);
+  }
+}
+
+function formatPrice(price: string | null) {
+  if (!price || price === "null") return null;
+  return new Intl.NumberFormat("tr-TR").format(Number(price));
+}
+
+function ProductShowcase({
+  title,
+  description,
+  products,
+}: {
+  title: string;
+  description: string;
+  products: DBProductPreview[];
+}) {
+  if (!products.length) return null;
+
+  return (
+    <section className="my-12 rounded-[1rem] border border-slate-300 bg-[#f8f7f3] p-5 md:p-6">
+      <div className="mb-6 max-w-2xl">
+        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
+          Size Uygun Modeller
+        </p>
+        <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-900 md:text-3xl">
+          {title}
+        </h2>
+        <p className="mt-3 text-sm font-medium leading-7 text-slate-600">
+          {description}
+        </p>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {products.map((product) => (
+          <Link
+            key={product.id}
+            href={`/urun-detay/${product.slug}`}
+            className="group overflow-hidden rounded-[0.95rem] border border-slate-300 bg-white shadow-[0_16px_34px_-28px_rgba(15,23,42,0.12)] transition-all duration-200 hover:-translate-y-1 hover:border-slate-400 hover:shadow-[0_24px_46px_-30px_rgba(15,23,42,0.18)]"
+          >
+            <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+              {product.image ? (
+                <Image
+                  src={product.image.url}
+                  alt={product.image.alt}
+                  fill
+                  sizes="(min-width: 1280px) 19vw, (min-width: 768px) 42vw, 92vw"
+                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                />
+              ) : null}
+
+              {product.category?.name ? (
+                <div className="absolute left-4 top-4 rounded-lg border border-slate-200/80 bg-white/92 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-primary shadow-sm backdrop-blur">
+                  {product.category.name}
+                </div>
+              ) : null}
+            </div>
+
+            <div className="p-5">
+              <h3 className="text-lg font-black leading-snug tracking-tight text-slate-900 transition-colors duration-200 group-hover:text-primary">
+                {product.name}
+              </h3>
+
+              {product.price ? (
+                <div className="mt-2 text-base font-bold text-secondary">
+                  {formatPrice(product.price)} ₺
+                </div>
+              ) : null}
+
+              <div className="mt-4 grid grid-cols-2 gap-3 border-t border-slate-200 pt-4">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-50 text-primary">
+                    <Ruler size={14} />
+                  </div>
+                  <span className="text-xs font-bold text-slate-500">
+                    {product.area} m<sup>2</sup>
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-50 text-primary">
+                    <Home size={14} />
+                  </div>
+                  <span className="text-xs font-bold text-slate-500">
+                    {product.room}
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-4 inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.14em] text-secondary">
+                Ürünü İncele
+                <ArrowUpRight className="h-4 w-4" />
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function MobileQuickLinks({ doubleFloorHref }: { doubleFloorHref: string }) {
+  return (
+    <section className="mb-6 grid grid-cols-2 gap-3 md:hidden">
+      <Link
+        href={doubleFloorHref}
+        className="group rounded-[0.50rem] border border-slate-300 bg-[linear-gradient(135deg,rgba(73,32,45,0.1),rgba(255,255,255,0.98))] p-3 shadow-[0_16px_30px_-24px_rgba(15,23,42,0.16)] transition-all duration-200 active:scale-[0.98]"
+      >
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white shadow-sm">
+            <Layers3 className="h-4.5 w-4.5" />
+          </div>
+          <ArrowUpRight className="h-4 w-4 text-primary" />
+        </div>
+        <p className="mt-3 text-[10px] font-black uppercase tracking-[0.18em] text-primary/70">
+          Hemen Incele
+        </p>
+        <h2 className="mt-1 text-sm font-black leading-snug text-slate-900">
+          Dubleks
+          <br />
+          Prefabrik Evler
+        </h2>
+      </Link>
+
+      <Link
+        href="/prefabrik-evler"
+        className="group rounded-[0.50rem] border border-slate-300 bg-[linear-gradient(135deg,rgba(22,91,57,0.1),rgba(255,255,255,0.98))] p-3 shadow-[0_16px_30px_-24px_rgba(15,23,42,0.16)] transition-all duration-200 active:scale-[0.98]"
+      >
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary text-white shadow-sm">
+            <Package className="h-4.5 w-4.5" />
+          </div>
+          <ArrowUpRight className="h-4 w-4 text-secondary" />
+        </div>
+        <p className="mt-3 text-[10px] font-black uppercase tracking-[0.18em] text-secondary/80">
+          Tum Kategoriler
+        </p>
+        <h2 className="mt-1 text-sm font-black leading-snug text-slate-900">
+          Konteyner
+          <br />
+          Evler
+        </h2>
+      </Link>
+    </section>
+  );
 }
 
 function getSuggestedLinks(category?: string | null) {
@@ -127,11 +320,28 @@ export default async function BlogPostPage({
 
   const { post } = data;
   const suggestedLinks = getSuggestedLinks(post.category);
+  const contentSections = getContentSections(post.content);
+
+  const categories = await getCategories();
+  const singleFloorCategory = categories.find((item) =>
+    item.name.includes("Tek Kat"),
+  );
+  const doubleFloorCategory = categories.find((item) =>
+    item.name.includes("Çift Kat"),
+  );
+  const previewProducts = await getProductsPreview(singleFloorCategory?.id, 60);
+
+  const firstBlockProducts = previewProducts
+    .filter((item) => item.room === "1+1")
+    .slice(0, 3);
+  const secondBlockProducts = previewProducts
+    .filter((item) => item.room === "2+1" || item.room === "3+1")
+    .slice(0, 3);
 
   return (
     <main className="min-h-screen bg-white pb-24">
       {/* --- HERO SECTION --- */}
-      <section className="relative pt-32 pb-16 md:pt-40 md:pb-20 overflow-hidden">
+      <section className="relative pt-16pb-16 md:pt-20 md:pb-20 overflow-hidden">
         {/* Background Vectors */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
           <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-primary/3 rounded-full blur-[120px]" />
@@ -145,7 +355,7 @@ export default async function BlogPostPage({
           />
         </div>
 
-        <div className="container mx-auto max-w-4xl relative z-10 px-4">
+        <div className="container mx-auto max-w-4xl relative z-10">
           <Link
             href="/blog"
             className="inline-flex items-center gap-2 text-slate-500 hover:text-primary transition-colors mb-8 text-sm font-bold uppercase tracking-wider"
@@ -191,9 +401,17 @@ export default async function BlogPostPage({
       </section>
 
       {/* --- CONTENT SECTION --- */}
-      <article className="container mx-auto max-w-4xl px-4">
+      <article className="container mx-auto max-w-4xl ">
+        <MobileQuickLinks
+          doubleFloorHref={
+            doubleFloorCategory
+              ? `/prefabrik-evler/${doubleFloorCategory.slug}`
+              : "/prefabrik-evler"
+          }
+        />
+
         {/* Featured Image */}
-        <div className="relative aspect-video w-full rounded-[2rem] overflow-hidden shadow-lg mb-8">
+        <div className="relative aspect-video w-full rounded-[1rem] overflow-hidden shadow-lg mb-8">
           <Image
             src={post.imageUrl}
             alt={post.imageAlt || post.title}
@@ -207,9 +425,31 @@ export default async function BlogPostPage({
 
         {/* Text Content */}
         <div className="blog-content text-slate-600">
-          {post.content && (
-            <div dangerouslySetInnerHTML={{ __html: convertJsonToHtml(post.content) }} />
-          )}
+          {contentSections.length > 0 ? (
+            <>
+              <div dangerouslySetInnerHTML={{ __html: contentSections[0] }} />
+
+              <ProductShowcase
+                title="1+1 Tek Katlı Prefabrik Ev Modelleri"
+                description="İçerikle birlikte değerlendirebileceğiniz, kompakt yaşam için uygun 1+1 tek katlı prefabrik ev seçeneklerini burada topladık."
+                products={firstBlockProducts}
+              />
+
+              {contentSections[1] ? (
+                <div dangerouslySetInnerHTML={{ __html: contentSections[1] }} />
+              ) : null}
+
+              <ProductShowcase
+                title="2+1 ve 3+1 Tek Katlı Prefabrik Ev Modelleri"
+                description="Daha geniş yaşam planı arıyorsanız 2+1 ve 3+1 tek katlı prefabrik ev seçeneklerini de birlikte inceleyin."
+                products={secondBlockProducts}
+              />
+
+              {contentSections[2] ? (
+                <div dangerouslySetInnerHTML={{ __html: contentSections[2] }} />
+              ) : null}
+            </>
+          ) : null}
         </div>
 
         <section className="mt-14 rounded-[2rem] border border-slate-200 bg-[#f8f7f3] p-6 md:p-8">
