@@ -37,7 +37,7 @@ const METRICS = [
 
 export function TrustMetrics() {
   return (
-    <section className="font-[family-name:var(--font-poppins)]">
+    <section className="">
       <div className="grid gap-3 md:grid-cols-4">
         {METRICS.map((item) => {
           const Icon = item.icon;
@@ -45,7 +45,7 @@ export function TrustMetrics() {
           return (
             <div
               key={item.label}
-              className="group rounded-[1.5rem] border border-slate-200 bg-white/95 p-4 shadow-[0_18px_50px_-42px_rgba(15,23,42,0.25)] backdrop-blur transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_26px_70px_-44px_rgba(15,23,42,0.32)]"
+              className="group rounded-[1.5rem] border border-slate-200 bg-white/95 p-4 shadow-[0_18px_50px_-42px_rgba(15,23,42,0.25)] backdrop-blur transition-all duration-200 hover:-translate-y-2 hover:shadow-[0_26px_70px_-44px_rgba(15,23,42,0.32)]"
             >
               <div className="flex items-start gap-3">
                 <div
@@ -55,7 +55,9 @@ export function TrustMetrics() {
                 </div>
 
                 <div className="min-w-0">
-                  <p className={`text-lg font-black tracking-tight ${item.tone}`}>
+                  <p
+                    className={`text-lg font-black tracking-tight ${item.tone}`}
+                  >
                     {item.value}
                   </p>
                   <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
