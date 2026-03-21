@@ -84,10 +84,7 @@ function ProductShowcase({
   return (
     <section className="my-12 rounded-[1rem] border border-slate-300 bg-[#f8f7f3] p-5 md:p-6">
       <div className="mb-6 max-w-2xl">
-        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
-          Size Uygun Modeller
-        </p>
-        <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-900 md:text-3xl">
+        <h2 className=" text-2xl font-black tracking-tight text-slate-900 md:text-3xl">
           {title}
         </h2>
         <p className="mt-3 text-sm font-medium leading-7 text-slate-600">
@@ -121,7 +118,7 @@ function ProductShowcase({
             </div>
 
             <div className="p-5">
-              <h3 className="text-lg font-black leading-snug tracking-tight text-slate-900 transition-colors duration-200 group-hover:text-primary">
+              <h3 className="text-2xl font-black leading-snug tracking-tight text-slate-900 transition-colors duration-200 group-hover:text-primary">
                 {product.name}
               </h3>
 
@@ -341,7 +338,7 @@ export default async function BlogPostPage({
   return (
     <main className="min-h-screen bg-white pb-24">
       {/* --- HERO SECTION --- */}
-      <section className="relative pt-16pb-16 md:pt-20 md:pb-20 overflow-hidden">
+      <section className="relative pt-16 md:pt-20 md:pb-10 overflow-hidden">
         {/* Background Vectors */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
           <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-primary/3 rounded-full blur-[120px]" />
@@ -358,7 +355,7 @@ export default async function BlogPostPage({
         <div className="container mx-auto max-w-4xl relative z-10">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-slate-500 hover:text-primary transition-colors mb-8 text-sm font-bold uppercase tracking-wider"
+            className="inline-flex underline items-center gap-2 text-slate-500 hover:text-primary transition-colors mb-8 text-sm font-bold uppercase tracking-wider"
           >
             <ArrowLeft size={16} />
             Bloga Dön
@@ -377,7 +374,7 @@ export default async function BlogPostPage({
           </h1>
 
           {/* Metadata */}
-          <div className="flex flex-wrap items-center gap-6 text-slate-400 text-sm font-bold border-b border-slate-100 pb-8">
+          <div className="flex flex-wrap items-center gap-6 text-slate-400 text-sm font-bold pb-6 md:pb-0">
             {post.createdAt && (
               <div className="flex items-center gap-2">
                 <Calendar size={16} />

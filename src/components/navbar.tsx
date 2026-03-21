@@ -52,14 +52,27 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
   const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(true);
   const [isAtTop, setIsAtTop] = useState(true);
   const [showCompactNavbar, setShowCompactNavbar] = useState(false);
+  const [showMobileNavbar, setShowMobileNavbar] = useState(true);
   const [mainNavbarHeight, setMainNavbarHeight] = useState(260);
   const pathname = usePathname();
   const lastScrollYRef = useRef(0);
   const isAtTopRef = useRef(true);
   const showCompactNavbarRef = useRef(false);
+  const showMobileNavbarRef = useRef(true);
   const tickingRef = useRef(false);
   const scrollFrameRef = useRef<number | null>(null);
   const mainNavbarRef = useRef<HTMLElement | null>(null);
+  const isMobileMenuOpenRef = useRef(false);
+
+  useEffect(() => {
+    isMobileMenuOpenRef.current = isMobileMenuOpen;
+  }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+    showMobileNavbarRef.current = true;
+    setShowMobileNavbar(true);
+  }, [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
@@ -102,6 +115,18 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
           : deltaY > 6
             ? false
             : showCompactNavbarRef.current;
+      const isMobileViewport = window.innerWidth < 1024;
+      const nextMobileVisibleState = isMobileViewport
+        ? isMobileMenuOpenRef.current
+          ? true
+          : currentY <= 8
+            ? true
+            : deltaY < -6
+              ? true
+              : deltaY > 6
+                ? false
+                : showMobileNavbarRef.current
+        : true;
 
       if (pageTop !== isAtTopRef.current) {
         isAtTopRef.current = pageTop;
@@ -111,6 +136,11 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
       if (nextCompactState !== showCompactNavbarRef.current) {
         showCompactNavbarRef.current = nextCompactState;
         setShowCompactNavbar(nextCompactState);
+      }
+
+      if (nextMobileVisibleState !== showMobileNavbarRef.current) {
+        showMobileNavbarRef.current = nextMobileVisibleState;
+        setShowMobileNavbar(nextMobileVisibleState);
       }
 
       lastScrollYRef.current = currentY;
@@ -146,6 +176,8 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
     isSectionActive(item.href),
   );
   const isProductsActive = pathname.startsWith("/prefabrik-evler");
+  const pathSegments = pathname.split("/").filter(Boolean);
+  const isBlogSlugPage = pathSegments[0] === "blog" && pathSegments.length === 2;
 
   return (
     <>
@@ -384,7 +416,9 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
       </header>
 
       <header
-        className={`fixed inset-x-0 top-0 z-50 translate-y-0 transition-transform duration-300 ${
+        className={`fixed inset-x-0 top-0 z-50 transition-transform duration-300 ${
+          showMobileNavbar ? "translate-y-0" : "-translate-y-full pointer-events-none"
+        } ${
           showCompact
             ? "lg:pointer-events-auto lg:translate-y-0"
             : "lg:pointer-events-none lg:-translate-y-[140%]"
@@ -525,18 +559,29 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
             >
               Ara
             </button>
-            <button
-              type="button"
-              aria-label={isMobileMenuOpen ? "Menüyü kapat" : "Menüyü aç"}
-              onClick={toggleMobileMenu}
-              className="rounded-xl border border-slate-300 p-2 text-slate-700 lg:hidden"
-            >
-              {isMobileMenuOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Menu className="h-5 w-5" />
-              )}
-            </button>
+            {isBlogSlugPage ? (
+              <button
+                type="button"
+                onClick={handleCall}
+                className="inline-flex items-center gap-2 rounded-xl bg-secondary px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] text-white transition-colors hover:bg-[#1d7048] lg:hidden"
+              >
+                <PhoneCall className="h-4 w-4" />
+                Bizi Arayın
+              </button>
+            ) : (
+              <button
+                type="button"
+                aria-label={isMobileMenuOpen ? "Menüyü kapat" : "Menüyü aç"}
+                onClick={toggleMobileMenu}
+                className="rounded-xl border border-slate-300 p-2 text-slate-700 lg:hidden"
+              >
+                {isMobileMenuOpen ? (
+                  <X className="h-5 w-5" />
+                ) : (
+                  <Menu className="h-5 w-5" />
+                )}
+              </button>
+            )}
           </div>
         </div>
       </header>
