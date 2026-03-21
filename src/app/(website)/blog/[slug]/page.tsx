@@ -127,7 +127,7 @@ function ProductShowcase({
         {products.map((product) => (
           <Link
             key={product.id}
-            href={`/urun-detay/${product.slug}`}
+            href={`/prefabrik-ev/${product.slug}`}
             className="group overflow-hidden rounded-[0.95rem] border border-slate-300 bg-white shadow-[0_16px_34px_-28px_rgba(15,23,42,0.12)] transition-all duration-200 hover:-translate-y-1 hover:border-slate-400 hover:shadow-[0_24px_46px_-30px_rgba(15,23,42,0.18)]"
           >
             <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">

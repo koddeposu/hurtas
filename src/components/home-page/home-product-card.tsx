@@ -16,7 +16,7 @@ interface HomeProductCardProps {
 export function HomeProductCard({ product, badge }: HomeProductCardProps) {
   return (
     <Link
-      href={`/urun-detay/${product.slug}`}
+      href={`/prefabrik-ev/${product.slug}`}
       prefetch={false}
       className="group flex h-full flex-col overflow-hidden rounded-[1rem] border border-slate-300 bg-white shadow-[0_16px_38px_-32px_rgba(15,23,42,0.24)] transition-all duration-300 hover:-translate-y-1.5 hover:border-slate-400 hover:shadow-[0_24px_52px_-30px_rgba(15,23,42,0.3)]"
     >

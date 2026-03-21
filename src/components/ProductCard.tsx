@@ -46,7 +46,7 @@ export const ProductCard = ({
 
   return (
     <Link
-      href={`/urun-detay/${detailSlug}`}
+      href={`/prefabrik-ev/${detailSlug}`}
       prefetch={false}
       className="group flex w-full flex-col justify-between overflow-hidden rounded-[1rem] border border-slate-300 bg-white text-left shadow-[0_16px_34px_-28px_rgba(15,23,42,0.12)] transition-all duration-200 hover:-translate-y-1 hover:border-slate-400 hover:shadow-[0_22px_44px_-28px_rgba(15,23,42,0.18)]"
     >

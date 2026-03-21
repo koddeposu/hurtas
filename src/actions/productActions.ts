@@ -363,7 +363,7 @@ export async function updateProductImageAlt(imageId: string, alt: string) {
 
   revalidatePath("/admin/products");
   revalidatePath("/prefabrik-evler", "layout");
-  revalidatePath("/urun-detay", "layout");
+  revalidatePath("/prefabrik-ev", "layout");
 
   return { success: true };
 }

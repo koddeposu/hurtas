@@ -118,7 +118,7 @@ export default async function Page() {
             potentialAction: {
               "@type": "SearchAction",
               target:
-                "https://ctprefabrik.com/urun-detay?q={search_term_string}",
+                "https://ctprefabrik.com/prefabrik-ev?q={search_term_string}",
               "query-input": "required name=search_term_string",
             },
           }),

@@ -8,7 +8,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Veritabanından ürünleri al
   const dbProducts = await getProductsWithImages();
   const products = dbProducts.map((product) => ({
-    url: `${baseUrl}/urun-detay/${product.slug}`,
+    url: `${baseUrl}/prefabrik-ev/${product.slug}`,
     lastModified: product.updatedAt ?? product.createdAt,
     changeFrequency: "weekly" as const,
     priority: 0.8,
