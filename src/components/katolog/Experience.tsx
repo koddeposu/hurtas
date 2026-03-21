@@ -16,10 +16,10 @@ export const Experience = () => {
 
       {/* OrbitControls kapalı: Fare ile döndürme yapılamaz */}
 
-      <Environment preset="studio" environmentIntensity={0.5} />
+      <Environment preset="studio" environmentIntensity={0.3} />
       <directionalLight
         position={[2, 5, 2]}
-        intensity={2.5}
+        intensity={1.65}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}

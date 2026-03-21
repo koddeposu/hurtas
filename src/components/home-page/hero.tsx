@@ -71,7 +71,7 @@ export const Hero4 = () => {
       `}</style>
       <div className="absolute inset-x-0 top-0 -z-10 h-full bg-[radial-gradient(circle_at_top_right,rgba(15,23,42,0.18),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(2,6,23,0.16),transparent_38%)]" />
 
-      <div className="relative h-[calc(100svh_-_6rem_-_env(safe-area-inset-bottom))] min-h-[calc(100svh_-_6rem_-_env(safe-area-inset-bottom))] max-h-[calc(100svh_-_6rem_-_env(safe-area-inset-bottom))] lg:h-[600px] xl:h-[711px] lg:min-h-0">
+      <div className="relative h-[calc(100svh_-_5.3rem_-_env(safe-area-inset-bottom))] min-h-[calc(100svh_-_5.3rem_-_env(safe-area-inset-bottom))] max-h-[calc(100svh_-_5.3rem_-_env(safe-area-inset-bottom))] lg:h-[600px] xl:h-[711px] lg:min-h-0">
         <div
           key={activeSlide.id}
           className="absolute inset-0 w-full transition-opacity duration-700"

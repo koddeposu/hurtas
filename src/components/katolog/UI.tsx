@@ -67,23 +67,23 @@ export const UI = () => {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-white/90 backdrop-blur-xl px-6 py-3 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4"
+            className="bg-[#201915]/75 backdrop-blur-xl px-6 py-3 rounded-2xl border border-[#e6c997]/35 shadow-[0_20px_55px_-35px_rgba(40,22,12,0.8)] flex items-center gap-4"
           >
             <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-[#49202d]/20">
               <BookOpen size={20} />
             </div>
             <div>
-              <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] leading-none">
+              <h2 className="text-[10px] font-black text-[#f4dcb8]/70 uppercase tracking-[0.3em] leading-none">
                 Proje Kataloğu
               </h2>
-              <p className="text-sm font-black text-slate-900 mt-1 uppercase">
+              <p className="text-sm font-black text-[#fff4e3] mt-1 uppercase">
                 CT Prefabrik 2025
               </p>
             </div>
           </motion.div>
 
           <div className="hidden md:flex flex-col items-end">
-            <div className="text-[4rem] font-black text-[#49202d]/10 leading-none select-none">
+            <div className="text-[4rem] font-black text-[#49202d]/20 leading-none select-none">
               {String(page).padStart(2, "0")}
             </div>
           </div>
@@ -94,16 +94,16 @@ export const UI = () => {
           <motion.div
             animate={{ y: [0, -5, 0] }}
             transition={{ repeat: Infinity, duration: 2 }}
-            className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest"
+            className="flex items-center gap-2 text-[10px] font-bold text-[#efddc0]/85 uppercase tracking-widest"
           >
             <MousePointer2 size={12} /> Sayfaları çevirmek için tıklayın
           </motion.div>
 
-          <div className="bg-white/80 backdrop-blur-2xl p-3 rounded-[2.5rem] border border-white shadow-[0_20px_50px_rgba(0,0,0,0.1)] flex items-center gap-2 max-w-full overflow-hidden">
+          <div className="bg-[#221b17]/80 backdrop-blur-2xl p-3 rounded-[2.5rem] border border-[#efd5ab]/30 shadow-[0_28px_65px_-35px_rgba(22,12,6,0.85)] flex items-center gap-2 max-w-full overflow-hidden">
             {/* Geri Butonu */}
             <button
               onClick={() => setPage(Math.max(0, page - 1))}
-              className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors text-slate-400 hover:text-[#49202d]"
+              className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-[#f0d8b4]/10 transition-colors text-[#e6cba4] hover:text-[#f8e0bb]"
             >
               <ChevronLeft size={24} />
             </button>
@@ -117,7 +117,7 @@ export const UI = () => {
                   className={`relative shrink-0 transition-all duration-500 rounded-full ${
                     index === page
                       ? "px-6 py-2 bg-primary text-white shadow-lg shadow-[#49202d]/30"
-                      : "w-3 h-3 bg-slate-200 hover:bg-primary/40"
+                      : "w-3 h-3 bg-[#efd7b1]/30 hover:bg-[#efd7b1]/60"
                   }`}
                 >
                   <span
@@ -134,7 +134,7 @@ export const UI = () => {
                 className={`relative shrink-0 transition-all duration-500 rounded-full ${
                   page === pages.length
                     ? "px-6 py-2 bg-primary text-white shadow-lg shadow-[#49202d]/30"
-                    : "w-3 h-3 bg-slate-200 hover:bg-primary/40"
+                    : "w-3 h-3 bg-[#efd7b1]/30 hover:bg-[#efd7b1]/60"
                 }`}
               >
                 <span
@@ -148,7 +148,7 @@ export const UI = () => {
             {/* İleri Butonu */}
             <button
               onClick={() => setPage(Math.min(pages.length, page + 1))}
-              className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors text-slate-400 hover:text-[#49202d]"
+              className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-[#f0d8b4]/10 transition-colors text-[#e6cba4] hover:text-[#f8e0bb]"
             >
               <ChevronRight size={24} />
             </button>
@@ -157,8 +157,9 @@ export const UI = () => {
       </main>
 
       {/* Arka Plan Dekorasyonu */}
-      <div className="fixed inset-0 bg-gradient-to-b from-slate-50 to-white -z-10" />
-      <div className="fixed top-0 right-0 w-[500px] h-[500px] bg-primary/[0.03] rounded-full blur-[120px] -z-10" />
+      <div className="fixed inset-0 -z-10 bg-[radial-gradient(circle_at_20%_15%,rgba(255,245,224,0.95),transparent_42%),radial-gradient(circle_at_88%_20%,rgba(73,32,45,0.18),transparent_46%),linear-gradient(165deg,#eadcc7_0%,#d2bea1_52%,#bea17f_100%)]" />
+      <div className="fixed top-[-120px] right-[-120px] h-[520px] w-[520px] rounded-full bg-[#f7e3c2]/45 blur-[110px] -z-10" />
+      <div className="fixed bottom-[-160px] left-[-140px] h-[560px] w-[560px] rounded-full bg-primary/20 blur-[130px] -z-10" />
     </>
   );
 };
