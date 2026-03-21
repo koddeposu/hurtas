@@ -39,6 +39,7 @@ const COMPANY = {
 const CORPORATE_LINKS = [
   { href: "/hakkimizda", label: "Hakkımızda" },
   { href: "/iletisim", label: "İletişim" },
+  { href: "/katalog", label: "Katalog" },
 ];
 
 const NAV_LINKS = [
@@ -399,9 +400,16 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
               <button
                 type="button"
                 onClick={handleWhatsApp}
-                className="hidden rounded-xl bg-secondary px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#1d7048] sm:inline-flex"
+                className="hidden cursor-pointer rounded-xl bg-secondary px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#1d7048] sm:inline-flex"
               >
                 WhatsApp
+              </button>
+              <button
+                type="button"
+                onClick={handleCall}
+                className="hidden cursor-pointer rounded-xl bg-primary px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#3d1a24] sm:inline-flex"
+              >
+                Bizi Arayın
               </button>
               <Link
                 href="/katalog"
@@ -563,7 +571,7 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
               <button
                 type="button"
                 onClick={handleCall}
-                className="inline-flex items-center gap-2 rounded-xl bg-secondary px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] text-white transition-colors hover:bg-[#1d7048] lg:hidden"
+                className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-secondary px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] text-white transition-colors hover:bg-[#1d7048] lg:hidden"
               >
                 <PhoneCall className="h-4 w-4" />
                 Bizi Arayın
@@ -573,13 +581,14 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                 type="button"
                 aria-label={isMobileMenuOpen ? "Menüyü kapat" : "Menüyü aç"}
                 onClick={toggleMobileMenu}
-                className="rounded-xl border border-slate-300 p-2 text-slate-700 lg:hidden"
+                className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-primary/30 bg-white px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-primary shadow-[0_12px_28px_-20px_rgba(73,32,45,0.55)] transition-all hover:bg-primary/5 lg:hidden"
               >
                 {isMobileMenuOpen ? (
-                  <X className="h-5 w-5" />
+                  <X className="h-4.5 w-4.5" />
                 ) : (
-                  <Menu className="h-5 w-5" />
+                  <Menu className="h-4.5 w-4.5" />
                 )}
+                <span>{isMobileMenuOpen ? "Kapat" : "Menü"}</span>
               </button>
             )}
           </div>

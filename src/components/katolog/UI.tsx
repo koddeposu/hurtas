@@ -103,7 +103,7 @@ export const UI = () => {
             {/* Geri Butonu */}
             <button
               onClick={() => setPage(Math.max(0, page - 1))}
-              className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-[#f0d8b4]/10 transition-colors text-[#e6cba4] hover:text-[#f8e0bb]"
+              className="w-12 h-12 cursor-pointer flex items-center justify-center rounded-full hover:bg-[#f0d8b4]/10 transition-colors text-[#e6cba4] hover:text-[#f8e0bb]"
             >
               <ChevronLeft size={24} />
             </button>
@@ -114,7 +114,7 @@ export const UI = () => {
                 <button
                   key={index}
                   onClick={() => setPage(index)}
-                  className={`relative shrink-0 transition-all duration-500 rounded-full ${
+                  className={`relative shrink-0 cursor-pointer transition-all duration-500 rounded-full ${
                     index === page
                       ? "px-6 py-2 bg-primary text-white shadow-lg shadow-[#49202d]/30"
                       : "w-3 h-3 bg-[#efd7b1]/30 hover:bg-[#efd7b1]/60"
@@ -131,7 +131,7 @@ export const UI = () => {
               {/* Arka Kapak Butonu */}
               <button
                 onClick={() => setPage(pages.length)}
-                className={`relative shrink-0 transition-all duration-500 rounded-full ${
+                className={`relative shrink-0 cursor-pointer transition-all duration-500 rounded-full ${
                   page === pages.length
                     ? "px-6 py-2 bg-primary text-white shadow-lg shadow-[#49202d]/30"
                     : "w-3 h-3 bg-[#efd7b1]/30 hover:bg-[#efd7b1]/60"
@@ -148,7 +148,7 @@ export const UI = () => {
             {/* İleri Butonu */}
             <button
               onClick={() => setPage(Math.min(pages.length, page + 1))}
-              className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-[#f0d8b4]/10 transition-colors text-[#e6cba4] hover:text-[#f8e0bb]"
+              className="w-12 h-12 cursor-pointer flex items-center justify-center rounded-full hover:bg-[#f0d8b4]/10 transition-colors text-[#e6cba4] hover:text-[#f8e0bb]"
             >
               <ChevronRight size={24} />
             </button>

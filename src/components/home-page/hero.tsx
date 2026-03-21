@@ -130,14 +130,14 @@ export const Hero4 = () => {
               <button
                 type="button"
                 onClick={handleWhatsApp}
-                className="rounded-xl bg-secondary px-5 py-3 text-xs font-black uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#1d7048] sm:text-sm"
+                className="cursor-pointer rounded-xl bg-secondary px-5 py-3 text-xs font-black uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#1d7048] sm:text-sm"
               >
                 WhatsApp
               </button>
               <button
                 type="button"
                 onClick={handleCall}
-                className="rounded-xl bg-white px-5 py-3 text-xs font-black uppercase tracking-[0.14em] text-slate-900 transition-colors hover:bg-emerald-50 sm:text-sm"
+                className="cursor-pointer rounded-xl bg-white px-5 py-3 text-xs font-black uppercase tracking-[0.14em] text-slate-900 transition-colors hover:bg-emerald-50 sm:text-sm"
               >
                 Hemen Ara
               </button>
