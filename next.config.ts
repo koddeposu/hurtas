@@ -1,6 +1,20 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/prefabrik-evler/tek-katli",
+        destination: "/prefabrik-evler/tek-katli-prefabrik-evler",
+        permanent: true,
+      },
+      {
+        source: "/prefabrik-evler/cift-katli",
+        destination: "/prefabrik-evler/cift-katli-prefabrik-evler",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [320, 480, 560, 640, 768, 1024, 1280],
