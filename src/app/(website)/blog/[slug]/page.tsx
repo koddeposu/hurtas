@@ -70,6 +70,34 @@ function formatPrice(price: string | null) {
   return new Intl.NumberFormat("tr-TR").format(Number(price));
 }
 
+function normalizeRoom(room: string | null | undefined) {
+  return (room ?? "").replace(/\s+/g, "").toLowerCase();
+}
+
+function hasRoomType(room: string | null | undefined, types: string[]) {
+  const normalizedRoom = normalizeRoom(room);
+  return types.some((type) => normalizedRoom.includes(normalizeRoom(type)));
+}
+
+function takeUniqueProducts(
+  products: DBProductPreview[],
+  limit: number,
+  excludeIds: Set<string> = new Set(),
+) {
+  const selected: DBProductPreview[] = [];
+  const seenIds = new Set(excludeIds);
+
+  for (const item of products) {
+    if (seenIds.has(item.id)) continue;
+    selected.push(item);
+    seenIds.add(item.id);
+
+    if (selected.length >= limit) break;
+  }
+
+  return selected;
+}
+
 function ProductShowcase({
   title,
   description,
@@ -84,7 +112,10 @@ function ProductShowcase({
   return (
     <section className="my-12 rounded-[1rem] border border-slate-300 bg-[#f8f7f3] p-5 md:p-6">
       <div className="mb-6 max-w-2xl">
-        <h2 className=" text-2xl font-black tracking-tight text-slate-900 md:text-3xl">
+        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
+          Size Uygun Modeller
+        </p>
+        <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-900 md:text-3xl">
           {title}
         </h2>
         <p className="mt-3 text-sm font-medium leading-7 text-slate-600">
@@ -92,7 +123,7 @@ function ProductShowcase({
         </p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {products.map((product) => (
           <Link
             key={product.id}
@@ -326,14 +357,69 @@ export default async function BlogPostPage({
   const doubleFloorCategory = categories.find((item) =>
     item.name.includes("Çift Kat"),
   );
-  const previewProducts = await getProductsPreview(singleFloorCategory?.id, 60);
+  const previewProducts = await getProductsPreview(undefined, 90);
 
-  const firstBlockProducts = previewProducts
-    .filter((item) => item.room === "1+1")
-    .slice(0, 3);
-  const secondBlockProducts = previewProducts
-    .filter((item) => item.room === "2+1" || item.room === "3+1")
-    .slice(0, 3);
+  const singleFloorProducts = singleFloorCategory
+    ? previewProducts.filter((item) => item.categoryId === singleFloorCategory.id)
+    : previewProducts;
+  const doubleFloorProducts = doubleFloorCategory
+    ? previewProducts.filter((item) => item.categoryId === doubleFloorCategory.id)
+    : [];
+  const otherProducts = previewProducts.filter(
+    (item) =>
+      item.categoryId !== singleFloorCategory?.id &&
+      item.categoryId !== doubleFloorCategory?.id,
+  );
+
+  const firstPrimary = singleFloorProducts.filter((item) =>
+    hasRoomType(item.room, ["1+1"]),
+  );
+  const firstFallback = [
+    ...singleFloorProducts.filter((item) => !hasRoomType(item.room, ["1+1"])),
+    ...doubleFloorProducts,
+    ...otherProducts,
+  ];
+  const firstBlockProducts = takeUniqueProducts(
+    [...firstPrimary, ...firstFallback],
+    3,
+  );
+  const firstUsesFallback = firstBlockProducts.some(
+    (item) => !hasRoomType(item.room, ["1+1"]),
+  );
+
+  const firstSelectedIds = new Set(firstBlockProducts.map((item) => item.id));
+  const secondPrimary = singleFloorProducts.filter((item) =>
+    hasRoomType(item.room, ["2+1", "3+1"]),
+  );
+  const secondFallback = [
+    ...singleFloorProducts.filter(
+      (item) => !hasRoomType(item.room, ["2+1", "3+1"]),
+    ),
+    ...doubleFloorProducts,
+    ...otherProducts,
+  ];
+  const secondBlockProducts = takeUniqueProducts(
+    [...secondPrimary, ...secondFallback],
+    3,
+    firstSelectedIds,
+  );
+  const secondUsesFallback = secondBlockProducts.some(
+    (item) => !hasRoomType(item.room, ["2+1", "3+1"]),
+  );
+
+  const firstShowcaseTitle = firstUsesFallback
+    ? "Tek Katlı ve Çift Katlı Prefabrik Ev Modelleri"
+    : "1+1 Tek Katlı Prefabrik Ev Modelleri";
+  const firstShowcaseDescription = firstUsesFallback
+    ? "1+1 ürün sayısı sınırlı olduğunda, size daha fazla seçenek sunmak için tek katlı ve çift katlı alternatif modelleri birlikte listeliyoruz."
+    : "İçerikle birlikte değerlendirebileceğiniz, kompakt yaşam için uygun 1+1 tek katlı prefabrik ev seçeneklerini burada topladık.";
+
+  const secondShowcaseTitle = secondUsesFallback
+    ? "2+1, 3+1 ve Alternatif Prefabrik Ev Modelleri"
+    : "2+1 ve 3+1 Tek Katlı Prefabrik Ev Modelleri";
+  const secondShowcaseDescription = secondUsesFallback
+    ? "2+1 ve 3+1 ürün sayısı sınırlı olduğunda, karşılaştırma yapabilmeniz için tek katlı ve çift katlı alternatif modelleri de dahil ediyoruz."
+    : "Daha geniş yaşam planı arıyorsanız 2+1 ve 3+1 tek katlı prefabrik ev seçeneklerini de birlikte inceleyin.";
 
   return (
     <main className="min-h-screen bg-white pb-24">
@@ -427,8 +513,8 @@ export default async function BlogPostPage({
               <div dangerouslySetInnerHTML={{ __html: contentSections[0] }} />
 
               <ProductShowcase
-                title="1+1 Tek Katlı Prefabrik Ev Modelleri"
-                description="İçerikle birlikte değerlendirebileceğiniz, kompakt yaşam için uygun 1+1 tek katlı prefabrik ev seçeneklerini burada topladık."
+                title={firstShowcaseTitle}
+                description={firstShowcaseDescription}
                 products={firstBlockProducts}
               />
 
@@ -437,8 +523,8 @@ export default async function BlogPostPage({
               ) : null}
 
               <ProductShowcase
-                title="2+1 ve 3+1 Tek Katlı Prefabrik Ev Modelleri"
-                description="Daha geniş yaşam planı arıyorsanız 2+1 ve 3+1 tek katlı prefabrik ev seçeneklerini de birlikte inceleyin."
+                title={secondShowcaseTitle}
+                description={secondShowcaseDescription}
                 products={secondBlockProducts}
               />
 
