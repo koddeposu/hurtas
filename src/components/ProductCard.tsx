@@ -56,7 +56,7 @@ export const ProductCard = ({
             src={coverImage.src}
             alt={coverImage.alt}
             fill
-            quality={52}
+            quality={75}
             sizes="(min-width: 1280px) 30vw, (min-width: 768px) 46vw, 94vw"
             className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
             draggable={false}
