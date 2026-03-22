@@ -48,6 +48,8 @@ interface DetailProduct {
 
 interface ProductPageClientProps {
   product: DetailProduct;
+  descriptionHtml?: string | null;
+  descriptionText?: string | null;
 }
 
 interface ProductImageProps {
@@ -293,22 +295,39 @@ function TrustFeatures() {
   );
 }
 
-function ProductDescription({ product }: ProductPriceProps) {
-  if (!product.description) return null;
+function ProductDescription({
+  descriptionHtml,
+  descriptionText,
+}: {
+  descriptionHtml?: string | null;
+  descriptionText?: string | null;
+}) {
+  if (!descriptionHtml && !descriptionText) return null;
 
   return (
     <div className="mt-8 md:mt-10 rounded-[1rem] border border-slate-200 bg-white p-4 md:p-6">
       <h2 className="text-lg md:text-xl font-black tracking-tight text-[#49202d]">
         Ürün Açıklaması
       </h2>
-      <p className="mt-3 text-sm md:text-base leading-relaxed text-slate-700 whitespace-pre-line">
-        {product.description}
-      </p>
+      {descriptionHtml ? (
+        <div
+          className="blog-content product-content mt-3 text-sm md:text-base text-slate-700"
+          dangerouslySetInnerHTML={{ __html: descriptionHtml }}
+        />
+      ) : (
+        <p className="mt-3 text-sm md:text-base leading-relaxed text-slate-700 whitespace-pre-line">
+          {descriptionText}
+        </p>
+      )}
     </div>
   );
 }
 
-export default function ProductPageClient({ product }: ProductPageClientProps) {
+export default function ProductPageClient({
+  product,
+  descriptionHtml,
+  descriptionText,
+}: ProductPageClientProps) {
   return (
     <main className="min-h-screen bg-slate-50/30">
       <section className="pt-14 pb-12 lg:pt-24">
@@ -317,7 +336,10 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
             <div className="lg:col-span-7">
               <ProductImage product={product} />
               <div className="hidden lg:block">
-                <ProductDescription product={product} />
+                <ProductDescription
+                  descriptionHtml={descriptionHtml}
+                  descriptionText={descriptionText}
+                />
               </div>
             </div>
 
@@ -342,7 +364,10 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
             </aside>
 
             <div className="lg:hidden">
-              <ProductDescription product={product} />
+              <ProductDescription
+                descriptionHtml={descriptionHtml}
+                descriptionText={descriptionText}
+              />
             </div>
           </div>
         </div>

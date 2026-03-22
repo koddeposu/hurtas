@@ -7,7 +7,6 @@ import { AdminHeader } from "@/components/admin/header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -33,6 +32,8 @@ import {
   type SortableImage,
 } from "@/components/admin/sortable-image-grid";
 import { AltTextEditDialog } from "@/components/admin/alt-text-edit-dialog";
+import { BlogContentEditor } from "@/components/admin/blog-content-editor";
+import { hasRichContent, toTipTapDocJson } from "@/lib/richContent";
 
 interface ProductImage {
   id: string;
@@ -89,7 +90,7 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
     height: product.height,
     price: product.price || "",
     oldPrice: product.oldPrice || "",
-    description: product.description || "",
+    description: toTipTapDocJson(product.description || ""),
     isActive: product.isActive,
   });
 
@@ -103,7 +104,9 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
         categoryId: formData.categoryId || null,
         price: formData.price || null,
         oldPrice: formData.oldPrice || null,
-        description: formData.description || null,
+        description: hasRichContent(formData.description)
+          ? formData.description
+          : null,
       });
       toast.success("Ürün güncellendi");
       router.push("/admin/products");
@@ -263,16 +266,14 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
 
                     <div className="space-y-2">
                       <Label htmlFor="description">Açıklama</Label>
-                      <Textarea
-                        id="description"
-                        value={formData.description}
-                        onChange={(e) =>
+                      <BlogContentEditor
+                        content={formData.description}
+                        onChange={(json) =>
                           setFormData({
                             ...formData,
-                            description: e.target.value,
+                            description: json,
                           })
                         }
-                        rows={4}
                       />
                     </div>
                   </CardContent>

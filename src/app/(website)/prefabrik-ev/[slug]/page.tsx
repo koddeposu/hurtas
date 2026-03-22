@@ -1,11 +1,21 @@
 import { getProductBySlug } from '@/actions/productActions';
 import ProductPageClient from '@/components/ProductPageClient';
+import { extractPlainTextFromRichContent, parseTipTapDoc } from '@/lib/richContent';
+import { convertJsonToHtml } from '@/lib/tiptap-utils';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
+
+function getDescriptionHtml(description: string | null | undefined) {
+  if (!description) return null;
+  if (!parseTipTapDoc(description)) return null;
+
+  const html = convertJsonToHtml(description);
+  return html || null;
+}
 
 // Metadata oluştur
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -21,10 +31,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const firstImage = product.images[0]?.url;
   const imageUrl = firstImage || 'https://ctprefabrik.com/og-image.png';
+  const plainDescription = extractPlainTextFromRichContent(product.description);
 
   // Açıklama oluştur
-  const description = product.description
-    ? product.description.substring(0, 160)
+  const description = plainDescription
+    ? plainDescription.substring(0, 160)
     : `${product.name} - ${product.room ? product.room + ' oda' : ''} ${product.bath ? product.bath + ' banyo' : ''} prefabrik ev modeli. Uygun fiyatlarla hemen teslim.`;
 
   const keywords = [
@@ -98,8 +109,10 @@ export default async function ProductPage({ params }: Props) {
 
   const imageUrls = product.images.map((img) => img.url);
   const pageUrl = `https://ctprefabrik.com/prefabrik-ev/${slug}`;
+  const plainDescription = extractPlainTextFromRichContent(product.description);
+  const descriptionHtml = getDescriptionHtml(product.description);
   const productDescription =
-    product.description ||
+    plainDescription ||
     `${product.name} prefabrik ev modeli. ${
       product.room ? `${product.room} oda planı, ` : ""
     }${
@@ -221,7 +234,11 @@ export default async function ProductPage({ params }: Props) {
       />
 
       {/* Client Component */}
-      <ProductPageClient product={product} />
+      <ProductPageClient
+        product={product}
+        descriptionHtml={descriptionHtml}
+        descriptionText={plainDescription}
+      />
     </>
   );
 }

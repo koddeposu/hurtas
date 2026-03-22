@@ -7,7 +7,6 @@ import { AdminHeader } from "@/components/admin/header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -22,10 +21,12 @@ import Link from "next/link";
 import { createProduct } from "@/actions/productActions";
 import { uploadImage } from "@/actions/uploadActions";
 import { toast } from "sonner";
+import { BlogContentEditor } from "@/components/admin/blog-content-editor";
 import {
   SortableImageGrid,
   type SortableImage,
 } from "@/components/admin/sortable-image-grid";
+import { hasRichContent, toTipTapDocJson } from "@/lib/richContent";
 
 interface PendingImage {
   tempId: string;
@@ -58,7 +59,7 @@ export function NewProductForm({ categories }: NewProductFormProps) {
     height: "2.5",
     price: "",
     oldPrice: "",
-    description: "",
+    description: toTipTapDocJson(""),
     isActive: true,
   });
 
@@ -72,7 +73,9 @@ export function NewProductForm({ categories }: NewProductFormProps) {
         categoryId: formData.categoryId || undefined,
         price: formData.price || undefined,
         oldPrice: formData.oldPrice || undefined,
-        description: formData.description || undefined,
+        description: hasRichContent(formData.description)
+          ? formData.description
+          : undefined,
         pendingImages: pendingImages.map(({ url, alt, order }) => ({
           url,
           alt,
@@ -205,17 +208,14 @@ export function NewProductForm({ categories }: NewProductFormProps) {
 
                     <div className="space-y-2">
                       <Label htmlFor="description">Açıklama</Label>
-                      <Textarea
-                        id="description"
-                        value={formData.description}
-                        onChange={(e) =>
+                      <BlogContentEditor
+                        content={formData.description}
+                        onChange={(json) =>
                           setFormData({
                             ...formData,
-                            description: e.target.value,
+                            description: json,
                           })
                         }
-                        placeholder="Ürün hakkında detaylı bilgi"
-                        rows={4}
                       />
                     </div>
                   </CardContent>
