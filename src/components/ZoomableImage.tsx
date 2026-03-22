@@ -1,4 +1,3 @@
-import Logo from "@/assets/logo.png";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import React from "react";
@@ -20,7 +19,7 @@ export function ZoomableImage({ src, alt }: { src: string; alt: string }) {
 
   return (
     <div
-      className="relative aspect-video w-full overflow-hidden cursor-zoom-in rounded-[1rem] md:rounded-[2rem]"
+      className="relative aspect-video w-full overflow-hidden cursor-zoom-in rounded-[1rem] md:rounded-[1rem]"
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
