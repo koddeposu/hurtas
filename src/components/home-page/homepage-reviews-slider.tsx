@@ -6,10 +6,10 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight, Quote, Star } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
+// Veri yapınız aynı kalıyor
 interface ReviewSlide {
   id: string;
   productName: string;
@@ -117,8 +117,9 @@ export function HomepageReviewsSlider() {
   const [api, setApi] = useState<CarouselApi | null>(null);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [snapCount, setSnapCount] = useState(0);
+  // Noktaları kullanmayacağız, sadece oklar
+  // const [selectedIndex, setSelectedIndex] = useState(0);
+  // const [snapCount, setSnapCount] = useState(0);
 
   useEffect(() => {
     if (!api) return;
@@ -126,8 +127,8 @@ export function HomepageReviewsSlider() {
     const updateState = () => {
       setCanScrollPrev(api.canScrollPrev());
       setCanScrollNext(api.canScrollNext());
-      setSelectedIndex(api.selectedScrollSnap());
-      setSnapCount(api.scrollSnapList().length);
+      // setSelectedIndex(api.selectedScrollSnap());
+      // setSnapCount(api.scrollSnapList().length);
     };
 
     updateState();
@@ -145,101 +146,125 @@ export function HomepageReviewsSlider() {
   }
 
   return (
-    <section className="mt-12 rounded-2xl border border-emerald-100 bg-gradient-to-b from-emerald-50/70 via-white to-white px-4 py-6 md:px-6 md:py-8">
-      <div className="mb-6 flex items-end justify-between gap-4">
-        <div>
-          <span className="inline-flex rounded-md border border-emerald-200 bg-white px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-emerald-700">
+    <section
+      aria-labelledby="reviews-heading"
+      className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden bg-slate-100"
+    >
+      {/* Ana İçerik Alanı (Carousel) */}
+      <div className="relative z-10 mx-auto max-w-[1440px] px-4 py-10 md:px-8 lg:py-12">
+        {/* Üst Alan: Başlık */}
+        <div className="mx-auto mb-8 max-w-3xl text-center lg:mb-10">
+          <span className="inline-flex items-center gap-1.5 rounded-lg bg-primary/10 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.18em] text-primary">
             Müşteri Yorumları
           </span>
-          <h3 className="mt-3 text-xl font-black tracking-tight text-slate-900 md:text-2xl">
-            En Çok Tercih Edilen Modeller Hakkında Geri Bildirimler
-          </h3>
+          <h2
+            id="reviews-heading"
+            className="mt-4 text-2xl font-black tracking-tight text-slate-900 md:text-4xl"
+          >
+            Sizin İçin En İyi Deneyimi Sunuyoruz
+          </h2>
+          <p className="mt-4 text-sm font-medium leading-6 text-slate-600 sm:text-base">
+            Tek katlı prefabrik ev, çift katlı prefabrik ev ve çelik ev
+            projelerimiz için paylaşılan gerçek müşteri yorumlarını inceleyin.
+          </p>
         </div>
 
-        <div className="hidden items-center gap-2 md:flex">
+        {/* Carousel ve Kenar Okları */}
+        <div className="relative">
+          {/* Sol Ok */}
           <button
             type="button"
             onClick={() => api?.scrollPrev()}
             disabled={!canScrollPrev}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300 text-slate-700 transition-colors hover:border-emerald-600 hover:text-emerald-700 disabled:cursor-not-allowed disabled:opacity-40"
+            className="absolute -left-7 top-1/2 z-20 inline-flex -translate-y-1/2 cursor-pointer items-center justify-center text-black transition-colors hover:scale-110 hover:text-secondary disabled:cursor-not-allowed disabled:opacity-40 md:-left-10"
             aria-label="Önceki yorum"
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft
+              className="h-14 w-14 lg:h-20 lg:w-20"
+              strokeWidth={0.8}
+            />
           </button>
+
+          {/* Sağ Ok */}
           <button
             type="button"
             onClick={() => api?.scrollNext()}
             disabled={!canScrollNext}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300 text-slate-700 transition-colors hover:border-emerald-600 hover:text-emerald-700 disabled:cursor-not-allowed disabled:opacity-40"
+            className="absolute -right-7 top-1/2 z-20 inline-flex -translate-y-1/2 cursor-pointer items-center justify-center text-slate-700 transition-colors hover:scale-110 hover:text-secondary disabled:cursor-not-allowed disabled:opacity-40 md:-right-10"
             aria-label="Sonraki yorum"
           >
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight
+              className="h-14 w-14 lg:h-20 lg:w-20"
+              strokeWidth={0.8}
+            />
           </button>
+
+          {/* Carousel */}
+          <Carousel
+            setApi={setApi}
+            opts={{
+              align: "start",
+              loop: true,
+              slidesToScroll: 1, // Tek bir yorum kaydırılacak
+            }}
+            className="w-full px-6 sm:px-8"
+          >
+            <CarouselContent>
+              {REVIEW_SLIDES.map((review) => (
+                <CarouselItem
+                  key={review.id}
+                  className="basis-full" // Tam genişlikte tek bir yorum
+                >
+                  {/* Yorum Kartı - Büyütülmüş ve Merkezlenmiş - SEO Semantik Yapı */}
+                  <figure className="relative mx-auto flex max-w-3xl flex-col rounded-[0.9rem] border border-slate-300 bg-white p-6 shadow-[0_16px_38px_-32px_rgba(15,23,42,0.24)] transition-all hover:border-slate-400 hover:shadow-[0_24px_52px_-30px_rgba(15,23,42,0.28)] md:p-7">
+                    {/* Arka plan tırnak işareti (Görsel Zenginlik) */}
+                    <Quote className="pointer-events-none absolute right-6 top-6 h-10 w-10 rotate-180 text-slate-100" />
+
+                    {/* Yıldızlar */}
+                    <div
+                      className="flex items-center gap-1 text-amber-400"
+                      aria-label={`${review.rating} üzerinden 5 yıldız`}
+                    >
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star
+                          key={`${review.id}-star-${i}`}
+                          className={`h-4 w-4 ${i < review.rating ? "fill-current" : "text-slate-200"}`}
+                        />
+                      ))}
+                    </div>
+
+                    {/* Yorum (Blockquote) - Büyütülmüş Metin */}
+                    <blockquote className="mt-4 flex-grow">
+                      <p className="text-sm font-medium leading-6 text-slate-700 md:text-base">
+                        &ldquo;{review.comment}&rdquo;
+                      </p>
+                    </blockquote>
+
+                    {/* Yorum Yapan Kişi ve Ürün (Footer) */}
+                    <figcaption className="mt-5 border-t border-slate-200 pt-4">
+                      <Link
+                        href={review.href}
+                        prefetch={false}
+                        className="mb-3 inline-block rounded border border-primary/10 bg-primary/5 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-primary transition-colors hover:bg-primary/10"
+                      >
+                        {review.productName}
+                      </Link>
+                      <div className="flex items-center justify-between">
+                        <cite className="not-italic text-sm font-bold text-slate-900 md:text-base">
+                          {review.customerName}
+                        </cite>
+                        <span className="text-xs font-medium text-slate-500 md:text-sm">
+                          {review.city}
+                        </span>
+                      </div>
+                    </figcaption>
+                  </figure>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
         </div>
       </div>
-
-      <Carousel
-        setApi={setApi}
-        opts={{
-          align: "start",
-          loop: true,
-          slidesToScroll: 1,
-        }}
-        className="w-full"
-      >
-        <CarouselContent>
-          {REVIEW_SLIDES.map((review) => (
-            <CarouselItem
-              key={review.id}
-              className="basis-full sm:basis-1/2 xl:basis-1/3"
-            >
-              <article className="h-full rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                <div className="flex items-center gap-1 text-amber-500">
-                  {Array.from({ length: review.rating }).map((_, starIndex) => (
-                    <Star key={`${review.id}-star-${starIndex}`} className="h-4 w-4 fill-current" />
-                  ))}
-                </div>
-
-                <p className="mt-4 text-sm leading-6 text-slate-700">
-                  {review.comment}
-                </p>
-
-                <div className="mt-5 border-t border-slate-100 pt-4">
-                  <Link
-                    href={review.href}
-                    prefetch={false}
-                    className="inline-flex rounded-md bg-emerald-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.16em] text-emerald-800 transition-colors hover:bg-emerald-100"
-                  >
-                    {review.productName}
-                  </Link>
-                  <p className="mt-2 text-xs font-semibold text-slate-800">
-                    {review.customerName}
-                  </p>
-                  <p className="text-xs text-slate-500">{review.city}</p>
-                </div>
-              </article>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-      </Carousel>
-
-      {snapCount > 1 ? (
-        <div className="mt-5 flex items-center justify-center gap-2">
-          {Array.from({ length: snapCount }).map((_, index) => (
-            <button
-              key={`review-dot-${index}`}
-              type="button"
-              onClick={() => api?.scrollTo(index)}
-              className={`h-2 rounded-full transition-all ${
-                index === selectedIndex
-                  ? "w-6 bg-emerald-700"
-                  : "w-2 bg-slate-300 hover:bg-slate-400"
-              }`}
-              aria-label={`${index + 1}. yoruma git`}
-            />
-          ))}
-        </div>
-      ) : null}
     </section>
   );
 }

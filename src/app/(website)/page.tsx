@@ -1,5 +1,4 @@
 import { getCategories } from "@/actions/categoryActions";
-import { Features } from "@/components/home-page/features";
 import { Hero4 } from "@/components/home-page/hero";
 import { HomepageBlogSection } from "@/components/home-page/homepage-blog-section";
 import {
@@ -276,17 +275,11 @@ export default async function Page() {
           </div>
         </section>
 
-        <section className="flex justify-center py-5 lg:py-18">
-          <div className="max-w-[1280px] w-full">
-            <Features />
-          </div>
-        </section>
-
         <Suspense fallback={<SectionSkeleton heightClassName="h-[560px]" />}>
           <HomepageFavoritesSection />
         </Suspense>
 
-        <section className="flex justify-center py-5 lg:py-18">
+        <section className="flex justify-center py-5 pt-16 lg:py-18">
           <div className="max-w-[1280px] w-full">
             <HomepageReviewsSlider />
           </div>

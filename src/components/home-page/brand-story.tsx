@@ -27,7 +27,7 @@ const FEATURES = [
 
 export function BrandStory() {
   return (
-    <section className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden bg-slate-50">
+    <section className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden bg-slate-100">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(22,91,57,0.06),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(73,32,45,0.04),transparent_30%)]" />
 
       <div className="relative mx-auto max-w-[1440px] px-5 py-9 md:px-8 lg:px-10 lg:py-12">
@@ -91,24 +91,24 @@ export function BrandStory() {
               />
             </div>
 
-            <div className="grid gap-4 lg:gap-10">
-              <div className="relative min-h-[200px] overflow-hidden border border-slate-300/80 shadow-[0_22px_58px_-38px_rgba(15,23,42,0.24)]">
+            <div className="col-span-2 grid grid-cols-2 gap-4 lg:col-span-1 lg:grid-cols-1 lg:gap-10">
+              <div className="relative min-h-[140px] overflow-hidden border border-slate-300/80 shadow-[0_22px_58px_-38px_rgba(15,23,42,0.24)] sm:min-h-[200px]">
                 <Image
                   src={StoryImage1}
                   alt="Prefabrik ev modelleri"
                   fill
                   className="object-cover"
-                  sizes="(min-width: 1024px) 22vw, 100vw"
+                  sizes="(max-width: 1023px) 46vw, (min-width: 1024px) 22vw, 100vw"
                 />
               </div>
 
-              <div className="relative min-h-[200px] overflow-hidden  border border-slate-300/80 shadow-[0_22px_58px_-38px_rgba(15,23,42,0.24)]">
+              <div className="relative min-h-[140px] overflow-hidden  border border-slate-300/80 shadow-[0_22px_58px_-38px_rgba(15,23,42,0.24)] sm:min-h-[200px]">
                 <Image
                   src={StoryImage3}
                   alt="Çelik ev ve dubleks prefabrik ev çözümleri"
                   fill
                   className="object-cover"
-                  sizes="(min-width: 1024px) 22vw, 100vw"
+                  sizes="(max-width: 1023px) 46vw, (min-width: 1024px) 22vw, 100vw"
                 />
               </div>
             </div>

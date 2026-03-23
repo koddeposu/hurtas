@@ -28,7 +28,7 @@ export default function ClientLayout({
 
   return (
     <>
-      <div className="fixed w-full h-screen -z-10 bg-primary/10 opacity-10 blur-in-sm " />
+      <div className="fixed w-full h-screen -z-10  opacity-10 blur-in-sm " />
       <Navbar categories={categories} />
 
       <main

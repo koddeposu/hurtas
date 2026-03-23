@@ -1,4 +1,5 @@
 import {
+  ArrowRight,
   BadgeCheck,
   ClipboardCheck,
   HardHat,
@@ -9,137 +10,109 @@ import {
 const STEPS = [
   {
     id: "01",
-    title: "Keşif ve İhtiyaç Analizi",
+    title: "Keşif ve Arsa Analizi",
     description:
-      "Arsa durumu, kullanım senaryosu, oda ihtiyacı ve yaşam alışkanlıklarını analiz ederek tek katlı, dubleks veya çelik ev için doğru yönü belirliyoruz.",
+      "Arsa durumunuza en uygun tek katlı, dubleks prefabrik veya çelik ev modelini belirlemek için yerinde değerlendirme yapıyoruz.",
     icon: ClipboardCheck,
   },
   {
     id: "02",
-    title: "Planlama ve Fiyatlandırma",
+    title: "Projelendirme ve Fiyatlandırma",
     description:
-      "Prefabrik ev fiyatları, malzeme kapsamı, metrekare alternatifleri ve uygulama takvimi tek teklif akışı içinde netleşiyor.",
+      "Bütçenize uygun prefabrik ev fiyatları, net malzeme listesi ve şeffaf sözleşme ile sürpriz maliyetleri tamamen ortadan kaldırıyoruz.",
     icon: Ruler,
   },
   {
     id: "03",
-    title: "Üretim ve Kalite Kontrol",
+    title: "Fabrika Üretimi ve Kalite",
     description:
-      "Yapı bileşenlerini kontrollü üretim sürecinden geçiriyor, montaja hazır her parçayı teknik standartlar ve kalite adımlarıyla doğruluyoruz.",
+      "Hafif çelik ve prefabrik yapı elemanlarını, yüksek yalıtım standartlarında ve uzun ömürlü kullanım için fabrikamızda üretiyoruz.",
     icon: Shield,
   },
   {
     id: "04",
-    title: "Montaj ve Teslim",
+    title: "Montaj ve Anahtar Teslim",
     description:
-      "Deneyimli saha ekibimiz, projeyi planlanan sürede kurup kullanıma hazır hale getiriyor; teslim sonrasında da süreci sahipsiz bırakmıyoruz.",
+      "Uzman saha ekibimizle profesyonel kurulumu tamamlıyor, hayalinizdeki evi söz verdiğimiz tarihte anahtar teslim sunuyoruz.",
     icon: HardHat,
   },
 ];
 
 export function ProcessJourney() {
   return (
-    <section className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden bg-slate-50">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(22,91,57,0.05),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(73,32,45,0.04),transparent_28%)]" />
-
-      <div className="relative mx-auto max-w-[1440px] px-5 py-8 md:px-8 lg:px-10 lg:py-10">
-        <div className="rounded-[1rem] border border-slate-300 bg-white/92 p-5 shadow-[0_22px_52px_-42px_rgba(15,23,42,0.2)] md:p-7 lg:p-8">
-          <div className="grid gap-6 border-b border-slate-300/80 pb-6 lg:grid-cols-[1.05fr_0.95fr] lg:items-end lg:gap-8">
-            <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-2 rounded-lg border border-secondary/20 bg-secondary/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
-                <BadgeCheck className="h-4 w-4" />
-                Prefabrik Ev Süreci
-              </div>
-
-              <h2 className="mt-4 text-2xl font-black leading-tight tracking-tight text-slate-900 md:text-4xl">
-                Keşiften Montaja
-                <br />
-                <span className="text-primary">Planlı ve Net Bir Süreç</span>
-              </h2>
-
-              <p className="mt-4 max-w-2xl text-sm font-medium leading-7 text-slate-600">
-                CT Prefabrik olarak <strong>tek katlı prefabrik ev</strong>,{" "}
-                <strong>dubleks prefabrik ev</strong> ve{" "}
-                <strong>çelik ev</strong> projelerinde keşif, planlama, üretim
-                ve montaj adımlarını tek merkezden yönetiyoruz. Böylece süreç
-                daha okunur, daha kontrollü ve daha güvenilir ilerliyor.
-              </p>
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-3">
-              <div className="rounded-[0.85rem] border border-slate-300 bg-slate-50 p-4">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-700">
-                  Hizmet Alanı
-                </p>
-                <p className="mt-2 text-lg font-black tracking-tight text-slate-900">
-                  Tek Katlı
-                  <br />
-                  Dubleks
-                  <br />
-                  Çelik Ev
-                </p>
-              </div>
-
-              <div className="rounded-[0.85rem] border border-slate-300 bg-slate-50 p-4">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-700">
-                  Süreç Yapısı
-                </p>
-                <p className="mt-2 text-lg font-black tracking-tight text-secondary">
-                  Keşif
-                  <br />
-                  Üretim
-                  <br />
-                  Montaj
-                </p>
-              </div>
-
-              <div className="rounded-[0.85rem] border border-slate-300 bg-slate-50 p-4">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-700">
-                  Odak Noktası
-                </p>
-                <p className="mt-2 text-lg font-black tracking-tight text-slate-900">
-                  Şeffaf
-                  <br />
-                  Takvim
-                  <br />
-                  Kalite
-                </p>
-              </div>
-            </div>
+    <section aria-labelledby="prefabrik-surec-baslik" className="bg-white ">
+      <div className="mx-auto max-w-7xl ">
+        {/* SEO Odaklı Üst Başlık ve İçerik */}
+        <div className="mx-auto max-w-3xl text-center">
+          <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-bold text-primary">
+            <BadgeCheck className="h-4 w-4" aria-hidden="true" />
+            <span>CT Prefabrik Güvencesi</span>
           </div>
 
-          <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {STEPS.map((step) => {
-              const Icon = step.icon;
+          <h2
+            id="prefabrik-surec-baslik"
+            className="mt-5 text-2xl font-black tracking-tight text-slate-900 sm:text-4xl "
+          >
+            Anahtar Teslim Prefabrik ve Çelik Ev Yapım Süreci
+          </h2>
 
-              return (
-                <article
-                  key={step.id}
-                  className="group rounded-[0.95rem] border border-slate-300 bg-white p-5 transition-all duration-300 hover:-translate-y-1.5 hover:border-slate-400 hover:shadow-[0_20px_42px_-30px_rgba(15,23,42,0.22)]"
-                >
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-secondary/10 text-secondary">
-                      <Icon className="h-5 w-5" />
+          <p className="mt-6 text-base leading-relaxed text-slate-600 sm:text-md">
+            <strong>CT Prefabrik</strong> olarak;{" "}
+            <strong>tek katlı prefabrik ev</strong>,{" "}
+            <strong>dubleks prefabrik villa</strong> ve{" "}
+            <strong>hafif çelik ev</strong> projelerinizin her aşamasını tek
+            merkezden yönetiyoruz. Yüksek yalıtımlı ve uzun ömürlü yapıları söz
+            verdiğimiz tarihte güvenle teslim ediyoruz.
+          </p>
+        </div>
+
+        {/* Adımlar - Semantik Liste (ol, li, article) */}
+        <ol className="mt-10 grid grid-cols-2 gap-3 sm:mt-14 sm:gap-6 lg:grid-cols-4">
+          {STEPS.map((step, index) => {
+            const Icon = step.icon;
+            const isLastStep = index === STEPS.length - 1;
+
+            return (
+              <li key={step.id} className="relative group">
+                <article className="flex h-full flex-col rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:p-6 transition-all duration-300 hover:bg-white hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:border-primary/40 hover:-translate-y-1">
+                  {/* İkon ve Numara */}
+                  <header className="mb-3 flex items-center justify-between sm:mb-5">
+                    <div
+                      className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary sm:h-12 sm:w-12"
+                      aria-hidden="true"
+                    >
+                      <Icon className="h-4 w-4 sm:h-6 sm:w-6" />
                     </div>
-                    <span className="text-sm font-black tracking-tight text-primary/70">
+                    <span
+                      className="text-xl font-bold text-slate-200 transition-colors group-hover:text-primary/20 sm:text-2xl sm:font-black"
+                      aria-hidden="true"
+                    >
                       {step.id}
                     </span>
-                  </div>
+                  </header>
 
-                  <h3 className="mt-4 text-lg font-black leading-snug tracking-tight text-slate-900">
+                  {/* Adım Başlığı ve Açıklaması */}
+                  <h3 className="mb-2 text-sm font-semibold leading-snug text-slate-900 sm:mb-3 sm:text-xl sm:font-bold">
                     {step.title}
                   </h3>
-
-                  <p className="mt-3 text-sm font-medium leading-6 text-slate-600">
+                  <p className="flex-grow text-[11px] font-normal leading-5 text-slate-600 sm:text-sm sm:font-medium sm:leading-relaxed">
                     {step.description}
                   </p>
-
-                  <div className="mt-4 h-1 w-12 rounded-full bg-gradient-to-r from-secondary via-primary/70 to-transparent" />
                 </article>
-              );
-            })}
-          </div>
-        </div>
+
+                {/* Masaüstü Ok İşareti (Botlar görmezden gelir) */}
+                {!isLastStep && (
+                  <div
+                    className="hidden lg:block absolute top-1/2 -right-4 -translate-y-1/2 z-10 text-slate-300"
+                    aria-hidden="true"
+                  >
+                    <ArrowRight className="h-6 w-6" />
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ol>
       </div>
     </section>
   );
