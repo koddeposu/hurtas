@@ -530,7 +530,7 @@ export default async function BlogPostPage({
         <MobileQuickLinks />
 
         {/* Featured Image */}
-        <div className="relative aspect-video w-full rounded-[1rem] overflow-hidden shadow-lg mb-8">
+        <div className="relative aspect-video w-full rounded-[1rem] overflow-hidden shadow-lg mb-8 border border-slate-300">
           <Image
             src={post.imageUrl}
             alt={post.imageAlt || post.title}
@@ -538,7 +538,7 @@ export default async function BlogPostPage({
             preload
             fetchPriority="high"
             loading="eager"
-            className="object-cover"
+            className="object-contain"
           />
         </div>
 
