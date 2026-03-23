@@ -10,8 +10,11 @@ import { handleCall, handleWhatsApp } from "@/lib/analytics/googleAds";
 import { motion } from "framer-motion";
 import {
   ArrowUp,
+  ArrowUpRight,
   Bath,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
   Home,
   Info,
   MessageCircle,
@@ -20,6 +23,7 @@ import {
   ZoomIn,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
 import { ProjectGalleryModal } from "./ModalSliderImage";
 
@@ -50,6 +54,8 @@ interface ProductPageClientProps {
   product: DetailProduct;
   descriptionHtml?: string | null;
   descriptionText?: string | null;
+  relatedProducts?: RelatedProduct[];
+  relatedTitle?: string;
 }
 
 interface ProductImageProps {
@@ -58,6 +64,21 @@ interface ProductImageProps {
 
 interface ProductPriceProps {
   product: DetailProduct;
+}
+
+interface RelatedProduct {
+  id: string;
+  slug: string;
+  name: string;
+  area: string;
+  room: string;
+  price: string | null;
+  oldPrice: string | null;
+  categoryName: string | null;
+  image: {
+    url: string;
+    alt: string;
+  } | null;
 }
 
 export function ProductImage({ product }: ProductImageProps) {
@@ -323,10 +344,195 @@ function ProductDescription({
   );
 }
 
+function RelatedProductCard({ product }: { product: RelatedProduct }) {
+  return (
+    <Link
+      href={`/prefabrik-ev/${product.slug}`}
+      prefetch={false}
+      className="group flex h-full flex-col overflow-hidden rounded-[1rem] border border-slate-300 bg-white shadow-[0_16px_38px_-32px_rgba(15,23,42,0.24)] transition-all duration-300 hover:-translate-y-1.5 hover:border-slate-400 hover:shadow-[0_24px_52px_-30px_rgba(15,23,42,0.3)]"
+    >
+      <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
+        {product.image ? (
+          <Image
+            src={product.image.url}
+            alt={product.image.alt}
+            fill
+            quality={75}
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+            sizes="(min-width: 1280px) 31vw, (min-width: 768px) 48vw, 48vw"
+          />
+        ) : null}
+
+        {product.categoryName ? (
+          <div className="absolute right-4 top-4 rounded-lg border border-slate-200/80 bg-white/92 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-primary shadow-sm backdrop-blur">
+            {product.categoryName}
+          </div>
+        ) : null}
+      </div>
+
+      <div className="flex flex-1 flex-col p-5">
+        <h3 className="text-base md:text-lg font-black leading-snug tracking-tight text-slate-900 transition-colors duration-300 group-hover:text-primary">
+          {product.name}
+        </h3>
+
+        {product.price ? (
+          <div className="mt-2 flex items-center gap-2">
+            <p className="text-base font-bold text-secondary">
+              {formatPrice(product.price)} ₺
+            </p>
+            {product.oldPrice ? (
+              <p className="text-sm font-bold text-slate-500 line-through">
+                {formatPrice(product.oldPrice)} ₺
+              </p>
+            ) : null}
+          </div>
+        ) : null}
+
+        <div className="mt-4 grid grid-cols-2 gap-3 border-t border-slate-200 pt-4">
+          <div className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-50 text-primary">
+              <Ruler className="h-4 w-4" />
+            </div>
+            <span className="text-xs font-bold text-slate-500">
+              {product.area} m<sup>2</sup>
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-50 text-primary">
+              <Home className="h-4 w-4" />
+            </div>
+            <span className="text-xs font-bold text-slate-500">
+              {product.room}
+            </span>
+          </div>
+        </div>
+
+        <div className="mt-5 inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.14em] text-secondary">
+          İncele
+          <ArrowUpRight className="h-4 w-4" />
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+function RelatedProductsSlider({
+  title,
+  products,
+}: {
+  title?: string;
+  products: RelatedProduct[];
+}) {
+  const [api, setApi] = useState<CarouselApi | null>(null);
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [snapCount, setSnapCount] = useState(0);
+
+  React.useEffect(() => {
+    if (!api) return;
+
+    const updateState = () => {
+      setCanScrollPrev(api.canScrollPrev());
+      setCanScrollNext(api.canScrollNext());
+      setSelectedIndex(api.selectedScrollSnap());
+      setSnapCount(api.scrollSnapList().length);
+    };
+
+    updateState();
+    api.on("select", updateState);
+    api.on("reInit", updateState);
+
+    return () => {
+      api.off("select", updateState);
+      api.off("reInit", updateState);
+    };
+  }, [api]);
+
+  if (!products.length) return null;
+
+  return (
+    <section className="font-[family-name:var(--font-poppins)]">
+      <div className="mb-6 md:mb-8">
+        <h2 className="text-2xl md:text-4xl font-black tracking-tight text-slate-900">
+          {title || "Diğer Prefabrik Ev Modellerimiz"}
+        </h2>
+      </div>
+
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => api?.scrollPrev()}
+          disabled={!canScrollPrev}
+          className="absolute -left-7 md:-left-10 top-1/2 z-20 inline-flex -translate-y-1/2 items-center justify-center text-black transition-colors hover:text-secondary disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer hover:scale-110"
+          aria-label={`${title || "İlgili ürünler"} önceki`}
+        >
+          <ChevronLeft
+            className="w-14 h-14 lg:w-20 lg:h-20"
+            strokeWidth={0.8}
+          />
+        </button>
+
+        <button
+          type="button"
+          onClick={() => api?.scrollNext()}
+          disabled={!canScrollNext}
+          className="absolute -right-7 md:-right-10 top-1/2 z-20 inline-flex -translate-y-1/2 items-center justify-center text-slate-700 transition-colors hover:text-secondary disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer hover:scale-110"
+          aria-label={`${title || "İlgili ürünler"} sonraki`}
+        >
+          <ChevronRight
+            className="w-14 h-14 lg:w-20 lg:h-20"
+            strokeWidth={0.8}
+          />
+        </button>
+
+        <Carousel
+          setApi={setApi}
+          opts={{
+            align: "start",
+            loop: false,
+            slidesToScroll: 1,
+          }}
+          className="w-full px-6 sm:px-8"
+        >
+          <CarouselContent>
+            {products.map((item) => (
+              <CarouselItem key={item.id} className="md:basis-1/2 lg:basis-1/3">
+                <RelatedProductCard product={item} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+
+        {snapCount > 1 ? (
+          <div
+            className="mt-5 flex items-center justify-center gap-2 md:hidden"
+            aria-hidden="true"
+          >
+            {Array.from({ length: snapCount }).map((_, index) => (
+              <span
+                key={`related-dot-${index}`}
+                className={`block h-2 rounded-full transition-all duration-300 ${
+                  index === selectedIndex
+                    ? "w-6 bg-primary"
+                    : "w-2 bg-slate-300"
+                }`}
+              />
+            ))}
+          </div>
+        ) : null}
+      </div>
+    </section>
+  );
+}
+
 export default function ProductPageClient({
   product,
   descriptionHtml,
   descriptionText,
+  relatedProducts = [],
+  relatedTitle,
 }: ProductPageClientProps) {
   return (
     <main className="min-h-screen bg-slate-50/30">
@@ -372,6 +578,17 @@ export default function ProductPageClient({
           </div>
         </div>
       </section>
+
+      {relatedProducts.length > 0 ? (
+        <section className="pb-16">
+          <div className="container mx-auto max-w-7xl">
+            <RelatedProductsSlider
+              title={relatedTitle}
+              products={relatedProducts}
+            />
+          </div>
+        </section>
+      ) : null}
     </main>
   );
 }

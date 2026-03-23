@@ -1,4 +1,4 @@
-import { getProductBySlug } from '@/actions/productActions';
+import { getProductBySlug, getProductsPreview } from '@/actions/productActions';
 import ProductPageClient from '@/components/ProductPageClient';
 import { extractPlainTextFromRichContent, parseTipTapDoc } from '@/lib/richContent';
 import { convertJsonToHtml } from '@/lib/tiptap-utils';
@@ -9,12 +9,44 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
+type RelatedProduct = {
+  id: string;
+  slug: string;
+  name: string;
+  area: string;
+  room: string;
+  price: string | null;
+  oldPrice: string | null;
+  categoryName: string | null;
+  image: {
+    url: string;
+    alt: string;
+  } | null;
+};
+
 function getDescriptionHtml(description: string | null | undefined) {
   if (!description) return null;
   if (!parseTipTapDoc(description)) return null;
 
   const html = convertJsonToHtml(description);
   return html || null;
+}
+
+function getRelatedTitle(categoryName: string | null | undefined) {
+  const name = categoryName ?? '';
+  const lower = name.toLocaleLowerCase('tr-TR');
+
+  if (lower.includes('tek kat')) {
+    return 'Diğer Tek Katlı Ev Modellerimiz';
+  }
+  if (lower.includes('çift kat') || lower.includes('dubleks')) {
+    return 'Diğer Çift Katlı Ev Modellerimiz';
+  }
+  if (lower.includes('çelik')) {
+    return 'Diğer Çelik Ev Modellerimiz';
+  }
+
+  return name ? `Diğer ${name} Modellerimiz` : 'Diğer Prefabrik Ev Modellerimiz';
 }
 
 // Metadata oluştur
@@ -111,6 +143,29 @@ export default async function ProductPage({ params }: Props) {
   const pageUrl = `https://ctprefabrik.com/prefabrik-ev/${slug}`;
   const plainDescription = extractPlainTextFromRichContent(product.description);
   const descriptionHtml = getDescriptionHtml(product.description);
+  const relatedSource = product.categoryId
+    ? await getProductsPreview(product.categoryId, 12)
+    : [];
+  const relatedProducts: RelatedProduct[] = relatedSource
+    .filter((item) => item.id !== product.id)
+    .slice(0, 6)
+    .map((item) => ({
+      id: item.id,
+      slug: item.slug,
+      name: item.name,
+      area: item.area,
+      room: item.room,
+      price: item.price,
+      oldPrice: item.oldPrice,
+      categoryName: item.category?.name ?? null,
+      image: item.image
+        ? {
+            url: item.image.url,
+            alt: item.image.alt,
+          }
+        : null,
+    }));
+  const relatedTitle = getRelatedTitle(product.category?.name);
   const productDescription =
     plainDescription ||
     `${product.name} prefabrik ev modeli. ${
@@ -238,6 +293,8 @@ export default async function ProductPage({ params }: Props) {
         product={product}
         descriptionHtml={descriptionHtml}
         descriptionText={plainDescription}
+        relatedProducts={relatedProducts}
+        relatedTitle={relatedTitle}
       />
     </>
   );
