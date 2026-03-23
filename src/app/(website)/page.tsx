@@ -295,7 +295,7 @@ export default async function Page() {
           </div>
         </section>
 
-        <section className="flex justify-center py-8 lg:py-12">
+        <section className="flex justify-center pt-8 lg:pt-12">
           <div className="max-w-[1280px] w-full">
             <HomepageFaq />
           </div>
