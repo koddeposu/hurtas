@@ -1,36 +1,77 @@
-// src/components/admin/analytics-dashboard.tsx
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { MessageCircle, Phone } from "lucide-react";
+import { CalendarDays, MessageCircle, Phone, Users } from "lucide-react";
 import { useEffect, useState } from "react";
+import type { ReactNode } from "react";
 
-interface Stats {
-  totalPageViews: number;
-  todayPageViews: number;
-  weekPageViews: number;
-  totalClicks: number;
-  todayClicks: number;
-  weekClicks: number;
-  pageStats: { page: string; count: number }[];
-  buttonStats: { buttonId: string; count: number }[];
-  dailyStats: { date: string; pageViews: number }[];
+interface MonthlySummary {
+  monthKey: string;
+  label: string;
+  visitors: number;
+  offset: number;
+}
+
+interface LastMonthDailyRow {
+  date: string;
+  label: string;
+  visitors: number;
+  phoneClicks: number;
+  whatsappClicks: number;
+}
+
+interface StatsResponse {
+  weekVisitors: number;
+  monthVisitors: number;
+  weekPhoneClicks: number;
+  weekWhatsAppClicks: number;
+  lastMonthLabel: string;
+  lastMonthTotalVisitors: number;
+  monthlySummaries: MonthlySummary[];
+  lastMonthDaily: LastMonthDailyRow[];
+  generatedAt: string;
+}
+
+function StatCard({
+  title,
+  value,
+  subtitle,
+  icon,
+  className,
+}: {
+  title: string;
+  value: number;
+  subtitle: string;
+  icon: ReactNode;
+  className?: string;
+}) {
+  return (
+    <Card className={className}>
+      <CardHeader className="pb-2">
+        <CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-700">
+          {icon}
+          {title}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-3xl font-black text-slate-900">
+          {value.toLocaleString("tr-TR")}
+        </p>
+        <p className="mt-1 text-xs text-slate-500">{subtitle}</p>
+      </CardContent>
+    </Card>
+  );
 }
 
 export function AnalyticsDashboard() {
-  const [stats, setStats] = useState<Stats | null>(null);
+  const [stats, setStats] = useState<StatsResponse | null>(null);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchStats();
-    const interval = setInterval(fetchStats, 60000); // 60 saniyede bir güncelle
-    return () => clearInterval(interval);
-  }, []);
 
   const fetchStats = async () => {
     try {
-      const res = await fetch("/api/analytics/stats");
-      const data = await res.json();
+      const response = await fetch("/api/analytics/stats", { cache: "no-store" });
+      if (!response.ok) throw new Error("stats failed");
+      const data = (await response.json()) as StatsResponse;
       setStats(data);
     } catch (error) {
       console.error("Failed to fetch stats:", error);
@@ -39,11 +80,17 @@ export function AnalyticsDashboard() {
     }
   };
 
+  useEffect(() => {
+    fetchStats();
+    const interval = setInterval(fetchStats, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   if (loading) {
     return (
       <Card>
         <CardContent className="flex items-center justify-center p-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-slate-900" />
         </CardContent>
       </Card>
     );
@@ -52,223 +99,171 @@ export function AnalyticsDashboard() {
   if (!stats) {
     return (
       <Card>
-        <CardContent className="p-8 text-center text-gray-500">
+        <CardContent className="p-8 text-center text-slate-500">
           İstatistikler yüklenemedi
         </CardContent>
       </Card>
     );
   }
 
-  const whatsappClicks =
-    stats.buttonStats?.find((s) => s.buttonId === "whatsapp-butonu")?.count ||
-    0;
-  const phoneClicks =
-    stats.buttonStats?.find((s) => s.buttonId === "telefon-butonu")?.count || 0;
-  const totalContacts = whatsappClicks + phoneClicks;
-  const conversionRate =
-    stats.totalPageViews > 0
-      ? ((totalContacts / stats.totalPageViews) * 100).toFixed(2)
-      : "0.00";
+  const lastMonthPhoneTotal = stats.lastMonthDaily.reduce(
+    (sum, row) => sum + row.phoneClicks,
+    0,
+  );
+  const lastMonthWhatsAppTotal = stats.lastMonthDaily.reduce(
+    (sum, row) => sum + row.whatsappClicks,
+    0,
+  );
 
   return (
     <div className="space-y-6">
-      {/* Başlık */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-slate-900">
-          Site İstatistikleri
-        </h2>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-2xl font-bold text-slate-900">Site İstatistikleri</h2>
         <button
           onClick={fetchStats}
-          className="px-3 py-1.5 text-sm bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors"
+          className="rounded-lg bg-slate-100 px-3 py-1.5 text-sm text-slate-700 transition-colors hover:bg-slate-200"
         >
           Yenile
         </button>
       </div>
 
-      {/* İletişim İstatistikleri - Öne Çıkan */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card className="border-2 border-green-500 bg-gradient-to-br from-green-50 to-white">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-sm font-medium text-green-700">
-              <MessageCircle className="w-4 h-4" />
-              WhatsApp
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold text-green-600">
-              {whatsappClicks.toLocaleString("tr-TR")}
-            </p>
-            <p className="text-xs text-gray-600 mt-1">Toplam tıklama</p>
-          </CardContent>
-        </Card>
-
-        <Card className="border-2 border-blue-500 bg-gradient-to-br from-blue-50 to-white">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-sm font-medium text-blue-700">
-              <Phone className="w-4 h-4" />
-              Telefon
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold text-blue-600">
-              {phoneClicks.toLocaleString("tr-TR")}
-            </p>
-            <p className="text-xs text-gray-600 mt-1">Toplam arama</p>
-          </CardContent>
-        </Card>
-        {/*
-        <Card className="border-2 border-orange-500 bg-gradient-to-br from-orange-50 to-white">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-sm font-medium text-orange-700">
-              <TrendingUp className="w-4 h-4" />
-              Dönüşüm
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-3xl font-bold text-orange-600">
-              {conversionRate}%
-            </p>
-            <p className="text-xs text-gray-600 mt-1">İletişim oranı</p>
-          </CardContent>
-        </Card> */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <StatCard
+          title="Bu Hafta Ziyaretçi"
+          value={stats.weekVisitors}
+          subtitle="Aynı kullanıcı 4 saatte bir sayılır"
+          icon={<Users className="h-4 w-4" />}
+          className="border-l-4 border-l-slate-700"
+        />
+        <StatCard
+          title="Bu Ay Ziyaretçi"
+          value={stats.monthVisitors}
+          subtitle="Aylık toplam (4 saat kuralı ile)"
+          icon={<CalendarDays className="h-4 w-4" />}
+          className="border-l-4 border-l-indigo-600"
+        />
+        <StatCard
+          title="Bu Hafta WhatsApp"
+          value={stats.weekWhatsAppClicks}
+          subtitle="4 saat içinde tekrar sayılmaz"
+          icon={<MessageCircle className="h-4 w-4" />}
+          className="border-l-4 border-l-green-600"
+        />
+        <StatCard
+          title="Bu Hafta Telefon"
+          value={stats.weekPhoneClicks}
+          subtitle="4 saat içinde tekrar sayılmaz"
+          icon={<Phone className="h-4 w-4" />}
+          className="border-l-4 border-l-blue-600"
+        />
       </div>
 
-      {/* Ziyaret İstatistikleri */}
-      {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-600">
-              <Eye className="w-4 h-4" />
-              Bugün
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold text-slate-900">
-              {(stats.todayPageViews || 0).toLocaleString("tr-TR")}
-            </p>
-            <p className="text-xs text-gray-600 mt-1">Sayfa görüntüleme</p>
-          </CardContent>
-        </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Aylık Ziyaretçi Özeti (Bu Ay + Son 3 Ay)</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[520px] text-sm">
+              <thead>
+                <tr className="border-b text-left text-slate-500">
+                  <th className="pb-3 font-semibold">Dönem</th>
+                  <th className="pb-3 font-semibold">Ziyaretçi</th>
+                  <th className="pb-3 font-semibold">Not</th>
+                </tr>
+              </thead>
+              <tbody>
+                {stats.monthlySummaries.map((item) => (
+                  <tr key={item.monthKey} className="border-b last:border-0">
+                    <td className="py-3 font-medium text-slate-800">{item.label}</td>
+                    <td className="py-3 font-black text-slate-900">
+                      {item.visitors.toLocaleString("tr-TR")}
+                    </td>
+                    <td className="py-3 text-slate-500">
+                      {item.offset === 0
+                        ? "Bu ay"
+                        : item.offset === 1
+                          ? "Geçen ay (detay aşağıda)"
+                          : "Genel özet"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-600">
-              <Eye className="w-4 h-4" />
-              Son 7 Gün
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold text-slate-900">
-              {(stats.weekPageViews || 0).toLocaleString("tr-TR")}
-            </p>
-            <p className="text-xs text-gray-600 mt-1">Sayfa görüntüleme</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-600">
-              <Eye className="w-4 h-4" />
-              Toplam
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold text-slate-900">
-              {(stats.totalPageViews || 0).toLocaleString("tr-TR")}
-            </p>
-            <p className="text-xs text-gray-600 mt-1">Sayfa görüntüleme</p>
-          </CardContent>
-        </Card>
-      </div> */}
-
-      {/* Detaylı İstatistikler */}
-      {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4"> */}
-      {/* En Çok Ziyaret Edilen Sayfalar */}
-      {/* <Card>
-          <CardHeader>
-            <CardTitle className="text-base">
-              En Çok Ziyaret Edilen Sayfalar
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {stats.pageStats && stats.pageStats.length > 0 ? (
-                stats.pageStats.slice(0, 5).map((stat, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center justify-between p-2 bg-slate-50 rounded"
-                  >
-                    <span className="text-sm truncate flex-1 text-slate-700">
-                      {stat.page}
-                    </span>
-                    <span className="ml-2 text-sm font-bold text-slate-900">
-                      {stat.count.toLocaleString("tr-TR")}
-                    </span>
-                  </div>
-                ))
-              ) : (
-                <p className="text-sm text-gray-500 text-center py-4">
-                  Henüz veri yok
-                </p>
-              )}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">
+            {stats.lastMonthLabel} Detay Tablosu
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+            <div className="rounded-lg border bg-slate-50 p-3">
+              <p className="text-xs text-slate-500">Toplam Ziyaretçi</p>
+              <p className="text-xl font-black text-slate-900">
+                {stats.lastMonthTotalVisitors.toLocaleString("tr-TR")}
+              </p>
             </div>
-          </CardContent>
-        </Card> */}
-
-      {/* Buton Tıklamaları */}
-      {/* <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Buton Tıklamaları</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {stats.buttonStats && stats.buttonStats.length > 0 ? (
-                stats.buttonStats.slice(0, 5).map((stat, i) => {
-                  const isWhatsApp = stat.buttonId === "whatsapp-butonu";
-                  const isPhone = stat.buttonId === "telefon-butonu";
-                  const bgColor = isWhatsApp
-                    ? "bg-green-50"
-                    : isPhone
-                      ? "bg-blue-50"
-                      : "bg-slate-50";
-
-                  return (
-                    <div
-                      key={i}
-                      className={`flex items-center justify-between p-2 rounded ${bgColor}`}
-                    >
-                      <div className="flex items-center gap-2 flex-1">
-                        {isWhatsApp && (
-                          <MessageCircle className="w-3 h-3 text-green-600" />
-                        )}
-                        {isPhone && <Phone className="w-3 h-3 text-blue-600" />}
-                        <span className="text-sm truncate text-slate-700">
-                          {stat.buttonId}
-                        </span>
-                      </div>
-                      <span
-                        className={`ml-2 text-sm font-bold ${
-                          isWhatsApp
-                            ? "text-green-600"
-                            : isPhone
-                              ? "text-blue-600"
-                              : "text-slate-900"
-                        }`}
-                      >
-                        {stat.count.toLocaleString("tr-TR")}
-                      </span>
-                    </div>
-                  );
-                })
-              ) : (
-                <p className="text-sm text-gray-500 text-center py-4">
-                  Henüz veri yok
-                </p>
-              )}
+            <div className="rounded-lg border bg-slate-50 p-3">
+              <p className="text-xs text-slate-500">Toplam Telefon Tıklama</p>
+              <p className="text-xl font-black text-blue-700">
+                {lastMonthPhoneTotal.toLocaleString("tr-TR")}
+              </p>
             </div>
-          </CardContent>
-        </Card> */}
-      {/* </div> */}
+            <div className="rounded-lg border bg-slate-50 p-3">
+              <p className="text-xs text-slate-500">Toplam WhatsApp Tıklama</p>
+              <p className="text-xl font-black text-green-700">
+                {lastMonthWhatsAppTotal.toLocaleString("tr-TR")}
+              </p>
+            </div>
+          </div>
+
+          <div className="max-h-[420px] overflow-auto rounded-lg border">
+            <table className="w-full min-w-[620px] text-sm">
+              <thead className="sticky top-0 bg-white">
+                <tr className="border-b text-left text-slate-500">
+                  <th className="px-4 py-3 font-semibold">Tarih</th>
+                  <th className="px-4 py-3 font-semibold">Ziyaretçi</th>
+                  <th className="px-4 py-3 font-semibold">Telefon</th>
+                  <th className="px-4 py-3 font-semibold">WhatsApp</th>
+                </tr>
+              </thead>
+              <tbody>
+                {stats.lastMonthDaily.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="px-4 py-6 text-center text-slate-500">
+                      Geçen ay için veri bulunamadı
+                    </td>
+                  </tr>
+                ) : (
+                  stats.lastMonthDaily.map((row) => (
+                    <tr key={row.date} className="border-b last:border-0">
+                      <td className="px-4 py-2.5 text-slate-700">{row.label}</td>
+                      <td className="px-4 py-2.5 font-semibold text-slate-900">
+                        {row.visitors.toLocaleString("tr-TR")}
+                      </td>
+                      <td className="px-4 py-2.5 font-semibold text-blue-700">
+                        {row.phoneClicks.toLocaleString("tr-TR")}
+                      </td>
+                      <td className="px-4 py-2.5 font-semibold text-green-700">
+                        {row.whatsappClicks.toLocaleString("tr-TR")}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          <p className="text-xs text-slate-500">
+            Son güncelleme: {new Date(stats.generatedAt).toLocaleString("tr-TR")}
+          </p>
+        </CardContent>
+      </Card>
     </div>
   );
 }

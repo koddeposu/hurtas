@@ -11,7 +11,7 @@ export default async function ProjectsPage() {
   return (
     <div className="flex min-h-screen">
       <AdminSidebar />
-      <div className="flex-1 ml-64">
+      <div className="flex-1 lg:ml-64">
         <AdminHeader
           title="Projeler"
           description="Tamamlanan projeleri yönetin"
@@ -25,3 +25,4 @@ export default async function ProjectsPage() {
     </div>
   );
 }
+

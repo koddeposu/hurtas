@@ -7,6 +7,7 @@ import {
   serial,
   text,
   timestamp,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
@@ -254,6 +255,45 @@ export const buttonClicks = pgTable("button_clicks", {
   ip: text("ip"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+export const siteVisit = pgTable(
+  "site_visit",
+  {
+    id: serial("id").primaryKey(),
+    visitorKey: text("visitor_key").notNull(),
+    page: text("page").notNull(),
+    bucketStart: timestamp("bucket_start").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("site_visit_visitor_bucket_uidx").on(
+      table.visitorKey,
+      table.bucketStart,
+    ),
+    index("site_visit_created_at_idx").on(table.createdAt),
+  ],
+);
+
+export const contactClick = pgTable(
+  "contact_click",
+  {
+    id: serial("id").primaryKey(),
+    buttonId: text("button_id").notNull(),
+    visitorKey: text("visitor_key").notNull(),
+    page: text("page").notNull(),
+    bucketStart: timestamp("bucket_start").notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("contact_click_button_visitor_bucket_uidx").on(
+      table.buttonId,
+      table.visitorKey,
+      table.bucketStart,
+    ),
+    index("contact_click_created_at_idx").on(table.createdAt),
+    index("contact_click_button_created_at_idx").on(table.buttonId, table.createdAt),
+  ],
+);
 
 // ============================================
 // Relations for Admin Panel Tables

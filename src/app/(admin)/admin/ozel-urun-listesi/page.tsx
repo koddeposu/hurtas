@@ -10,7 +10,7 @@ export default async function OzelUrunListesiPage() {
   return (
     <div className="flex min-h-screen">
       <AdminSidebar />
-      <div className="flex-1 ml-64">
+      <div className="flex-1 lg:ml-64">
         <AdminHeader
           title="Özel Ürün Listesi"
           description="Sadece yönetim için ürün isim listesi"
@@ -34,3 +34,4 @@ export default async function OzelUrunListesiPage() {
     </div>
   );
 }
+

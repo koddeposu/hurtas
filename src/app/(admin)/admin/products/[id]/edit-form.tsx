@@ -212,7 +212,7 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
   return (
     <div className="flex min-h-screen">
       <AdminSidebar />
-      <div className="flex-1 ml-64">
+      <div className="flex-1 lg:ml-64">
         <AdminHeader title="Ürün Düzenle" description={product.name} />
 
         <main className="p-6">
@@ -461,3 +461,4 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
     </div>
   );
 }
+

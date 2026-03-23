@@ -116,7 +116,7 @@ export default function NewProjectPage() {
   return (
     <div className="flex min-h-screen">
       <AdminSidebar />
-      <div className="flex-1 ml-64">
+      <div className="flex-1 lg:ml-64">
         <AdminHeader title="Yeni Proje" description="Yeni bir proje ekleyin" />
 
         <main className="p-6">
@@ -256,3 +256,4 @@ export default function NewProjectPage() {
     </div>
   );
 }
+

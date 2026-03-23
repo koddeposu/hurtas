@@ -52,7 +52,7 @@ export function EditCategoryForm({ category }: EditCategoryFormProps) {
   return (
     <div className="flex min-h-screen">
       <AdminSidebar />
-      <div className="flex-1 ml-64">
+      <div className="flex-1 lg:ml-64">
         <AdminHeader title="Kategori Düzenle" description={category.name} />
 
         <main className="p-6">
@@ -126,3 +126,4 @@ export function EditCategoryForm({ category }: EditCategoryFormProps) {
     </div>
   );
 }
+

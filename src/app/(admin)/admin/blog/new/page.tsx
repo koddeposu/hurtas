@@ -85,7 +85,7 @@ export default function NewBlogPage() {
   return (
     <div className="flex min-h-screen">
       <AdminSidebar />
-      <div className="flex-1 ml-64">
+      <div className="flex-1 lg:ml-64">
         <AdminHeader
           title="Yeni Blog Yazısı"
           description="Yeni bir yazı ekleyin"
@@ -246,3 +246,4 @@ export default function NewBlogPage() {
     </div>
   );
 }
+
