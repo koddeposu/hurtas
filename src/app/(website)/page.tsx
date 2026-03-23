@@ -8,6 +8,7 @@ import {
 } from "@/components/home-page/homepage-faq";
 import { HomepageFavoritesSection } from "@/components/home-page/homepage-favorites-section";
 import { HomepageProductSliders } from "@/components/home-page/homepage-product-sliders";
+import { HomepageReviewsSlider } from "@/components/home-page/homepage-reviews-slider";
 import { ProductCategoryCards } from "@/components/home-page/product-category-cards";
 import { SectionSkeleton } from "@/components/home-page/section-skeleton";
 import { ServiceRegions } from "@/components/home-page/service-regions";
@@ -284,6 +285,12 @@ export default async function Page() {
         <Suspense fallback={<SectionSkeleton heightClassName="h-[560px]" />}>
           <HomepageFavoritesSection />
         </Suspense>
+
+        <section className="flex justify-center py-5 lg:py-18">
+          <div className="max-w-[1280px] w-full">
+            <HomepageReviewsSlider />
+          </div>
+        </section>
 
         <Suspense fallback={<SectionSkeleton heightClassName="h-[520px]" />}>
           <HomepageBlogSection />

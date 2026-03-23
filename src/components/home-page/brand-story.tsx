@@ -27,8 +27,8 @@ const FEATURES = [
 
 export function BrandStory() {
   return (
-    <section className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden bg-[#f3f1eb]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(22,91,57,0.12),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(73,32,45,0.08),transparent_24%)]" />
+    <section className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden bg-slate-50">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(22,91,57,0.06),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(73,32,45,0.04),transparent_30%)]" />
 
       <div className="relative mx-auto max-w-[1440px] px-5 py-9 md:px-8 lg:px-10 lg:py-12">
         <div className="grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:gap-12">

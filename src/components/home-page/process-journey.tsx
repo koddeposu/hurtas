@@ -39,8 +39,8 @@ const STEPS = [
 
 export function ProcessJourney() {
   return (
-    <section className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden bg-[#f3f1eb]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(22,91,57,0.08),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(73,32,45,0.07),transparent_22%)]" />
+    <section className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden bg-slate-50">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(22,91,57,0.05),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(73,32,45,0.04),transparent_28%)]" />
 
       <div className="relative mx-auto max-w-[1440px] px-5 py-8 md:px-8 lg:px-10 lg:py-10">
         <div className="rounded-[1rem] border border-slate-300 bg-white/92 p-5 shadow-[0_22px_52px_-42px_rgba(15,23,42,0.2)] md:p-7 lg:p-8">
@@ -67,7 +67,7 @@ export function ProcessJourney() {
             </div>
 
             <div className="grid gap-3 sm:grid-cols-3">
-              <div className="rounded-[0.85rem] border border-slate-300 bg-[#f8f7f3] p-4">
+              <div className="rounded-[0.85rem] border border-slate-300 bg-slate-50 p-4">
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-700">
                   Hizmet Alanı
                 </p>
@@ -80,7 +80,7 @@ export function ProcessJourney() {
                 </p>
               </div>
 
-              <div className="rounded-[0.85rem] border border-slate-300 bg-[#f8f7f3] p-4">
+              <div className="rounded-[0.85rem] border border-slate-300 bg-slate-50 p-4">
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-700">
                   Süreç Yapısı
                 </p>
@@ -93,7 +93,7 @@ export function ProcessJourney() {
                 </p>
               </div>
 
-              <div className="rounded-[0.85rem] border border-slate-300 bg-[#f8f7f3] p-4">
+              <div className="rounded-[0.85rem] border border-slate-300 bg-slate-50 p-4">
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-700">
                   Odak Noktası
                 </p>

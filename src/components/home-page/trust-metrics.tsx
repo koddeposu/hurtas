@@ -38,35 +38,27 @@ const METRICS = [
 export function TrustMetrics() {
   return (
     <section className="">
-      <div className="grid gap-3 md:grid-cols-4">
+      <div className="grid gap-6 lg:gap-3 grid-cols-2 lg:grid-cols-4">
         {METRICS.map((item) => {
           const Icon = item.icon;
-
           return (
             <div
               key={item.label}
-              className="group rounded-[0.85rem] border border-slate-300 bg-white/95 p-4 shadow-[0_14px_32px_-24px_rgba(15,23,42,0.16)] transition-all duration-200 hover:-translate-y-1 hover:border-slate-400 hover:shadow-[0_20px_40px_-26px_rgba(15,23,42,0.22)]"
+              className="group relative rounded-[0.85rem] border border-slate-300 bg-white/95 px-4 pb-4 pt-6 shadow-[0_14px_32px_-24px_rgba(15,23,42,0.16)] transition-all duration-200 hover:-translate-y-1 hover:border-slate-400 hover:shadow-[0_20px_40px_-26px_rgba(15,23,42,0.22)]"
             >
-              <div className="flex items-start gap-3">
-                <div
-                  className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg ${item.ring}`}
-                >
-                  <Icon className={`h-5 w-5 ${item.tone}`} />
-                </div>
+              <p
+                className={`absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full border border-slate-300 bg-white px-3 py-1 text-sm font-black tracking-tight md:text-base min-w-[100px] text-center ${item.tone}`}
+              >
+                {item.value}
+              </p>
 
-                <div className="min-w-0">
-                  <p
-                    className={`text-lg font-black tracking-tight ${item.tone}`}
-                  >
-                    {item.value}
-                  </p>
-                  <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
-                    {item.label}
-                  </p>
-                </div>
-              </div>
+              <p
+                className={`text-[11px] font-black uppercase tracking-[0.14em]  text-center ${item.tone}`}
+              >
+                {item.label}
+              </p>
 
-              <p className="mt-3 text-sm font-medium leading-6 text-slate-600">
+              <p className="mt-2 text-sm font-medium leading-6 text-slate-600 text-center">
                 {item.description}
               </p>
             </div>

@@ -84,13 +84,13 @@ export const Hero4 = () => {
               preload
               fetchPriority="high"
               loading="eager"
-              quality={55}
+              quality={80}
               placeholder="blur"
               sizes="100vw"
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/72 via-black/48 to-slate-950/36" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(15,23,42,0.24),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(0,0,0,0.3),transparent_38%)]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/40 to-slate-950/36" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(15,23,42,0.14),transparent_10%),radial-gradient(circle_at_bottom_left,rgba(0,0,0,0.1),transparent_38%)]" />
           </div>
 
           <div className="absolute inset-0 hero-zoom md:hidden">
@@ -101,24 +101,23 @@ export const Hero4 = () => {
               preload
               fetchPriority="high"
               loading="eager"
-              quality={55}
+              quality={80}
               placeholder="blur"
               sizes="100vw"
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/72 via-black/48 to-slate-950/36" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(15,23,42,0.24),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(0,0,0,0.3),transparent_38%)]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/48 to-slate-950/36" />
           </div>
         </div>
 
         <div className="relative mx-auto flex h-full max-w-7xl items-end px-4 pb-24 pt-28 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-emerald-200 backdrop-blur">
+            <div className="hidden md:inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-emerald-200 backdrop-blur">
               <span className="h-2 w-2 rounded-full bg-secondary shadow-[0_0_14px_rgba(22,91,57,0.9)]" />
               CT Prefabrik Üretim Güvencesi
             </div>
 
-            <h1 className="mt-5  max-w-2xl overflow-hidden text-3xl font-semibold leading-tight tracking-tight text-white line-clamp-3  sm:text-5xl lg:h-auto lg:line-clamp-none lg:text-6xl">
+            <h1 className="mt-5  max-w-2xl overflow-hidden text-2xl font-semibold leading-tight tracking-tight text-white line-clamp-3  md:text-4xl lg:h-auto lg:line-clamp-none ">
               {activeSlide.title}
             </h1>
 
