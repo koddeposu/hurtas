@@ -36,6 +36,7 @@ export interface Product {
   // bestseller?: boolean;
   category: Category;
   name: string;
+  metaDescription?: string;
   area: string;
   room: string;
   price?: string;
@@ -80,6 +81,7 @@ export interface DBProduct {
   price: string | null;
   oldPrice: string | null;
   description: string | null;
+  metaDescription: string | null;
   isActive: boolean;
   order: number;
   createdAt: Date;
@@ -101,6 +103,7 @@ export interface DBProductPreview {
   price: string | null;
   oldPrice: string | null;
   description: string | null;
+  metaDescription: string | null;
   isActive: boolean;
   order: number;
   createdAt: Date;

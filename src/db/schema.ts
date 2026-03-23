@@ -136,6 +136,7 @@ export const product = pgTable(
     price: text("price"),
     oldPrice: text("old_price"),
     description: text("description"),
+    metaDescription: text("meta_description"),
     isActive: boolean("is_active").default(true).notNull(),
     order: integer("order").default(0).notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),

@@ -47,6 +47,7 @@ interface DetailProduct {
   price: string | null;
   oldPrice: string | null;
   description: string | null;
+  metaDescription: string | null;
   images: DBProductImage[];
 }
 
@@ -75,6 +76,7 @@ interface RelatedProduct {
   price: string | null;
   oldPrice: string | null;
   categoryName: string | null;
+  metaDescription: string | null;
   image: {
     url: string;
     alt: string;
@@ -375,6 +377,12 @@ function RelatedProductCard({ product }: { product: RelatedProduct }) {
           {product.name}
         </h3>
 
+        {product.metaDescription ? (
+          <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">
+            {product.metaDescription}
+          </p>
+        ) : null}
+
         {product.price ? (
           <div className="mt-2 flex items-center gap-2">
             <p className="text-base font-bold text-secondary">
@@ -560,6 +568,12 @@ export default function ProductPageClient({
               <h1 className="text-3xl md:text-5xl lg:text-4xl xl:text-5xl font-black text-slate-900 tracking-tight leading-[1.05]">
                 {product.name}
               </h1>
+
+              {product.metaDescription ? (
+                <p className="text-sm md:text-base leading-relaxed text-slate-600 [text-wrap:pretty]">
+                  {product.metaDescription}
+                </p>
+              ) : null}
 
               <ProductFeatures product={product} />
 

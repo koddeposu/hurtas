@@ -7,6 +7,7 @@ import { AdminHeader } from "@/components/admin/header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -55,6 +56,7 @@ interface Product {
   price: string | null;
   oldPrice: string | null;
   description: string | null;
+  metaDescription: string | null;
   isActive: boolean;
   order: number;
   images: ProductImage[];
@@ -91,6 +93,7 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
     price: product.price || "",
     oldPrice: product.oldPrice || "",
     description: toTipTapDocJson(product.description || ""),
+    metaDescription: product.metaDescription || "",
     isActive: product.isActive,
   });
 
@@ -107,6 +110,7 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
         description: hasRichContent(formData.description)
           ? formData.description
           : null,
+        metaDescription: formData.metaDescription.trim() || null,
       });
       toast.success("Ürün güncellendi");
       router.push("/admin/products");
@@ -275,6 +279,25 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                           })
                         }
                       />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="metaDescription">Meta Description</Label>
+                      <Textarea
+                        id="metaDescription"
+                        value={formData.metaDescription}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            metaDescription: e.target.value,
+                          })
+                        }
+                        placeholder="SEO için kısa açıklama (öneri: 140-160 karakter)"
+                        rows={4}
+                      />
+                      <p className="text-xs text-slate-500">
+                        Ürün kartlarında ve ürün detay sayfası meta etiketlerinde kullanılabilir.
+                      </p>
                     </div>
                   </CardContent>
                 </Card>

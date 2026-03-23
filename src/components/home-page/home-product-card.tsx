@@ -50,6 +50,12 @@ export function HomeProductCard({ product, badge }: HomeProductCardProps) {
           {product.name}
         </h3>
 
+        {product.metaDescription ? (
+          <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">
+            {product.metaDescription}
+          </p>
+        ) : null}
+
         {product.price ? (
           <div className="mt-2 flex items-center gap-2">
             <p className="text-base font-bold text-secondary">

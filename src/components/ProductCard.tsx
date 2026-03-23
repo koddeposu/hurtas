@@ -39,6 +39,11 @@ export const ProductCard = ({
     : `${product.slug}-${product.id}`;
 
   const coverImage = images[0];
+  const metaDescription =
+    "metaDescription" in product && typeof product.metaDescription === "string"
+      ? product.metaDescription
+      : "";
+  const cardDescription = metaDescription.trim() || null;
 
   if (!coverImage) {
     return null;
@@ -100,6 +105,12 @@ export const ProductCard = ({
         <h3 className="mb-1.5 text-lg font-black text-slate-900 transition-colors duration-200 group-hover:text-primary">
           {product.name}
         </h3>
+
+        {cardDescription ? (
+          <p className="mb-3 line-clamp-2 text-sm leading-6 text-slate-600">
+            {cardDescription}
+          </p>
+        ) : null}
 
         {product.price ? (
           <div className="mb-3 flex items-center gap-2">

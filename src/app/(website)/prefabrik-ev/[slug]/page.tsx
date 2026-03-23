@@ -18,6 +18,7 @@ type RelatedProduct = {
   price: string | null;
   oldPrice: string | null;
   categoryName: string | null;
+  metaDescription: string | null;
   image: {
     url: string;
     alt: string;
@@ -64,11 +65,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const firstImage = product.images[0]?.url;
   const imageUrl = firstImage || 'https://ctprefabrik.com/og-image.png';
   const plainDescription = extractPlainTextFromRichContent(product.description);
+  const fallbackDescription = `${product.name} - ${product.room ? `${product.room} oda` : ""} ${product.bath ? `${product.bath} banyo` : ""} prefabrik ev modeli. Uygun fiyatlarla hemen teslim.`;
 
   // Açıklama oluştur
-  const description = plainDescription
-    ? plainDescription.substring(0, 160)
-    : `${product.name} - ${product.room ? product.room + ' oda' : ''} ${product.bath ? product.bath + ' banyo' : ''} prefabrik ev modeli. Uygun fiyatlarla hemen teslim.`;
+  const description = (
+    product.metaDescription?.trim() || plainDescription || fallbackDescription
+  ).substring(0, 160);
 
   const keywords = [
     product.name,
@@ -158,6 +160,7 @@ export default async function ProductPage({ params }: Props) {
       price: item.price,
       oldPrice: item.oldPrice,
       categoryName: item.category?.name ?? null,
+      metaDescription: item.metaDescription,
       image: item.image
         ? {
             url: item.image.url,
@@ -167,6 +170,7 @@ export default async function ProductPage({ params }: Props) {
     }));
   const relatedTitle = getRelatedTitle(product.category?.name);
   const productDescription =
+    product.metaDescription ||
     plainDescription ||
     `${product.name} prefabrik ev modeli. ${
       product.room ? `${product.room} oda planı, ` : ""

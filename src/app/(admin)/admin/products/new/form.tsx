@@ -7,6 +7,7 @@ import { AdminHeader } from "@/components/admin/header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -60,6 +61,7 @@ export function NewProductForm({ categories }: NewProductFormProps) {
     price: "",
     oldPrice: "",
     description: toTipTapDocJson(""),
+    metaDescription: "",
     isActive: true,
   });
 
@@ -76,6 +78,7 @@ export function NewProductForm({ categories }: NewProductFormProps) {
         description: hasRichContent(formData.description)
           ? formData.description
           : undefined,
+        metaDescription: formData.metaDescription.trim() || undefined,
         pendingImages: pendingImages.map(({ url, alt, order }) => ({
           url,
           alt,
@@ -217,6 +220,25 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                           })
                         }
                       />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="metaDescription">Meta Description</Label>
+                      <Textarea
+                        id="metaDescription"
+                        value={formData.metaDescription}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            metaDescription: e.target.value,
+                          })
+                        }
+                        placeholder="SEO için kısa açıklama (öneri: 140-160 karakter)"
+                        rows={4}
+                      />
+                      <p className="text-xs text-slate-500">
+                        Ürün kartlarında ve ürün detay sayfası meta etiketlerinde kullanılabilir.
+                      </p>
                     </div>
                   </CardContent>
                 </Card>

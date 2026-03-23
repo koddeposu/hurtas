@@ -15,6 +15,13 @@
       "when": 1769515735033,
       "tag": "0001_neat_smiling_tiger",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1774289783488,
+      "tag": "0002_slim_gressill",
+      "breakpoints": true
     }
   ]
 }

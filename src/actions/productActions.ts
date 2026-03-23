@@ -165,6 +165,7 @@ export async function createProduct(data: {
   price?: string;
   oldPrice?: string;
   description?: string;
+  metaDescription?: string;
   isActive?: boolean;
   order?: number;
   pendingImages?: Array<{ url: string; alt: string; order: number }>;
@@ -187,6 +188,7 @@ export async function createProduct(data: {
     price: data.price ?? null,
     oldPrice: data.oldPrice ?? null,
     description: data.description ?? null,
+    metaDescription: data.metaDescription ?? null,
     isActive: data.isActive ?? true,
     order: data.order ?? 0,
   });
@@ -223,6 +225,7 @@ export async function updateProduct(
     price?: string | null;
     oldPrice?: string | null;
     description?: string | null;
+    metaDescription?: string | null;
     isActive?: boolean;
     order?: number;
   },
@@ -244,6 +247,9 @@ export async function updateProduct(
   if (data.price !== undefined) updateData.price = data.price;
   if (data.oldPrice !== undefined) updateData.oldPrice = data.oldPrice;
   if (data.description !== undefined) updateData.description = data.description;
+  if (data.metaDescription !== undefined) {
+    updateData.metaDescription = data.metaDescription;
+  }
   if (data.isActive !== undefined) updateData.isActive = data.isActive;
   if (data.order !== undefined) updateData.order = data.order;
 
