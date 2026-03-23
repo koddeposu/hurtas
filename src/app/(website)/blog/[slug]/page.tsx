@@ -6,6 +6,7 @@ import type { DBProductPreview } from "@/types/product";
 import type { JSONContent } from "@tiptap/core";
 import {
   ArrowLeft,
+  ArrowRight,
   ArrowUpRight,
   Calendar,
   Clock,
@@ -13,6 +14,7 @@ import {
   Layers3,
   Package,
   Ruler,
+  Sparkles,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -191,48 +193,84 @@ function ProductShowcase({
   );
 }
 
-function MobileQuickLinks({ doubleFloorHref }: { doubleFloorHref: string }) {
+function MobileQuickLinks() {
   return (
-    <section className="mb-6 grid grid-cols-2 gap-3 md:hidden">
-      <Link
-        href={doubleFloorHref}
-        className="group rounded-[0.50rem] border border-slate-300 bg-[linear-gradient(135deg,rgba(73,32,45,0.1),rgba(255,255,255,0.98))] p-3 shadow-[0_16px_30px_-24px_rgba(15,23,42,0.16)] transition-all duration-200 active:scale-[0.98]"
-      >
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white shadow-sm">
-            <Layers3 className="h-4.5 w-4.5" />
-          </div>
-          <ArrowUpRight className="h-4 w-4 text-primary" />
-        </div>
-        <p className="mt-3 text-[10px] font-black uppercase tracking-[0.18em] text-primary/70">
-          Hemen Incele
-        </p>
-        <h2 className="mt-1 text-sm font-black leading-snug text-slate-900">
-          Dubleks
-          <br />
-          Prefabrik Evler
-        </h2>
-      </Link>
+    <section className="mb-8 md:hidden">
+      {/* 1. Müşteriye Mesaj Veren Başlık Alanı */}
+      <div className="mb-3 flex items-center gap-2 px-1">
+        <Sparkles className="h-4.5 w-4.5 text-amber-500" />
+        <h3 className="text-sm font-bold text-slate-800">
+          Hayalindeki Evi Keşfet
+        </h3>
+      </div>
 
-      <Link
-        href="/prefabrik-evler"
-        className="group rounded-[0.50rem] border border-slate-300 bg-[linear-gradient(135deg,rgba(22,91,57,0.1),rgba(255,255,255,0.98))] p-3 shadow-[0_16px_30px_-24px_rgba(15,23,42,0.16)] transition-all duration-200 active:scale-[0.98]"
-      >
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary text-white shadow-sm">
-            <Package className="h-4.5 w-4.5" />
+      <div className="grid grid-cols-2 gap-3">
+        {/* Kart 1: Dubleks Evler */}
+        <Link
+          href={"/prefabrik-evler/tek-katli-prefabrik-evler"}
+          className="group relative overflow-hidden rounded-xl border border-primary/20 bg-white p-3.5 shadow-[0_8px_20px_-12px_rgba(0,0,0,0.08)] transition-all active:scale-95"
+        >
+          {/* Arka plan efekti */}
+          <div className="absolute -right-4 -top-4 h-16 w-16 rounded-full bg-primary/5 transition-transform group-hover:scale-150" />
+
+          <div className="relative">
+            <div className="mb-3 flex items-start justify-between">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <Layers3 className="h-5 w-5" />
+              </div>
+              {/* Psikolojik Tetikleyici Rozet */}
+              <span className="flex items-center rounded-full bg-red-100 px-2 py-0.5 text-[9px] font-bold text-red-600">
+                POPÜLER
+              </span>
+            </div>
+
+            <h2 className="text-sm font-extrabold leading-tight text-slate-900">
+              Tek Katlı Prefabrik Ev
+              <span className="mt-0.5 block text-xs font-medium text-slate-500">
+                1+1,2+1,3+1,4+1 modelleri inceleyin
+              </span>
+            </h2>
+
+            <div className="mt-3 flex items-center gap-1 text-[11px] font-bold text-primary">
+              İncele{" "}
+              <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+            </div>
           </div>
-          <ArrowUpRight className="h-4 w-4 text-secondary" />
-        </div>
-        <p className="mt-3 text-[10px] font-black uppercase tracking-[0.18em] text-secondary/80">
-          Tum Kategoriler
-        </p>
-        <h2 className="mt-1 text-sm font-black leading-snug text-slate-900">
-          Konteyner
-          <br />
-          Evler
-        </h2>
-      </Link>
+        </Link>
+
+        {/* Kart 2: Konteyner Evler */}
+        <Link
+          href="prefabrik-evler/cift-katli-prefabrik-evler"
+          className="group relative overflow-hidden rounded-xl border border-secondary/20 bg-white p-3.5 shadow-[0_8px_20px_-12px_rgba(0,0,0,0.08)] transition-all active:scale-95"
+        >
+          {/* Arka plan efekti */}
+          <div className="absolute -right-4 -top-4 h-16 w-16 rounded-full bg-secondary/5 transition-transform group-hover:scale-150" />
+
+          <div className="relative">
+            <div className="mb-3 flex items-start justify-between">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-secondary/10 text-secondary">
+                <Package className="h-5 w-5" />
+              </div>
+              {/* Psikolojik Tetikleyici Rozet */}
+              <span className="flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-[9px] font-bold text-emerald-600">
+                HIZLI KURULUM
+              </span>
+            </div>
+
+            <h2 className="text-sm font-extrabold leading-tight text-slate-900">
+              Çift Katlı Prefabrik ev (Dublex)
+              <span className="mt-0.5 block text-xs font-medium text-slate-500">
+                2+1,3+1,4+1,5+1 ve daha fazlası
+              </span>
+            </h2>
+
+            <div className="mt-3 flex items-center gap-1 text-[11px] font-bold text-secondary">
+              Tümünü Gör
+              <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+            </div>
+          </div>
+        </Link>
+      </div>
     </section>
   );
 }
@@ -360,10 +398,14 @@ export default async function BlogPostPage({
   const previewProducts = await getProductsPreview(undefined, 90);
 
   const singleFloorProducts = singleFloorCategory
-    ? previewProducts.filter((item) => item.categoryId === singleFloorCategory.id)
+    ? previewProducts.filter(
+        (item) => item.categoryId === singleFloorCategory.id,
+      )
     : previewProducts;
   const doubleFloorProducts = doubleFloorCategory
-    ? previewProducts.filter((item) => item.categoryId === doubleFloorCategory.id)
+    ? previewProducts.filter(
+        (item) => item.categoryId === doubleFloorCategory.id,
+      )
     : [];
   const otherProducts = previewProducts.filter(
     (item) =>
@@ -485,13 +527,7 @@ export default async function BlogPostPage({
 
       {/* --- CONTENT SECTION --- */}
       <article className="container mx-auto max-w-4xl ">
-        <MobileQuickLinks
-          doubleFloorHref={
-            doubleFloorCategory
-              ? `/prefabrik-evler/${doubleFloorCategory.slug}`
-              : "/prefabrik-evler"
-          }
-        />
+        <MobileQuickLinks />
 
         {/* Featured Image */}
         <div className="relative aspect-video w-full rounded-[1rem] overflow-hidden shadow-lg mb-8">
