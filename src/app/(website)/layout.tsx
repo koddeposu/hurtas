@@ -131,7 +131,7 @@ export default async function RootLayout({
         {/* Sadece bir tane script yüklemek yeterli, AW veya G- fark etmez */}
         <script
           async
-          src={`https://www.googletagmanager.com/gtag/js?id=AW-17869545270`}
+          src={`https://www.googletagmanager.com/gtag/js?id=AW-17869486943`}
         ></script>
         <script
           dangerouslySetInnerHTML={{
@@ -144,11 +144,11 @@ export default async function RootLayout({
       gtag('config', 'G-B77049HMXP');
 
       // 2. Google Ads Ana Bağlantısı (Az önce paylaştığın kod)
-      gtag('config', 'AW-17869545270');
+      gtag('config', 'AW-17869486943');
 
       // 3. Web Sitesi Telefon Araması Dönüşümü (Daha önce paylaştığın kod)
       // Bu kod, sitedeki numarayı otomatik olarak takip numarasına çevirir.
-      gtag('config', 'AW-17869545270/c6tyCK_3kekbELa-7shC', {
+      gtag('config', 'AW-17869486943/c6tyCK_3kekbELa-7shC', {
         'phone_conversion_number': '+90 537 518 30 06'
       });
     `,

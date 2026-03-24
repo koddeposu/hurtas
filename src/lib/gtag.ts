@@ -3,7 +3,7 @@
 export const trackWhatsAppClick = (callback?: () => void) => {
   if (typeof window !== "undefined" && window.gtag) {
     window.gtag("event", "conversion", {
-      send_to: "AW-17869545270/c6tyCK_3kekbELa-7shC",
+      send_to: "AW-17869486943/c6tyCK_3kekbELa-7shC",
       event_callback: callback,
     });
   } else {
@@ -15,7 +15,7 @@ export const trackWhatsAppClick = (callback?: () => void) => {
 export const trackPhoneClick = (callback?: () => void) => {
   if (typeof window !== "undefined" && window.gtag) {
     window.gtag("event", "conversion", {
-      send_to: "AW-17869545270/c6tyCK_3kekbELa-7shC",
+      send_to: "AW-17869486943/c6tyCK_3kekbELa-7shC",
       event_callback: callback,
     });
   } else {
