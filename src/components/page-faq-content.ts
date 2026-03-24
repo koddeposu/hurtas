@@ -318,7 +318,60 @@ export const STEEL_HOUSE_PRODUCT_FAQS: readonly SeoFaqItem[] = [
   },
 ] as const;
 
-export function getProductFaqsByCategory(categoryName?: string): readonly SeoFaqItem[] {
+type RoomKey = "1+1" | "2+1" | "3+1" | "4+1";
+
+function detectRoomKey(categoryNameOrSlug?: string): RoomKey | null {
+  if (!categoryNameOrSlug) return null;
+  const normalized = categoryNameOrSlug.toLowerCase();
+
+  if (normalized.includes("1+1") || normalized.includes("1-1")) return "1+1";
+  if (normalized.includes("2+1") || normalized.includes("2-1")) return "2+1";
+  if (normalized.includes("3+1") || normalized.includes("3-1")) return "3+1";
+  if (normalized.includes("4+1") || normalized.includes("4-1")) return "4+1";
+
+  return null;
+}
+
+function getRoomSpecificFaqs(room: RoomKey): readonly SeoFaqItem[] {
+  return [
+    {
+      question: `${room} prefabrik ev fiyatları neye göre belirlenir?`,
+      answer: `${room} prefabrik ev fiyatları; metrekare, plan tipi, yalıtım seviyesi, cephe detayları, nakliye ve anahtar teslim kapsamına göre belirlenir. Doğru karşılaştırma için teklif içeriği kalem kalem incelenmelidir.`,
+    },
+    {
+      question: `${room} prefabrik ev modelleri kimler için uygundur?`,
+      answer: `${room} planlar; aile yapısı, günlük yaşam alışkanlığı ve arsa koşuluna göre farklı kullanıcı profillerine hitap eder. Doğru model seçimi için oda dağılımı ve kullanım konforu birlikte değerlendirilmelidir.`,
+    },
+    {
+      question: `${room} prefabrik ev anahtar teslim kapsamda neler olur?`,
+      answer: `Anahtar teslim ${room} prefabrik ev projelerinde dış cephe, çatı, iç bölme, elektrik altyapısı, ıslak hacim uygulamaları, nakliye ve montaj gibi başlıklar değerlendirilir. Nihai kapsam teklif detayında netleştirilmelidir.`,
+    },
+    {
+      question: `${room} prefabrik ev için ruhsat gerekir mi?`,
+      answer: `Evet, ${room} prefabrik ev projelerinde ilgili belediye ve yerel mevzuata göre ruhsat süreci yürütülmelidir. Arsa imar durumu ve proje uygunluğu karar öncesinde kontrol edilmelidir.`,
+    },
+    {
+      question: `${room} prefabrik ev teslim süresi ne kadar sürer?`,
+      answer: `Teslim süresi üretim yoğunluğu, proje kapsamı, nakliye mesafesi ve montaj planına göre değişir. Prefabrik sistemlerde süreç çoğu zaman geleneksel yapılara göre daha planlı ilerler.`,
+    },
+    {
+      question: `${room} prefabrik ev seçerken en kritik kriter nedir?`,
+      answer: `En kritik kriter; fiyat, teknik kalite, plan verimliliği ve uzun ömürlü kullanım dengesini birlikte değerlendirmektir. Sadece başlangıç fiyatına bakmak yerine toplam proje kapsamına odaklanmak gerekir.`,
+    },
+  ];
+}
+
+export function getProductFaqsByCategory(
+  categoryName?: string,
+  categorySlug?: string,
+): readonly SeoFaqItem[] {
+  if (!categoryName && !categorySlug) return PRODUCTS_FAQS;
+
+  const roomKey = detectRoomKey(categoryName) ?? detectRoomKey(categorySlug);
+  if (roomKey) {
+    return getRoomSpecificFaqs(roomKey);
+  }
+
   if (!categoryName) return PRODUCTS_FAQS;
 
   if (categoryName.includes("Tek Kat")) {

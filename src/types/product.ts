@@ -71,6 +71,7 @@ export interface DBCategory {
 export interface DBProduct {
   id: string;
   categoryId: string | null;
+  categoryIds?: string[];
   name: string;
   slug: string;
   area: string;
@@ -87,12 +88,14 @@ export interface DBProduct {
   createdAt: Date;
   updatedAt: Date;
   category: DBCategory | null;
+  categories?: DBCategory[];
   images: DBProductImage[];
 }
 
 export interface DBProductPreview {
   id: string;
   categoryId: string | null;
+  categoryIds?: string[];
   name: string;
   slug: string;
   area: string;
@@ -109,6 +112,7 @@ export interface DBProductPreview {
   createdAt: Date;
   updatedAt: Date;
   category: DBCategory | null;
+  categories?: DBCategory[];
   image: DBProductImage | null;
 }
 

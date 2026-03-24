@@ -149,6 +149,24 @@ export const product = pgTable(
   (table) => [index("product_category_idx").on(table.categoryId)],
 );
 
+export const productCategory = pgTable(
+  "product_category",
+  {
+    productId: text("product_id")
+      .notNull()
+      .references(() => product.id, { onDelete: "cascade" }),
+    categoryId: text("category_id")
+      .notNull()
+      .references(() => category.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("product_category_uidx").on(table.productId, table.categoryId),
+    index("product_category_product_idx").on(table.productId),
+    index("product_category_category_idx").on(table.categoryId),
+  ],
+);
+
 // Product Images
 export const productImage = pgTable(
   "product_image",
@@ -301,6 +319,7 @@ export const contactClick = pgTable(
 
 export const categoryRelations = relations(category, ({ many }) => ({
   products: many(product),
+  productCategories: many(productCategory),
 }));
 
 export const productRelations = relations(product, ({ one, many }) => ({
@@ -308,8 +327,20 @@ export const productRelations = relations(product, ({ one, many }) => ({
     fields: [product.categoryId],
     references: [category.id],
   }),
+  categoryLinks: many(productCategory),
   images: many(productImage),
   favorites: many(favorite),
+}));
+
+export const productCategoryRelations = relations(productCategory, ({ one }) => ({
+  product: one(product, {
+    fields: [productCategory.productId],
+    references: [product.id],
+  }),
+  category: one(category, {
+    fields: [productCategory.categoryId],
+    references: [category.id],
+  }),
 }));
 
 export const productImageRelations = relations(productImage, ({ one }) => ({

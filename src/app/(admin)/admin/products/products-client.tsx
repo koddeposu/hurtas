@@ -42,7 +42,11 @@ interface Product extends SortableItem {
 }
 
 interface ProductsClientProps {
-  products: { product: Product; category: Category | null }[];
+  products: {
+    product: Product;
+    category: Category | null;
+    categories?: Category[];
+  }[];
 }
 
 export function ProductsClient({
@@ -54,6 +58,7 @@ export function ProductsClient({
   const initialItems = initialProducts.map((p) => ({
     ...p.product,
     _category: p.category,
+    _categories: p.categories ?? [],
   }));
 
   const {
@@ -163,10 +168,16 @@ export function ProductsClient({
                         </div>
                       </TableCell>
                       <TableCell>
-                        {product._category ? (
-                          <Badge variant="secondary">
-                            {product._category.name}
-                          </Badge>
+                        {product._categories && product._categories.length > 0 ? (
+                          <div className="flex flex-wrap gap-1">
+                            {product._categories.map((item: Category) => (
+                              <Badge key={item.id} variant="secondary">
+                                {item.name}
+                              </Badge>
+                            ))}
+                          </div>
+                        ) : product._category ? (
+                          <Badge variant="secondary">{product._category.name}</Badge>
                         ) : (
                           <span className="text-slate-400">-</span>
                         )}

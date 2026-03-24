@@ -145,8 +145,9 @@ export default async function ProductPage({ params }: Props) {
   const pageUrl = `https://ctprefabrik.com/prefabrik-ev/${slug}`;
   const plainDescription = extractPlainTextFromRichContent(product.description);
   const descriptionHtml = getDescriptionHtml(product.description);
-  const relatedSource = product.categoryId
-    ? await getProductsPreview(product.categoryId, 12)
+  const relatedCategoryId = product.categoryId ?? product.categoryIds?.[0];
+  const relatedSource = relatedCategoryId
+    ? await getProductsPreview(relatedCategoryId, 12)
     : [];
   const relatedProducts: RelatedProduct[] = relatedSource
     .filter((item) => item.id !== product.id)

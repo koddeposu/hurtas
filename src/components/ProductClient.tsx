@@ -34,16 +34,63 @@ interface ProductsClientProps {
 }
 
 type CategoryKey = "all" | "single" | "double" | "steel";
+type RoomKey = "1+1" | "2+1" | "3+1" | "4+1";
+type ExtendedCategoryKey =
+  | CategoryKey
+  | "room-1-1"
+  | "room-2-1"
+  | "room-3-1"
+  | "room-4-1";
 
 const CURRENT_YEAR = new Date().getFullYear();
 
-function getCategoryKey(categoryName?: string): CategoryKey {
-  if (!categoryName) return "all";
-  if (categoryName.includes("Tek Kat")) return "single";
-  if (categoryName.includes("Çift Kat") || categoryName.includes("Dubleks")) {
+function includesRoom(value: string | undefined, room: RoomKey) {
+  if (!value) return false;
+  const normalized = value.toLowerCase();
+  const target = room.toLowerCase();
+  return (
+    normalized.includes(target) ||
+    normalized.includes(target.replace("+", "-")) ||
+    normalized.includes(target.replace("+", " + "))
+  );
+}
+
+function getCategoryKey(
+  categoryName?: string,
+  categorySlug?: string,
+): ExtendedCategoryKey {
+  if (!categoryName && !categorySlug) return "all";
+
+  if (
+    includesRoom(categorySlug, "1+1") ||
+    includesRoom(categoryName, "1+1")
+  ) {
+    return "room-1-1";
+  }
+  if (
+    includesRoom(categorySlug, "2+1") ||
+    includesRoom(categoryName, "2+1")
+  ) {
+    return "room-2-1";
+  }
+  if (
+    includesRoom(categorySlug, "3+1") ||
+    includesRoom(categoryName, "3+1")
+  ) {
+    return "room-3-1";
+  }
+  if (
+    includesRoom(categorySlug, "4+1") ||
+    includesRoom(categoryName, "4+1")
+  ) {
+    return "room-4-1";
+  }
+
+  if (categoryName?.includes("Tek Kat")) return "single";
+  if (categoryName?.includes("Çift Kat") || categoryName?.includes("Dubleks")) {
     return "double";
   }
-  if (categoryName.includes("Çelik")) return "steel";
+  if (categoryName?.includes("Çelik")) return "steel";
   return "all";
 }
 
@@ -57,8 +104,41 @@ function getCategoryHref(categories: DBCategory[], matcher: string) {
     : "/prefabrik-evler";
 }
 
-function getPageContent(categoryName?: string) {
-  const categoryKey = getCategoryKey(categoryName);
+function getRoomPageContent(room: RoomKey) {
+  return {
+    eyebrow: `${room} Prefabrik Ev Seçkisi`,
+    title: `${room} Prefabrik Ev Fiyatları ve Modelleri`,
+    description: `${room} prefabrik ev modellerini metrekare, kat planı, kullanım amacı ve anahtar teslim kapsamına göre inceleyin. Kompakt yaşamdan aile kullanımına kadar farklı plan alternatiflerini tek sayfada karşılaştırın.`,
+    seoTitle: `${room} Prefabrik Ev Fiyatları ${CURRENT_YEAR}`,
+    seoDescription: `${room} prefabrik ev fiyatları; metrekare, malzeme kalitesi, yalıtım seviyesi, proje kapsamı ve teslim detaylarına göre değişir. ${room} plan arayan kullanıcılar için doğru model seçimi, yalnızca fiyat değil plan verimliliği ve uzun ömürlü kullanım kriterleriyle yapılmalıdır.`,
+    seoCards: [
+      {
+        title: `${room} Prefabrik Ev Modelleri`,
+        text: `${room} prefabrik ev modelleri, yaşam alışkanlığına uygun plan kurgusu ile öne çıkar. Salon-mutfak ilişkisi, oda yerleşimi, doğal ışık kullanımı ve günlük kullanım konforu birlikte değerlendirilmelidir.`,
+      },
+      {
+        title: `${room} Prefabrik Ev Fiyatları Neye Göre Değişir?`,
+        text: `${room} prefabrik ev fiyatlarında metrekare, duvar sistemi, çatı tipi, pencere-doğrama seçimi ve anahtar teslim kapsamı temel belirleyicilerdir. Sağlıklı karşılaştırma için teklif içeriği kalem kalem incelenmelidir.`,
+      },
+      {
+        title: `${room} Planında Doğru Model Seçimi`,
+        text: `${room} planı tercih edilirken arsa ölçüsü, aile kişi sayısı, depolama ihtiyacı ve gelecekteki kullanım senaryoları birlikte ele alınmalıdır. Böylece hem bütçeye hem yaşam konforuna uygun model seçimi yapılabilir.`,
+      },
+      {
+        title: `${room} Prefabrik Evlerde Anahtar Teslim Kapsam`,
+        text: `Anahtar teslim ${room} prefabrik ev projelerinde dış cephe, çatı, iç bölme, elektrik altyapısı, ıslak hacim detayları, nakliye ve montaj kalemleri teklif kapsamında açık şekilde yer almalıdır.`,
+      },
+    ],
+  };
+}
+
+function getPageContent(categoryName?: string, categorySlug?: string) {
+  const categoryKey = getCategoryKey(categoryName, categorySlug);
+
+  if (categoryKey === "room-1-1") return getRoomPageContent("1+1");
+  if (categoryKey === "room-2-1") return getRoomPageContent("2+1");
+  if (categoryKey === "room-3-1") return getRoomPageContent("3+1");
+  if (categoryKey === "room-4-1") return getRoomPageContent("4+1");
 
   if (categoryKey === "single") {
     return {
@@ -214,8 +294,44 @@ function getPageContent(categoryName?: string) {
   };
 }
 
-function getFaqContent(categoryName?: string) {
-  const categoryKey = getCategoryKey(categoryName);
+function getFaqContent(categoryName?: string, categorySlug?: string) {
+  const categoryKey = getCategoryKey(categoryName, categorySlug);
+
+  if (categoryKey === "room-1-1") {
+    return {
+      title: "1+1 Prefabrik Evler İçin",
+      accent: "En Çok Aranan Sorular",
+      description:
+        "1+1 prefabrik ev fiyatları, metrekare planı, teslim süreci ve anahtar teslim kapsam hakkında en çok sorulan soruları burada topladık.",
+    };
+  }
+
+  if (categoryKey === "room-2-1") {
+    return {
+      title: "2+1 Prefabrik Evler İçin",
+      accent: "En Çok Aranan Sorular",
+      description:
+        "2+1 prefabrik ev modelleri, fiyat detayları, ruhsat süreci ve aile kullanımına uygun plan seçimiyle ilgili soruları burada yanıtladık.",
+    };
+  }
+
+  if (categoryKey === "room-3-1") {
+    return {
+      title: "3+1 Prefabrik Evler İçin",
+      accent: "En Çok Aranan Sorular",
+      description:
+        "3+1 prefabrik ev fiyatları, büyük aileler için planlama, anahtar teslim kapsam ve teslim süreci hakkında merak edilenleri burada bulabilirsiniz.",
+    };
+  }
+
+  if (categoryKey === "room-4-1") {
+    return {
+      title: "4+1 Prefabrik Evler İçin",
+      accent: "En Çok Aranan Sorular",
+      description:
+        "4+1 prefabrik ev modelleri, geniş yaşam planı, dubleks çözümler ve proje kapsamıyla ilgili en çok aranan soruları bu bölümde topladık.",
+    };
+  }
 
   if (categoryKey === "single") {
     return {
@@ -252,8 +368,84 @@ function getFaqContent(categoryName?: string) {
   };
 }
 
-function getInternalLinks(categoryName?: string) {
-  const categoryKey = getCategoryKey(categoryName);
+function getInternalLinks(categoryName?: string, categorySlug?: string) {
+  const categoryKey = getCategoryKey(categoryName, categorySlug);
+
+  if (categoryKey === "room-1-1") {
+    return [
+      {
+        title: "1+1 Prefabrik Ev Rehberleri",
+        description:
+          "Kompakt yaşam planı, maliyet analizi ve teslim süreci için blog içeriklerine geçin.",
+        href: "/blog",
+        icon: BookOpenText,
+      },
+      {
+        title: "1+1 Proje Örnekleri",
+        description:
+          "Tamamlanan küçük metrekareli uygulamaları inceleyip plan fikirleri alın.",
+        href: "/projelerimiz",
+        icon: LayoutGrid,
+      },
+    ];
+  }
+
+  if (categoryKey === "room-2-1") {
+    return [
+      {
+        title: "2+1 Prefabrik Ev İçerikleri",
+        description:
+          "2+1 planlarda oda dağılımı, fiyat ve kullanım senaryosu karşılaştırmaları için bloga geçin.",
+        href: "/blog",
+        icon: BookOpenText,
+      },
+      {
+        title: "2+1 Referans Projeler",
+        description:
+          "2+1 planla tamamlanan projeleri görüp yaşam düzenine uygun model seçin.",
+        href: "/projelerimiz",
+        icon: LayoutGrid,
+      },
+    ];
+  }
+
+  if (categoryKey === "room-3-1") {
+    return [
+      {
+        title: "3+1 Prefabrik Ev Rehberleri",
+        description:
+          "Geniş aile planı, yaşam konforu ve bütçe dengesi için detaylı blog içeriklerine göz atın.",
+        href: "/blog",
+        icon: BookOpenText,
+      },
+      {
+        title: "3+1 Uygulama Projeleri",
+        description:
+          "3+1 planların sahadaki gerçek uygulama örneklerini proje sayfasında inceleyin.",
+        href: "/projelerimiz",
+        icon: LayoutGrid,
+      },
+    ];
+  }
+
+  if (categoryKey === "room-4-1") {
+    return [
+      {
+        title: "4+1 Plan ve Maliyet Rehberi",
+        description:
+          "4+1 prefabrik evlerde metrekare-fiyat dengesini ve teknik kapsamı blog içerikleriyle inceleyin.",
+        href: "/blog",
+        icon: BookOpenText,
+      },
+      {
+        title: "4+1 Geniş Yaşam Projeleri",
+        description:
+          "4+1 oda planlı referans projeler üzerinden cephe ve iç plan fikirleri alın.",
+        href: "/projelerimiz",
+        icon: LayoutGrid,
+      },
+    ];
+  }
 
   if (categoryKey === "single") {
     return [
@@ -337,6 +529,37 @@ function TopCategoryFilters({
   categories: DBCategory[];
   activeCategory?: string;
 }) {
+  const activeCategoryItem = activeCategory
+    ? categories.find((item) => item.slug === activeCategory)
+    : undefined;
+  const activeCategoryKey = getCategoryKey(
+    activeCategoryItem?.name,
+    activeCategoryItem?.slug,
+  );
+
+  const roomFilters = ([
+    { room: "1+1", key: "room-1-1", icon: Home },
+    { room: "2+1", key: "room-2-1", icon: Home },
+    { room: "3+1", key: "room-3-1", icon: Home },
+    { room: "4+1", key: "room-4-1", icon: Home },
+  ] as const)
+    .map((item) => {
+      const category = categories.find(
+        (cat) =>
+          includesRoom(cat.slug, item.room) || includesRoom(cat.name, item.room),
+      );
+
+      if (!category) return null;
+
+      return {
+        label: item.room,
+        href: `/prefabrik-evler/${category.slug}`,
+        active: activeCategoryKey === item.key,
+        icon: item.icon,
+      };
+    })
+    .filter((item): item is NonNullable<typeof item> => item !== null);
+
   const filterItems = [
     {
       label: "Tümü",
@@ -347,33 +570,22 @@ function TopCategoryFilters({
     {
       label: "Tek Katlı",
       href: getCategoryHref(categories, "Tek Kat"),
-      active:
-        !!activeCategory &&
-        categories
-          .find((item) => item.slug === activeCategory)
-          ?.name.includes("Tek Kat") === true,
+      active: activeCategoryKey === "single",
       icon: Building2,
     },
     {
       label: "Çift Katlı",
       href: getCategoryHref(categories, "Çift Kat"),
-      active:
-        !!activeCategory &&
-        categories
-          .find((item) => item.slug === activeCategory)
-          ?.name.includes("Çift Kat") === true,
+      active: activeCategoryKey === "double",
       icon: Layers3,
     },
     {
       label: "Çelik Ev",
       href: getCategoryHref(categories, "Çelik"),
-      active:
-        !!activeCategory &&
-        categories
-          .find((item) => item.slug === activeCategory)
-          ?.name.includes("Çelik") === true,
+      active: activeCategoryKey === "steel",
       icon: ShieldCheck,
     },
+    ...roomFilters,
   ];
 
   return (
@@ -514,10 +726,10 @@ const ProductsClient = ({
     ? categories.find((category) => category.slug === activeCategory)?.name
     : undefined;
 
-  const content = getPageContent(activeCategoryName);
-  const faqContent = getFaqContent(activeCategoryName);
-  const faqItems = getProductFaqsByCategory(activeCategoryName);
-  const internalLinks = getInternalLinks(activeCategoryName);
+  const content = getPageContent(activeCategoryName, activeCategory);
+  const faqContent = getFaqContent(activeCategoryName, activeCategory);
+  const faqItems = getProductFaqsByCategory(activeCategoryName, activeCategory);
+  const internalLinks = getInternalLinks(activeCategoryName, activeCategory);
 
   return (
     <div className="w-full max-w-[1280px]">

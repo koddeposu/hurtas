@@ -10,6 +10,19 @@ interface Props {
   params: Promise<{ category: string }>;
 }
 
+type RoomKey = "1+1" | "2+1" | "3+1" | "4+1";
+
+function includesRoom(value: string | undefined, room: RoomKey) {
+  if (!value) return false;
+  const normalized = value.toLowerCase();
+  const target = room.toLowerCase();
+  return (
+    normalized.includes(target) ||
+    normalized.includes(target.replace("+", "-")) ||
+    normalized.includes(target.replace("+", " + "))
+  );
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category: categorySlug } = await params;
   const categoryData = await getCategoryBySlug(categorySlug);
@@ -17,6 +30,45 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!categoryData) {
     return {
       title: "Kategori Bulunamadı",
+    };
+  }
+
+  const roomCategory = (["1+1", "2+1", "3+1", "4+1"] as const).find((room) =>
+    includesRoom(categoryData.name, room) || includesRoom(categoryData.slug, room),
+  );
+
+  if (roomCategory) {
+    const title = `${roomCategory} Prefabrik Ev Fiyatları ve Modelleri | CT Prefabrik`;
+    const description = `${roomCategory} prefabrik ev modellerini ve güncel fiyat seçeneklerini CT Prefabrik'te inceleyin. Anahtar teslim kapsam, metrekare seçenekleri ve yaşam planına uygun proje detaylarını karşılaştırın.`;
+
+    return {
+      title,
+      description,
+      keywords: [
+        `${roomCategory.toLowerCase()} prefabrik ev`,
+        `${roomCategory.toLowerCase()} prefabrik ev fiyatları`,
+        `${roomCategory.toLowerCase()} prefabrik ev modelleri`,
+        "anahtar teslim prefabrik ev",
+        "prefabrik ev modelleri",
+        "CT Prefabrik",
+      ],
+      openGraph: {
+        title,
+        description,
+        images: [
+          {
+            url: "https://ctprefabrik.com/og-image.png",
+            width: 1200,
+            height: 630,
+            alt: `CT Prefabrik - ${categoryData.name}`,
+          },
+        ],
+        type: "website",
+        url: `https://ctprefabrik.com/prefabrik-evler/${categorySlug}`,
+      },
+      alternates: {
+        canonical: `https://ctprefabrik.com/prefabrik-evler/${categorySlug}`,
+      },
     };
   }
 
@@ -85,7 +137,7 @@ const CategoryPage = async ({ params }: Props) => {
     getProductsWithImages(categoryData.id),
     getCategories(),
   ]);
-  const faqs = getProductFaqsByCategory(categoryData.name);
+  const faqs = getProductFaqsByCategory(categoryData.name, categoryData.slug);
 
   return (
     <>

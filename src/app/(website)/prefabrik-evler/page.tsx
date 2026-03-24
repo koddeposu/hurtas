@@ -8,7 +8,7 @@ import { Suspense } from "react";
 export const metadata: Metadata = {
   title: "Prefabrik Ev Modelleri ve Fiyatları | CT Prefabrik",
   description:
-    "CT Prefabrik'in prefabrik ev modellerini ve fiyatlarını inceleyin. 1+1, 2+1, 3+1 seçenekleri, tek katlı ve 2 katlı prefabrik evler. Anahtar teslim, TSE onaylı.",
+    "CT Prefabrik'in prefabrik ev modellerini ve fiyatlarını inceleyin. 1+1, 2+1, 3+1, 4+1 oda seçenekleri, tek katlı, çift katlı ve çelik ev kategorileri. Anahtar teslim, TSE onaylı.",
   keywords: [
     "prefabrik ev modelleri",
     "prefabrik ev fiyatları",
@@ -16,9 +16,11 @@ export const metadata: Metadata = {
     "1+1 prefabrik ev",
     "2+1 prefabrik ev",
     "3+1 prefabrik ev",
+    "4+1 prefabrik ev",
     "tek katlı prefabrik ev",
     "çift katlı prefabrik ev",
     "2 katlı prefabrik ev",
+    "çelik ev modelleri",
     "villa tipi prefabrik ev",
     "CT Prefabrik",
     "CT Prefabrik Ev",

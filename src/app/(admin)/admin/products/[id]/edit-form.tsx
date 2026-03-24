@@ -10,13 +10,6 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -46,6 +39,7 @@ interface ProductImage {
 interface Product {
   id: string;
   categoryId: string | null;
+  categoryIds?: string[];
   name: string;
   slug: string;
   area: string;
@@ -83,7 +77,12 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
   } | null>(null);
   const [isUpdatingAlt, setIsUpdatingAlt] = useState(false);
   const [formData, setFormData] = useState({
-    categoryId: product.categoryId || "",
+    categoryIds:
+      product.categoryIds && product.categoryIds.length > 0
+        ? product.categoryIds
+        : product.categoryId
+          ? [product.categoryId]
+          : [],
     name: product.name,
     area: product.area,
     room: product.room,
@@ -104,7 +103,7 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
     try {
       await updateProduct(product.id, {
         ...formData,
-        categoryId: formData.categoryId || null,
+        categoryIds: formData.categoryIds,
         price: formData.price || null,
         oldPrice: formData.oldPrice || null,
         description: hasRichContent(formData.description)
@@ -209,6 +208,18 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
     }
   };
 
+  const toggleCategory = (categoryId: string) => {
+    setFormData((prev) => {
+      const isSelected = prev.categoryIds.includes(categoryId);
+      return {
+        ...prev,
+        categoryIds: isSelected
+          ? prev.categoryIds.filter((id) => id !== categoryId)
+          : [...prev.categoryIds, categoryId],
+      };
+    });
+  };
+
   return (
     <div className="flex min-h-screen">
       <AdminSidebar />
@@ -245,27 +256,44 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="category">Kategori</Label>
-                        <Select
-                          value={formData.categoryId}
-                          onValueChange={(value) =>
-                            setFormData({ ...formData, categoryId: value })
+                    <div className="space-y-2">
+                      <Label>Kategoriler</Label>
+                      <div className="flex flex-wrap gap-2">
+                        {categories.map((cat) => {
+                          const selected = formData.categoryIds.includes(cat.id);
+                          return (
+                            <Button
+                              key={cat.id}
+                              type="button"
+                              variant={selected ? "default" : "outline"}
+                              onClick={() => toggleCategory(cat.id)}
+                              className={
+                                selected
+                                  ? "bg-primary hover:bg-[#3a1924]"
+                                  : ""
+                              }
+                            >
+                              {cat.name}
+                            </Button>
+                          );
+                        })}
+                      </div>
+                      <p className="text-xs text-slate-500">
+                        Birden fazla kategori seçebilirsiniz. İlk seçilen kategori
+                        ana kategori olarak kullanılır.
+                      </p>
+                      {formData.categoryIds.length > 0 ? (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          className="h-auto px-0 text-xs text-slate-500 hover:text-slate-700"
+                          onClick={() =>
+                            setFormData((prev) => ({ ...prev, categoryIds: [] }))
                           }
                         >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Kategori seçin" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {categories.map((cat) => (
-                              <SelectItem key={cat.id} value={cat.id}>
-                                {cat.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
+                          Seçimi temizle
+                        </Button>
+                      ) : null}
                     </div>
 
                     <div className="space-y-2">

@@ -1,32 +1,144 @@
 "use server";
 
-import { and, eq, desc, asc } from "drizzle-orm";
+import { and, eq, desc, asc, inArray } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db/drizzle";
-import { product, productImage, category } from "@/db/schema";
+import { product, productImage, category, productCategory } from "@/db/schema";
 import { requireAuth } from "@/lib/requireAuth";
 import { generateUniqueSlug } from "@/lib/slug";
+
+type DBCategory = typeof category.$inferSelect;
 
 function generateId() {
   return crypto.randomUUID();
 }
 
-export async function getProducts(categoryId?: string) {
-  let query = db
-    .select({
-      product: product,
-      category: category,
-    })
-    .from(product)
-    .leftJoin(category, eq(product.categoryId, category.id))
-    .orderBy(asc(product.order), desc(product.createdAt));
+function normalizeCategoryIds(
+  categoryIds?: Array<string | null | undefined> | null,
+  fallbackCategoryId?: string | null,
+) {
+  const source =
+    categoryIds && categoryIds.length > 0
+      ? categoryIds
+      : fallbackCategoryId
+        ? [fallbackCategoryId]
+        : [];
 
-  if (categoryId) {
-    query = query.where(eq(product.categoryId, categoryId)) as typeof query;
+  return Array.from(
+    new Set(source.filter((id): id is string => typeof id === "string" && id.length > 0)),
+  );
+}
+
+async function getLinkedProductIdsByCategory(categoryId: string) {
+  const [mappedRows, legacyRows] = await Promise.all([
+    db
+      .select({ productId: productCategory.productId })
+      .from(productCategory)
+      .where(eq(productCategory.categoryId, categoryId)),
+    db
+      .select({ id: product.id })
+      .from(product)
+      .where(eq(product.categoryId, categoryId)),
+  ]);
+
+  return Array.from(
+    new Set([
+      ...mappedRows.map((row) => row.productId),
+      ...legacyRows.map((row) => row.id),
+    ]),
+  );
+}
+
+async function getCategoriesByProductIds(productIds: string[]) {
+  const map = new Map<string, DBCategory[]>();
+
+  if (productIds.length === 0) {
+    return map;
   }
 
-  const results = await query;
-  return results;
+  const rows = await db
+    .select({
+      productId: productCategory.productId,
+      category,
+    })
+    .from(productCategory)
+    .innerJoin(category, eq(productCategory.categoryId, category.id))
+    .where(inArray(productCategory.productId, productIds))
+    .orderBy(asc(category.order), asc(category.name));
+
+  for (const row of rows) {
+    const list = map.get(row.productId) ?? [];
+    list.push(row.category);
+    map.set(row.productId, list);
+  }
+
+  return map;
+}
+
+function mergeCategoriesWithPrimary(
+  productId: string,
+  primaryCategory: DBCategory | null,
+  categoryMap: Map<string, DBCategory[]>,
+) {
+  const linkedCategories = categoryMap.get(productId) ?? [];
+
+  if (!primaryCategory) {
+    return linkedCategories;
+  }
+
+  if (linkedCategories.some((item) => item.id === primaryCategory.id)) {
+    return linkedCategories;
+  }
+
+  return [primaryCategory, ...linkedCategories];
+}
+
+export async function getProducts(categoryId?: string) {
+  const filteredProductIds = categoryId
+    ? await getLinkedProductIdsByCategory(categoryId)
+    : null;
+
+  if (filteredProductIds && filteredProductIds.length === 0) {
+    return [];
+  }
+
+  const results = filteredProductIds
+    ? await db
+        .select({
+          product: product,
+          category: category,
+        })
+        .from(product)
+        .leftJoin(category, eq(product.categoryId, category.id))
+        .where(inArray(product.id, filteredProductIds))
+        .orderBy(asc(product.order), desc(product.createdAt))
+    : await db
+        .select({
+          product: product,
+          category: category,
+        })
+        .from(product)
+        .leftJoin(category, eq(product.categoryId, category.id))
+        .orderBy(asc(product.order), desc(product.createdAt));
+
+  const categoryMap = await getCategoriesByProductIds(
+    results.map((row) => row.product.id),
+  );
+
+  return results.map((row) => {
+    const categories = mergeCategoriesWithPrimary(
+      row.product.id,
+      row.category,
+      categoryMap,
+    );
+    const primaryCategory = row.category ?? categories[0] ?? null;
+
+    return {
+      product: row.product,
+      category: primaryCategory,
+      categories,
+    };
+  });
 }
 
 export async function getProductBySlug(slug: string) {
@@ -42,6 +154,14 @@ export async function getProductBySlug(slug: string) {
 
   if (!result[0]) return null;
 
+  const categoryMap = await getCategoriesByProductIds([result[0].product.id]);
+  const categories = mergeCategoriesWithPrimary(
+    result[0].product.id,
+    result[0].category,
+    categoryMap,
+  );
+  const primaryCategory = result[0].category ?? categories[0] ?? null;
+
   const images = await db
     .select()
     .from(productImage)
@@ -50,19 +170,34 @@ export async function getProductBySlug(slug: string) {
 
   return {
     ...result[0].product,
-    category: result[0].category,
+    categoryId: result[0].product.categoryId ?? primaryCategory?.id ?? null,
+    category: primaryCategory,
+    categories,
+    categoryIds: categories.map((item) => item.id),
     images,
   };
 }
 
 export async function getProductById(id: string) {
   const result = await db
-    .select()
+    .select({
+      product: product,
+      category: category,
+    })
     .from(product)
+    .leftJoin(category, eq(product.categoryId, category.id))
     .where(eq(product.id, id))
     .limit(1);
 
   if (!result[0]) return null;
+
+  const categoryMap = await getCategoriesByProductIds([id]);
+  const categories = mergeCategoriesWithPrimary(
+    id,
+    result[0].category,
+    categoryMap,
+  );
+  const primaryCategory = result[0].category ?? categories[0] ?? null;
 
   const images = await db
     .select()
@@ -71,12 +206,29 @@ export async function getProductById(id: string) {
     .orderBy(asc(productImage.order));
 
   return {
-    ...result[0],
+    ...result[0].product,
+    categoryId: result[0].product.categoryId ?? primaryCategory?.id ?? null,
+    category: primaryCategory,
+    categories,
+    categoryIds: categories.map((item) => item.id),
     images,
   };
 }
 
 export async function getProductsWithImages(categoryId?: string) {
+  const filteredProductIds = categoryId
+    ? await getLinkedProductIdsByCategory(categoryId)
+    : null;
+
+  if (filteredProductIds && filteredProductIds.length === 0) {
+    return [];
+  }
+
+  const filters = [eq(product.isActive, true)];
+  if (filteredProductIds) {
+    filters.push(inArray(product.id, filteredProductIds));
+  }
+
   const products = await db
     .select({
       product: product,
@@ -84,16 +236,22 @@ export async function getProductsWithImages(categoryId?: string) {
     })
     .from(product)
     .leftJoin(category, eq(product.categoryId, category.id))
-    .where(eq(product.isActive, true))
+    .where(and(...filters))
     .orderBy(asc(product.order));
 
-  // Filter by category if provided
-  const filteredProducts = categoryId
-    ? products.filter((p) => p.product.categoryId === categoryId)
-    : products;
+  const categoryMap = await getCategoriesByProductIds(
+    products.map((row) => row.product.id),
+  );
 
   const productsWithImages = await Promise.all(
-    filteredProducts.map(async (p) => {
+    products.map(async (p) => {
+      const categories = mergeCategoriesWithPrimary(
+        p.product.id,
+        p.category,
+        categoryMap,
+      );
+      const primaryCategory = p.category ?? categories[0] ?? null;
+
       const images = await db
         .select()
         .from(productImage)
@@ -102,7 +260,9 @@ export async function getProductsWithImages(categoryId?: string) {
 
       return {
         ...p.product,
-        category: p.category,
+        category: primaryCategory,
+        categories,
+        categoryIds: categories.map((item) => item.id),
         images,
       };
     }),
@@ -112,10 +272,18 @@ export async function getProductsWithImages(categoryId?: string) {
 }
 
 export async function getProductsPreview(categoryId?: string, limit?: number) {
+  const filteredProductIds = categoryId
+    ? await getLinkedProductIdsByCategory(categoryId)
+    : null;
+
+  if (filteredProductIds && filteredProductIds.length === 0) {
+    return [];
+  }
+
   const filters = [eq(product.isActive, true)];
 
-  if (categoryId) {
-    filters.push(eq(product.categoryId, categoryId));
+  if (filteredProductIds) {
+    filters.push(inArray(product.id, filteredProductIds));
   }
 
   let query = db
@@ -133,9 +301,19 @@ export async function getProductsPreview(categoryId?: string, limit?: number) {
   }
 
   const rows = await query;
+  const categoryMap = await getCategoriesByProductIds(
+    rows.map((row) => row.product.id),
+  );
 
   const previews = await Promise.all(
     rows.map(async (row) => {
+      const categories = mergeCategoriesWithPrimary(
+        row.product.id,
+        row.category,
+        categoryMap,
+      );
+      const primaryCategory = row.category ?? categories[0] ?? null;
+
       const images = await db
         .select()
         .from(productImage)
@@ -145,7 +323,9 @@ export async function getProductsPreview(categoryId?: string, limit?: number) {
 
       return {
         ...row.product,
-        category: row.category,
+        category: primaryCategory,
+        categories,
+        categoryIds: categories.map((item) => item.id),
         image: images[0] ?? null,
       };
     }),
@@ -156,6 +336,7 @@ export async function getProductsPreview(categoryId?: string, limit?: number) {
 
 export async function createProduct(data: {
   categoryId?: string;
+  categoryIds?: string[];
   name: string;
   area: string;
   room: string;
@@ -174,37 +355,50 @@ export async function createProduct(data: {
 
   const id = generateId();
   const slug = await generateUniqueSlug("product", data.name);
+  const categoryIds = normalizeCategoryIds(data.categoryIds, data.categoryId);
+  const primaryCategoryId = categoryIds[0] ?? null;
 
-  await db.insert(product).values({
-    id,
-    categoryId: data.categoryId ?? null,
-    name: data.name,
-    slug,
-    area: data.area,
-    room: data.room,
-    floor: data.floor,
-    bath: data.bath,
-    height: data.height,
-    price: data.price ?? null,
-    oldPrice: data.oldPrice ?? null,
-    description: data.description ?? null,
-    metaDescription: data.metaDescription ?? null,
-    isActive: data.isActive ?? true,
-    order: data.order ?? 0,
-  });
+  await db.transaction(async (tx) => {
+    await tx.insert(product).values({
+      id,
+      categoryId: primaryCategoryId,
+      name: data.name,
+      slug,
+      area: data.area,
+      room: data.room,
+      floor: data.floor,
+      bath: data.bath,
+      height: data.height,
+      price: data.price ?? null,
+      oldPrice: data.oldPrice ?? null,
+      description: data.description ?? null,
+      metaDescription: data.metaDescription ?? null,
+      isActive: data.isActive ?? true,
+      order: data.order ?? 0,
+    });
 
-  // Create image records if pending images were provided
-  if (data.pendingImages && data.pendingImages.length > 0) {
-    for (const img of data.pendingImages) {
-      await db.insert(productImage).values({
-        id: generateId(),
-        productId: id,
-        url: img.url,
-        alt: img.alt,
-        order: img.order,
-      });
+    if (categoryIds.length > 0) {
+      await tx.insert(productCategory).values(
+        categoryIds.map((item) => ({
+          productId: id,
+          categoryId: item,
+        })),
+      );
     }
-  }
+
+    // Create image records if pending images were provided
+    if (data.pendingImages && data.pendingImages.length > 0) {
+      for (const img of data.pendingImages) {
+        await tx.insert(productImage).values({
+          id: generateId(),
+          productId: id,
+          url: img.url,
+          alt: img.alt,
+          order: img.order,
+        });
+      }
+    }
+  });
 
   revalidatePath("/admin/products");
   revalidatePath("/prefabrik-evler", "layout");
@@ -216,6 +410,7 @@ export async function updateProduct(
   id: string,
   data: {
     categoryId?: string | null;
+    categoryIds?: string[] | null;
     name?: string;
     area?: string;
     room?: string;
@@ -233,12 +428,21 @@ export async function updateProduct(
   await requireAuth();
 
   const updateData: Record<string, unknown> = {};
+  const shouldSyncCategories =
+    data.categoryIds !== undefined || data.categoryId !== undefined;
+  const normalizedCategoryIds = shouldSyncCategories
+    ? normalizeCategoryIds(data.categoryIds, data.categoryId)
+    : [];
 
   if (data.name !== undefined) {
     updateData.name = data.name;
     updateData.slug = await generateUniqueSlug("product", data.name, id);
   }
-  if (data.categoryId !== undefined) updateData.categoryId = data.categoryId;
+  if (data.categoryIds !== undefined) {
+    updateData.categoryId = normalizedCategoryIds[0] ?? null;
+  } else if (data.categoryId !== undefined) {
+    updateData.categoryId = data.categoryId;
+  }
   if (data.area !== undefined) updateData.area = data.area;
   if (data.room !== undefined) updateData.room = data.room;
   if (data.floor !== undefined) updateData.floor = data.floor;
@@ -253,7 +457,22 @@ export async function updateProduct(
   if (data.isActive !== undefined) updateData.isActive = data.isActive;
   if (data.order !== undefined) updateData.order = data.order;
 
-  await db.update(product).set(updateData).where(eq(product.id, id));
+  await db.transaction(async (tx) => {
+    await tx.update(product).set(updateData).where(eq(product.id, id));
+
+    if (shouldSyncCategories) {
+      await tx.delete(productCategory).where(eq(productCategory.productId, id));
+
+      if (normalizedCategoryIds.length > 0) {
+        await tx.insert(productCategory).values(
+          normalizedCategoryIds.map((item) => ({
+            productId: id,
+            categoryId: item,
+          })),
+        );
+      }
+    }
+  });
 
   revalidatePath("/admin/products");
   revalidatePath("/prefabrik-evler", "layout");

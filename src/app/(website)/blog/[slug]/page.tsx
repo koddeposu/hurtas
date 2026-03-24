@@ -81,6 +81,15 @@ function hasRoomType(room: string | null | undefined, types: string[]) {
   return types.some((type) => normalizedRoom.includes(normalizeRoom(type)));
 }
 
+function hasCategory(
+  product: DBProductPreview,
+  categoryId: string | null | undefined,
+) {
+  if (!categoryId) return false;
+  if (product.categoryIds?.includes(categoryId)) return true;
+  return product.categoryId === categoryId;
+}
+
 function takeUniqueProducts(
   products: DBProductPreview[],
   limit: number,
@@ -399,18 +408,18 @@ export default async function BlogPostPage({
 
   const singleFloorProducts = singleFloorCategory
     ? previewProducts.filter(
-        (item) => item.categoryId === singleFloorCategory.id,
+        (item) => hasCategory(item, singleFloorCategory.id),
       )
     : previewProducts;
   const doubleFloorProducts = doubleFloorCategory
     ? previewProducts.filter(
-        (item) => item.categoryId === doubleFloorCategory.id,
+        (item) => hasCategory(item, doubleFloorCategory.id),
       )
     : [];
   const otherProducts = previewProducts.filter(
     (item) =>
-      item.categoryId !== singleFloorCategory?.id &&
-      item.categoryId !== doubleFloorCategory?.id,
+      !hasCategory(item, singleFloorCategory?.id) &&
+      !hasCategory(item, doubleFloorCategory?.id),
   );
 
   const firstPrimary = singleFloorProducts.filter((item) =>
