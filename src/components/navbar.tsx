@@ -400,14 +400,14 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
               <button
                 type="button"
                 onClick={handleWhatsApp}
-                className="hidden cursor-pointer rounded-xl bg-secondary px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#1d7048] sm:inline-flex"
+                className="hidden cursor-pointer rounded-xl bg-secondary px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#1d7048] sm:inline-flex ads-whatsapp"
               >
                 WhatsApp
               </button>
               <button
                 type="button"
                 onClick={handleCall}
-                className="hidden cursor-pointer rounded-xl bg-primary px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#3d1a24] sm:inline-flex"
+                className="hidden cursor-pointer rounded-xl bg-primary px-3 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#3d1a24] sm:inline-flex ads-phone-call"
               >
                 Bizi Arayın
               </button>
@@ -563,7 +563,7 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
             <button
               type="button"
               onClick={handleCall}
-              className="hidden rounded-xl bg-secondary px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] text-white transition-colors hover:bg-[#1d7048] lg:inline-flex"
+              className="hidden rounded-xl bg-secondary px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] text-white transition-colors hover:bg-[#1d7048] lg:inline-flex ads-phone-call"
             >
               Ara
             </button>
@@ -571,7 +571,7 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
               <button
                 type="button"
                 onClick={handleCall}
-                className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-secondary px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] text-white transition-colors hover:bg-[#1d7048] lg:hidden"
+                className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-secondary px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] text-white transition-colors hover:bg-[#1d7048] lg:hidden ads-phone-call"
               >
                 <PhoneCall className="h-4 w-4" />
                 Bizi Arayın

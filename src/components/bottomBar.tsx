@@ -13,7 +13,7 @@ const BottomBar = () => {
         <button
           type="button"
           onClick={handleCall}
-          className="flex h-full  flex-col items-center justify-center gap-2 bg-primary py-1 text-white animate-pulse [animation-duration:4s] [animation-timing-function:ease-in-out]"
+          className="flex h-full  flex-col items-center justify-center gap-2 bg-primary py-1 text-white animate-pulse [animation-duration:4s] [animation-timing-function:ease-in-out] ads-phone-call"
         >
           <Phone size={20} fill="currentColor" />
           <div className="flex flex-col items-start">
@@ -24,7 +24,7 @@ const BottomBar = () => {
         <button
           type="button"
           onClick={handleWhatsApp}
-          className="flex h-full  flex-col items-center justify-center gap-2 bg-primary text-[#39f397] animate-pulse [animation-duration:4s] [animation-timing-function:ease-in-out] [animation-delay:3s]"
+          className="flex h-full  flex-col items-center justify-center gap-2 bg-primary text-[#39f397] animate-pulse [animation-duration:4s] [animation-timing-function:ease-in-out] [animation-delay:3s] google-ads-call ads-whatsapp"
         >
           <MessageCircle size={20} fill="currentColor" />
           <div className="flex flex-col items-start">

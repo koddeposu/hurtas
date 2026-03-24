@@ -282,13 +282,13 @@ function ProductActions() {
     <div className="space-y-3">
       <button
         onClick={handleWhatsApp}
-        className="cursor-pointer w-full bg-secondary text-white py-4 rounded-[1rem] font-black text-sm tracking-[0.08em] flex items-center justify-center gap-3 hover:bg-[#20ba5a] transition-colors"
+        className="cursor-pointer w-full bg-secondary text-white py-4 rounded-[1rem] font-black text-sm tracking-[0.08em] flex items-center justify-center gap-3 hover:bg-[#20ba5a] transition-colors ads-whatsapp"
       >
         <MessageCircle size={22} /> WHATSAPP
       </button>
       <button
         onClick={handleCall}
-        className="cursor-pointer w-full bg-primary text-white py-4 rounded-[1rem] font-black text-sm tracking-[0.08em] flex items-center justify-center gap-3 hover:bg-[#3d1a26] transition-colors"
+        className="cursor-pointer w-full bg-primary text-white py-4 rounded-[1rem] font-black text-sm tracking-[0.08em] flex items-center justify-center gap-3 hover:bg-[#3d1a26] transition-colors ads-phone-call"
       >
         <Phone size={22} /> BİZİ ARAYIN
       </button>
