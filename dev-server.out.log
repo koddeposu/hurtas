@@ -1,0 +1,13 @@
+
+> ct-prefabrik@0.1.0 dev C:\projects\hurtas
+> next dev
+
+▲ Next.js 16.1.0 (Turbopack)
+- Local:         http://localhost:3001
+- Network:       http://192.168.1.39:3001
+- Environments: .env
+
+✓ Starting...
+  Suggestion: If you intended to restart next dev, terminate the other process, and then try again.
+[?25h
+ ELIFECYCLE  Command failed with exit code 1.

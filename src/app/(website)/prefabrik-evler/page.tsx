@@ -5,6 +5,10 @@ import ProductsClient from "@/components/ProductClient";
 import { Metadata } from "next";
 import { Suspense } from "react";
 
+interface ProductsPageProps {
+  searchParams: Promise<{ q?: string }>;
+}
+
 export const metadata: Metadata = {
   title: "Prefabrik Ev Modelleri ve Fiyatları | CT Prefabrik",
   description:
@@ -47,7 +51,9 @@ export const metadata: Metadata = {
   },
 };
 
-const ProductsPage = async () => {
+const ProductsPage = async ({ searchParams }: ProductsPageProps) => {
+  const params = await searchParams;
+  const searchQuery = typeof params.q === "string" ? params.q : "";
   const [products, categories] = await Promise.all([
     getProductsWithImages(),
     getCategories(),
@@ -81,7 +87,11 @@ const ProductsPage = async () => {
             </div>
           }
         >
-          <ProductsClient products={products} categories={categories} />
+          <ProductsClient
+            products={products}
+            categories={categories}
+            searchQuery={searchQuery}
+          />
         </Suspense>
       </main>
     </>

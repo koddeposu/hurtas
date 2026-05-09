@@ -8,6 +8,7 @@ import { Suspense } from "react";
 
 interface Props {
   params: Promise<{ category: string }>;
+  searchParams: Promise<{ q?: string }>;
 }
 
 type RoomKey = "1+1" | "2+1" | "3+1" | "4+1";
@@ -122,8 +123,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-const CategoryPage = async ({ params }: Props) => {
+const CategoryPage = async ({ params, searchParams }: Props) => {
   const { category: categorySlug } = await params;
+  const queryParams = await searchParams;
+  const searchQuery =
+    typeof queryParams.q === "string" ? queryParams.q : "";
 
   // Fetch category by slug
   const categoryData = await getCategoryBySlug(categorySlug);
@@ -171,6 +175,7 @@ const CategoryPage = async ({ params }: Props) => {
             products={products}
             categories={categories}
             activeCategory={categorySlug}
+            searchQuery={searchQuery}
           />
         </Suspense>
       </main>

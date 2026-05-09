@@ -31,6 +31,7 @@ interface ProductsClientProps {
   products: DBProduct[];
   categories: DBCategory[];
   activeCategory?: string;
+  searchQuery?: string;
 }
 
 type CategoryKey = "all" | "single" | "double" | "steel";
@@ -102,6 +103,33 @@ function getCategoryHref(categories: DBCategory[], matcher: string) {
   return matchedCategory
     ? `/prefabrik-evler/${matchedCategory.slug}`
     : "/prefabrik-evler";
+}
+
+function normalizeSearchValue(value: string | null | undefined) {
+  return (value ?? "").toLocaleLowerCase("tr-TR").trim();
+}
+
+function productMatchesQuery(product: DBProduct, query: string) {
+  const searchableText = [
+    product.name,
+    product.slug,
+    product.area,
+    product.room,
+    product.floor,
+    product.bath,
+    product.height,
+    product.price,
+    product.oldPrice,
+    product.description,
+    product.metaDescription,
+    product.category?.name,
+    product.category?.slug,
+    ...(product.categories?.flatMap((item) => [item.name, item.slug]) ?? []),
+  ]
+    .map((item) => normalizeSearchValue(item))
+    .join(" ");
+
+  return searchableText.includes(query);
 }
 
 function getRoomPageContent(room: RoomKey) {
@@ -717,10 +745,17 @@ const ProductsClient = ({
   products,
   categories,
   activeCategory,
+  searchQuery = "",
 }: ProductsClientProps) => {
   const [selectedProduct, setSelectedProduct] = useState<DBProduct | null>(
     null,
   );
+  const normalizedSearchQuery = normalizeSearchValue(searchQuery);
+  const visibleProducts = normalizedSearchQuery
+    ? products.filter((product) =>
+        productMatchesQuery(product, normalizedSearchQuery),
+      )
+    : products;
 
   const activeCategoryName = activeCategory
     ? categories.find((category) => category.slug === activeCategory)?.name
@@ -769,7 +804,7 @@ const ProductsClient = ({
       </section>
 
       <section className="pb-20">
-        {products.length === 0 ? (
+        {visibleProducts.length === 0 ? (
           <div className="flex flex-col items-center justify-center rounded-[1rem] border border-slate-300 bg-white px-6 py-20">
             <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-xl bg-slate-100">
               <Filter size={32} className="text-slate-400" />
@@ -778,7 +813,9 @@ const ProductsClient = ({
               Ürün Bulunamadı
             </h3>
             <p className="mt-2 max-w-md text-center text-slate-500">
-              {activeCategoryName
+              {normalizedSearchQuery
+                ? `"${searchQuery}" araması için uygun ürün bulunamadı.`
+                : activeCategoryName
                 ? `"${activeCategoryName}" kategorisinde henüz ürün bulunmuyor.`
                 : "Henüz ürün eklenmemiş."}
             </p>
@@ -792,7 +829,7 @@ const ProductsClient = ({
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {products.map((product) => (
+            {visibleProducts.map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}

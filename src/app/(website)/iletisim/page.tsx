@@ -1,33 +1,32 @@
 import ContactPageClient from '@/components/ContactPageClient';
+import { CONTACT_INFO, CONTACT_MAP_EMBED_URL } from '@/lib/contact';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'İletişim | CT Prefabrik - Bize Ulaşın',
-  description: 'CT Prefabrik ile iletişime geçin. Telefon: +90 537 518 30 06, E-posta: info@ctprefabrik.com. Sakarya merkez ofisimizden veya online olarak bize ulaşabilirsiniz.',
+  title: 'İletişim | Hürtaş Beton - Bize Ulaşın',
+  description: `Hürtaş Beton ile iletişime geçin. Telefon: ${CONTACT_INFO.primaryPhone.display}, ${CONTACT_INFO.mobilePhone.display}, E-posta: ${CONTACT_INFO.email}. ${CONTACT_INFO.address.short} adresimizden veya online olarak bize ulaşabilirsiniz.`,
   keywords: [
-    'CT Prefabrik iletişim',
-    'ctprefabrik iletişim',
-    'ctprefabrik iletişim',
-    'prefabrik ev iletişim',
-    'prefabrik firma telefon',
-    'CT Prefabrik telefon',
-    'ctprefabrik telefon',
-    'ctprefabrik adres',
-    'CT Prefabrik adres',
-    'Sakarya prefabrik',
-    'prefabrik teklif al',
+    'Hürtaş Beton iletişim',
+    'Hürtaş Beton telefon',
+    'Hürtaş Beton adres',
+    'hurtas beton iletişim',
+    'beton ürünleri iletişim',
+    'beton elemanları telefon',
+    'Arnavutköy beton',
+    'İstanbul beton elemanları',
+    'beton ürünleri teklif al',
   ],
   openGraph: {
-    title: 'İletişim | CT Prefabrik',
-    description: 'CT Prefabrik ile iletişime geçin. Hayalinizdeki prefabrik ev için hemen arayın.',
+    title: 'İletişim | Hürtaş Beton',
+    description: 'Hürtaş Beton ile iletişime geçin. Beton elemanları için hemen arayın.',
     url: 'https://ctprefabrik.com/iletisim',
-    siteName: 'CT Prefabrik',
+    siteName: 'Hürtaş Beton',
     images: [
       {
         url: '/og-contact.jpg',
         width: 1200,
         height: 630,
-        alt: 'CT Prefabrik İletişim',
+        alt: 'Hürtaş Beton İletişim',
       },
     ],
     locale: 'tr_TR',
@@ -35,8 +34,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'İletişim | CT Prefabrik',
-    description: 'CT Prefabrik ile iletişime geçin.',
+    title: 'İletişim | Hürtaş Beton',
+    description: 'Hürtaş Beton ile iletişime geçin.',
     images: ['/og-contact.jpg'],
   },
   alternates: {
@@ -59,7 +58,7 @@ export default function ContactPage() {
             '@context': 'https://schema.org',
             '@type': 'ContactPage',
             name: 'İletişim',
-            description: 'CT Prefabrik iletişim bilgileri',
+            description: 'Hürtaş Beton iletişim bilgileri',
             url: 'https://ctprefabrik.com/iletisim',
           }),
         }}
@@ -73,24 +72,18 @@ export default function ContactPage() {
             '@context': 'https://schema.org',
             '@type': 'LocalBusiness',
             '@id': 'https://ctprefabrik.com',
-            name: 'CT Prefabrik',
+            name: CONTACT_INFO.companyName,
             image: 'https://ctprefabrik.com/logo.png',
             url: 'https://ctprefabrik.com',
-            telephone: '+905375183006',
-            email: 'info@ctprefabrik.com',
+            telephone: CONTACT_INFO.primaryPhone.schema,
+            email: CONTACT_INFO.email,
             priceRange: '₺₺',
             address: {
               '@type': 'PostalAddress',
-              streetAddress: 'Soğucak, Kervan/1 Sokak No: 2/4',
-              addressLocality: 'Söğütlü',
-              addressRegion: 'Sakarya',
-              postalCode: '54160',
+              streetAddress: `${CONTACT_INFO.address.street}, ${CONTACT_INFO.address.note}`,
+              addressLocality: CONTACT_INFO.address.locality,
+              addressRegion: CONTACT_INFO.address.region,
               addressCountry: 'TR',
-            },
-            geo: {
-              '@type': 'GeoCoordinates',
-              latitude: 40.897743,
-              longitude: 30.507634,
             },
             openingHoursSpecification: [
               {
@@ -115,7 +108,7 @@ export default function ContactPage() {
               '@type': 'Country',
               name: 'Turkey',
             },
-            hasMap: 'https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d188.48880587821307!2d30.50763411393848!3d40.89774357467647',
+            hasMap: CONTACT_MAP_EMBED_URL,
           }),
         }}
       />
@@ -152,17 +145,16 @@ export default function ContactPage() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Organization',
-            name: 'CT Prefabrik',
+            name: CONTACT_INFO.companyName,
             url: 'https://ctprefabrik.com',
             contactPoint: [
               {
                 '@type': 'ContactPoint',
-                telephone: '+90-537-518-3006',
+                telephone: CONTACT_INFO.primaryPhone.schema,
                 contactType: 'customer service',
-                email: 'info@ctprefabrik.com',
+                email: CONTACT_INFO.email,
                 areaServed: 'TR',
                 availableLanguage: ['Turkish'],
-                contactOption: 'TollFree',
                 hoursAvailable: {
                   '@type': 'OpeningHoursSpecification',
                   dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
@@ -172,9 +164,9 @@ export default function ContactPage() {
               },
               {
                 '@type': 'ContactPoint',
-                telephone: '+90-537-518-3006',
+                telephone: CONTACT_INFO.mobilePhone.schema,
                 contactType: 'sales',
-                email: 'info@ctprefabrik.com',
+                email: CONTACT_INFO.email,
                 areaServed: 'TR',
                 availableLanguage: ['Turkish'],
               },

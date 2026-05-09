@@ -1,5 +1,6 @@
 import { getCategories } from "@/actions/categoryActions";
 import { Hero4 } from "@/components/home-page/hero";
+import { HomepageAboutSection } from "@/components/home-page/homepage-about-section";
 import { HomepageBlogSection } from "@/components/home-page/homepage-blog-section";
 import {
   HOMEPAGE_FAQS,
@@ -8,28 +9,12 @@ import {
 import { HomepageFavoritesSection } from "@/components/home-page/homepage-favorites-section";
 import { HomepageProductSliders } from "@/components/home-page/homepage-product-sliders";
 import { HomepageReviewsSlider } from "@/components/home-page/homepage-reviews-slider";
-import { ProductCategoryCards } from "@/components/home-page/product-category-cards";
 import { SectionSkeleton } from "@/components/home-page/section-skeleton";
-import { ServiceRegions } from "@/components/home-page/service-regions";
-import { TrustMetrics } from "@/components/home-page/trust-metrics";
+import { StructureCategoryBoxes } from "@/components/home-page/structure-category-boxes";
+import { CONTACT_INFO, CONTACT_MAP_EMBED_URL } from "@/lib/contact";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
-
-const DeferredLeadForm = dynamic(
-  () => import("@/components/form").then((mod) => mod.LeadForm),
-  {
-    loading: () => <SectionSkeleton heightClassName="h-[420px]" />,
-  },
-);
-
-const DeferredBrandStory = dynamic(
-  () =>
-    import("@/components/home-page/brand-story").then((mod) => mod.BrandStory),
-  {
-    loading: () => <SectionSkeleton heightClassName="h-[420px]" />,
-  },
-);
 
 const DeferredProcessJourney = dynamic(
   () =>
@@ -95,16 +80,6 @@ export const metadata: Metadata = {
 export default async function Page() {
   const categories = await getCategories();
 
-  const getCategoryHref = (matcher: string) => {
-    const matchedCategory = categories.find((category) =>
-      category.name.includes(matcher),
-    );
-
-    return matchedCategory
-      ? `/prefabrik-evler/${matchedCategory.slug}`
-      : "/prefabrik-evler";
-  };
-
   return (
     <>
       <script
@@ -131,22 +106,35 @@ export default async function Page() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Organization",
-            name: "CT Prefabrik",
+            name: CONTACT_INFO.companyName,
             url: "https://ctprefabrik.com",
             logo: "https://ctprefabrik.com/logo.png",
             description: "Türkiye'nin en kaliteli prefabrik ev üreticisi",
             address: {
               "@type": "PostalAddress",
-              addressLocality: "İstanbul",
+              streetAddress: `${CONTACT_INFO.address.street}, ${CONTACT_INFO.address.note}`,
+              addressLocality: CONTACT_INFO.address.locality,
+              addressRegion: CONTACT_INFO.address.region,
               addressCountry: "TR",
             },
-            contactPoint: {
-              "@type": "ContactPoint",
-              telephone: "+90-537-518-3006",
-              contactType: "customer service",
-              areaServed: "TR",
-              availableLanguage: ["Turkish"],
-            },
+            contactPoint: [
+              {
+                "@type": "ContactPoint",
+                telephone: CONTACT_INFO.primaryPhone.schema,
+                contactType: "customer service",
+                email: CONTACT_INFO.email,
+                areaServed: "TR",
+                availableLanguage: ["Turkish"],
+              },
+              {
+                "@type": "ContactPoint",
+                telephone: CONTACT_INFO.mobilePhone.schema,
+                contactType: "sales",
+                email: CONTACT_INFO.email,
+                areaServed: "TR",
+                availableLanguage: ["Turkish"],
+              },
+            ],
             sameAs: [
               "https://www.facebook.com/ctprefabrik",
               "https://www.instagram.com/ctprefabrik",
@@ -162,22 +150,21 @@ export default async function Page() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "LocalBusiness",
-            name: "CT Prefabrik",
+            name: CONTACT_INFO.companyName,
             image: "https://ctprefabrik.com/og-home.jpg",
             "@id": "https://ctprefabrik.com",
             url: "https://ctprefabrik.com",
-            telephone: "+90-537-518-3006",
+            telephone: CONTACT_INFO.primaryPhone.schema,
+            email: CONTACT_INFO.email,
             priceRange: "₺₺",
             address: {
               "@type": "PostalAddress",
-              addressLocality: "İstanbul",
+              streetAddress: `${CONTACT_INFO.address.street}, ${CONTACT_INFO.address.note}`,
+              addressLocality: CONTACT_INFO.address.locality,
+              addressRegion: CONTACT_INFO.address.region,
               addressCountry: "TR",
             },
-            geo: {
-              "@type": "GeoCoordinates",
-              latitude: 41.0082,
-              longitude: 28.9784,
-            },
+            hasMap: CONTACT_MAP_EMBED_URL,
             openingHoursSpecification: {
               "@type": "OpeningHoursSpecification",
               dayOfWeek: [
@@ -218,56 +205,14 @@ export default async function Page() {
           <div className="w-full">
             <Hero4 />
           </div>
-        </section>
-
-        <section className="flex justify-center mt-15">
-          <div className="max-w-[1280px] w-full">
-            <div className="mb-4 md:mb-5">
-              <TrustMetrics />
-            </div>
-            <ProductCategoryCards
-              items={[
-                {
-                  title: "Tek Katlı Prefabrik Ev",
-                  description:
-                    "Farklı metrekare ve oda dağılımlarına sahip tek katlı modelleri inceleyin.",
-                  href: getCategoryHref("Tek Kat"),
-                  icon: "single",
-                },
-                {
-                  title: "Dubleks Prefabrik Ev (Çift Katlı)",
-                  description:
-                    "Geniş yaşam ihtiyaçları için çift katlı prefabrik ev seçeneklerine geçin.",
-                  href: getCategoryHref("Çift Kat"),
-                  icon: "duplex",
-                },
-                {
-                  title: "Çelik Ev",
-                  description:
-                    "Dayanıklı tasarım diliyle hazırlanan çelik ev ürünlerimizi keşfedin.",
-                  href: getCategoryHref("Çelik"),
-                  icon: "steel",
-                },
-              ]}
-            />
-          </div>
+          <StructureCategoryBoxes />
         </section>
 
         <Suspense fallback={<SectionSkeleton heightClassName="h-[520px]" />}>
           <HomepageProductSliders categories={categories} />
         </Suspense>
 
-        <section className="flex justify-center py-6 lg:py-10">
-          <div className="max-w-[1280px] w-full">
-            <DeferredBrandStory />
-          </div>
-        </section>
-
-        <section className="flex justify-center py-4 lg:py-12">
-          <div className="max-w-[1280px] w-full">
-            <ServiceRegions />
-          </div>
-        </section>
+        <HomepageAboutSection />
 
         <section className="flex justify-center py-8 lg:py-4">
           <div className="max-w-[1280px] w-full">
@@ -288,12 +233,6 @@ export default async function Page() {
         <Suspense fallback={<SectionSkeleton heightClassName="h-[520px]" />}>
           <HomepageBlogSection />
         </Suspense>
-
-        <section className="flex justify-center pt-14 lg:mt-0">
-          <div className="max-w-[1280px] w-full">
-            <DeferredLeadForm />
-          </div>
-        </section>
 
         <section className="flex justify-center pt-8 lg:pt-12">
           <div className="max-w-[1280px] w-full">

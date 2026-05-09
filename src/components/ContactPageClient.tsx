@@ -1,6 +1,12 @@
 "use client";
 
 import { LeadForm } from "@/components/form";
+import {
+  CONTACT_INFO,
+  CONTACT_MAP_EMBED_URL,
+  CONTACT_MAP_URL,
+  CONTACT_PHONES,
+} from "@/lib/contact";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Check, Copy, Mail, MapPin, Phone } from "lucide-react";
 import { useState } from "react";
@@ -67,29 +73,40 @@ export default function ContactPageClient() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Telefon - Schema ile uyumlu */}
             <div itemScope itemType="https://schema.org/ContactPoint">
-              <meta itemProp="telephone" content="+905375183006" />
+              {CONTACT_PHONES.map((phone) => (
+                <meta
+                  key={phone.href}
+                  itemProp="telephone"
+                  content={phone.href}
+                />
+              ))}
               <meta itemProp="contactType" content="customer service" />
               <ContactCard
                 icon={<Phone size={32} />}
                 label="Bizi Arayın"
-                value="+90 537 518 30 06"
+                value={`${CONTACT_INFO.primaryPhone.display} / ${CONTACT_INFO.mobilePhone.display}`}
                 sub="Hafta içi: 09:00 - 18:00"
                 delay={0.1}
-                onCopy={() => copyToClipboard("+905375183006", "phone")}
+                onCopy={() =>
+                  copyToClipboard(
+                    CONTACT_PHONES.map((phone) => phone.display).join(" / "),
+                    "phone",
+                  )
+                }
                 copied={copiedPhone}
               />
             </div>
 
             {/* E-posta - Schema ile uyumlu */}
             <div itemScope itemType="https://schema.org/ContactPoint">
-              <meta itemProp="email" content="info@ctprefabrik.com" />
+              <meta itemProp="email" content={CONTACT_INFO.email} />
               <ContactCard
                 icon={<Mail size={32} />}
                 label="E-Posta Gönderin"
-                value="info@ctprefabrik.com"
+                value={CONTACT_INFO.email}
                 sub="7/24 Yanıt Garantisi"
                 delay={0.2}
-                onCopy={() => copyToClipboard("info@ctprefabrik.com", "email")}
+                onCopy={() => copyToClipboard(CONTACT_INFO.email, "email")}
                 copied={copiedEmail}
               />
             </div>
@@ -98,23 +115,25 @@ export default function ContactPageClient() {
             <div itemScope itemType="https://schema.org/PostalAddress">
               <meta
                 itemProp="streetAddress"
-                content="Soğucak, Kervan/1 Sokak No: 2/4"
+                content={`${CONTACT_INFO.address.street}, ${CONTACT_INFO.address.note}`}
               />
-              <meta itemProp="addressLocality" content="Söğütlü" />
-              <meta itemProp="addressRegion" content="Sakarya" />
-              <meta itemProp="postalCode" content="54160" />
+              <meta
+                itemProp="addressLocality"
+                content={CONTACT_INFO.address.locality}
+              />
+              <meta
+                itemProp="addressRegion"
+                content={CONTACT_INFO.address.region}
+              />
               <meta itemProp="addressCountry" content="TR" />
               <ContactCard
                 icon={<MapPin size={32} />}
                 label="Merkez Ofisimiz"
-                value="Soğucak, Kervan/1 Sokak No: 2/4, 54160 Söğütlü/Sakarya"
+                value={CONTACT_INFO.address.full}
                 sub="Tesislerimize Kahveye Bekleriz"
                 delay={0.3}
                 onCopy={() =>
-                  copyToClipboard(
-                    "Soğucak, Kervan/1 Sokak No: 2/4, 54160 Söğütlü/Sakarya",
-                    "address",
-                  )
+                  copyToClipboard(CONTACT_INFO.address.full, "address")
                 }
                 copied={copiedAddress}
               />
@@ -143,13 +162,13 @@ export default function ContactPageClient() {
         itemType="https://schema.org/Map"
       >
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d188.48880587821307!2d30.50763411393848!3d40.89774357467647!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNDDCsDUzJzUxLjciTiAzMMKwMzAnMjcuOSJF!5e0!3m2!1str!2str!4v1767361404509!5m2!1str!2str"
+          src={CONTACT_MAP_EMBED_URL}
           width="100%"
           height="100%"
           style={{ border: 0 }}
           allowFullScreen
           loading="lazy"
-          title="CT Prefabrik Merkez Ofis Konumu"
+          title="Hürtaş Beton Merkez Ofis Konumu"
           itemProp="hasMap"
         />
         <div className="absolute top-10 right-10 max-w-xs rounded-xl border border-slate-300 bg-white p-6 shadow-[0_20px_44px_-28px_rgba(15,23,42,0.24)]">
@@ -160,7 +179,7 @@ export default function ContactPageClient() {
             Üretim tesislerimizi ziyaret etmek için konum alabilirsiniz.
           </p>
           <a
-            href="https://www.google.com/maps/dir//40.8977436,30.5076341/@40.8977436,30.5076341,17z"
+            href={CONTACT_MAP_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-[#49202d] font-bold text-xs group"

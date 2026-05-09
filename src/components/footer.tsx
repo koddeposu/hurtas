@@ -1,5 +1,6 @@
 "use client";
 import { AnimatePresence, motion } from 'framer-motion';
+import { CONTACT_INFO, CONTACT_PHONES } from "@/lib/contact";
 import {
   Check,
   Copy,
@@ -75,7 +76,7 @@ const Footer = ({ categories = [] }: FooterProps) => {
           </div>
 
           <a
-            href="tel:+905375183006"
+            href={`tel:${CONTACT_INFO.primaryPhone.href}`}
             className="cursor-pointer relative z-10 px-10 py-5 bg-white text-slate-900 rounded-full font-bold text-sm flex items-center gap-3 hover:bg-emerald-50 transition-all shadow-xl active:scale-95"
           >
             <Phone size={20} fill="currentColor" />
@@ -93,8 +94,8 @@ const Footer = ({ categories = [] }: FooterProps) => {
               <Home className="w-8 h-8" /> CT <span style={{ color: '#49202d' }}>PREFABRİK</span>
             </div>
             <p className="text-slate-600 text-sm leading-relaxed font-medium max-w-sm">
-              Sakarya CT Prefabrik olarak, modern mimariyi çeliğin gücüyle birleştiriyoruz.
-              Sizin için güvenli, hızlı ve sürdürülebilir yaşam alanları tasarlıyoruz.
+              Hürtaş Beton olarak, altyapı ve üst yapı beton elemanlarında
+              dayanıklı üretim ve düzenli tedarik çözümleri sunuyoruz.
             </p>
             <div className="flex gap-4">
               {[Instagram].map((Icon, i) => (
@@ -145,14 +146,16 @@ const Footer = ({ categories = [] }: FooterProps) => {
             <h4 className="text-sm font-black uppercase tracking-[0.2em]" style={{ color: '#49202d' }}>İletişim</h4>
             <div className="space-y-4">
               {/* Adres */}
-              <div className="relative group cursor-pointer" onClick={() => copyToClipboard('Sakarya Prefabrik Üretim Tesisleri, Erenler / Sakarya', 'address')}>
+              <div className="relative group cursor-pointer" onClick={() => copyToClipboard(CONTACT_INFO.address.full, 'address')}>
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0 text-[#165b39]">
                     <MapPin size={18} />
                   </div>
                   <div className="flex-1">
                     <p className="text-sm font-medium text-slate-600">
-                      Soğucak, Kervan/1 Sokak No: 2/4, 54160 <br />Söğütlü / Sakarya
+                      {CONTACT_INFO.address.street} <br />
+                      {CONTACT_INFO.address.note} <br />
+                      {CONTACT_INFO.address.short}
                     </p>
                   </div>
                   <button
@@ -183,11 +186,22 @@ const Footer = ({ categories = [] }: FooterProps) => {
 
               {/* Telefon */}
               <div className="relative group">
-                <div className="flex items-center gap-4 cursor-pointer" onClick={() => copyToClipboard('+90 537 518 30 06', 'phone')}>
+                <div className="flex items-center gap-4 cursor-pointer" onClick={() => copyToClipboard(CONTACT_PHONES.map((phone) => phone.display).join(" / "), 'phone')}>
                   <div className="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0 text-[#165b39]">
                     <Phone size={18} />
                   </div>
-                  <p className="text-sm font-bold text-slate-900 flex-1">+90 537 518 30 06</p>
+                  <div className="flex-1 space-y-1">
+                    {CONTACT_PHONES.map((phone) => (
+                      <a
+                        key={phone.href}
+                        href={`tel:${phone.href}`}
+                        className="block text-sm font-bold text-slate-900 transition-colors hover:text-[#152f51]"
+                        onClick={(event) => event.stopPropagation()}
+                      >
+                        {phone.display}
+                      </a>
+                    ))}
+                  </div>
                   <button
                     type="button"
                     aria-label="Telefon numarasını kopyala"
@@ -215,14 +229,18 @@ const Footer = ({ categories = [] }: FooterProps) => {
               </div>
 
               {/* Email */}
-              <div className="relative group cursor-pointer" onClick={() => copyToClipboard('info@ctprefabrik.com', 'email')}>
+              <div className="relative group cursor-pointer" onClick={() => copyToClipboard(CONTACT_INFO.email, 'email')}>
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0 text-[#165b39]">
                     <Mail size={18} />
                   </div>
-                  <p className="text-sm font-medium text-slate-700 flex-1">
-                    E-posta adresini kopyalayın
-                  </p>
+                  <a
+                    href={`mailto:${CONTACT_INFO.email}`}
+                    className="text-sm font-medium text-slate-700 flex-1 transition-colors hover:text-[#152f51]"
+                    onClick={(event) => event.stopPropagation()}
+                  >
+                    {CONTACT_INFO.email}
+                  </a>
                   <button
                     type="button"
                     aria-label="E-posta adresini kopyala"

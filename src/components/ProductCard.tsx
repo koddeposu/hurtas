@@ -1,12 +1,7 @@
 import { DBProduct, Product } from "@/types/product";
-import { ArrowUpRight, Home, Images, Maximize2, Ruler } from "lucide-react";
+import { ArrowUpRight, Images, Maximize2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-
-const formatPrice = (price: string | null | undefined) => {
-  if (!price || price === "null") return null;
-  return new Intl.NumberFormat("tr-TR").format(Number(price));
-};
 
 type ProductCardProduct = DBProduct | Product;
 
@@ -81,20 +76,20 @@ export const ProductCard = ({
           </button>
 
           {bestseller ? (
-            <div className="absolute left-4 top-4 z-10 rounded-lg bg-red-600/90 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-white shadow-sm">
+            <div className="absolute left-4 top-4 z-10 rounded-lg bg-[#d6a94a] px-3 py-1 text-[9px] font-black uppercase tracking-widest text-[#152f51] shadow-sm">
               Çok Satan
             </div>
           ) : null}
 
           {categoryName ? (
-            <div className="absolute right-4 top-4 z-10 rounded-lg border border-slate-200/80 bg-white/92 px-4 py-1 text-[9px] font-black uppercase tracking-widest text-primary shadow-sm backdrop-blur">
+            <div className="absolute right-4 top-4 z-10 rounded-lg border border-slate-200/80 bg-white/92 px-4 py-1 text-[9px] font-black uppercase tracking-widest text-[#152f51] shadow-sm backdrop-blur">
               {categoryName}
             </div>
           ) : null}
 
           {images.length > 1 ? (
             <div className="absolute left-4 bottom-4 z-10 inline-flex items-center gap-2 rounded-lg border border-slate-200/80 bg-white/92 px-3 py-2 text-[10px] font-black uppercase tracking-[0.14em] text-slate-700 shadow-sm backdrop-blur">
-              <Images className="h-3.5 w-3.5 text-secondary" />
+              <Images className="h-3.5 w-3.5 text-[#d6a94a]" />
               {images.length} Görsel
             </div>
           ) : null}
@@ -102,7 +97,7 @@ export const ProductCard = ({
       </div>
 
       <div className="cursor-pointer px-5 pt-4">
-        <h3 className="mb-1.5 text-lg font-black text-slate-900 transition-colors duration-200 group-hover:text-primary">
+        <h3 className="mb-1.5 text-lg font-black text-slate-900 transition-colors duration-200 group-hover:text-[#152f51]">
           {product.name}
         </h3>
 
@@ -112,42 +107,10 @@ export const ProductCard = ({
           </p>
         ) : null}
 
-        {product.price ? (
-          <div className="mb-3 flex items-center gap-2">
-            <p className="text-base font-bold text-secondary">
-              {formatPrice(product.price)} ₺
-            </p>
-            {product.oldPrice ? (
-              <p className="text-sm font-bold text-slate-500 line-through">
-                {formatPrice(product.oldPrice)} ₺
-              </p>
-            ) : null}
-          </div>
-        ) : null}
       </div>
 
       <div className="px-5 pb-5">
-        <div className="grid grid-cols-2 gap-4 border-t border-slate-100 pt-4">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-50 text-[#49202d]">
-              <Ruler size={14} />
-            </div>
-            <span className="text-xs font-bold text-slate-500">
-              {product.area} m<sup>2</sup>
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-50 text-[#49202d]">
-              <Home size={14} />
-            </div>
-            <span className="text-xs font-bold text-slate-500">
-              {product.room}
-            </span>
-          </div>
-        </div>
-
-        <div className="mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-slate-900 py-3.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white transition-all duration-200 group-hover:bg-primary">
+        <div className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-[#152f51] py-3.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white transition-all duration-200 group-hover:bg-[#10243d]">
           İncele <ArrowUpRight size={14} />
         </div>
       </div>

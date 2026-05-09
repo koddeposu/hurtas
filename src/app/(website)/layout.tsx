@@ -2,6 +2,7 @@ import { getCategories } from "@/actions/categoryActions";
 import "@/app/globals.css";
 import { AnalyticsWrapper } from "@/components/analytics-wrapper";
 import ClientLayout from "@/components/ClientLayout";
+import { CONTACT_INFO } from "@/lib/contact";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
     template: "%s | Sakarya CT Prefabrik Evler",
   },
   description:
-    "Prefabrik ev, çelik ev ve konteyner çözümleri! Hızlı kurulum, modern tasarımlar, Sakarya CT Prefabrik 20 yıllık deneyim. Ücretsiz keşif +90 537 518 30 06.",
+    `Beton boru, parke taşı, bordür ve altyapı elemanları için Hürtaş Beton ile iletişime geçin. Telefon: ${CONTACT_INFO.primaryPhone.display}, ${CONTACT_INFO.mobilePhone.display}.`,
   keywords: [
     "prefabrik ev",
     "prefabrik ev fiyatları",
@@ -149,7 +150,7 @@ export default async function RootLayout({
       // 3. Web Sitesi Telefon Araması Dönüşümü (Daha önce paylaştığın kod)
       // Bu kod, sitedeki numarayı otomatik olarak takip numarasına çevirir.
       gtag('config', 'AW-17869486943/c6tyCK_3kekbELa-7shC', {
-        'phone_conversion_number': '+90 537 518 30 06'
+        'phone_conversion_number': '${CONTACT_INFO.primaryPhone.intlDisplay}'
       });
     `,
           }}
@@ -161,16 +162,27 @@ export default async function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              name: "CT Prefabrik",
+              name: CONTACT_INFO.companyName,
               url: "https://ctprefabrik.com",
               logo: "https://ctprefabrik.com/logo.png",
-              contactPoint: {
-                "@type": "ContactPoint",
-                telephone: "+90-537-518-3006",
-                contactType: "customer service",
-                areaServed: "TR",
-                availableLanguage: "Turkish",
-              },
+              contactPoint: [
+                {
+                  "@type": "ContactPoint",
+                  telephone: CONTACT_INFO.primaryPhone.schema,
+                  contactType: "customer service",
+                  email: CONTACT_INFO.email,
+                  areaServed: "TR",
+                  availableLanguage: "Turkish",
+                },
+                {
+                  "@type": "ContactPoint",
+                  telephone: CONTACT_INFO.mobilePhone.schema,
+                  contactType: "sales",
+                  email: CONTACT_INFO.email,
+                  areaServed: "TR",
+                  availableLanguage: "Turkish",
+                },
+              ],
               sameAs: [
                 "https://www.facebook.com/ctprefabrik",
                 "https://www.instagram.com/ctprefabrik",

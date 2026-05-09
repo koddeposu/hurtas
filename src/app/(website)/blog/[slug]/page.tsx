@@ -10,10 +10,8 @@ import {
   ArrowUpRight,
   Calendar,
   Clock,
-  Home,
   Layers3,
   Package,
-  Ruler,
   Sparkles,
 } from "lucide-react";
 import Image from "next/image";
@@ -65,11 +63,6 @@ function getContentSections(content: string | null) {
   } catch {
     return [convertJsonToHtml(content)].filter(Boolean);
   }
-}
-
-function formatPrice(price: string | null) {
-  if (!price || price === "null") return null;
-  return new Intl.NumberFormat("tr-TR").format(Number(price));
 }
 
 function normalizeRoom(room: string | null | undefined) {
@@ -153,44 +146,18 @@ function ProductShowcase({
               ) : null}
 
               {product.category?.name ? (
-                <div className="absolute left-4 top-4 rounded-lg border border-slate-200/80 bg-white/92 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-primary shadow-sm backdrop-blur">
+                <div className="absolute left-4 top-4 rounded-lg border border-slate-200/80 bg-white/92 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-[#152f51] shadow-sm backdrop-blur">
                   {product.category.name}
                 </div>
               ) : null}
             </div>
 
             <div className="p-5">
-              <h3 className="text-2xl font-black leading-snug tracking-tight text-slate-900 transition-colors duration-200 group-hover:text-primary">
+              <h3 className="text-2xl font-black leading-snug tracking-tight text-slate-900 transition-colors duration-200 group-hover:text-[#152f51]">
                 {product.name}
               </h3>
 
-              {product.price ? (
-                <div className="mt-2 text-base font-bold text-secondary">
-                  {formatPrice(product.price)} ₺
-                </div>
-              ) : null}
-
-              <div className="mt-4 grid grid-cols-2 gap-3 border-t border-slate-200 pt-4">
-                <div className="flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-50 text-primary">
-                    <Ruler size={14} />
-                  </div>
-                  <span className="text-xs font-bold text-slate-500">
-                    {product.area} m<sup>2</sup>
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-50 text-primary">
-                    <Home size={14} />
-                  </div>
-                  <span className="text-xs font-bold text-slate-500">
-                    {product.room}
-                  </span>
-                </div>
-              </div>
-
-              <div className="mt-4 inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.14em] text-secondary">
+              <div className="mt-4 inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.14em] text-[#152f51]">
                 Ürünü İncele
                 <ArrowUpRight className="h-4 w-4" />
               </div>

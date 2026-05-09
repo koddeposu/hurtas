@@ -222,7 +222,7 @@ export function HomepageReviewsSlider() {
 
                     {/* Yıldızlar */}
                     <div
-                      className="flex items-center gap-1 text-amber-400"
+                      className="flex items-center gap-1 text-[#d6a94a]"
                       aria-label={`${review.rating} üzerinden 5 yıldız`}
                     >
                       {Array.from({ length: 5 }).map((_, i) => (

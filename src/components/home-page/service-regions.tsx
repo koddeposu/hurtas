@@ -26,14 +26,14 @@ export function ServiceRegions() {
           </div>
 
           <h2 className="mt-5 text-3xl font-black leading-tight tracking-tight text-slate-900 md:text-4xl">
-            Tüm Türkiye'ye Hizmet, <br />
-            <span className="text-primary">Sakarya'da Güçlü Saha</span>
+            Tüm Türkiye&apos;ye Hizmet, <br />
+            <span className="text-primary">Sakarya&apos;da Güçlü Saha</span>
           </h2>
 
           <p className="mt-4 text-sm font-medium leading-relaxed text-slate-700">
             CT Prefabrik olarak <strong>tek katlı prefabrik</strong>,{" "}
             <strong>dubleks prefabrik</strong> ve <strong>çelik ev</strong>{" "}
-            projelerinizi Türkiye'nin her noktasına ulaştırıyoruz. Özellikle{" "}
+            projelerinizi Türkiye&apos;nin her noktasına ulaştırıyoruz. Özellikle{" "}
             <strong>Sakarya prefabrik ev</strong> taleplerinde daha hızlı keşif
             ve yakın saha koordinasyonu avantajı sunuyoruz.
           </p>
@@ -75,7 +75,7 @@ export function ServiceRegions() {
         {/* SAĞ KOLON: Kompakt Bölge Kartları */}
         <div className="grid gap-4 sm:grid-cols-2 content-center">
           {/* Vurgulu Ana Kart (2 Kolon Kaplar) */}
-          <article className="sm:col-span-2 flex flex-col sm:flex-row items-start sm:items-center gap-4 rounded-[0.9rem] border border-secondary/20 bg-secondary p-5 text-white shadow-lg">
+          <article className="sm:col-span-2 flex flex-col sm:flex-row items-start sm:items-center gap-4 rounded-[0.9rem] border border-[#d6a94a]/30 bg-[#152f51] p-5 text-white shadow-lg">
             <div className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-white/10">
               <Truck className="h-6 w-6 text-white" />
             </div>
@@ -83,7 +83,7 @@ export function ServiceRegions() {
               <h3 className="text-lg font-black tracking-tight text-white">
                 Sakarya Prefabrik Ev Merkezi
               </h3>
-              <p className="mt-1 text-sm font-medium leading-relaxed text-emerald-50/80">
+              <p className="mt-1 text-sm font-medium leading-relaxed text-white/80">
                 Keşif, teklif ve uygulama planlamasında en güçlü operasyon
                 akışımızı Sakarya genelinde kuruyor, süreci hızlandırıyoruz.
               </p>
@@ -112,7 +112,7 @@ export function ServiceRegions() {
               Türkiye Geneli
             </h3>
             <p className="mt-1.5 text-xs font-medium leading-relaxed text-slate-600">
-              Tüm prefabrik ev projelerimizi Türkiye'nin farklı şehirlerine
+              Tüm prefabrik ev projelerimizi Türkiye&apos;nin farklı şehirlerine
               güvenle ulaştırıyoruz.
             </p>
           </article>

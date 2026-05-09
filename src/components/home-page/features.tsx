@@ -6,37 +6,37 @@ export const Features = () => {
       id: "01",
       title: "Sektöründe Öncü",
       icon: <Star size={20} />,
-      color: "#165b39",
+      color: "#d6a94a",
     },
     {
       id: "02",
       title: "Güvenilir Yapı",
       icon: <Shield size={20} />,
-      color: "#49202d",
+      color: "#152f51",
     },
     {
       id: "03",
       title: "Yüksek Kalite",
       icon: <Gem size={20} />,
-      color: "#165b39",
+      color: "#d6a94a",
     },
     {
       id: "04",
       title: "Modern Tasarımlar",
       icon: <Ruler size={20} />,
-      color: "#49202d",
+      color: "#152f51",
     },
     {
       id: "05",
       title: "Fiyat Performans",
       icon: <Zap size={20} />,
-      color: "#165b39",
+      color: "#d6a94a",
     },
     {
       id: "06",
       title: "Mutlu Müşteriler",
       icon: <Smile size={20} />,
-      color: "#49202d",
+      color: "#152f51",
     },
   ];
 
@@ -61,7 +61,7 @@ export const Features = () => {
 
               <h2 className="mb-6 text-2xl font-black leading-[1.1] tracking-tighter text-slate-900 md:text-5xl">
                 Neden <br />
-                <span style={{ color: "#49202d" }}>CT</span> Prefabrik Ev?
+                <span style={{ color: "#152f51" }}>CT</span> Prefabrik Ev?
               </h2>
 
               <div className="relative space-y-5 border-l-2 border-slate-100 pl-7">

@@ -6,33 +6,33 @@ export const CoreValues = () => {
       title: "Yerinde Kurulum",
       desc: "Hızlı ve titiz montaj.",
       icon: <Hammer size={28} />,
-      brandColor: "#49202d",
+      brandColor: "#152f51",
       lightBg: "bg-primary/5",
-      borderColor: "group-hover:border-[#49202d]/30",
+      borderColor: "group-hover:border-[#152f51]/30",
     },
     {
       title: "Deneyimli Ustalar",
       desc: "Uzman kadro, tam güven.",
       icon: <Users size={28} />,
-      brandColor: "#165b39",
-      lightBg: "bg-[#165b39]/5",
-      borderColor: "group-hover:border-[#165b39]/30",
+      brandColor: "#d6a94a",
+      lightBg: "bg-[#d6a94a]/10",
+      borderColor: "group-hover:border-[#d6a94a]/40",
     },
     {
       title: "Kolay Bakım",
       desc: "Zahmetsiz ve uzun ömürlü.",
       icon: <Wrench size={28} />,
-      brandColor: "#49202d",
+      brandColor: "#152f51",
       lightBg: "bg-primary/5",
-      borderColor: "group-hover:border-[#49202d]/30",
+      borderColor: "group-hover:border-[#152f51]/30",
     },
     {
       title: "Çevre Dostu",
       desc: "Doğaya saygılı üretim.",
       icon: <Leaf size={28} />,
-      brandColor: "#165b39",
-      lightBg: "bg-[#165b39]/5",
-      borderColor: "group-hover:border-[#165b39]/30",
+      brandColor: "#d6a94a",
+      lightBg: "bg-[#d6a94a]/10",
+      borderColor: "group-hover:border-[#d6a94a]/40",
     },
   ];
 
@@ -43,10 +43,10 @@ export const CoreValues = () => {
         <div className="mb-4 space-y-2 text-center lg:mb-12">
           <h2
             className="text-xl font-black tracking-tighter md:text-3xl"
-            style={{ color: "#165b39" }}
+            style={{ color: "#d6a94a" }}
           >
             PREFABRİK EVLERDE DEĞERLERİMİZ{" "}
-            <span style={{ color: "#49202d" }}>& GÜCÜMÜZ</span>
+            <span style={{ color: "#152f51" }}>& GÜCÜMÜZ</span>
           </h2>
           <div className="h-1 bg-slate-200 mx-auto rounded-full w-[60px]" />
         </div>

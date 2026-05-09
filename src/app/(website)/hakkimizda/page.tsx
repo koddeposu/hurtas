@@ -1,5 +1,6 @@
 import AboutPageClient from "@/components/AboutPageClient";
 import { ABOUT_FAQS } from "@/components/page-faq-content";
+import { CONTACT_INFO } from "@/lib/contact";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -82,13 +83,16 @@ export default function AboutPage() {
               logo: "https://ctprefabrik.com/logo.png",
               address: {
                 "@type": "PostalAddress",
-                addressLocality: "İstanbul",
+                streetAddress: `${CONTACT_INFO.address.street}, ${CONTACT_INFO.address.note}`,
+                addressLocality: CONTACT_INFO.address.locality,
+                addressRegion: CONTACT_INFO.address.region,
                 addressCountry: "TR",
               },
               contactPoint: {
                 "@type": "ContactPoint",
-                telephone: "+90-537-518-3006",
+                telephone: CONTACT_INFO.primaryPhone.schema,
                 contactType: "customer service",
+                email: CONTACT_INFO.email,
                 areaServed: "TR",
                 availableLanguage: "Turkish",
               },
