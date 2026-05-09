@@ -157,8 +157,7 @@ export const Hero4 = () => {
                         sizes="100vw"
                         className="object-cover"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#152f51]/88 via-[#152f51]/58 to-slate-950/24" />
-                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(21,47,81,0.16),transparent_18%),radial-gradient(circle_at_bottom_left,rgba(0,0,0,0.18),transparent_40%)]" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-[#152f51]/88 via-[#152f51]/50 to-slate-950/24" />
                     </div>
 
                     <div
@@ -189,10 +188,10 @@ export const Hero4 = () => {
 
         <div className="relative z-10 mx-auto flex h-full max-w-7xl items-center px-4 pb-18 pt-28 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
-            <div className="hidden items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-[#dbe7f3] backdrop-blur md:inline-flex">
-              <span className="h-2 w-2 rounded-full bg-[#152f51] shadow-[0_0_14px_rgba(21,47,81,0.9)]" />
+            <div className="hidden items-center gap-2 rounded-[2px] border border-white/20 bg-white/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-[#dbe7f3] backdrop-blur md:inline-flex">
+              <span className="h-2 w-2 rounded-[1px] bg-[#152f51] shadow-[0_0_14px_rgba(21,47,81,0.9)]" />
               <span>Hürtaş</span>
-              <span className="h-1 w-1 rounded-full bg-[#dbe7f3]/70" />
+              <span className="h-1 w-1 rounded-[1px] bg-[#dbe7f3]/70" />
               <span>Beton Elemanları</span>
             </div>
 
@@ -208,21 +207,21 @@ export const Hero4 = () => {
               <button
                 type="button"
                 onClick={handleWhatsApp}
-                className="cursor-pointer rounded-lg bg-[#152f51] px-5 py-3 text-xs font-black uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#10243d] sm:text-sm ads-whatsapp"
+                className="inline-flex min-h-12 cursor-pointer items-center justify-center rounded-[2px] bg-[#d6a94a] px-6 py-3.5 text-xs font-black uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#10243d] focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#152f51] sm:text-sm ads-whatsapp"
               >
                 WhatsApp
               </button>
               <button
                 type="button"
                 onClick={handleCall}
-                className="cursor-pointer rounded-lg bg-white px-5 py-3 text-xs font-black uppercase tracking-[0.14em] text-slate-900 transition-colors hover:bg-[#f4f7fb] sm:text-sm ads-phone-call"
+                className="inline-flex min-h-12 cursor-pointer items-center justify-center rounded-[2px] bg-white px-6 py-3.5 text-xs font-black uppercase tracking-[0.14em] text-slate-900 transition-colors hover:bg-[#f4f7fb] focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#152f51] sm:text-sm ads-phone-call"
               >
                 Hemen Ara
               </button>
               <Link
                 href="/prefabrik-evler"
                 prefetch={false}
-                className="rounded-lg border border-white/50 px-5 py-3 text-xs font-black uppercase tracking-[0.14em] text-white transition-colors hover:bg-white/10 sm:text-sm"
+                className="inline-flex min-h-12 items-center justify-center rounded-[2px] border border-white/50 px-6 py-3.5 text-xs font-black uppercase tracking-[0.14em] text-white transition-colors hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#152f51] sm:text-sm"
               >
                 Ürünleri İncele
               </Link>
@@ -231,9 +230,9 @@ export const Hero4 = () => {
             <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3">
               {FEATURES.map((item) => (
                 <div
-                key={item}
-                className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.08em] text-slate-100"
-              >
+                  key={item}
+                  className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.08em] text-slate-100"
+                >
                   <CheckCircle2 className="h-4 w-4 text-[#dbe7f3]" />
                   {item}
                 </div>
@@ -245,7 +244,7 @@ export const Hero4 = () => {
         <button
           type="button"
           onClick={() => api?.scrollPrev()}
-          className="absolute left-3 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/30 bg-black/25 text-white backdrop-blur transition-colors hover:bg-black/40 sm:left-6 lg:h-13 lg:w-13"
+          className="absolute left-3 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-[2px] border border-white/30 bg-black/25 text-white backdrop-blur transition-colors hover:bg-black/40 sm:left-6 lg:h-13 lg:w-13"
           aria-label="Önceki slayt"
         >
           <ChevronLeft className="h-5 w-5" />
@@ -254,22 +253,22 @@ export const Hero4 = () => {
         <button
           type="button"
           onClick={() => api?.scrollNext()}
-          className="absolute right-3 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/30 bg-black/25 text-white backdrop-blur transition-colors hover:bg-black/40 sm:right-6 lg:h-13 lg:w-13"
+          className="absolute right-3 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-[2px] border border-white/30 bg-black/25 text-white backdrop-blur transition-colors hover:bg-black/40 sm:right-6 lg:h-13 lg:w-13"
           aria-label="Sonraki slayt"
         >
           <ChevronRight className="h-5 w-5" />
         </button>
 
-        <div className="absolute bottom-16 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
+        <div
+          className="absolute bottom-16 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2"
+          aria-hidden="true"
+        >
           {SLIDES.map((slide, index) => (
-            <button
-              type="button"
+            <span
               key={slide.id}
-              onClick={() => api?.scrollTo(index)}
-              className={`h-2 cursor-pointer rounded-full transition-all ${
+              className={`h-2 rounded-[2px] transition-all ${
                 index === current ? "w-10 bg-[#152f51]" : "w-4 bg-white/70"
               }`}
-              aria-label={`${index + 1}. slayta git`}
             />
           ))}
         </div>
@@ -286,7 +285,7 @@ export const Hero4 = () => {
                 key={`${item}-${index}`}
                 className="inline-flex items-center text-[10px] font-black uppercase tracking-[0.18em] text-slate-100 sm:text-xs"
               >
-                <span className="mx-4 h-1.5 w-1.5 rounded-full bg-[#d6a94a] sm:mx-6" />
+                <span className="mx-4 h-1.5 w-1.5 rounded-[1px] bg-[#d6a94a] sm:mx-6" />
                 {item}
               </span>
             ))}

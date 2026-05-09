@@ -48,7 +48,7 @@ export const CoreValues = () => {
             PREFABRİK EVLERDE DEĞERLERİMİZ{" "}
             <span style={{ color: "#152f51" }}>& GÜCÜMÜZ</span>
           </h2>
-          <div className="h-1 bg-slate-200 mx-auto rounded-full w-[60px]" />
+          <div className="h-1 bg-slate-200 mx-auto rounded-[1px] w-[60px]" />
         </div>
 
         {/* Yan Yana Soft Box Yapısı */}
@@ -56,17 +56,17 @@ export const CoreValues = () => {
           {values.map((v, i) => (
             <div
               key={i}
-              className={` group relative bg-white border border-slate-200 p-4 lg:p-6 rounded-[1.5rem] lg:rounded-[2rem] transition-all duration-500 flex gap-4 lg:gap-0 lg:flex-col items-center lg:text-center ${v.borderColor}`}
+              className={` group relative bg-white border border-slate-200 p-4 lg:p-6 rounded-[3px] transition-all duration-500 flex gap-4 lg:gap-0 lg:flex-col items-center lg:text-center ${v.borderColor}`}
             >
               {/* Arka Plan Glow (Sadece Hover'da Kendi Renginde) */}
               <div
-                className="absolute inset-0 opacity-0 group-hover:opacity-[0.02] transition-opacity duration-500 rounded-[1.5rem] lg:rounded-[2.5rem]"
+                className="absolute inset-0 opacity-0 group-hover:opacity-[0.02] transition-opacity duration-500 rounded-[3px]"
                 style={{ backgroundColor: v.brandColor }}
               />
 
               {/* İkon Alanı */}
               <div
-                className={`w-10 h-10 lg:w-16 lg:h-16 ${v.lightBg} rounded-[0.75rem] lg:rounded-[1.5rem] flex items-center justify-center lg:mb-5 transition-all duration-500 group-hover:scale-110 shadow-sm`}
+                className={`w-10 h-10 lg:w-16 lg:h-16 ${v.lightBg} rounded-[2px] flex items-center justify-center lg:mb-5 transition-all duration-500 group-hover:scale-110 shadow-sm`}
                 style={{ color: v.brandColor }}
               >
                 {v.icon}
@@ -83,7 +83,7 @@ export const CoreValues = () => {
 
               {/* Kibar Alt Çizgi Detayı (Sadece Hover'da Kendi Renginde) */}
               <div
-                className="w-0 h-1 mt-6 rounded-full transition-all duration-500 group-hover:w-10"
+                className="w-0 h-1 mt-6 rounded-[1px] transition-all duration-500 group-hover:w-10"
                 style={{ backgroundColor: v.brandColor }}
               />
             </div>

@@ -29,7 +29,7 @@ export function HomepageAboutSection() {
 
       <div className="relative mx-auto grid max-w-7xl gap-5 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-center lg:px-8 lg:py-12">
         <div className="max-w-2xl">
-          <div className="inline-flex items-center gap-2 rounded-lg border border-[#d6a94a]/35 bg-[#d6a94a]/10 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.18em] text-[#f4d78d] sm:text-[10px]">
+          <div className="inline-flex items-center gap-2 rounded-[2px] border border-[#d6a94a]/35 bg-[#d6a94a]/10 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.18em] text-[#f4d78d] sm:text-[10px]">
             Hürtaş Beton Elemanları
           </div>
 
@@ -50,7 +50,7 @@ export function HomepageAboutSection() {
             <Link
               href="/prefabrik-evler"
               prefetch={false}
-              className="inline-flex items-center gap-2 rounded-lg bg-[#d6a94a] px-4 py-2.5 text-[11px] font-black uppercase tracking-[0.12em] text-[#152f51] transition-colors hover:bg-[#bf943b] sm:px-5 sm:py-3 sm:text-xs"
+              className="inline-flex items-center gap-2 rounded-[2px] bg-[#d6a94a] px-4 py-2.5 text-[11px] font-black uppercase tracking-[0.12em] text-[#152f51] transition-colors hover:bg-[#bf943b] sm:px-5 sm:py-3 sm:text-xs"
             >
               Ürünleri İncele
               <ArrowUpRight className="h-4 w-4" />
@@ -58,14 +58,14 @@ export function HomepageAboutSection() {
             <Link
               href="/hakkimizda"
               prefetch={false}
-              className="inline-flex items-center gap-2 rounded-lg border border-white/35 px-4 py-2.5 text-[11px] font-black uppercase tracking-[0.12em] text-white transition-colors hover:bg-white/10 sm:px-5 sm:py-3 sm:text-xs"
+              className="inline-flex items-center gap-2 rounded-[2px] border border-white/35 px-4 py-2.5 text-[11px] font-black uppercase tracking-[0.12em] text-white transition-colors hover:bg-white/10 sm:px-5 sm:py-3 sm:text-xs"
             >
               Hakkımızda
             </Link>
           </div>
         </div>
 
-        <aside className="hidden rounded-lg border border-white/15 bg-white/10 p-4 backdrop-blur lg:block">
+        <aside className="hidden rounded-[3px] border border-white/15 bg-white/10 p-4 backdrop-blur lg:block">
           <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#f4d78d]">
             Ürünlere Hızlı Geçiş
           </p>

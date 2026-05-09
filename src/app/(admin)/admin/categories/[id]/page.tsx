@@ -1,5 +1,5 @@
 import { requireAuth } from "@/lib/requireAuth";
-import { getCategoryById } from "@/actions/categoryActions";
+import { getCategories, getCategoryById } from "@/actions/categoryActions";
 import { notFound } from "next/navigation";
 import { EditCategoryForm } from "./edit-form";
 
@@ -12,11 +12,14 @@ export default async function EditCategoryPage({
 }: EditCategoryPageProps) {
   await requireAuth();
   const { id } = await params;
-  const category = await getCategoryById(id);
+  const [category, categories] = await Promise.all([
+    getCategoryById(id),
+    getCategories(),
+  ]);
 
   if (!category) {
     notFound();
   }
 
-  return <EditCategoryForm category={category} />;
+  return <EditCategoryForm category={category} categories={categories} />;
 }

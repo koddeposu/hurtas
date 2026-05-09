@@ -19,7 +19,7 @@ export function ZoomableImage({ src, alt }: { src: string; alt: string }) {
 
   return (
     <div
-      className="relative aspect-video w-full overflow-hidden cursor-zoom-in rounded-[1rem] md:rounded-[1rem]"
+      className="relative aspect-video w-full overflow-hidden cursor-zoom-in rounded-[3px]"
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

@@ -10,6 +10,7 @@ import { config } from "dotenv";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { eq } from "drizzle-orm";
 import { user, account } from "../src/db/schema";
+import { hashPassword } from "better-auth/crypto";
 
 config({ path: ".env" });
 
@@ -18,15 +19,6 @@ const db = drizzle({
     connectionString: process.env.DATABASE_URL!,
   },
 });
-
-async function hashPassword(password: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password);
-  const hash = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(hash))
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-}
 
 async function resetPassword() {
   const args = process.argv.slice(2);

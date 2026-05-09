@@ -13,12 +13,12 @@ export async function generateMetadata({
   const params = await searchParams;
   const page = parseInt(params.page || "1", 10);
   const title =
-    page > 1 ? `Blog - Sayfa ${page} | CT Prefabrik` : "Blog | CT Prefabrik";
+    page > 1 ? `Blog - Sayfa ${page} | Hürtaş Beton` : "Blog | Hürtaş Beton";
 
   return {
     title,
     description:
-      "Prefabrik yapılardan modern mimariye, teknik ipuçlarından yaşam rehberlerine kadar her şey burada.",
+      "Beton boru, parke taşı, bordür ve altyapı beton ürünleri hakkında ürün seçimi, tedarik ve uygulama rehberleri.",
     alternates: {
       canonical:
         page > 1

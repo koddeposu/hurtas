@@ -7,24 +7,16 @@ import {
   HomepageFaq,
 } from "@/components/home-page/homepage-faq";
 import { HomepageFavoritesSection } from "@/components/home-page/homepage-favorites-section";
+import { HeroProductMarquee } from "@/components/home-page/hero-product-marquee";
 import { HomepageProductSliders } from "@/components/home-page/homepage-product-sliders";
 import { HomepageReviewsSlider } from "@/components/home-page/homepage-reviews-slider";
+import { ProjectSupplyPower } from "@/components/home-page/project-supply-power";
 import { SectionSkeleton } from "@/components/home-page/section-skeleton";
+import { SiteDroneVideo } from "@/components/home-page/site-drone-video";
 import { StructureCategoryBoxes } from "@/components/home-page/structure-category-boxes";
 import { CONTACT_INFO, CONTACT_MAP_EMBED_URL } from "@/lib/contact";
 import { Metadata } from "next";
-import dynamic from "next/dynamic";
 import { Suspense } from "react";
-
-const DeferredProcessJourney = dynamic(
-  () =>
-    import("@/components/home-page/process-journey").then(
-      (mod) => mod.ProcessJourney,
-    ),
-  {
-    loading: () => <SectionSkeleton heightClassName="h-[520px]" />,
-  },
-);
 
 export const metadata: Metadata = {
   title: "CT Prefabrik | Türkiye'nin En Kaliteli Prefabrik Ev Üreticisi",
@@ -205,8 +197,13 @@ export default async function Page() {
           <div className="w-full">
             <Hero4 />
           </div>
-          <StructureCategoryBoxes />
+          <Suspense fallback={<SectionSkeleton heightClassName="h-28" />}>
+            <HeroProductMarquee />
+          </Suspense>
+          <StructureCategoryBoxes categories={categories} />
         </section>
+
+        <SiteDroneVideo />
 
         <Suspense fallback={<SectionSkeleton heightClassName="h-[520px]" />}>
           <HomepageProductSliders categories={categories} />
@@ -214,17 +211,17 @@ export default async function Page() {
 
         <HomepageAboutSection />
 
-        <section className="flex justify-center py-8 lg:py-4">
-          <div className="max-w-[1280px] w-full">
-            <DeferredProcessJourney />
-          </div>
-        </section>
+        <Suspense fallback={<SectionSkeleton heightClassName="h-[360px]" />}>
+          <HomepageProductSliders categories={categories} group="environment" />
+        </Suspense>
+
+        <ProjectSupplyPower />
 
         <Suspense fallback={<SectionSkeleton heightClassName="h-[560px]" />}>
           <HomepageFavoritesSection />
         </Suspense>
 
-        <section className="flex justify-center py-5 pt-16 lg:py-18">
+        <section className="flex justify-center py-4 lg:py-6">
           <div className="max-w-[1280px] w-full">
             <HomepageReviewsSlider />
           </div>

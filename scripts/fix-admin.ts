@@ -8,8 +8,7 @@ import { config } from "dotenv";
 import { drizzle } from "drizzle-orm/node-postgres";
 import { eq } from "drizzle-orm";
 import { user, account } from "../src/db/schema";
-import { scrypt, randomBytes } from "crypto";
-import { promisify } from "util";
+import { hashPassword } from "better-auth/crypto";
 
 config({ path: ".env" });
 
@@ -19,20 +18,11 @@ const db = drizzle({
   },
 });
 
-const scryptAsync = promisify(scrypt);
-
-// Better-auth uses scrypt with PHC format
-async function hashPassword(password: string): Promise<string> {
-  const salt = randomBytes(16).toString("hex");
-  const derivedKey = (await scryptAsync(password, salt, 64)) as Buffer;
-  return `$scrypt$n=16384,r=8,p=1$${salt}$${derivedKey.toString("hex")}`;
-}
-
 async function fixAdmin() {
   const adminEmail = "admin@ctprefabrik.com";
   const adminPassword = "admin123";
 
-  console.log("🔧 Fixing admin password with scrypt...\n");
+  console.log("🔧 Fixing admin password with better-auth...\n");
 
   // Find the user
   const users = await db.select().from(user).where(eq(user.email, adminEmail));

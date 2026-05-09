@@ -26,8 +26,12 @@ import {
   type SortableImage,
 } from "@/components/admin/sortable-image-grid";
 import { AltTextEditDialog } from "@/components/admin/alt-text-edit-dialog";
-import { BlogContentEditor } from "@/components/admin/blog-content-editor";
-import { hasRichContent, toTipTapDocJson } from "@/lib/richContent";
+import { ProductDetailContentEditor } from "@/components/admin/product-detail-content-editor";
+import {
+  hasProductDetailContent,
+  toProductDetailContentJson,
+} from "@/lib/productDetailContent";
+import { buildCategoryOptions } from "@/lib/categoryTree";
 
 interface ProductImage {
   id: string;
@@ -58,7 +62,9 @@ interface Product {
 
 interface Category {
   id: string;
+  parentId: string | null;
   name: string;
+  order: number;
 }
 
 interface EditProductFormProps {
@@ -89,12 +95,11 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
     floor: product.floor,
     bath: product.bath,
     height: product.height,
-    price: product.price || "",
-    oldPrice: product.oldPrice || "",
-    description: toTipTapDocJson(product.description || ""),
+    description: toProductDetailContentJson(product.description || ""),
     metaDescription: product.metaDescription || "",
     isActive: product.isActive,
   });
+  const categoryOptions = buildCategoryOptions(categories);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,9 +109,7 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
       await updateProduct(product.id, {
         ...formData,
         categoryIds: formData.categoryIds,
-        price: formData.price || null,
-        oldPrice: formData.oldPrice || null,
-        description: hasRichContent(formData.description)
+        description: hasProductDetailContent(formData.description)
           ? formData.description
           : null,
         metaDescription: formData.metaDescription.trim() || null,
@@ -138,14 +141,15 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
         }
 
         if (result.url) {
+          const imageAlt = file.name.replace(/\.[^/.]+$/, "");
           const { id } = await addProductImage(product.id, {
             url: result.url,
-            alt: file.name.replace(/\.[^/.]+$/, ""),
+            alt: imageAlt,
             order: images.length,
           });
           setImages([
             ...images,
-            { id, url: result.url, alt: file.name, order: images.length },
+            { id, url: result.url, alt: imageAlt, order: images.length },
           ]);
         }
       }
@@ -257,9 +261,28 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                     </div>
 
                     <div className="space-y-2">
+                      <Label htmlFor="metaDescription">Meta Description</Label>
+                      <Textarea
+                        id="metaDescription"
+                        value={formData.metaDescription}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            metaDescription: e.target.value,
+                          })
+                        }
+                        placeholder="SEO için kısa açıklama (öneri: 140-160 karakter)"
+                        rows={4}
+                      />
+                      <p className="text-xs text-slate-500">
+                        Ürün kartlarında ve ürün detay sayfası meta etiketlerinde kullanılabilir.
+                      </p>
+                    </div>
+
+                    <div className="space-y-2">
                       <Label>Kategoriler</Label>
                       <div className="flex flex-wrap gap-2">
-                        {categories.map((cat) => {
+                        {categoryOptions.map(({ category: cat, depth }) => {
                           const selected = formData.categoryIds.includes(cat.id);
                           return (
                             <Button
@@ -273,6 +296,7 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                                   : ""
                               }
                             >
+                              {depth > 0 ? `${"-- ".repeat(depth)}` : ""}
                               {cat.name}
                             </Button>
                           );
@@ -297,8 +321,8 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="description">Açıklama</Label>
-                      <BlogContentEditor
+                      <Label htmlFor="description">Ürün Detay İçeriği</Label>
+                      <ProductDetailContentEditor
                         content={formData.description}
                         onChange={(json) =>
                           setFormData({
@@ -307,90 +331,6 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                           })
                         }
                       />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="metaDescription">Meta Description</Label>
-                      <Textarea
-                        id="metaDescription"
-                        value={formData.metaDescription}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            metaDescription: e.target.value,
-                          })
-                        }
-                        placeholder="SEO için kısa açıklama (öneri: 140-160 karakter)"
-                        rows={4}
-                      />
-                      <p className="text-xs text-slate-500">
-                        Ürün kartlarında ve ürün detay sayfası meta etiketlerinde kullanılabilir.
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Özellikler</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="area">Alan (m²) *</Label>
-                        <Input
-                          id="area"
-                          value={formData.area}
-                          onChange={(e) =>
-                            setFormData({ ...formData, area: e.target.value })
-                          }
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="room">Oda *</Label>
-                        <Input
-                          id="room"
-                          value={formData.room}
-                          onChange={(e) =>
-                            setFormData({ ...formData, room: e.target.value })
-                          }
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="floor">Kat *</Label>
-                        <Input
-                          id="floor"
-                          value={formData.floor}
-                          onChange={(e) =>
-                            setFormData({ ...formData, floor: e.target.value })
-                          }
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="bath">Banyo *</Label>
-                        <Input
-                          id="bath"
-                          value={formData.bath}
-                          onChange={(e) =>
-                            setFormData({ ...formData, bath: e.target.value })
-                          }
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="height">Yükseklik (m) *</Label>
-                        <Input
-                          id="height"
-                          value={formData.height}
-                          onChange={(e) =>
-                            setFormData({ ...formData, height: e.target.value })
-                          }
-                          required
-                        />
-                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -413,34 +353,6 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
               </div>
 
               <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Fiyatlandırma</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="price">Fiyat (₺)</Label>
-                      <Input
-                        id="price"
-                        value={formData.price}
-                        onChange={(e) =>
-                          setFormData({ ...formData, price: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="oldPrice">Eski Fiyat (₺)</Label>
-                      <Input
-                        id="oldPrice"
-                        value={formData.oldPrice}
-                        onChange={(e) =>
-                          setFormData({ ...formData, oldPrice: e.target.value })
-                        }
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
-
                 <Card>
                   <CardHeader>
                     <CardTitle>Durum</CardTitle>

@@ -1,17 +1,18 @@
 "use client";
-import { AnimatePresence, motion } from 'framer-motion';
+
+import { AnimatePresence, motion } from "framer-motion";
 import { CONTACT_INFO, CONTACT_PHONES } from "@/lib/contact";
 import {
+  ArrowUpRight,
+  Building2,
   Check,
   Copy,
-  Home,
-  Instagram,
   Mail,
   MapPin,
-  Phone
-} from 'lucide-react';
-import Link from 'next/link';
-import { useState } from 'react';
+  Phone,
+} from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
 interface Category {
   id: string;
@@ -23,13 +24,22 @@ interface FooterProps {
   categories?: Category[];
 }
 
-const pageLink = [
+const pageLinks = [
   { name: "Hakkımızda", href: "/hakkimizda" },
-  { name: "Prefabrik Evler", href: "/prefabrik-evler" },
+  { name: "Arge", href: "/arge" },
+  { name: "Ürünler", href: "/prefabrik-evler" },
   { name: "Blog", href: "/blog" },
   { name: "Projelerimiz", href: "/projelerimiz" },
   { name: "İletişim", href: "/iletisim" },
-]
+];
+
+const FOOTER_PRODUCTS = [
+  "Beton Boru",
+  "Parke Taşı",
+  "Bordür",
+  "Menhol",
+  "Yağmur Oluğu",
+];
 
 const Footer = ({ categories = [] }: FooterProps) => {
   const currentYear = new Date().getFullYear();
@@ -37,13 +47,16 @@ const Footer = ({ categories = [] }: FooterProps) => {
   const [copiedPhone, setCopiedPhone] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
 
-  const copyToClipboard = async (text: string, type: 'address' | 'phone' | 'email') => {
+  const copyToClipboard = async (
+    text: string,
+    type: "address" | "phone" | "email",
+  ) => {
     try {
       await navigator.clipboard.writeText(text);
-      if (type === 'address') {
+      if (type === "address") {
         setCopiedAddress(true);
         setTimeout(() => setCopiedAddress(false), 2000);
-      } else if (type === 'phone') {
+      } else if (type === "phone") {
         setCopiedPhone(true);
         setTimeout(() => setCopiedPhone(false), 2000);
       } else {
@@ -51,239 +64,240 @@ const Footer = ({ categories = [] }: FooterProps) => {
         setTimeout(() => setCopiedEmail(false), 2000);
       }
     } catch (err) {
-      console.error('Kopyalama başarısız:', err);
+      console.error("Kopyalama başarısız:", err);
     }
   };
 
+  const productLinks =
+    categories.length > 0
+      ? categories.slice(0, 5).map((category) => ({
+          name: category.name,
+          href: `/prefabrik-evler/${category.slug}`,
+        }))
+      : FOOTER_PRODUCTS.map((name) => ({
+          name,
+          href: `/prefabrik-evler?q=${encodeURIComponent(name)}`,
+        }));
+
   return (
-    <footer className="safe-area-footer bg-white px-6 pt-20 pb-10 font-[family-name:var(--font-poppins)]">
-      <div className="container mx-auto max-w-7xl">
-
-        {/* Üst CTA Alanı: Yumuşak bir geçiş kutusu */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          className="relative bg-slate-900 rounded-[3rem] p-8 md:p-12 overflow-hidden mb-20 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl shadow-emerald-900/20"
-        >
-          {/* Arka plan süsü */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-[#165b39] opacity-20 blur-[80px] -z-0" />
-
-          <div className="relative z-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight">
-              Hayalinizdeki yuvayı <br />
-              <span className="text-emerald-500 italic">birlikte inşa edelim.</span>
-            </h2>
-          </div>
-
-          <a
-            href={`tel:${CONTACT_INFO.primaryPhone.href}`}
-            className="cursor-pointer relative z-10 px-10 py-5 bg-white text-slate-900 rounded-full font-bold text-sm flex items-center gap-3 hover:bg-emerald-50 transition-all shadow-xl active:scale-95"
-          >
-            <Phone size={20} fill="currentColor" />
-            Bizi Arayın
-          </a>
-
-        </motion.div>
-
-        {/* Ana Footer İçeriği */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 mb-20">
-
-          {/* 1. Kolon: Marka & Hakkında */}
-          <div className="lg:col-span-4 space-y-6">
-            <div className="flex items-center gap-2 text-2xl font-black tracking-tighter" style={{ color: '#165b39' }}>
-              <Home className="w-8 h-8" /> CT <span style={{ color: '#49202d' }}>PREFABRİK</span>
+    <footer className="safe-area-footer bg-[#0d1f36] px-4 pt-10 pb-8 font-[family-name:var(--font-poppins)] text-white sm:px-6 lg:px-8 lg:pt-14">
+      <div className="mx-auto max-w-7xl">
+        <section className="border border-white/15 bg-[#10243d]">
+          <div className="grid gap-5 px-4 py-5 sm:px-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:px-6">
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#d6a94a]">
+                Proje Tedariki
+              </p>
+              <h2 className="mt-2 max-w-3xl text-2xl font-black tracking-tight text-white sm:text-3xl">
+                Beton ürün ihtiyacınızı netleştirelim.
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm font-medium leading-6 text-slate-300">
+                Altyapı, üst yapı ve çevre düzenleme ürünleri için doğru adet,
+                doğru ürün ve planlı sevkiyat.
+              </p>
             </div>
-            <p className="text-slate-600 text-sm leading-relaxed font-medium max-w-sm">
-              Hürtaş Beton olarak, altyapı ve üst yapı beton elemanlarında
-              dayanıklı üretim ve düzenli tedarik çözümleri sunuyoruz.
+
+            <a
+              href={`tel:${CONTACT_INFO.primaryPhone.href}`}
+              className="inline-flex min-h-12 w-fit items-center justify-center gap-2 border border-[#d6a94a] bg-[#d6a94a] px-5 text-xs font-black uppercase tracking-[0.14em] text-[#152f51] transition-colors hover:bg-transparent hover:text-[#f4d78d] ads-phone-call"
+            >
+              <Phone className="h-4 w-4" />
+              Hemen Ara
+            </a>
+          </div>
+        </section>
+
+        <div className="grid grid-cols-1 gap-10 border-x border-b border-white/15 px-4 py-10 sm:px-5 md:grid-cols-2 lg:grid-cols-12 lg:gap-8 lg:px-6">
+          <div className="lg:col-span-4">
+            <div className="inline-flex items-center gap-3">
+              <span className="flex h-11 w-11 items-center justify-center border border-[#d6a94a]/45 bg-[#d6a94a] text-[#152f51]">
+                <Building2 className="h-5 w-5" />
+              </span>
+              <div>
+                <p className="text-xl font-black tracking-tight text-white">
+                  {CONTACT_INFO.companyName}
+                </p>
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#d6a94a]">
+                  Beton Elemanları
+                </p>
+              </div>
+            </div>
+
+            <p className="mt-5 max-w-sm text-sm font-medium leading-6 text-slate-300">
+              Altyapı ve üst yapı beton elemanlarında dayanıklı üretim,
+              anlaşılır ürün seçimi ve düzenli tedarik yaklaşımıyla çalışıyoruz.
             </p>
-            <div className="flex gap-4">
-              {[Instagram].map((Icon, i) => (
-                <motion.a
-                  key={i}
-                  href="https://www.instagram.com/ctprefabrikev/"
-                  aria-label="CT Prefabrik Instagram sayfasını aç"
-                  whileHover={{ y: -5, scale: 1.1 }}
-                  className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-[#165b39] hover:text-white transition-all shadow-sm"
-                >
-                  <Icon size={18} />
-                </motion.a>
-              ))}
-            </div>
           </div>
 
-          {/* 2. Kolon: Hızlı Linkler */}
-          <div className="lg:col-span-2 space-y-6">
-            <h4 className="text-sm font-black uppercase tracking-[0.2em]" style={{ color: '#49202d' }}>Kurumsal</h4>
-            <ul className="space-y-4">
-              {pageLink.map((item, index) => (
-                <li key={index} className='cursor-pointer'>
-                  <a href={item.href} className="text-sm font-semibold text-slate-600 hover:text-[#165b39] transition-colors cursor-pointer">{item.name}</a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* 3. Kolon: Hizmetler */}
-          <div className="lg:col-span-2 space-y-6">
-            <h4 className="text-sm font-black uppercase tracking-[0.2em]" style={{ color: '#49202d' }}>Hizmetler</h4>
-            <ul className="space-y-4">
-              {categories.slice(0, 5).map((cat) => (
-                <li key={cat.id}>
+          <nav className="lg:col-span-2" aria-label="Footer kurumsal linkleri">
+            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#d6a94a]">
+              Kurumsal
+            </h4>
+            <ul className="mt-5 space-y-3">
+              {pageLinks.map((item) => (
+                <li key={item.href}>
                   <Link
-                    href={`/prefabrik-evler/${cat.slug}`}
-                    className="text-sm font-semibold text-slate-600 hover:text-[#165b39] transition-colors"
+                    href={item.href}
+                    className="inline-flex items-center gap-2 text-sm font-bold text-slate-300 transition-colors hover:text-white"
                   >
-                    {cat.name}
+                    {item.name}
                   </Link>
                 </li>
               ))}
             </ul>
-          </div>
+          </nav>
 
-          {/* 4. Kolon: İletişim */}
-          <div className="lg:col-span-4 space-y-6">
-            <h4 className="text-sm font-black uppercase tracking-[0.2em]" style={{ color: '#49202d' }}>İletişim</h4>
-            <div className="space-y-4">
-              {/* Adres */}
-              <div className="relative group cursor-pointer" onClick={() => copyToClipboard(CONTACT_INFO.address.full, 'address')}>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0 text-[#165b39]">
-                    <MapPin size={18} />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-slate-600">
-                      {CONTACT_INFO.address.street} <br />
-                      {CONTACT_INFO.address.note} <br />
-                      {CONTACT_INFO.address.short}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    aria-label="Adresi kopyala"
-                    className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+          <nav className="lg:col-span-2" aria-label="Footer ürün linkleri">
+            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#d6a94a]">
+              Ürünler
+            </h4>
+            <ul className="mt-5 space-y-3">
+              {productLinks.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="inline-flex items-center gap-2 text-sm font-bold text-slate-300 transition-colors hover:text-white"
                   >
-                    {copiedAddress ? (
-                      <Check size={16} className="text-green-600" />
-                    ) : (
-                      <Copy size={16} className="text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    )}
-                  </button>
-                </div>
-                <AnimatePresence>
-                  {copiedAddress && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 5 }}
-                      className="absolute -top-10 left-0 bg-secondary text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg whitespace-nowrap z-10"
-                    >
-                      ✓ Kopyalandı!
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                    {item.name}
+                    <ArrowUpRight className="h-3.5 w-3.5 text-[#d6a94a]" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-              {/* Telefon */}
-              <div className="relative group">
-                <div className="flex items-center gap-4 cursor-pointer" onClick={() => copyToClipboard(CONTACT_PHONES.map((phone) => phone.display).join(" / "), 'phone')}>
-                  <div className="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0 text-[#165b39]">
-                    <Phone size={18} />
-                  </div>
-                  <div className="flex-1 space-y-1">
-                    {CONTACT_PHONES.map((phone) => (
-                      <a
-                        key={phone.href}
-                        href={`tel:${phone.href}`}
-                        className="block text-sm font-bold text-slate-900 transition-colors hover:text-[#152f51]"
-                        onClick={(event) => event.stopPropagation()}
-                      >
-                        {phone.display}
-                      </a>
-                    ))}
-                  </div>
-                  <button
-                    type="button"
-                    aria-label="Telefon numarasını kopyala"
-                    className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
-                  >
-                    {copiedPhone ? (
-                      <Check size={16} className="text-green-600" />
-                    ) : (
-                      <Copy size={16} className="text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    )}
-                  </button>
-                </div>
-                <AnimatePresence>
-                  {copiedPhone && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 5 }}
-                      className="absolute -top-10 left-0 bg-secondary text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg whitespace-nowrap z-10"
-                    >
-                      ✓ Kopyalandı!
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+          <div className="lg:col-span-4">
+            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#d6a94a]">
+              İletişim
+            </h4>
+            <div className="mt-5 space-y-4">
+              <ContactRow
+                icon={<MapPin className="h-4 w-4" />}
+                copied={copiedAddress}
+                copyLabel="Adresi kopyala"
+                onCopy={() =>
+                  copyToClipboard(CONTACT_INFO.address.full, "address")
+                }
+              >
+                <p className="text-sm font-medium leading-6 text-slate-300">
+                  {CONTACT_INFO.address.street}
+                  <br />
+                  {CONTACT_INFO.address.note}
+                  <br />
+                  {CONTACT_INFO.address.short}
+                </p>
+              </ContactRow>
 
-              {/* Email */}
-              <div className="relative group cursor-pointer" onClick={() => copyToClipboard(CONTACT_INFO.email, 'email')}>
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0 text-[#165b39]">
-                    <Mail size={18} />
-                  </div>
-                  <a
-                    href={`mailto:${CONTACT_INFO.email}`}
-                    className="text-sm font-medium text-slate-700 flex-1 transition-colors hover:text-[#152f51]"
-                    onClick={(event) => event.stopPropagation()}
-                  >
-                    {CONTACT_INFO.email}
-                  </a>
-                  <button
-                    type="button"
-                    aria-label="E-posta adresini kopyala"
-                    className="p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
-                  >
-                    {copiedEmail ? (
-                      <Check size={16} className="text-green-600" />
-                    ) : (
-                      <Copy size={16} className="text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    )}
-                  </button>
-                </div>
-                <AnimatePresence>
-                  {copiedEmail && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 5 }}
-                      className="absolute -top-10 left-0 bg-secondary text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg whitespace-nowrap z-10"
+              <ContactRow
+                icon={<Phone className="h-4 w-4" />}
+                copied={copiedPhone}
+                copyLabel="Telefon numarasını kopyala"
+                onCopy={() =>
+                  copyToClipboard(
+                    CONTACT_PHONES.map((phone) => phone.display).join(" / "),
+                    "phone",
+                  )
+                }
+              >
+                <div className="space-y-1">
+                  {CONTACT_PHONES.map((phone) => (
+                    <a
+                      key={phone.href}
+                      href={`tel:${phone.href}`}
+                      className="block text-sm font-black text-white transition-colors hover:text-[#f4d78d]"
+                      onClick={(event) => event.stopPropagation()}
                     >
-                      ✓ Kopyalandı!
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                      {phone.display}
+                    </a>
+                  ))}
+                </div>
+              </ContactRow>
+
+              <ContactRow
+                icon={<Mail className="h-4 w-4" />}
+                copied={copiedEmail}
+                copyLabel="E-posta adresini kopyala"
+                onCopy={() => copyToClipboard(CONTACT_INFO.email, "email")}
+              >
+                <a
+                  href={`mailto:${CONTACT_INFO.email}`}
+                  className="text-sm font-bold text-slate-200 transition-colors hover:text-[#f4d78d]"
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  {CONTACT_INFO.email}
+                </a>
+              </ContactRow>
             </div>
           </div>
         </div>
 
-        {/* Alt Bar: Copyright */}
-        <div className="pt-8 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-[10px] font-bold text-slate-700 uppercase tracking-widest">
-            © {currentYear} CT PREFABRİK. TÜM HAKLARI SAKLIDIR.
+        <div className="flex flex-col gap-4 border-x border-b border-white/15 px-4 py-5 text-[10px] font-black uppercase tracking-[0.16em] text-slate-400 sm:px-5 md:flex-row md:items-center md:justify-between lg:px-6">
+          <p>
+            © {currentYear} {CONTACT_INFO.companyName}. Tüm hakları saklıdır.
           </p>
-          <div className="flex gap-8 text-[10px] font-bold text-slate-700 uppercase tracking-widest">
-            <a href="#" className="hover:text-[#49202d] transition-colors">KVKK</a>
-            <a href="#" className="hover:text-[#49202d] transition-colors">YASAL UYARI</a>
+          <div className="flex flex-wrap gap-5">
+            <Link href="/kvkk" className="transition-colors hover:text-white">
+              KVKK
+            </Link>
+            <Link href="/iletisim" className="transition-colors hover:text-white">
+              İletişim
+            </Link>
           </div>
         </div>
-
       </div>
     </footer>
   );
 };
+
+interface ContactRowProps {
+  icon: React.ReactNode;
+  copied: boolean;
+  copyLabel: string;
+  onCopy: () => void;
+  children: React.ReactNode;
+}
+
+function ContactRow({
+  icon,
+  copied,
+  copyLabel,
+  onCopy,
+  children,
+}: ContactRowProps) {
+  return (
+    <div className="group relative cursor-pointer" onClick={onCopy}>
+      <div className="flex items-start gap-3">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center border border-white/15 bg-white/5 text-[#d6a94a]">
+          {icon}
+        </div>
+        <div className="min-w-0 flex-1">{children}</div>
+        <button
+          type="button"
+          aria-label={copyLabel}
+          className="flex h-8 w-8 shrink-0 items-center justify-center border border-transparent text-slate-500 transition-colors hover:border-white/15 hover:bg-white/5 hover:text-white"
+        >
+          {copied ? (
+            <Check className="h-4 w-4 text-[#d6a94a]" />
+          ) : (
+            <Copy className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
+          )}
+        </button>
+      </div>
+
+      <AnimatePresence>
+        {copied ? (
+          <motion.div
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 5 }}
+            className="absolute -top-9 left-0 border border-[#d6a94a]/35 bg-[#10243d] px-3 py-1 text-xs font-bold text-[#f4d78d] shadow-[0_16px_34px_-24px_rgba(0,0,0,0.8)]"
+          >
+            Kopyalandı
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+    </div>
+  );
+}
 
 export default Footer;

@@ -27,7 +27,7 @@ export function SeoFaqSection({
     <section aria-labelledby="faq-heading" className="mx-auto max-w-7xl ">
       {/* Üst Alan: Başlık ve Açıklama */}
       <div className="text-center mb-14">
-        <div className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-600">
+        <div className="inline-flex items-center gap-1.5 rounded-[2px] bg-slate-100 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-600">
           <HelpCircle className="h-4 w-4" />
           Sıkça Sorulan Sorular
         </div>
@@ -57,7 +57,7 @@ export function SeoFaqSection({
               </h3>
 
               {/* Dönen Ok İkonu */}
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition-transform duration-300 group-open:rotate-180 group-open:bg-primary group-open:text-white">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[2px] bg-slate-100 text-slate-500 transition-transform duration-300 group-open:rotate-180 group-open:bg-primary group-open:text-white">
                 <ChevronDown className="h-4 w-4" />
               </div>
             </summary>
@@ -77,7 +77,7 @@ export function SeoFaqSection({
         <Link
           href={ctaHref}
           prefetch={false}
-          className="inline-flex items-center gap-2 rounded-lg bg-primary px-7 py-3.5 text-sm font-bold uppercase tracking-wider text-white transition-all hover:bg-primary/90 hover:shadow-lg hover:-translate-y-0.5"
+          className="inline-flex items-center gap-2 rounded-[2px] bg-primary px-7 py-3.5 text-sm font-bold uppercase tracking-wider text-white transition-all hover:bg-primary/90 hover:shadow-lg hover:-translate-y-0.5"
         >
           {ctaLabel}
           <ArrowUpRight className="h-4.5 w-4.5" />

@@ -12,7 +12,6 @@ import {
   Clock,
   PencilLine,
   Search,
-  Sparkles,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -55,8 +54,8 @@ function EmptyState() {
         Henüz Blog Yazısı Yok
       </h3>
       <p className="max-w-md text-slate-500">
-        Yakında prefabrik yapılar, mimari trendler ve daha fazlası hakkında
-        ilham verici içerikler paylaşılacak.
+        Yakında beton ürünleri, saha kullanımı ve tedarik planlaması hakkında
+        faydalı içerikler paylaşılacak.
       </p>
     </div>
   );
@@ -87,10 +86,10 @@ function SearchBox({
   onChange: (value: string) => void;
 }) {
   return (
-    <div className="rounded-[1rem] border border-slate-300 bg-white p-5 shadow-[0_18px_40px_-30px_rgba(15,23,42,0.18)]">
+    <div className="rounded-[3px] border border-slate-300 bg-white p-5 shadow-[0_18px_40px_-30px_rgba(15,23,42,0.18)]">
       <div className="mb-3">
-        <p className="text-[11px] font-black uppercase tracking-[0.28em] text-[#49202d]">
-          Blog Category Arama
+        <p className="text-[11px] font-black uppercase tracking-[0.28em] text-[#152f51]">
+          Blog Arama
         </p>
       </div>
 
@@ -104,7 +103,7 @@ function SearchBox({
           value={value}
           onChange={(event) => onChange(event.target.value)}
           placeholder="Blog veya kategori ara"
-          className="h-12 rounded-xl border-slate-300 bg-slate-50 pl-11 pr-4 text-sm text-slate-700 placeholder:text-slate-400"
+          className="h-12 rounded-[3px] border-slate-300 bg-slate-50 pl-11 pr-4 text-sm text-slate-700 placeholder:text-slate-400"
         />
       </div>
     </div>
@@ -154,11 +153,11 @@ function Pagination({
   };
 
   return (
-    <div className="mt-20 flex flex-wrap items-center justify-center gap-3 rounded-[1rem] border border-slate-300 bg-white px-4 py-4 shadow-[0_16px_30px_-24px_rgba(15,23,42,0.1)]">
+    <div className="mt-20 flex flex-wrap items-center justify-center gap-3 rounded-[3px]  px-4 py-4 shadow-[0_16px_30px_-24px_rgba(15,23,42,0.1)]">
       {hasPrevPage && (
         <Link
           href={getPageUrl(currentPage - 1)}
-          className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-3 font-bold text-[#49202d] transition-colors hover:border-primary hover:bg-primary hover:text-white"
+          className="inline-flex items-center gap-2 rounded-[3px] border border-slate-300 px-4 py-3 font-bold text-[#152f51] transition-colors hover:border-primary hover:bg-primary hover:text-white"
         >
           <ArrowLeft size={18} /> Önceki
         </Link>
@@ -173,7 +172,7 @@ function Pagination({
           <Link
             key={page}
             href={getPageUrl(page)}
-            className={`flex h-12 w-12 items-center justify-center rounded-lg border font-bold transition-all ${
+            className={`flex h-12 w-12 items-center justify-center rounded-[3px] border font-bold transition-all ${
               currentPage === page
                 ? "bg-primary text-white border-primary"
                 : "border-slate-300 text-slate-400 hover:bg-primary hover:text-white hover:border-primary"
@@ -187,7 +186,7 @@ function Pagination({
       {hasNextPage && (
         <Link
           href={getPageUrl(currentPage + 1)}
-          className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-3 font-bold text-[#49202d] transition-colors hover:border-primary hover:bg-primary hover:text-white"
+          className="inline-flex items-center gap-2 rounded-[3px] border border-slate-300 px-4 py-3 font-bold text-[#152f51] transition-colors hover:border-primary hover:bg-primary hover:text-white"
         >
           Sonraki <ArrowRight size={18} />
         </Link>
@@ -225,83 +224,7 @@ export function BlogPageClient({
 
   return (
     <main className="min-h-screen bg-white">
-      <section className="relative overflow-hidden bg-white pb-24 pt-24 md:pt-16">
-        {/* --- ARKA PLAN VEKTÖREL SÜSLER (Kibar ve Şekilli) --- */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
-          {/* Soft Vektör Daire */}
-          <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-primary/[0.02] rounded-full blur-[120px]" />
-          {/* Teknik Çizim Grid Noktaları */}
-          <div
-            className="absolute inset-0 opacity-[0.15]"
-            style={{
-              backgroundImage:
-                "radial-gradient(#49202d 0.5px, transparent 0.5px)",
-              backgroundSize: "40px 40px",
-            }}
-          />
-        </div>
-
-        <div className="container mx-auto max-w-7xl relative z-10">
-          <div className="flex flex-col items-center text-center">
-            {/* Üst Küçük Rozet */}
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="mb-12 flex items-center gap-2 rounded-lg border border-[#49202d]/15 bg-primary/5 px-4 py-2"
-            >
-              <PencilLine size={14} className="text-[#49202d]" />
-              <span className="text-[#49202d] text-[10px] font-black uppercase tracking-[0.3em]">
-                CT Akademi & Blog
-              </span>
-            </motion.div>
-
-            {/* Ana Başlık: Karakterli ve Güçlü */}
-            <motion.h1
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8 }}
-              className="text-[clamp(3.5rem,10vw,8rem)] font-black text-slate-900 leading-[0.85] tracking-[-0.05em]"
-            >
-              OKU, <span className="text-slate-200">ÖĞREN</span> <br />
-              <span className="text-[#49202d] italic font-serif font-light">
-                İlham Al.
-              </span>
-            </motion.h1>
-
-            {/* Alt Metin ve Vektörel Çizgi */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="mt-12 relative"
-            >
-              <p className="text-slate-400 text-xl md:text-2xl font-medium max-w-2xl leading-relaxed">
-                Prefabrik yapılardan modern mimariye, teknik ipuçlarından yaşam
-                rehberlerine kadar her şey burada.
-              </p>
-
-              {/* El Yazısı Stilinde Vektör (Opsiyonel: SVG olarak eklenebilir) */}
-              <div className="absolute -bottom-6 right-0 md:-right-12 hidden md:block opacity-20 rotate-12">
-                <Sparkles size={48} className="text-primary" />
-              </div>
-            </motion.div>
-
-            {/* Etkileşim İkonu */}
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-              className="mt-20 flex flex-col items-center gap-3"
-            >
-              <div className="w-px h-20 bg-linear-to-b from-primary to-transparent" />
-              <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">
-                Aşağı Kaydır
-              </span>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-white pb-32">
+      <section className="bg-white py-12 lg:py-16">
         <div className="container mx-auto max-w-7xl">
           <div className="mb-10 lg:hidden">
             <SearchBox value={searchQuery} onChange={setSearchQuery} />
@@ -334,18 +257,13 @@ export function BlogPageClient({
                             transition={{ delay: index * 0.08 }}
                             className="group flex h-full cursor-pointer flex-col bg-white will-change-transform"
                           >
-                            <div className="relative mb-6 h-[300px] overflow-hidden rounded-[0.85rem] shadow-sm transition-shadow duration-300 group-hover:shadow-[0_24px_44px_-24px_rgba(15,23,42,0.2)]">
+                            <div className="relative mb-6 h-[300px] overflow-hidden rounded-[3px] shadow-sm transition-shadow duration-300 group-hover:shadow-[0_24px_44px_-24px_rgba(15,23,42,0.2)]">
                               <Image
                                 src={post.imageUrl}
                                 alt={post.imageAlt || post.title}
                                 fill
                                 className="object-cover transition-transform duration-300 group-hover:scale-105"
                               />
-                              <div className="absolute left-5 top-5 rounded-lg bg-white/92 px-4 py-2 shadow-sm backdrop-blur-md">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-[#49202d]">
-                                  {post.category}
-                                </span>
-                              </div>
                             </div>
 
                             <div className="flex flex-1 flex-col px-2 pb-2">
@@ -364,7 +282,7 @@ export function BlogPageClient({
                                 )}
                               </div>
 
-                              <h3 className="mb-4 text-2xl font-black leading-tight text-slate-900 transition-colors duration-300 group-hover:text-[#49202d]">
+                              <h3 className="mb-4 text-2xl font-black leading-tight text-slate-900 transition-colors duration-300 group-hover:text-[#152f51]">
                                 {post.title}
                               </h3>
 
@@ -372,7 +290,7 @@ export function BlogPageClient({
                                 {post.excerpt}
                               </p>
 
-                              <div className="mt-auto flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#49202d] transition-all duration-300 group-hover:gap-4">
+                              <div className="mt-auto flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#152f51] transition-all duration-300 group-hover:gap-4">
                                 Devamını Oku <ChevronRight size={16} />
                               </div>
                             </div>
@@ -397,7 +315,7 @@ export function BlogPageClient({
                 <div className="sticky top-28 space-y-6">
                   <SearchBox value={searchQuery} onChange={setSearchQuery} />
 
-                  <div className="rounded-[1rem] border border-slate-300 bg-white p-6 shadow-[0_18px_40px_-30px_rgba(15,23,42,0.14)]">
+                  <div className="rounded-[3px] border border-slate-300 bg-white p-6 shadow-[0_18px_40px_-30px_rgba(15,23,42,0.14)]">
                     <div className="mb-5 flex items-center justify-between">
                       <h2 className="text-lg font-black text-slate-900">
                         Son 4 Gonderi
@@ -412,9 +330,9 @@ export function BlogPageClient({
                         <Link
                           key={post.id}
                           href={`/blog/${post.slug}`}
-                          className="group flex items-center gap-4 rounded-[0.85rem] border border-slate-300 p-3 transition-colors hover:border-[#49202d]/20 hover:bg-slate-50"
+                          className="group flex items-center gap-4 rounded-[3px] border border-slate-300 p-3 transition-colors hover:border-[#152f51]/20 hover:bg-slate-50"
                         >
-                          <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl">
+                          <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-[3px]">
                             <Image
                               src={post.imageUrl}
                               alt={post.imageAlt || post.title}
@@ -424,7 +342,7 @@ export function BlogPageClient({
                           </div>
 
                           <div className="min-w-0">
-                            <p className="mb-2 text-[11px] font-black uppercase tracking-[0.22em] text-[#49202d]">
+                            <p className="mb-2 text-[11px] font-medium  tracking-[0.10em] text-[#152f51]">
                               {post.category}
                             </p>
                             <h3 className="line-clamp-2 text-sm font-black leading-snug text-slate-900">
@@ -439,13 +357,13 @@ export function BlogPageClient({
                     </div>
                   </div>
 
-                  <div className="rounded-[1rem] border border-slate-300 bg-white p-6 shadow-[0_18px_40px_-30px_rgba(15,23,42,0.14)]">
+                  <div className="rounded-[3px] border border-slate-300 bg-white p-6 shadow-[0_18px_40px_-30px_rgba(15,23,42,0.14)]">
                     <div className="mb-5">
                       <h2 className="text-lg font-black text-slate-900">
-                        Prefabrik Ev Kategorilerimiz
+                        Beton Ürün Kategorileri
                       </h2>
                       <p className="mt-2 text-sm leading-relaxed text-slate-500">
-                        Modelleri kategori bazinda hizlica inceleyin.
+                        Ürünleri kategori bazında hızlıca inceleyin.
                       </p>
                     </div>
 
@@ -455,7 +373,7 @@ export function BlogPageClient({
                           <Link
                             key={item.id}
                             href={`/prefabrik-evler/${item.slug}`}
-                            className="group flex items-center justify-between rounded-[0.75rem] border border-slate-300 px-4 py-4 text-sm font-bold text-slate-700 transition-colors hover:border-[#49202d]/20 hover:bg-slate-50 hover:text-[#49202d]"
+                            className="group flex items-center justify-between rounded-[3px] border border-slate-300 px-4 py-4 text-sm font-bold text-slate-700 transition-colors hover:border-[#152f51]/20 hover:bg-slate-50 hover:text-[#152f51]"
                           >
                             <span>{item.name}</span>
                             <ChevronRight

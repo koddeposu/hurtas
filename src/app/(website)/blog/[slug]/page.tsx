@@ -1,8 +1,8 @@
 import { getBlogPostBySlug } from "@/actions/blogActions";
 import { getCategories } from "@/actions/categoryActions";
 import { getProductsPreview } from "@/actions/productActions";
+import { HomepageCategorySlider } from "@/components/home-page/homepage-category-slider";
 import { convertJsonToHtml } from "@/lib/tiptap-utils";
-import type { DBProductPreview } from "@/types/product";
 import type { JSONContent } from "@tiptap/core";
 import {
   ArrowLeft,
@@ -10,14 +10,20 @@ import {
   ArrowUpRight,
   Calendar,
   Clock,
+  Construction,
   Layers3,
-  Package,
-  Sparkles,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ShareButtons } from "./share-buttons";
+
+interface CategorySummary {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+}
 
 async function getPostData(slug: string) {
   const post = await getBlogPostBySlug(slug);
@@ -40,13 +46,8 @@ function getContentSections(content: string | null) {
       return [convertJsonToHtml(content)].filter(Boolean);
     }
 
-    const cut1 = Math.max(1, Math.floor(nodes.length / 3));
-    const cut2 = Math.max(cut1 + 1, Math.floor((nodes.length * 2) / 3));
-    const slices = [
-      nodes.slice(0, cut1),
-      nodes.slice(cut1, cut2),
-      nodes.slice(cut2),
-    ];
+    const cut = Math.max(1, Math.floor(nodes.length / 2));
+    const slices = [nodes.slice(0, cut), nodes.slice(cut)];
 
     return slices
       .map((slice) =>
@@ -65,260 +66,148 @@ function getContentSections(content: string | null) {
   }
 }
 
-function normalizeRoom(room: string | null | undefined) {
-  return (room ?? "").replace(/\s+/g, "").toLowerCase();
+function formatDate(date: Date | null) {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("tr-TR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 }
 
-function hasRoomType(room: string | null | undefined, types: string[]) {
-  const normalizedRoom = normalizeRoom(room);
-  return types.some((type) => normalizedRoom.includes(normalizeRoom(type)));
-}
-
-function hasCategory(
-  product: DBProductPreview,
-  categoryId: string | null | undefined,
-) {
-  if (!categoryId) return false;
-  if (product.categoryIds?.includes(categoryId)) return true;
-  return product.categoryId === categoryId;
-}
-
-function takeUniqueProducts(
-  products: DBProductPreview[],
-  limit: number,
-  excludeIds: Set<string> = new Set(),
-) {
-  const selected: DBProductPreview[] = [];
-  const seenIds = new Set(excludeIds);
-
-  for (const item of products) {
-    if (seenIds.has(item.id)) continue;
-    selected.push(item);
-    seenIds.add(item.id);
-
-    if (selected.length >= limit) break;
-  }
-
-  return selected;
-}
-
-function ProductShowcase({
-  title,
-  description,
-  products,
-}: {
-  title: string;
-  description: string;
-  products: DBProductPreview[];
-}) {
-  if (!products.length) return null;
-
+function getCategory(categories: CategorySummary[], matchers: string[]) {
   return (
-    <section className="my-12 rounded-[1rem] border border-slate-300 bg-[#f8f7f3] p-5 md:p-6">
-      <div className="mb-6 max-w-2xl">
-        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
-          Size Uygun Modeller
-        </p>
-        <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-900 md:text-3xl">
-          {title}
-        </h2>
-        <p className="mt-3 text-sm font-medium leading-7 text-slate-600">
-          {description}
-        </p>
+    categories.find((category) =>
+      matchers.some((matcher) =>
+        category.name.toLocaleLowerCase("tr-TR").includes(
+          matcher.toLocaleLowerCase("tr-TR"),
+        ),
+      ),
+    ) ?? null
+  );
+}
+
+function MobileQuickLinks({
+  infrastructureCategory,
+  superstructureCategory,
+}: {
+  infrastructureCategory: CategorySummary | null;
+  superstructureCategory: CategorySummary | null;
+}) {
+  return (
+    <section className="mb-8 md:hidden">
+      <div className="mb-3 flex items-center gap-2 px-1">
+        <span className="h-2 w-2 rounded-[1px] bg-[#d6a94a]" />
+        <h3 className="text-sm font-black text-slate-800">
+          Ürün Gruplarını Keşfet
+        </h3>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {products.map((product) => (
+      <div className="grid grid-cols-2 gap-3">
+        <Link
+          href={
+            infrastructureCategory
+              ? `/prefabrik-evler/${infrastructureCategory.slug}`
+              : "/prefabrik-evler"
+          }
+          className="group relative overflow-hidden rounded-[3px] border border-slate-200 bg-white p-4 shadow-[0_12px_26px_-24px_rgba(15,23,42,0.32)] transition-all active:scale-95"
+        >
+          <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-[2px] bg-[#152f51] text-white">
+            <Construction className="h-5 w-5" />
+          </div>
+          <h2 className="text-sm font-black leading-tight text-slate-900">
+            Altyapı Elemanları
+          </h2>
+          <div className="mt-3 flex items-center gap-1 text-[11px] font-black uppercase tracking-[0.12em] text-[#152f51]">
+            İncele
+            <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+          </div>
+        </Link>
+
+        <Link
+          href={
+            superstructureCategory
+              ? `/prefabrik-evler/${superstructureCategory.slug}`
+              : "/prefabrik-evler"
+          }
+          className="group relative overflow-hidden rounded-[3px] border border-slate-200 bg-white p-4 shadow-[0_12px_26px_-24px_rgba(15,23,42,0.32)] transition-all active:scale-95"
+        >
+          <div className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-[2px] bg-[#d6a94a] text-[#152f51]">
+            <Layers3 className="h-5 w-5" />
+          </div>
+          <h2 className="text-sm font-black leading-tight text-slate-900">
+            Üst Yapı Elemanları
+          </h2>
+          <div className="mt-3 flex items-center gap-1 text-[11px] font-black uppercase tracking-[0.12em] text-[#152f51]">
+            Tümünü Gör
+            <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
+          </div>
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+function SuggestedLinks({
+  infrastructureCategory,
+  superstructureCategory,
+}: {
+  infrastructureCategory: CategorySummary | null;
+  superstructureCategory: CategorySummary | null;
+}) {
+  const links = [
+    {
+      title: "Altyapı Elemanları",
+      description:
+        "Beton boru, menhol, baca ve altyapı projeleri için kullanılan ürünleri inceleyin.",
+      href: infrastructureCategory
+        ? `/prefabrik-evler/${infrastructureCategory.slug}`
+        : "/prefabrik-evler",
+    },
+    {
+      title: "Üst Yapı Elemanları",
+      description:
+        "Parke taşı, bordür ve saha kaplama çözümlerini kategori bazında görün.",
+      href: superstructureCategory
+        ? `/prefabrik-evler/${superstructureCategory.slug}`
+        : "/prefabrik-evler",
+    },
+  ];
+
+  return (
+    <section className="mt-14 border-y border-slate-200 bg-[#f6f8fb] py-7">
+      <div className="max-w-2xl">
+        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#d6a94a]">
+          İlgili Bağlantılar
+        </p>
+        <h2 className="mt-3 text-2xl font-black tracking-tight text-[#152f51] md:text-3xl">
+          Ürün kategorilerine hızlı geçiş yapın.
+        </h2>
+      </div>
+
+      <div className="mt-6 grid gap-4 md:grid-cols-2">
+        {links.map((item) => (
           <Link
-            key={product.id}
-            href={`/prefabrik-ev/${product.slug}`}
-            className="group overflow-hidden rounded-[0.95rem] border border-slate-300 bg-white shadow-[0_16px_34px_-28px_rgba(15,23,42,0.12)] transition-all duration-200 hover:-translate-y-1 hover:border-slate-400 hover:shadow-[0_24px_46px_-30px_rgba(15,23,42,0.18)]"
+            key={item.title}
+            href={item.href}
+            className="group rounded-[3px] border border-slate-200 bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#d6a94a]/60 hover:shadow-[0_20px_44px_-34px_rgba(15,23,42,0.22)]"
           >
-            <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
-              {product.image ? (
-                <Image
-                  src={product.image.url}
-                  alt={product.image.alt}
-                  fill
-                  sizes="(min-width: 1280px) 19vw, (min-width: 768px) 42vw, 92vw"
-                  className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                />
-              ) : null}
-
-              {product.category?.name ? (
-                <div className="absolute left-4 top-4 rounded-lg border border-slate-200/80 bg-white/92 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-[#152f51] shadow-sm backdrop-blur">
-                  {product.category.name}
-                </div>
-              ) : null}
-            </div>
-
-            <div className="p-5">
-              <h3 className="text-2xl font-black leading-snug tracking-tight text-slate-900 transition-colors duration-200 group-hover:text-[#152f51]">
-                {product.name}
-              </h3>
-
-              <div className="mt-4 inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.14em] text-[#152f51]">
-                Ürünü İncele
-                <ArrowUpRight className="h-4 w-4" />
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h3 className="text-lg font-black text-slate-900">
+                  {item.title}
+                </h3>
+                <p className="mt-2 text-sm font-medium leading-7 text-slate-600">
+                  {item.description}
+                </p>
               </div>
+              <ArrowUpRight className="mt-1 h-5 w-5 shrink-0 text-[#152f51] transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </div>
           </Link>
         ))}
       </div>
     </section>
   );
-}
-
-function MobileQuickLinks() {
-  return (
-    <section className="mb-8 md:hidden">
-      {/* 1. Müşteriye Mesaj Veren Başlık Alanı */}
-      <div className="mb-3 flex items-center gap-2 px-1">
-        <Sparkles className="h-4.5 w-4.5 text-amber-500" />
-        <h3 className="text-sm font-bold text-slate-800">
-          Hayalindeki Evi Keşfet
-        </h3>
-      </div>
-
-      <div className="grid grid-cols-2 gap-3">
-        {/* Kart 1: Dubleks Evler */}
-        <Link
-          href={"/prefabrik-evler/tek-katli-prefabrik-evler"}
-          className="group relative overflow-hidden rounded-xl border border-primary/20 bg-white p-3.5 shadow-[0_8px_20px_-12px_rgba(0,0,0,0.08)] transition-all active:scale-95"
-        >
-          {/* Arka plan efekti */}
-          <div className="absolute -right-4 -top-4 h-16 w-16 rounded-full bg-primary/5 transition-transform group-hover:scale-150" />
-
-          <div className="relative">
-            <div className="mb-3 flex items-start justify-between">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                <Layers3 className="h-5 w-5" />
-              </div>
-              {/* Psikolojik Tetikleyici Rozet */}
-              <span className="flex items-center rounded-full bg-red-100 px-2 py-0.5 text-[9px] font-bold text-red-600">
-                POPÜLER
-              </span>
-            </div>
-
-            <h2 className="text-sm font-extrabold leading-tight text-slate-900">
-              Tek Katlı Prefabrik Ev
-              <span className="mt-0.5 block text-xs font-medium text-slate-500">
-                1+1,2+1,3+1,4+1 modelleri inceleyin
-              </span>
-            </h2>
-
-            <div className="mt-3 flex items-center gap-1 text-[11px] font-bold text-primary">
-              İncele{" "}
-              <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
-            </div>
-          </div>
-        </Link>
-
-        {/* Kart 2: Konteyner Evler */}
-        <Link
-          href="prefabrik-evler/cift-katli-prefabrik-evler"
-          className="group relative overflow-hidden rounded-xl border border-secondary/20 bg-white p-3.5 shadow-[0_8px_20px_-12px_rgba(0,0,0,0.08)] transition-all active:scale-95"
-        >
-          {/* Arka plan efekti */}
-          <div className="absolute -right-4 -top-4 h-16 w-16 rounded-full bg-secondary/5 transition-transform group-hover:scale-150" />
-
-          <div className="relative">
-            <div className="mb-3 flex items-start justify-between">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-secondary/10 text-secondary">
-                <Package className="h-5 w-5" />
-              </div>
-              {/* Psikolojik Tetikleyici Rozet */}
-              <span className="flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-[9px] font-bold text-emerald-600">
-                HIZLI KURULUM
-              </span>
-            </div>
-
-            <h2 className="text-sm font-extrabold leading-tight text-slate-900">
-              Çift Katlı Prefabrik ev (Dublex)
-              <span className="mt-0.5 block text-xs font-medium text-slate-500">
-                2+1,3+1,4+1,5+1 ve daha fazlası
-              </span>
-            </h2>
-
-            <div className="mt-3 flex items-center gap-1 text-[11px] font-bold text-secondary">
-              Tümünü Gör
-              <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
-            </div>
-          </div>
-        </Link>
-      </div>
-    </section>
-  );
-}
-
-function getSuggestedLinks(category?: string | null) {
-  const lowerCategory = category?.toLowerCase() ?? "";
-
-  if (lowerCategory.includes("çelik")) {
-    return [
-      {
-        title: "Çelik Ev Modelleri",
-        description:
-          "Çelik konstrüksiyon ev çözümlerini ve güncel model seçeneklerini inceleyin.",
-        href: "/prefabrik-evler/celik-ev",
-      },
-      {
-        title: "Çelik Ev Projelerimiz",
-        description:
-          "Tamamlanan çelik ev ve modern yaşam alanı uygulamalarını keşfedin.",
-        href: "/projelerimiz",
-      },
-    ];
-  }
-
-  if (lowerCategory.includes("tek kat")) {
-    return [
-      {
-        title: "Tek Katlı Prefabrik Evler",
-        description:
-          "Tek katlı prefabrik ev fiyatları ve modelleri için kategori sayfasına geçin.",
-        href: "/prefabrik-evler/tek-katli",
-      },
-      {
-        title: "Prefabrik Ev Projelerimiz",
-        description:
-          "Tamamlanan tek katlı ve farklı planlı uygulama örneklerini inceleyin.",
-        href: "/projelerimiz",
-      },
-    ];
-  }
-
-  if (lowerCategory.includes("çift kat") || lowerCategory.includes("dubleks")) {
-    return [
-      {
-        title: "Çift Katlı Prefabrik Evler",
-        description:
-          "Dubleks prefabrik ev modelleri ve fiyat seçeneklerini karşılaştırın.",
-        href: "/prefabrik-evler/cift-katli",
-      },
-      {
-        title: "Dubleks Proje Örnekleri",
-        description:
-          "Geniş yaşam planına sahip referans projeleri inceleyerek fikir alın.",
-        href: "/projelerimiz",
-      },
-    ];
-  }
-
-  return [
-    {
-      title: "Prefabrik Ev Modelleri",
-      description:
-        "Tek katlı, çift katlı ve çelik ev kategorilerini tek sayfada karşılaştırın.",
-      href: "/prefabrik-evler",
-    },
-    {
-      title: "Projelerimizi İnceleyin",
-      description:
-        "Tamamlanan prefabrik ev, çelik ev ve dubleks uygulamalarına göz atın.",
-      href: "/projelerimiz",
-    },
-  ];
 }
 
 export async function generateMetadata({
@@ -331,14 +220,14 @@ export async function generateMetadata({
 
   if (!data) {
     return {
-      title: "Blog | CT Prefabrik",
+      title: "Blog | Hürtaş Beton",
     };
   }
 
   const { post } = data;
 
   return {
-    title: `${post.title} | CT Prefabrik Blog`,
+    title: `${post.title} | Hürtaş Beton Blog`,
     description: post.excerpt,
     openGraph: {
       title: post.title,
@@ -361,234 +250,126 @@ export default async function BlogPostPage({
   }
 
   const { post } = data;
-  const suggestedLinks = getSuggestedLinks(post.category);
+  const [categories, sliderProducts] = await Promise.all([
+    getCategories(),
+    post.productCategoryId
+      ? getProductsPreview(post.productCategoryId, 10)
+      : Promise.resolve([]),
+  ]);
+  const infrastructureCategory = getCategory(categories, ["Altyapı", "Alt Yapı"]);
+  const superstructureCategory = getCategory(categories, ["Üst Yapı", "Üstyapı"]);
+  const sliderCategory = post.productCategoryId
+    ? categories.find((category) => category.id === post.productCategoryId) ??
+      null
+    : null;
   const contentSections = getContentSections(post.content);
-
-  const categories = await getCategories();
-  const singleFloorCategory = categories.find((item) =>
-    item.name.includes("Tek Kat"),
-  );
-  const doubleFloorCategory = categories.find((item) =>
-    item.name.includes("Çift Kat"),
-  );
-  const previewProducts = await getProductsPreview(undefined, 90);
-
-  const singleFloorProducts = singleFloorCategory
-    ? previewProducts.filter(
-        (item) => hasCategory(item, singleFloorCategory.id),
-      )
-    : previewProducts;
-  const doubleFloorProducts = doubleFloorCategory
-    ? previewProducts.filter(
-        (item) => hasCategory(item, doubleFloorCategory.id),
-      )
-    : [];
-  const otherProducts = previewProducts.filter(
-    (item) =>
-      !hasCategory(item, singleFloorCategory?.id) &&
-      !hasCategory(item, doubleFloorCategory?.id),
-  );
-
-  const firstPrimary = singleFloorProducts.filter((item) =>
-    hasRoomType(item.room, ["1+1"]),
-  );
-  const firstFallback = [
-    ...singleFloorProducts.filter((item) => !hasRoomType(item.room, ["1+1"])),
-    ...doubleFloorProducts,
-    ...otherProducts,
-  ];
-  const firstBlockProducts = takeUniqueProducts(
-    [...firstPrimary, ...firstFallback],
-    3,
-  );
-  const firstUsesFallback = firstBlockProducts.some(
-    (item) => !hasRoomType(item.room, ["1+1"]),
-  );
-
-  const firstSelectedIds = new Set(firstBlockProducts.map((item) => item.id));
-  const secondPrimary = singleFloorProducts.filter((item) =>
-    hasRoomType(item.room, ["2+1", "3+1"]),
-  );
-  const secondFallback = [
-    ...singleFloorProducts.filter(
-      (item) => !hasRoomType(item.room, ["2+1", "3+1"]),
-    ),
-    ...doubleFloorProducts,
-    ...otherProducts,
-  ];
-  const secondBlockProducts = takeUniqueProducts(
-    [...secondPrimary, ...secondFallback],
-    3,
-    firstSelectedIds,
-  );
-  const secondUsesFallback = secondBlockProducts.some(
-    (item) => !hasRoomType(item.room, ["2+1", "3+1"]),
-  );
-
-  const firstShowcaseTitle = firstUsesFallback
-    ? "Tek Katlı ve Çift Katlı Prefabrik Ev Modelleri"
-    : "1+1 Tek Katlı Prefabrik Ev Modelleri";
-  const firstShowcaseDescription = firstUsesFallback
-    ? "1+1 ürün sayısı sınırlı olduğunda, size daha fazla seçenek sunmak için tek katlı ve çift katlı alternatif modelleri birlikte listeliyoruz."
-    : "İçerikle birlikte değerlendirebileceğiniz, kompakt yaşam için uygun 1+1 tek katlı prefabrik ev seçeneklerini burada topladık.";
-
-  const secondShowcaseTitle = secondUsesFallback
-    ? "2+1, 3+1 ve Alternatif Prefabrik Ev Modelleri"
-    : "2+1 ve 3+1 Tek Katlı Prefabrik Ev Modelleri";
-  const secondShowcaseDescription = secondUsesFallback
-    ? "2+1 ve 3+1 ürün sayısı sınırlı olduğunda, karşılaştırma yapabilmeniz için tek katlı ve çift katlı alternatif modelleri de dahil ediyoruz."
-    : "Daha geniş yaşam planı arıyorsanız 2+1 ve 3+1 tek katlı prefabrik ev seçeneklerini de birlikte inceleyin.";
+  const firstContent = contentSections[0];
+  const restContent = contentSections.slice(1);
 
   return (
-    <main className="min-h-screen bg-white pb-24">
-      {/* --- HERO SECTION --- */}
-      <section className="relative pt-16 md:pt-20 md:pb-10 overflow-hidden">
-        {/* Background Vectors */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
-          <div className="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-primary/3 rounded-full blur-[120px]" />
-          <div
-            className="absolute inset-0 opacity-[0.1]"
-            style={{
-              backgroundImage:
-                "radial-gradient(#49202d 0.5px, transparent 0.5px)",
-              backgroundSize: "40px 40px",
-            }}
-          />
-        </div>
+    <main className="min-h-screen bg-[#f4f7fb] pb-20">
+      <section className="bg-white py-10 lg:py-14">
+        <div className="container mx-auto grid max-w-7xl gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(420px,1.1fr)] lg:items-center">
+          <div>
+            <Link
+              href="/blog"
+              className="mb-6 inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-[#152f51] transition-colors hover:text-[#d6a94a]"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              Bloga Dön
+            </Link>
 
-        <div className="container mx-auto max-w-4xl relative z-10">
-          <Link
-            href="/blog"
-            className="inline-flex underline items-center gap-2 text-slate-500 hover:text-primary transition-colors mb-8 text-sm font-bold uppercase tracking-wider"
-          >
-            <ArrowLeft size={16} />
-            Bloga Dön
-          </Link>
+            <div className="inline-flex items-center gap-2 rounded-[2px] border border-slate-200 bg-[#f6f8fb] px-3 py-1.5">
+              <span className="h-2 w-2 rounded-[1px] bg-[#d6a94a]" />
+              <span className="text-[10px] font-black uppercase tracking-[0.18em] text-[#152f51]">
+                {post.category}
+              </span>
+            </div>
 
-          {/* Category Badge */}
-          <div className="mb-6">
-            <span className="bg-primary/5 text-primary border border-primary/10 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest">
-              {post.category}
-            </span>
+            <h1 className="mt-5 text-3xl font-black leading-tight tracking-tight text-slate-900 md:text-5xl">
+              {post.title}
+            </h1>
+
+            <p className="mt-5 max-w-2xl text-sm font-medium leading-7 text-slate-600 md:text-base">
+              {post.excerpt}
+            </p>
+
+            <div className="mt-6 flex flex-wrap items-center gap-5 text-sm font-bold text-slate-500">
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4 text-[#152f51]" />
+                <span>{formatDate(post.publishedAt || post.createdAt)}</span>
+              </div>
+              {post.readTime ? (
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-[#152f51]" />
+                  <span>{post.readTime} dk</span>
+                </div>
+              ) : null}
+            </div>
           </div>
 
-          {/* Title */}
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 leading-[1.1] mb-8">
-            {post.title}
-          </h1>
-
-          {/* Metadata */}
-          <div className="flex flex-wrap items-center gap-6 text-slate-400 text-sm font-bold pb-6 md:pb-0">
-            {post.createdAt && (
-              <div className="flex items-center gap-2">
-                <Calendar size={16} />
-                <span>
-                  {new Date(post.createdAt).toLocaleDateString("tr-TR", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </span>
-              </div>
-            )}
-            {post.readTime && (
-              <div className="flex items-center gap-2">
-                <Clock size={16} />
-                <span>{post.readTime} dk</span>
-              </div>
-            )}
+          <div className="relative aspect-[16/10] overflow-hidden rounded-[3px] border border-slate-200 bg-slate-100 shadow-[0_24px_70px_-48px_rgba(15,23,42,0.55)]">
+            <Image
+              src={post.imageUrl}
+              alt={post.imageAlt || post.title}
+              fill
+              preload
+              fetchPriority="high"
+              loading="eager"
+              className="object-cover"
+            />
           </div>
         </div>
       </section>
 
-      {/* --- CONTENT SECTION --- */}
-      <article className="container mx-auto max-w-4xl ">
-        <MobileQuickLinks />
+      <article className="container mx-auto max-w-4xl py-10">
+        <MobileQuickLinks
+          infrastructureCategory={infrastructureCategory}
+          superstructureCategory={superstructureCategory}
+        />
 
-        {/* Featured Image */}
-        <div className="relative aspect-video w-full rounded-[1rem] overflow-hidden shadow-lg mb-8 border border-slate-300">
-          <Image
-            src={post.imageUrl}
-            alt={post.imageAlt || post.title}
-            fill
-            preload
-            fetchPriority="high"
-            loading="eager"
-            className="object-contain"
+        <div className="blog-content text-slate-700">
+          {firstContent ? (
+            <div dangerouslySetInnerHTML={{ __html: firstContent }} />
+          ) : (
+            <p className="text-base font-medium leading-8 text-slate-700">
+              {post.excerpt}
+            </p>
+          )}
+        </div>
+      </article>
+
+      {sliderCategory && sliderProducts.length > 0 ? (
+        <section className="container mx-auto max-w-7xl pb-10">
+          <HomepageCategorySlider
+            title="Ürünleri"
+            accent={sliderCategory.name}
+            seoLabel="Blog İçeriğine Uygun Ürünler"
+            description={`${post.title} içeriğiyle ilgili ${sliderCategory.name.toLocaleLowerCase("tr-TR")} ürünlerini inceleyin.`}
+            href={`/prefabrik-evler/${sliderCategory.slug}`}
+            products={sliderProducts}
           />
-        </div>
-
-        {/* Text Content */}
-        <div className="blog-content text-slate-600">
-          {contentSections.length > 0 ? (
-            <>
-              <div dangerouslySetInnerHTML={{ __html: contentSections[0] }} />
-
-              <ProductShowcase
-                title={firstShowcaseTitle}
-                description={firstShowcaseDescription}
-                products={firstBlockProducts}
-              />
-
-              {contentSections[1] ? (
-                <div dangerouslySetInnerHTML={{ __html: contentSections[1] }} />
-              ) : null}
-
-              <ProductShowcase
-                title={secondShowcaseTitle}
-                description={secondShowcaseDescription}
-                products={secondBlockProducts}
-              />
-
-              {contentSections[2] ? (
-                <div dangerouslySetInnerHTML={{ __html: contentSections[2] }} />
-              ) : null}
-            </>
-          ) : null}
-        </div>
-
-        <section className="mt-14 rounded-[2rem] border border-slate-200 bg-[#f8f7f3] p-6 md:p-8">
-          <div className="max-w-2xl">
-            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
-              İlgili Bağlantılar
-            </p>
-            <h2 className="mt-3 text-2xl font-black tracking-tight text-slate-900 md:text-3xl">
-              Bu İçeriği Okuduktan Sonra Buraya Geçin
-            </h2>
-            <p className="mt-3 text-sm font-medium leading-7 text-slate-600 md:text-base">
-              Blog içeriğini ürün kategorileri ve referans projelerle birlikte
-              incelemek, karar verme sürecini hızlandırır. Aşağıdaki bağlantılar
-              sizi ilgili kategori ve proje sayfalarına taşır.
-            </p>
-          </div>
-
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            {suggestedLinks.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="group rounded-[1.5rem] border border-slate-200 bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-200 hover:shadow-[0_20px_44px_-34px_rgba(15,23,42,0.18)]"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <h3 className="text-lg font-black text-slate-900">
-                      {item.title}
-                    </h3>
-                    <p className="mt-2 text-sm font-medium leading-7 text-slate-600">
-                      {item.description}
-                    </p>
-                  </div>
-                  <ArrowUpRight className="mt-1 h-5 w-5 shrink-0 text-secondary transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                </div>
-              </Link>
-            ))}
-          </div>
         </section>
+      ) : null}
 
-        {/* --- SHARE / FOOTER --- */}
-        <div className="mt-16 pt-10 border-t border-slate-100 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="text-slate-900 font-bold text-lg">
-            Bu yazıyı paylaş:
+      <article className="container mx-auto max-w-4xl">
+        <div className="blog-content text-slate-700">
+          {restContent.map((content, index) => (
+            <div
+              key={`content-section-${index}`}
+              dangerouslySetInnerHTML={{ __html: content }}
+            />
+          ))}
+        </div>
+
+        <SuggestedLinks
+          infrastructureCategory={infrastructureCategory}
+          superstructureCategory={superstructureCategory}
+        />
+
+        <div className="mt-14 flex flex-col items-center justify-between gap-5 border-t border-slate-200 pt-8 md:flex-row">
+          <div className="text-lg font-black text-slate-900">
+            Bu yazıyı paylaş
           </div>
           <ShareButtons title={post.title} slug={post.slug} />
         </div>

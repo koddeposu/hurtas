@@ -104,6 +104,7 @@ export async function createBlogPost(data: {
   excerpt: string;
   content?: string;
   category: string;
+  productCategoryId?: string | null;
   imageUrl: string;
   imageAlt?: string;
   readTime?: number;
@@ -121,6 +122,7 @@ export async function createBlogPost(data: {
     excerpt: data.excerpt,
     content: data.content ?? null,
     category: data.category,
+    productCategoryId: data.productCategoryId ?? null,
     imageUrl: data.imageUrl,
     imageAlt: data.imageAlt ?? null,
     readTime: data.readTime ?? null,
@@ -141,6 +143,7 @@ export async function updateBlogPost(
     excerpt?: string;
     content?: string | null;
     category?: string;
+    productCategoryId?: string | null;
     imageUrl?: string;
     imageAlt?: string | null;
     readTime?: number | null;
@@ -158,6 +161,9 @@ export async function updateBlogPost(
   if (data.excerpt !== undefined) updateData.excerpt = data.excerpt;
   if (data.content !== undefined) updateData.content = data.content;
   if (data.category !== undefined) updateData.category = data.category;
+  if (data.productCategoryId !== undefined) {
+    updateData.productCategoryId = data.productCategoryId;
+  }
   if (data.imageUrl !== undefined) updateData.imageUrl = data.imageUrl;
   if (data.imageAlt !== undefined) updateData.imageAlt = data.imageAlt;
   if (data.readTime !== undefined) updateData.readTime = data.readTime;

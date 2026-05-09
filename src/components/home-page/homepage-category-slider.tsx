@@ -8,7 +8,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { DBProductPreview } from "@/types/product";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -61,56 +61,63 @@ export function HomepageCategorySlider({
 
   return (
     <section className="font-[family-name:var(--font-poppins)]">
-      <div className="mb-6 flex flex-col gap-4 lg:mb-8 lg:flex-row lg:items-end lg:justify-between">
-        <div className="max-w-2xl">
-          <span className="inline-flex rounded-lg border border-secondary/15 bg-secondary/10 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-secondary">
-            {seoLabel}
-          </span>
-          <h2 className="mt-3 text-2xl font-black tracking-tight text-slate-900 md:text-4xl">
-            <span className="text-secondary">{accent}</span> {title}
-          </h2>
-          <p className="mt-3 max-w-lg text-sm font-medium leading-6 text-slate-500">
-            {description}
-          </p>
-        </div>
+      <div className="mb-5 border-y border-slate-200 bg-[#f6f8fb] px-4 py-5 sm:px-5 lg:mb-6 lg:px-6">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-3">
+              <span className="h-px w-10 bg-[#d6a94a]" aria-hidden="true" />
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#6f839d]">
+                {seoLabel}
+              </span>
+            </div>
+            <h2 className="mt-2 text-2xl font-black tracking-tight text-slate-900 md:text-4xl">
+              <span className="text-[#152f51]">{accent}</span> {title}
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm font-medium leading-6 text-slate-600">
+              {description}
+            </p>
+          </div>
 
-        <div className="flex items-center gap-3">
-          <Link
-            href={href}
-            prefetch={false}
-            className="rounded-lg border border-slate-300 px-3.5 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-slate-700 transition-colors hover:border-secondary hover:text-secondary"
-          >
-            Tümünü Gör
-          </Link>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex h-10 items-center rounded-[2px] border border-slate-300 bg-white px-3 text-[11px] font-black uppercase tracking-[0.14em] text-slate-600">
+              {products.length} Ürün
+            </span>
+            <Link
+              href={href}
+              prefetch={false}
+              className="inline-flex h-10 items-center gap-2 rounded-[2px] bg-[#152f51] px-4 text-[11px] font-black uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#10243d]"
+            >
+              Tümünü Gör
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
         </div>
       </div>
 
       <div className="relative">
-        <button
-          type="button"
-          onClick={() => api?.scrollPrev()}
-          disabled={!canScrollPrev}
-          className="absolute  -left-7 md:-left-10 top-1/2 z-20 inline-flex  -translate-y-1/2 items-center justify-center   text-black  transition-colors hover:text-secondary disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer hover:scale-110"
-          aria-label={`${title} önceki`}
-        >
-          <ChevronLeft
-            className="w-14 h-14 lg:w-20 lg:h-20"
-            strokeWidth={0.8}
-          />
-        </button>
+        {snapCount > 1 ? (
+          <>
+            <button
+              type="button"
+              onClick={() => api?.scrollPrev()}
+              disabled={!canScrollPrev}
+              className="absolute left-0 top-1/2 z-20 inline-flex h-16 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-[2px] border border-[#152f51]/20 bg-[#152f51] text-white shadow-[0_18px_34px_-24px_rgba(15,23,42,0.7)] transition-colors hover:bg-[#d6a94a] hover:text-[#152f51] disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 sm:h-20 sm:w-10"
+              aria-label={`${accent} ${title} önceki ürünler`}
+            >
+              <ChevronLeft className="h-6 w-6" strokeWidth={1.8} />
+            </button>
 
-        <button
-          type="button"
-          onClick={() => api?.scrollNext()}
-          disabled={!canScrollNext}
-          className="absolute  -right-7 md:-right-10 top-1/2 z-20 inline-flex  -translate-y-1/2 items-center justify-center text-slate-700  transition-colors  hover:text-secondary disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer hover:scale-110"
-          aria-label={`${title} sonraki`}
-        >
-          <ChevronRight
-            strokeWidth={0.8}
-            className="w-14 h-14 lg:w-20 lg:h-20"
-          />
-        </button>
+            <button
+              type="button"
+              onClick={() => api?.scrollNext()}
+              disabled={!canScrollNext}
+              className="absolute right-0 top-1/2 z-20 inline-flex h-16 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-[2px] border border-[#152f51]/20 bg-[#152f51] text-white shadow-[0_18px_34px_-24px_rgba(15,23,42,0.7)] transition-colors hover:bg-[#d6a94a] hover:text-[#152f51] disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 sm:h-20 sm:w-10"
+              aria-label={`${accent} ${title} sonraki ürünler`}
+            >
+              <ChevronRight className="h-6 w-6" strokeWidth={1.8} />
+            </button>
+          </>
+        ) : null}
 
         <Carousel
           setApi={setApi}
@@ -119,13 +126,13 @@ export function HomepageCategorySlider({
             loop: false,
             slidesToScroll: 1,
           }}
-          className="w-full px-6 sm:px-8"
+          className="w-full px-9 sm:px-12"
         >
           <CarouselContent>
             {products.map((product) => (
               <CarouselItem
                 key={product.id}
-                className="basis-full md:basis-1/2 xl:basis-1/4"
+                className="basis-full sm:basis-1/2 xl:basis-1/4"
               >
                 <HomeProductCard product={product} />
               </CarouselItem>
@@ -141,10 +148,10 @@ export function HomepageCategorySlider({
             {Array.from({ length: snapCount }).map((_, index) => (
               <span
                 key={`${title}-dot-${index}`}
-                className={`block h-2 rounded-full transition-all duration-300 ${
+                className={`block h-2 transition-all duration-300 ${
                   index === selectedIndex
-                    ? "w-6 bg-primary"
-                    : "w-2 bg-slate-300"
+                    ? "w-6 rounded-[2px] bg-primary"
+                    : "w-2 rounded-[2px] bg-slate-300"
                 }`}
               />
             ))}

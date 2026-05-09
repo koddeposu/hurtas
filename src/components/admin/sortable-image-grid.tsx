@@ -87,16 +87,21 @@ function SortableImageItem({ image, onDelete, onEditAlt }: SortableImageItemProp
       </button>
 
       {/* Edit alt text button - bottom left */}
-      {onEditAlt && (
-        <button
-          type="button"
-          onClick={() => onEditAlt(image.id, image.alt)}
-          className="absolute bottom-2 left-2 p-1 bg-blue-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10"
-          title="Alt metin düzenle"
-        >
-          <Pencil className="h-4 w-4" />
-        </button>
-      )}
+      <div className="absolute inset-x-0 bottom-0 z-10 flex items-center gap-2 bg-black/65 px-2 py-1.5 text-white">
+        <span className="min-w-0 flex-1 truncate text-[11px]">
+          {image.alt?.trim() ? image.alt : "Alt metin girilmedi"}
+        </span>
+        {onEditAlt && (
+          <button
+            type="button"
+            onClick={() => onEditAlt(image.id, image.alt)}
+            className="rounded bg-white/15 p-1 transition-colors hover:bg-white/25"
+            title="Alt metin düzenle"
+          >
+            <Pencil className="h-3.5 w-3.5" />
+          </button>
+        )}
+      </div>
     </div>
   );
 }

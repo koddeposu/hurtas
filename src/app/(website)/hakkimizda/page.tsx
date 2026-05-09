@@ -4,40 +4,32 @@ import { CONTACT_INFO } from "@/lib/contact";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Hakkımızda | CT Prefabrik Prefabrik Ev, Çelik Ev ve Anahtar Teslim Yapı Çözümleri",
+  title: "Hakkımızda | Hürtaş Beton Elemanları",
   description:
-    "CT Prefabrik hakkında detaylı bilgi alın. Prefabrik ev modelleri, prefabrik ev fiyatları, anahtar teslim prefabrik ev, çelik konstrüksiyon ev, dubleks prefabrik ev, prefabrik villa ve konteyner ev fiyatları odaklı çözümlerimizle Sakarya'dan Türkiye geneline hizmet veriyoruz.",
+    "Hürtaş Beton hakkında bilgi alın. Beton boru, parke taşı, bordür, menhol ve çevre düzenleme ürünlerinde üretim, ürün seçimi ve planlı sevkiyat yaklaşımımızı inceleyin.",
   keywords: [
-    "CT Prefabrik hakkında",
-    "ctprefabrik hakkında",
-    "prefabrik ev üreticisi",
-    "prefabrik firma",
-    "güvenilir prefabrik firma",
-    "prefabrik ev modelleri",
-    "prefabrik ev fiyatları",
-    "anahtar teslim prefabrik ev",
-    "çelik konstrüksiyon ev",
-    "dubleks prefabrik ev",
-    "prefabrik villa",
-    "konteyner ev fiyatları",
-    "Sakarya prefabrik ev",
-    "çelik ev firması",
-    "kaliteli prefabrik ev",
+    "Hürtaş Beton hakkında",
+    "beton elemanları",
+    "beton boru",
+    "parke taşı",
+    "bordür",
+    "menhol",
+    "altyapı beton ürünleri",
+    "İstanbul beton elemanları",
+    "Arnavutköy beton",
   ],
   openGraph: {
-    title:
-      "Hakkımızda | CT Prefabrik Prefabrik Ev ve Çelik Ev Uzmanlığı",
+    title: "Hakkımızda | Hürtaş Beton Elemanları",
     description:
-      "CT Prefabrik'in prefabrik ev modelleri, çelik konstrüksiyon ev çözümleri, anahtar teslim yapı yaklaşımı ve Sakarya merkezli hizmet gücü hakkında bilgi alın.",
+      "Hürtaş Beton'un beton elemanları üretim, ürün seçimi ve planlı tedarik yaklaşımı hakkında bilgi alın.",
     url: "https://ctprefabrik.com/hakkimizda",
-    siteName: "CT Prefabrik",
+    siteName: "Hürtaş Beton",
     images: [
       {
         url: "/og-about.jpg",
         width: 1200,
         height: 630,
-        alt: "CT Prefabrik hakkında prefabrik ev ve çelik ev çözümleri",
+        alt: "Hürtaş Beton hakkında beton elemanları üretim yaklaşımı",
       },
     ],
     locale: "tr_TR",
@@ -45,9 +37,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hakkımızda | CT Prefabrik Prefabrik Ev ve Çelik Ev Çözümleri",
+    title: "Hakkımızda | Hürtaş Beton",
     description:
-      "Prefabrik ev fiyatları, anahtar teslim prefabrik ev, çelik ev ve prefabrik villa çözümlerinde CT Prefabrik yaklaşımını inceleyin.",
+      "Beton boru, parke taşı, bordür ve altyapı ürünlerinde Hürtaş Beton yaklaşımını inceleyin.",
     images: ["/og-about.jpg"],
   },
   alternates: {
@@ -71,14 +63,13 @@ export default function AboutPage() {
             "@type": "AboutPage",
             name: "Hakkımızda",
             description:
-              "CT Prefabrik hakkında bilgiler, prefabrik ev modelleri, çelik ev çözümleri ve anahtar teslim yapı yaklaşımımız",
+              "Hürtaş Beton hakkında bilgiler, beton elemanları üretimi ve planlı tedarik yaklaşımımız",
             url: "https://ctprefabrik.com/hakkimizda",
             mainEntity: {
               "@type": "Organization",
-              name: "CT Prefabrik",
-              foundingDate: "2010",
+              name: CONTACT_INFO.companyName,
               description:
-                "Prefabrik ev, çelik konstrüksiyon ev, dubleks prefabrik ev, prefabrik villa ve konteyner yapı çözümleri sunan üretici firma",
+                "Beton boru, parke taşı, bordür, menhol ve çevre düzenleme ürünleri sunan beton elemanları üreticisi",
               url: "https://ctprefabrik.com",
               logo: "https://ctprefabrik.com/logo.png",
               address: {
@@ -152,22 +143,17 @@ export default function AboutPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Organization",
-            name: "CT Prefabrik",
+            name: CONTACT_INFO.companyName,
             url: "https://ctprefabrik.com",
             logo: "https://ctprefabrik.com/logo.png",
             description:
-              "Prefabrik ev modelleri, prefabrik ev fiyatları, anahtar teslim prefabrik ev, çelik konstrüksiyon ev ve prefabrik villa çözümleri sunan üretici marka",
-            foundingDate: "2010",
+              "Beton boru, parke taşı, bordür, menhol ve altyapı beton ürünleri sunan üretici marka",
             numberOfEmployees: {
               "@type": "QuantitativeValue",
               value: 150,
             },
-            slogan: "Hayalinizdeki eve hızlı ve güvenli ulaşın",
-            award: [
-              "TSE Belgeli Üretim",
-              "ISO 9001 Kalite Yönetimi",
-              "Müşteri Memnuniyeti Ödülü 2024",
-            ],
+            slogan: "Beton elemanlarında planlı üretim ve düzenli tedarik",
+            award: ["TSE Onaylı Belgeler", "Standart Üretim", "Planlı Sevkiyat"],
             areaServed: {
               "@type": "Country",
               name: "Turkey",

@@ -1,6 +1,6 @@
 "use server";
 
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db/drizzle";
 import { category } from "@/db/schema";
@@ -12,8 +12,16 @@ function generateId() {
   return crypto.randomUUID();
 }
 
+function toNullableText(value: string | null | undefined) {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : null;
+}
+
 export async function getCategories() {
-  const categories = await db.select().from(category).orderBy(category.order);
+  const categories = await db
+    .select()
+    .from(category)
+    .orderBy(asc(category.order), asc(category.name));
   return categories;
 }
 
@@ -37,7 +45,11 @@ export async function getCategoryBySlug(slug: string) {
 
 export async function createCategory(data: {
   name: string;
+  parentId?: string | null;
+  title?: string;
   description?: string;
+  subtitle?: string;
+  subdescription?: string;
   order?: number;
 }) {
   await requireAuth();
@@ -47,9 +59,13 @@ export async function createCategory(data: {
 
   await db.insert(category).values({
     id,
+    parentId: data.parentId || null,
     name: data.name,
     slug,
-    description: data.description ?? null,
+    title: toNullableText(data.title),
+    description: toNullableText(data.description),
+    subtitle: toNullableText(data.subtitle),
+    subdescription: toNullableText(data.subdescription),
     order: data.order ?? 0,
   });
 
@@ -64,7 +80,11 @@ export async function updateCategory(
   id: string,
   data: {
     name?: string;
+    parentId?: string | null;
+    title?: string;
     description?: string;
+    subtitle?: string;
+    subdescription?: string;
     order?: number;
   },
 ) {
@@ -76,8 +96,20 @@ export async function updateCategory(
     updateData.name = data.name;
     updateData.slug = await generateUniqueSlug("category", data.name, id);
   }
+  if (data.parentId !== undefined) {
+    updateData.parentId = data.parentId === id ? null : data.parentId;
+  }
+  if (data.title !== undefined) {
+    updateData.title = toNullableText(data.title);
+  }
   if (data.description !== undefined) {
-    updateData.description = data.description;
+    updateData.description = toNullableText(data.description);
+  }
+  if (data.subtitle !== undefined) {
+    updateData.subtitle = toNullableText(data.subtitle);
+  }
+  if (data.subdescription !== undefined) {
+    updateData.subdescription = toNullableText(data.subdescription);
   }
   if (data.order !== undefined) {
     updateData.order = data.order;

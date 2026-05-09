@@ -75,7 +75,7 @@ export function ProjectGalleryModal({
           <div className="relative">
             <Carousel
               setApi={setApi}
-              className="w-full overflow-hidden rounded-[1rem] md:rounded-[2rem]
+              className="w-full overflow-hidden rounded-[3px]
               shadow-[0_50px_100px_-20px_rgba(0,0,0,0.12)]
               border-2 md:border-[8px] border-white"
             >
@@ -126,7 +126,7 @@ export function ProjectGalleryModal({
                     // Burada setCurrent(index) demenize artık gerek yok,
                     // yukarıdaki api.on('select') bu işi otomatik yapıyor.
                   }}
-                  className={`border-2 rounded-lg overflow-hidden transition-all duration-300 ${
+                  className={`border-2 rounded-[3px] overflow-hidden transition-all duration-300 ${
                     current === index
                       ? "border-secondary scale-110 shadow-lg"
                       : "border-white opacity-40 hover:opacity-100"

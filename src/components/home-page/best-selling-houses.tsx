@@ -8,10 +8,10 @@ interface BestSellingHousesProps {
 export function BestSellingHouses({ favorites }: BestSellingHousesProps) {
   return (
     <HomepageCategorySlider
-      title="Prefabrik Evlerimiz"
-      accent="En Çok Tercih Edilen"
-      seoLabel="Popüler Modeller"
-      description="Yüzlerce aileye yuva olan, en çok incelenen prefabrik ev modellerimizi keşfedin."
+      title="Ürünler"
+      accent="Öne Çıkan"
+      seoLabel="Seçili Beton Ürünleri"
+      description="Altyapı, üst yapı ve çevre düzenleme projeleri için öne çıkan beton ürünlerini keşfedin."
       href="/prefabrik-evler"
       products={favorites}
     />

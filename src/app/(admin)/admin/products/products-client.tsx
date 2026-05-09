@@ -36,7 +36,6 @@ interface Product extends SortableItem {
   slug: string;
   area: string;
   room: string;
-  price: string | null;
   isActive: boolean;
   order: number;
 }
@@ -143,7 +142,6 @@ export function ProductsClient({
                   <TableHead>Kategori</TableHead>
                   <TableHead>Alan</TableHead>
                   <TableHead>Oda</TableHead>
-                  <TableHead>Fiyat</TableHead>
                   <TableHead>Durum</TableHead>
                   <TableHead className="text-right">İşlemler</TableHead>
                 </TableRow>
@@ -152,7 +150,7 @@ export function ProductsClient({
                 {products.length === 0 ? (
                   <TableRow>
                     <TableCell
-                      colSpan={isEditMode ? 8 : 7}
+                      colSpan={isEditMode ? 7 : 6}
                       className="text-center py-8 text-slate-500"
                     >
                       Henüz ürün eklenmemiş
@@ -184,15 +182,6 @@ export function ProductsClient({
                       </TableCell>
                       <TableCell>{product.area} m²</TableCell>
                       <TableCell>{product.room}</TableCell>
-                      <TableCell>
-                        {product.price ? (
-                          <span className="font-medium">
-                            ₺{parseInt(product.price).toLocaleString("tr-TR")}
-                          </span>
-                        ) : (
-                          <span className="text-slate-400">-</span>
-                        )}
-                      </TableCell>
                       <TableCell>
                         <Badge
                           variant={product.isActive ? "default" : "secondary"}

@@ -16,12 +16,6 @@ export default function ContactPageClient() {
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedAddress, setCopiedAddress] = useState(false);
 
-  const fadeInUp = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.6 },
-  };
-
   const copyToClipboard = async (
     text: string,
     type: "phone" | "email" | "address",
@@ -45,29 +39,6 @@ export default function ContactPageClient() {
 
   return (
     <div className="min-h-screen bg-white">
-      <section className="relative pt-32 pb-20 px-6 bg-[#fdfafb] overflow-hidden w-full">
-        <motion.div
-          animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
-          transition={{ duration: 20, repeat: Infinity }}
-          className="absolute -top-20 -right-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none"
-        />
-
-        <div className="container mx-auto max-w-6xl relative z-10 text-center">
-          <motion.div {...fadeInUp}>
-            <span className="mb-6 inline-block rounded-lg border border-primary/15 bg-primary/10 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-[#49202d]">
-              Bize Ulaşın
-            </span>
-            <h1 className="text-5xl md:text-7xl font-black text-[#49202d] leading-none tracking-tighter mb-8">
-              Sizinle Tanışmak <br />{" "}
-              <span className="text-slate-400 italic font-light text-4xl md:text-6xl">
-                İçin Sabırsızlanıyoruz.
-              </span>
-            </h1>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* İLETİŞİM KARTLARI - Schema için önemli */}
       <section className="py-12 px-6">
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -150,7 +121,7 @@ export default function ContactPageClient() {
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             className="hidden lg:block absolute left-10 top-1/2 -translate-y-1/2 opacity-10 pointer-events-none"
           >
-            <div className="text-[15rem] font-black text-[#49202d]">2005</div>
+            <div className="text-[15rem] font-black text-[#152f51]">2005</div>
           </motion.div>
         </div>
       </section>
@@ -171,8 +142,8 @@ export default function ContactPageClient() {
           title="Hürtaş Beton Merkez Ofis Konumu"
           itemProp="hasMap"
         />
-        <div className="absolute top-10 right-10 max-w-xs rounded-xl border border-slate-300 bg-white p-6 shadow-[0_20px_44px_-28px_rgba(15,23,42,0.24)]">
-          <h4 className="font-black text-[#49202d] mb-2 uppercase text-xs tracking-widest">
+        <div className="absolute top-10 right-10 max-w-xs rounded-[3px] border border-slate-300 bg-white p-6 shadow-[0_20px_44px_-28px_rgba(15,23,42,0.24)]">
+          <h4 className="font-black text-[#152f51] mb-2 uppercase text-xs tracking-widest">
             Yol Tarifi
           </h4>
           <p className="text-slate-500 text-sm mb-4">
@@ -182,7 +153,7 @@ export default function ContactPageClient() {
             href={CONTACT_MAP_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-2 text-[#49202d] font-bold text-xs group"
+            className="flex items-center gap-2 text-[#152f51] font-bold text-xs group"
           >
             HARİTALARDA AÇ{" "}
             <ArrowRight
@@ -220,19 +191,19 @@ const ContactCard = ({
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ delay, duration: 0.5 }}
     viewport={{ once: true }}
-    className="group relative rounded-[1rem] border border-slate-300 bg-white p-10 shadow-[0_16px_36px_-28px_rgba(15,23,42,0.14)] transition-all duration-500 hover:-translate-y-1.5 hover:border-slate-400 hover:shadow-[0_24px_48px_-28px_rgba(15,23,42,0.18)]"
+    className="group relative rounded-[3px] border border-slate-300 bg-white p-8 shadow-[0_16px_36px_-28px_rgba(15,23,42,0.14)] transition-all duration-300 hover:-translate-y-1 hover:border-slate-400 hover:shadow-[0_24px_48px_-28px_rgba(15,23,42,0.18)]"
   >
-    <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-lg bg-primary/5 text-[#49202d] transition-colors duration-500 group-hover:bg-primary group-hover:text-white">
+    <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-[2px] bg-[#152f51] text-white transition-colors duration-300 group-hover:bg-[#d6a94a] group-hover:text-[#152f51]">
       {icon}
     </div>
     <p className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-2">
       {label}
     </p>
     <div className="relative">
-      <h3 className="text-lg font-bold text-[#49202d] mb-1 pr-8">{value}</h3>
+      <h3 className="text-lg font-bold text-[#152f51] mb-1 pr-8">{value}</h3>
       <button
         onClick={onCopy}
-        className="absolute right-0 top-0 p-1.5 rounded-lg hover:bg-slate-100 transition-colors"
+        className="absolute right-0 top-0 p-1.5 rounded-[2px] hover:bg-slate-100 transition-colors"
         aria-label={`${label} kopyala`}
       >
         {copied ? (
@@ -251,7 +222,7 @@ const ContactCard = ({
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 5 }}
-            className="absolute -top-10 left-0 whitespace-nowrap rounded-lg bg-secondary px-3 py-1 text-xs font-semibold text-white shadow-lg"
+            className="absolute -top-10 left-0 whitespace-nowrap rounded-[2px] bg-secondary px-3 py-1 text-xs font-semibold text-[#152f51] shadow-lg"
           >
             ✓ Kopyalandı!
           </motion.div>

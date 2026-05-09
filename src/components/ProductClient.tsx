@@ -6,18 +6,18 @@ import { SeoFaqSection } from "@/components/seo-faq-section";
 import { DBCategory, DBProduct } from "@/types/product";
 import {
   ArrowUpRight,
-  BookOpenText,
   Building2,
+  ChevronRight,
+  Factory,
   Filter,
   Home,
   Layers3,
-  LayoutGrid,
-  Link2,
   ShieldCheck,
+  X,
 } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const ProjectGalleryModal = dynamic(
   () =>
@@ -62,28 +62,16 @@ function getCategoryKey(
 ): ExtendedCategoryKey {
   if (!categoryName && !categorySlug) return "all";
 
-  if (
-    includesRoom(categorySlug, "1+1") ||
-    includesRoom(categoryName, "1+1")
-  ) {
+  if (includesRoom(categorySlug, "1+1") || includesRoom(categoryName, "1+1")) {
     return "room-1-1";
   }
-  if (
-    includesRoom(categorySlug, "2+1") ||
-    includesRoom(categoryName, "2+1")
-  ) {
+  if (includesRoom(categorySlug, "2+1") || includesRoom(categoryName, "2+1")) {
     return "room-2-1";
   }
-  if (
-    includesRoom(categorySlug, "3+1") ||
-    includesRoom(categoryName, "3+1")
-  ) {
+  if (includesRoom(categorySlug, "3+1") || includesRoom(categoryName, "3+1")) {
     return "room-3-1";
   }
-  if (
-    includesRoom(categorySlug, "4+1") ||
-    includesRoom(categoryName, "4+1")
-  ) {
+  if (includesRoom(categorySlug, "4+1") || includesRoom(categoryName, "4+1")) {
     return "room-4-1";
   }
 
@@ -396,166 +384,14 @@ function getFaqContent(categoryName?: string, categorySlug?: string) {
   };
 }
 
-function getInternalLinks(categoryName?: string, categorySlug?: string) {
-  const categoryKey = getCategoryKey(categoryName, categorySlug);
-
-  if (categoryKey === "room-1-1") {
-    return [
-      {
-        title: "1+1 Prefabrik Ev Rehberleri",
-        description:
-          "Kompakt yaşam planı, maliyet analizi ve teslim süreci için blog içeriklerine geçin.",
-        href: "/blog",
-        icon: BookOpenText,
-      },
-      {
-        title: "1+1 Proje Örnekleri",
-        description:
-          "Tamamlanan küçük metrekareli uygulamaları inceleyip plan fikirleri alın.",
-        href: "/projelerimiz",
-        icon: LayoutGrid,
-      },
-    ];
-  }
-
-  if (categoryKey === "room-2-1") {
-    return [
-      {
-        title: "2+1 Prefabrik Ev İçerikleri",
-        description:
-          "2+1 planlarda oda dağılımı, fiyat ve kullanım senaryosu karşılaştırmaları için bloga geçin.",
-        href: "/blog",
-        icon: BookOpenText,
-      },
-      {
-        title: "2+1 Referans Projeler",
-        description:
-          "2+1 planla tamamlanan projeleri görüp yaşam düzenine uygun model seçin.",
-        href: "/projelerimiz",
-        icon: LayoutGrid,
-      },
-    ];
-  }
-
-  if (categoryKey === "room-3-1") {
-    return [
-      {
-        title: "3+1 Prefabrik Ev Rehberleri",
-        description:
-          "Geniş aile planı, yaşam konforu ve bütçe dengesi için detaylı blog içeriklerine göz atın.",
-        href: "/blog",
-        icon: BookOpenText,
-      },
-      {
-        title: "3+1 Uygulama Projeleri",
-        description:
-          "3+1 planların sahadaki gerçek uygulama örneklerini proje sayfasında inceleyin.",
-        href: "/projelerimiz",
-        icon: LayoutGrid,
-      },
-    ];
-  }
-
-  if (categoryKey === "room-4-1") {
-    return [
-      {
-        title: "4+1 Plan ve Maliyet Rehberi",
-        description:
-          "4+1 prefabrik evlerde metrekare-fiyat dengesini ve teknik kapsamı blog içerikleriyle inceleyin.",
-        href: "/blog",
-        icon: BookOpenText,
-      },
-      {
-        title: "4+1 Geniş Yaşam Projeleri",
-        description:
-          "4+1 oda planlı referans projeler üzerinden cephe ve iç plan fikirleri alın.",
-        href: "/projelerimiz",
-        icon: LayoutGrid,
-      },
-    ];
-  }
-
-  if (categoryKey === "single") {
-    return [
-      {
-        title: "Tek Katlı Prefabrik Ev İçerikleri",
-        description:
-          "Blog sayfasında tek katlı prefabrik ev fiyatları, ruhsat ve teslim süreci hakkında içeriklere geçin.",
-        href: "/blog",
-        icon: BookOpenText,
-      },
-      {
-        title: "Tek Katlı Proje Örnekleri",
-        description:
-          "Tamamlanan referans projeler üzerinden plan, metrekare ve dış cephe fikirleri alın.",
-        href: "/projelerimiz",
-        icon: LayoutGrid,
-      },
-    ];
-  }
-
-  if (categoryKey === "double") {
-    return [
-      {
-        title: "Dubleks Prefabrik Rehberleri",
-        description:
-          "Çift katlı prefabrik ev modelleri ve plan önerileri için blog içeriklerine göz atın.",
-        href: "/blog",
-        icon: BookOpenText,
-      },
-      {
-        title: "Çift Katlı Referans Projeler",
-        description:
-          "Dubleks yaşam planı içeren proje uygulamalarını detaylı biçimde inceleyin.",
-        href: "/projelerimiz",
-        icon: LayoutGrid,
-      },
-    ];
-  }
-
-  if (categoryKey === "steel") {
-    return [
-      {
-        title: "Çelik Ev Blog İçerikleri",
-        description:
-          "Çelik konstrüksiyon ev, yalıtım, fiyat ve teknik detaylara dair blog yazılarına geçin.",
-        href: "/blog",
-        icon: BookOpenText,
-      },
-      {
-        title: "Çelik Ev Projeleri",
-        description:
-          "Tamamlanan çelik ev ve modern yaşam alanı uygulamalarını proje sayfasında inceleyin.",
-        href: "/projelerimiz",
-        icon: LayoutGrid,
-      },
-    ];
-  }
-
-  return [
-    {
-      title: "Blog Rehberlerine Geçin",
-      description:
-        "Prefabrik ev fiyatları, modelleri, anahtar teslim süreç ve ruhsat konularını blog yazılarında inceleyin.",
-      href: "/blog",
-      icon: BookOpenText,
-    },
-    {
-      title: "Projelerimizi İnceleyin",
-      description:
-        "Tamamlanan prefabrik ev, dubleks prefabrik ve çelik ev uygulamaları üzerinden fikir alın.",
-      href: "/projelerimiz",
-      icon: LayoutGrid,
-    },
-  ];
-}
-
-function TopCategoryFilters({
+function ProductSidebarMenu({
   categories,
   activeCategory,
+  onNavigate,
 }: {
   categories: DBCategory[];
   activeCategory?: string;
+  onNavigate?: () => void;
 }) {
   const activeCategoryItem = activeCategory
     ? categories.find((item) => item.slug === activeCategory)
@@ -565,16 +401,19 @@ function TopCategoryFilters({
     activeCategoryItem?.slug,
   );
 
-  const roomFilters = ([
-    { room: "1+1", key: "room-1-1", icon: Home },
-    { room: "2+1", key: "room-2-1", icon: Home },
-    { room: "3+1", key: "room-3-1", icon: Home },
-    { room: "4+1", key: "room-4-1", icon: Home },
-  ] as const)
+  const roomLinks = (
+    [
+      { room: "1+1", key: "room-1-1", icon: Home },
+      { room: "2+1", key: "room-2-1", icon: Home },
+      { room: "3+1", key: "room-3-1", icon: Home },
+      { room: "4+1", key: "room-4-1", icon: Home },
+    ] as const
+  )
     .map((item) => {
       const category = categories.find(
         (cat) =>
-          includesRoom(cat.slug, item.room) || includesRoom(cat.name, item.room),
+          includesRoom(cat.slug, item.room) ||
+          includesRoom(cat.name, item.room),
       );
 
       if (!category) return null;
@@ -588,7 +427,7 @@ function TopCategoryFilters({
     })
     .filter((item): item is NonNullable<typeof item> => item !== null);
 
-  const filterItems = [
+  const quickLinks = [
     {
       label: "Tümü",
       href: "/prefabrik-evler",
@@ -613,31 +452,103 @@ function TopCategoryFilters({
       active: activeCategoryKey === "steel",
       icon: ShieldCheck,
     },
-    ...roomFilters,
+    ...roomLinks,
   ];
 
   return (
-    <div className="flex flex-wrap gap-3">
-      {filterItems.map((item) => {
-        const Icon = item.icon;
+    <aside>
+      <div className="border border-[#223955] bg-[#0d1f36] text-white shadow-[0_24px_54px_-42px_rgba(13,31,54,0.75)]">
+        <div className="border-b border-white/10 p-5">
+          <div className="flex items-center gap-3">
+            <span className="h-8 w-1 bg-[#d6a94a]" aria-hidden="true" />
+            <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#d6a94a]">
+                Ürün Menüsü
+              </p>
+              <h2 className="mt-1 text-lg font-black uppercase tracking-tight">
+                Beton Ürünleri
+              </h2>
+            </div>
+          </div>
+        </div>
 
-        return (
-          <Link
-            key={item.label}
-            href={item.href}
-            className={`inline-flex items-center gap-2 rounded-lg border px-4 py-3 text-xs font-black uppercase tracking-[0.14em] transition-all duration-300 ${
-              item.active
-                ? "border-primary bg-primary text-white shadow-[0_18px_40px_-28px_rgba(73,32,45,0.55)]"
-                : "border-slate-300 bg-white text-slate-700 hover:-translate-y-0.5 hover:border-slate-400 hover:shadow-[0_16px_38px_-30px_rgba(15,23,42,0.18)]"
-            }`}
-          >
-            <Icon className="h-4 w-4" />
-            {item.label}
-          </Link>
-        );
-      })}
-    </div>
+        <nav className="p-3" aria-label="Ürün kategorileri">
+          <p className="px-2 pb-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+            Hızlı Seçim
+          </p>
+          <div className="space-y-1">
+            {quickLinks.map((item) => {
+              const Icon = item.icon;
+
+              return (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  onClick={onNavigate}
+                  className={`group flex min-h-11 items-center justify-between border px-3 py-2 text-xs font-black uppercase tracking-[0.12em] transition-colors ${
+                    item.active
+                      ? "border-[#d6a94a] bg-[#d6a94a] text-[#0d1f36]"
+                      : "border-white/10 bg-[#132945] text-slate-200 hover:border-white/25 hover:bg-[#183456] hover:text-white"
+                  }`}
+                >
+                  <span className="flex min-w-0 items-center gap-2">
+                    <Icon className="h-4 w-4 shrink-0" />
+                    <span className="truncate">{item.label}</span>
+                  </span>
+                  <ChevronRight className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
+                </Link>
+              );
+            })}
+          </div>
+
+          <div className="my-4 h-px bg-white/10" />
+
+          <p className="px-2 pb-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+            Kategoriler
+          </p>
+          <div className="space-y-1">
+            {categories.map((category) => {
+              const isActive = activeCategory === category.slug;
+
+              return (
+                <Link
+                  key={category.id}
+                  href={`/prefabrik-evler/${category.slug}`}
+                  onClick={onNavigate}
+                  className={`group flex min-h-11 items-center justify-between border px-3 py-2 text-sm font-bold transition-colors ${
+                    isActive
+                      ? "border-[#d6a94a] bg-[#d6a94a] text-[#0d1f36]"
+                      : "border-white/10 bg-transparent text-slate-300 hover:border-white/25 hover:bg-white/10 hover:text-white"
+                  }`}
+                >
+                  <span className="flex min-w-0 items-center gap-2">
+                    <Factory className="h-4 w-4 shrink-0" />
+                    <span className="truncate">{category.name}</span>
+                  </span>
+                  <ChevronRight className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
+      </div>
+    </aside>
   );
+}
+
+function getShortText(text: string, maxLength = 150) {
+  if (text.length <= maxLength) return text;
+
+  const trimmed = text.slice(0, maxLength).trim();
+  const lastSpaceIndex = trimmed.lastIndexOf(" ");
+  const endIndex = lastSpaceIndex > 80 ? lastSpaceIndex : trimmed.length;
+
+  return `${trimmed.slice(0, endIndex)}...`;
+}
+
+function getFilledText(value: string | null | undefined) {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : undefined;
 }
 
 function SeoFooter({
@@ -649,93 +560,36 @@ function SeoFooter({
   description: string;
   cards: Array<{ title: string; text: string }>;
 }) {
+  const visibleCards = cards.slice(0, 3);
+
   return (
-    <section className="mt-14 rounded-[1rem] border border-slate-300 bg-[#f7f5ef] p-6 shadow-[0_22px_50px_-40px_rgba(15,23,42,0.16)] md:p-8 lg:p-10">
-      <div className="max-w-4xl">
-        <p className="text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
-          CT PREFABRİK
+    <section className="mt-12 border-t border-slate-200 pt-8">
+      <div className="max-w-3xl">
+        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#6f839d]">
+          Ürün Bilgisi
         </p>
-        <h2 className="mt-3 text-3xl font-black leading-tight tracking-tight text-slate-900 md:text-5xl">
+        <h2 className="mt-2 text-2xl font-black tracking-tight text-[#152f51] md:text-3xl">
           {title}
         </h2>
-        <p className="mt-5 text-base font-medium leading-8 text-slate-600">
-          {description}
+        <p className="mt-3 text-sm font-medium leading-7 text-slate-600">
+          {getShortText(description, 190)}
         </p>
       </div>
 
-      <div className="mt-8 grid gap-5 md:grid-cols-2">
-        {cards.map((card) => (
+      <div className="mt-6 grid gap-4 md:grid-cols-3">
+        {visibleCards.map((card) => (
           <article
             key={card.title}
-            className="rounded-[1rem] border border-slate-300 bg-white p-6 shadow-[0_16px_34px_-28px_rgba(15,23,42,0.12)]"
+            className="border border-slate-200 bg-white p-5"
           >
-            <h3 className="text-xl font-black leading-snug tracking-tight text-slate-900 md:text-2xl">
+            <h3 className="text-base font-black leading-snug text-slate-900">
               {card.title}
             </h3>
-            <p className="mt-4 text-base font-medium leading-8 text-slate-600">
-              {card.text}
+            <p className="mt-3 text-sm font-medium leading-6 text-slate-600">
+              {getShortText(card.text)}
             </p>
           </article>
         ))}
-      </div>
-    </section>
-  );
-}
-
-function InternalLinkSection({
-  items,
-}: {
-  items: Array<{
-    title: string;
-    description: string;
-    href: string;
-    icon: typeof BookOpenText;
-  }>;
-}) {
-  return (
-    <section className="mt-14 rounded-[1rem] border border-slate-300 bg-white p-6 shadow-[0_22px_50px_-40px_rgba(15,23,42,0.14)] md:p-8">
-      <div className="max-w-3xl">
-        <p className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
-          <Link2 className="h-4 w-4" />
-          İlgili Sayfalar
-        </p>
-        <h2 className="mt-3 text-2xl font-black tracking-tight text-slate-900 md:text-3xl">
-          Kategori İncelemesini Blog ve Projelerle Derinleştirin
-        </h2>
-        <p className="mt-3 text-sm font-medium leading-7 text-slate-600 md:text-base">
-          Model seçimi yaparken sadece ürün kartlarına bakmak yerine, ilgili blog
-          içerikleri ve tamamlanan projeler arasında geçiş yapmak daha sağlıklı
-          karar vermenizi sağlar.
-        </p>
-      </div>
-
-      <div className="mt-6 grid gap-4 md:grid-cols-2">
-        {items.map((item) => {
-          const Icon = item.icon;
-
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="group rounded-[0.9rem] border border-slate-300 bg-[#f8f7f3] p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-slate-400 hover:shadow-[0_18px_42px_-34px_rgba(15,23,42,0.16)]"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <div className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <h3 className="mt-4 text-lg font-black text-slate-900">
-                    {item.title}
-                  </h3>
-                  <p className="mt-2 text-sm font-medium leading-7 text-slate-600">
-                    {item.description}
-                  </p>
-                </div>
-                <ArrowUpRight className="mt-1 h-5 w-5 shrink-0 text-secondary transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-              </div>
-            </Link>
-          );
-        })}
       </div>
     </section>
   );
@@ -750,6 +604,7 @@ const ProductsClient = ({
   const [selectedProduct, setSelectedProduct] = useState<DBProduct | null>(
     null,
   );
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const normalizedSearchQuery = normalizeSearchValue(searchQuery);
   const visibleProducts = normalizedSearchQuery
     ? products.filter((product) =>
@@ -757,14 +612,29 @@ const ProductsClient = ({
       )
     : products;
 
-  const activeCategoryName = activeCategory
-    ? categories.find((category) => category.slug === activeCategory)?.name
+  const activeCategoryItem = activeCategory
+    ? categories.find((category) => category.slug === activeCategory)
     : undefined;
+  const activeCategoryName = activeCategoryItem?.name;
 
   const content = getPageContent(activeCategoryName, activeCategory);
+  const headerTitle =
+    getFilledText(activeCategoryItem?.title) ?? content.title;
+  const headerDescription =
+    getFilledText(activeCategoryItem?.description) ?? content.description;
+  const bottomTitle = getFilledText(activeCategoryItem?.subtitle);
+  const bottomDescription = getFilledText(activeCategoryItem?.subdescription);
+  const hasBottomContent = Boolean(bottomTitle || bottomDescription);
   const faqContent = getFaqContent(activeCategoryName, activeCategory);
   const faqItems = getProductFaqsByCategory(activeCategoryName, activeCategory);
-  const internalLinks = getInternalLinks(activeCategoryName, activeCategory);
+
+  useEffect(() => {
+    document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileMenuOpen]);
 
   return (
     <div className="w-full max-w-[1280px]">
@@ -780,6 +650,39 @@ const ProductsClient = ({
         />
       ) : null}
 
+      {isMobileMenuOpen ? (
+        <div className="fixed inset-0 z-[90] bg-[#0d1f36] text-white lg:hidden">
+          <div className="flex h-full flex-col">
+            <div className="flex min-h-16 items-center justify-between border-b border-white/10 px-4">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#d6a94a]">
+                  Ürün Menüsü
+                </p>
+                <p className="mt-1 text-sm font-black uppercase tracking-[0.08em] text-white">
+                  Kategori Seç
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="inline-flex h-11 w-11 items-center justify-center border border-white/15 bg-white/5 text-white"
+                aria-label="Ürün menüsünü kapat"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="min-h-0 flex-1 overflow-y-auto px-4 py-5">
+              <ProductSidebarMenu
+                categories={categories}
+                activeCategory={activeCategory}
+                onNavigate={() => setIsMobileMenuOpen(false)}
+              />
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       <section className="pb-10 pt-14 lg:pb-12 lg:pt-18">
         <div className="relative py-2">
           <div className="mx-auto max-w-4xl text-center">
@@ -787,65 +690,103 @@ const ProductsClient = ({
               {content.eyebrow}
             </p>
             <h1 className="mt-3 text-2xl font-black leading-tight tracking-tight text-slate-900 md:text-4xl lg:text-5xl">
-              {content.title}
+              {headerTitle}
             </h1>
             <p className="mx-auto mt-3 max-w-3xl text-sm font-medium leading-7 text-slate-600">
-              {content.description}
+              {headerDescription}
             </p>
-
-            <div className="mt-6 flex justify-center border-t border-slate-200 pt-5">
-              <TopCategoryFilters
-                categories={categories}
-                activeCategory={activeCategory}
-              />
-            </div>
           </div>
         </div>
       </section>
 
       <section className="pb-20">
-        {visibleProducts.length === 0 ? (
-          <div className="flex flex-col items-center justify-center rounded-[1rem] border border-slate-300 bg-white px-6 py-20">
-            <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-xl bg-slate-100">
-              <Filter size={32} className="text-slate-400" />
-            </div>
-            <h3 className="text-xl font-black text-slate-900">
-              Ürün Bulunamadı
-            </h3>
-            <p className="mt-2 max-w-md text-center text-slate-500">
-              {normalizedSearchQuery
-                ? `"${searchQuery}" araması için uygun ürün bulunamadı.`
-                : activeCategoryName
-                ? `"${activeCategoryName}" kategorisinde henüz ürün bulunmuyor.`
-                : "Henüz ürün eklenmemiş."}
-            </p>
-            <Link
-              href="/prefabrik-evler"
-              className="mt-6 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-primary/90"
-            >
-              Tüm Ürünleri Gör
-              <ArrowUpRight className="h-4 w-4" />
-            </Link>
+        <div className="mb-5 lg:hidden">
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="flex min-h-14 w-full items-center justify-between border border-[#152f51] bg-[#0d1f36] px-4 text-left text-white shadow-[0_18px_38px_-30px_rgba(13,31,54,0.8)]"
+          >
+            <span className="flex min-w-0 items-center gap-3">
+              <Filter className="h-5 w-5 shrink-0 text-[#d6a94a]" />
+              <span>
+                <span className="block text-xs font-black uppercase tracking-[0.16em] text-[#d6a94a]">
+                  Ürün Menüsü
+                </span>
+                <span className="block text-sm font-black uppercase tracking-[0.08em]">
+                  Kategorileri Aç
+                </span>
+              </span>
+            </span>
+            <ChevronRight className="h-5 w-5 shrink-0" />
+          </button>
+        </div>
+
+        <div className="grid gap-7 lg:grid-cols-[290px_minmax(0,1fr)] lg:items-start">
+          <div className="hidden lg:block">
+            <ProductSidebarMenu
+              categories={categories}
+              activeCategory={activeCategory}
+            />
           </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {visibleProducts.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                fullscreenChange={() => setSelectedProduct(product)}
-              />
-            ))}
+
+          <div className="min-w-0">
+            {visibleProducts.length === 0 ? (
+              <div className="flex flex-col items-center justify-center border border-slate-300 bg-white px-6 py-20">
+                <div className="mb-6 flex h-20 w-20 items-center justify-center border border-slate-200 bg-slate-100">
+                  <Filter size={32} className="text-slate-400" />
+                </div>
+                <h3 className="text-xl font-black text-slate-900">
+                  Ürün Bulunamadı
+                </h3>
+                <p className="mt-2 max-w-md text-center text-slate-500">
+                  {normalizedSearchQuery
+                    ? `"${searchQuery}" araması için uygun ürün bulunamadı.`
+                    : activeCategoryName
+                      ? `"${activeCategoryName}" kategorisinde henüz ürün bulunmuyor.`
+                      : "Henüz ürün eklenmemiş."}
+                </p>
+                <Link
+                  href="/prefabrik-evler"
+                  className="mt-6 inline-flex items-center gap-2 bg-primary px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-primary/90"
+                >
+                  Tüm Ürünleri Gör
+                  <ArrowUpRight className="h-4 w-4" />
+                </Link>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+                {visibleProducts.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    fullscreenChange={() => setSelectedProduct(product)}
+                  />
+                ))}
+              </div>
+            )}
+
+            {hasBottomContent ? (
+              <section className="mt-12 border-t border-slate-200 pt-8">
+                {bottomTitle ? (
+                  <h2 className="text-2xl font-black tracking-tight text-[#152f51] md:text-3xl">
+                    {bottomTitle}
+                  </h2>
+                ) : null}
+                {bottomDescription ? (
+                  <p className="mt-3 text-sm font-medium leading-7 text-slate-600">
+                    {bottomDescription}
+                  </p>
+                ) : null}
+              </section>
+            ) : null}
           </div>
-        )}
+        </div>
 
         <SeoFooter
           title={content.seoTitle}
           description={content.seoDescription}
           cards={content.seoCards}
         />
-
-        <InternalLinkSection items={internalLinks} />
 
         <div className="mt-14">
           <SeoFaqSection

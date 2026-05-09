@@ -37,8 +37,8 @@ export const WhoWeAre = () => {
         {/* Yumuşak Box Grid (Bento Mix) */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-12 lg:gap-6">
           {/* ANA GÖRSEL KUTUSU (Sol - 8 Col) */}
-          <div className="md:col-span-8 flex flex-col rounded-[2.5rem] border border-slate-100 bg-[#F8FAFC] p-4 shadow-sm">
-            <div className="relative h-[320px] w-full overflow-hidden rounded-[2rem]">
+          <div className="md:col-span-8 flex flex-col rounded-[3px] border border-slate-100 bg-[#F8FAFC] p-4 shadow-sm">
+            <div className="relative h-[320px] w-full overflow-hidden rounded-[3px]">
               <Image
                 src={HeroImage}
                 alt="prefabrik-ev"
@@ -47,8 +47,8 @@ export const WhoWeAre = () => {
                 quality={55}
                 className="object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-700"
               />
-              <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-2xl flex items-center gap-2 shadow-sm">
-                <div className="w-2 h-2 rounded-full bg-[#d6a94a] animate-pulse" />
+              <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-[2px] flex items-center gap-2 shadow-sm">
+                <div className="w-2 h-2 rounded-[1px] bg-[#d6a94a] animate-pulse" />
                 <span className="text-[10px] font-bold uppercase tracking-widest">
                   30 GÜNDE TESLİM
                 </span>
@@ -66,7 +66,7 @@ export const WhoWeAre = () => {
               </div>
               <button
                 aria-label="prefabrik-evler"
-                className="bg-[#152f51] text-white p-4 rounded-full hover:bg-[#10243d] transition-colors shadow-lg"
+                className="bg-[#152f51] text-white p-4 rounded-[2px] hover:bg-[#10243d] transition-colors shadow-lg"
               >
                 <ArrowRight size={20} />
               </button>
@@ -76,8 +76,8 @@ export const WhoWeAre = () => {
           {/* SAĞ KOLON KUTULARI (4 Col) */}
           <div className="md:col-span-4 flex flex-col gap-8">
             {/* Güven Kutusu */}
-            <div className="relative flex-1 overflow-hidden rounded-[2.5rem] border border-slate-50 bg-white p-8 shadow-[0_20px_50px_rgba(0,0,0,0.03)]">
-              <div className="absolute -right-8 -top-8 w-32 h-32 bg-[#fffaf0] rounded-full opacity-50" />
+            <div className="relative flex-1 overflow-hidden rounded-[3px] border border-slate-50 bg-white p-8 shadow-[0_20px_50px_rgba(0,0,0,0.03)]">
+              <div className="absolute -right-8 -top-8 w-32 h-32 bg-[#fffaf0] rounded-[3px] opacity-50" />
               <ShieldCheck className="relative z-10 mb-5 h-9 w-9 text-secondary" />
               <h4 className="mb-2 text-lg font-bold">Statik Güven</h4>
               <p className="text-sm font-medium leading-6 text-slate-500">
@@ -89,7 +89,7 @@ export const WhoWeAre = () => {
             {/* Doğa Kutusu */}
             <motion.div
               whileHover="hover"
-              className="group flex flex-1 cursor-pointer flex-col justify-end rounded-[2.5rem] bg-[#fffaf0] p-8"
+              className="group flex flex-1 cursor-pointer flex-col justify-end rounded-[3px] bg-[#fffaf0] p-8"
             >
               <Trees className="mb-4 h-9 w-9 text-[#9b7430] transition-transform group-hover:scale-110" />
               <h4 className="mb-1 text-lg font-bold text-[#152f51]">
@@ -102,8 +102,8 @@ export const WhoWeAre = () => {
           </div>
 
           {/* ALT SATIR: HIZLI BİLGİ KUTULARI */}
-          <div className="md:col-span-4 flex items-center gap-5 rounded-[2.5rem] border border-slate-100 bg-white p-8 shadow-sm">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[1.5rem] bg-slate-50">
+          <div className="md:col-span-4 flex items-center gap-5 rounded-[3px] border border-slate-100 bg-white p-8 shadow-sm">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[2px] bg-slate-50">
               <Zap className="text-[#d6a94a] fill-[#d6a94a]" size={24} />
             </div>
             <div>
@@ -116,8 +116,8 @@ export const WhoWeAre = () => {
             </div>
           </div>
 
-          <div className="md:col-span-4 flex items-center gap-5 rounded-[2.5rem] bg-slate-900 p-8 text-white">
-            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[1.5rem] bg-white/10">
+          <div className="md:col-span-4 flex items-center gap-5 rounded-[3px] bg-slate-900 p-8 text-white">
+            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[2px] bg-white/10">
               <PencilRuler className="text-white" size={24} />
             </div>
             <div>
@@ -128,7 +128,7 @@ export const WhoWeAre = () => {
             </div>
           </div>
 
-          <div className="md:col-span-4 flex flex-col items-center justify-center rounded-[2.5rem] bg-[#152f51] p-8 text-center text-white">
+          <div className="md:col-span-4 flex flex-col items-center justify-center rounded-[3px] bg-[#152f51] p-8 text-center text-white">
             <div className="text-3xl font-black tracking-tighter">50+</div>
             <p className="text-xs font-bold uppercase tracking-widest opacity-80">
               Yıllık Tecrübe

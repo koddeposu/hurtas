@@ -60,9 +60,13 @@ export interface DBProductImage {
 
 export interface DBCategory {
   id: string;
+  parentId: string | null;
   name: string;
   slug: string;
+  title: string | null;
   description: string | null;
+  subtitle: string | null;
+  subdescription: string | null;
   order: number;
   createdAt: Date;
   updatedAt: Date;

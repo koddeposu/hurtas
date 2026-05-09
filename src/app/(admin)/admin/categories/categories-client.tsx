@@ -22,9 +22,11 @@ import {
   SortableItem,
 } from "@/components/admin/sortable-table";
 import { toast } from "sonner";
+import { buildCategoryOptions } from "@/lib/categoryTree";
 
 interface Category extends SortableItem {
   id: string;
+  parentId: string | null;
   name: string;
   slug: string;
   description: string | null;
@@ -50,6 +52,7 @@ export function CategoriesClient({
     setHasChanges,
     getOrderedItems,
   } = useSortableTable(initialCategories);
+  const categoryOptions = buildCategoryOptions(categories);
 
   const handleSave = () => {
     startTransition(async () => {
@@ -136,10 +139,13 @@ export function CategoriesClient({
                     </TableCell>
                   </TableRow>
                 ) : (
-                  categories.map((category) => (
+                  categoryOptions.map(({ category, depth }) => (
                     <SortableRow key={category.id} id={category.id}>
                       <TableCell className="font-medium">
-                        {category.name}
+                        <span style={{ paddingLeft: depth * 18 }}>
+                          {depth > 0 ? "↳ " : ""}
+                          {category.name}
+                        </span>
                       </TableCell>
                       <TableCell className="text-slate-500">
                         {category.slug}

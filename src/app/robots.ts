@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/api/", "/admin/"],
     },
-    sitemap: "https://ctprefabrik.com/sitemap.xml",
+    sitemap: "https://hurtasbeton.com/sitemap.xml",
   };
 }

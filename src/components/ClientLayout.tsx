@@ -2,6 +2,7 @@
 
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
+import { PageHero } from "@/components/page-hero";
 import { usePathname } from "next/navigation";
 import BottomBar from "./bottomBar";
 
@@ -36,6 +37,7 @@ export default function ClientLayout({
           isHomepage ? "" : "pt-16 lg:pt-[13rem]"
         }`}
       >
+        <PageHero pathname={pathname} />
         <div
           className={`w-full ${hideLayout && "h-screen"} ${!hideLayout2 && "px-5 pb-5"}`}
         >

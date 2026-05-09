@@ -20,7 +20,7 @@ export async function HomepageBlogSection() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "ItemList",
-            name: "CT Prefabrik Blog Yazıları",
+            name: "Hürtaş Beton Blog Yazıları",
             itemListElement: blogData.posts.map((post, index) => ({
               "@type": "ListItem",
               position: index + 1,

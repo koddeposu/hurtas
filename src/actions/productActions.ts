@@ -1,6 +1,6 @@
 "use server";
 
-import { and, eq, desc, asc, inArray } from "drizzle-orm";
+import { and, eq, desc, asc, inArray, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db/drizzle";
 import { product, productImage, category, productCategory } from "@/db/schema";
@@ -29,16 +29,45 @@ function normalizeCategoryIds(
   );
 }
 
+async function getCategoryAndDescendantIds(categoryId: string) {
+  const categories = await db
+    .select({ id: category.id, parentId: category.parentId })
+    .from(category);
+  const childrenByParent = new Map<string | null, string[]>();
+
+  for (const item of categories) {
+    const key = item.parentId ?? null;
+    const children = childrenByParent.get(key) ?? [];
+    children.push(item.id);
+    childrenByParent.set(key, children);
+  }
+
+  const ids = new Set<string>();
+  const visit = (id: string) => {
+    if (ids.has(id)) return;
+    ids.add(id);
+
+    for (const childId of childrenByParent.get(id) ?? []) {
+      visit(childId);
+    }
+  };
+
+  visit(categoryId);
+
+  return Array.from(ids);
+}
+
 async function getLinkedProductIdsByCategory(categoryId: string) {
+  const categoryIds = await getCategoryAndDescendantIds(categoryId);
   const [mappedRows, legacyRows] = await Promise.all([
     db
       .select({ productId: productCategory.productId })
       .from(productCategory)
-      .where(eq(productCategory.categoryId, categoryId)),
+      .where(inArray(productCategory.categoryId, categoryIds)),
     db
       .select({ id: product.id })
       .from(product)
-      .where(eq(product.categoryId, categoryId)),
+      .where(inArray(product.categoryId, categoryIds)),
   ]);
 
   return Array.from(
@@ -301,6 +330,51 @@ export async function getProductsPreview(categoryId?: string, limit?: number) {
   }
 
   const rows = await query;
+  const categoryMap = await getCategoriesByProductIds(
+    rows.map((row) => row.product.id),
+  );
+
+  const previews = await Promise.all(
+    rows.map(async (row) => {
+      const categories = mergeCategoriesWithPrimary(
+        row.product.id,
+        row.category,
+        categoryMap,
+      );
+      const primaryCategory = row.category ?? categories[0] ?? null;
+
+      const images = await db
+        .select()
+        .from(productImage)
+        .where(eq(productImage.productId, row.product.id))
+        .orderBy(asc(productImage.order))
+        .limit(1);
+
+      return {
+        ...row.product,
+        category: primaryCategory,
+        categories,
+        categoryIds: categories.map((item) => item.id),
+        image: images[0] ?? null,
+      };
+    }),
+  );
+
+  return previews;
+}
+
+export async function getRandomProductsPreview(limit = 10) {
+  const rows = await db
+    .select({
+      product: product,
+      category: category,
+    })
+    .from(product)
+    .leftJoin(category, eq(product.categoryId, category.id))
+    .where(eq(product.isActive, true))
+    .orderBy(sql`random()`)
+    .limit(limit);
+
   const categoryMap = await getCategoriesByProductIds(
     rows.map((row) => row.product.id),
   );

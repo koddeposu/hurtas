@@ -10,6 +10,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ArrowLeft, Info, Loader2, Upload } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -24,13 +31,27 @@ interface BlogPost {
   excerpt: string;
   content: string | null;
   category: string;
+  productCategoryId: string | null;
   imageUrl: string;
   imageAlt: string | null;
   readTime: number | null;
   isPublished: boolean;
 }
 
-export function EditBlogForm({ post }: { post: BlogPost }) {
+interface ProductCategoryOption {
+  id: string;
+  name: string;
+}
+
+const NO_PRODUCT_CATEGORY = "_none";
+
+export function EditBlogForm({
+  post,
+  productCategories,
+}: {
+  post: BlogPost;
+  productCategories: ProductCategoryOption[];
+}) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -40,6 +61,7 @@ export function EditBlogForm({ post }: { post: BlogPost }) {
     excerpt: post.excerpt,
     content: post.content || "",
     category: post.category,
+    productCategoryId: post.productCategoryId || "",
     imageAlt: post.imageAlt || "",
     readTime: post.readTime?.toString() || "",
     isPublished: post.isPublished,
@@ -78,6 +100,7 @@ export function EditBlogForm({ post }: { post: BlogPost }) {
     try {
       await updateBlogPost(post.id, {
         ...formData,
+        productCategoryId: formData.productCategoryId || null,
         readTime: formData.readTime ? parseInt(formData.readTime, 10) : null,
         imageUrl,
       });
@@ -134,6 +157,33 @@ export function EditBlogForm({ post }: { post: BlogPost }) {
                       required
                       className="mt-1"
                     />
+                  </div>
+                  <div className="w-[260px]">
+                    <Label>Ürün Slider Kategorisi</Label>
+                    <Select
+                      value={formData.productCategoryId || NO_PRODUCT_CATEGORY}
+                      onValueChange={(value) =>
+                        setFormData({
+                          ...formData,
+                          productCategoryId:
+                            value === NO_PRODUCT_CATEGORY ? "" : value,
+                        })
+                      }
+                    >
+                      <SelectTrigger className="mt-1 w-full">
+                        <SelectValue placeholder="Kategori seçin" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value={NO_PRODUCT_CATEGORY}>
+                          Slider gösterme
+                        </SelectItem>
+                        {productCategories.map((category) => (
+                          <SelectItem key={category.id} value={category.id}>
+                            {category.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                   <div className="w-[100px]">
                     <div className="flex items-center gap-1.5">

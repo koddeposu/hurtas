@@ -11,7 +11,7 @@
 
 import { config } from "dotenv";
 import { drizzle } from "drizzle-orm/node-postgres";
-import { hash } from "bcryptjs";
+import { hashPassword } from "better-auth/crypto";
 import {
   user,
   account,
@@ -39,8 +39,7 @@ async function seed() {
   const userId = crypto.randomUUID();
   const accountId = crypto.randomUUID();
 
-  // Use bcrypt for password hashing (same as better-auth)
-  const hashedPassword = await hash(adminPassword, 10);
+  const hashedPassword = await hashPassword(adminPassword);
 
   console.log("👤 Creating admin user...");
   await db

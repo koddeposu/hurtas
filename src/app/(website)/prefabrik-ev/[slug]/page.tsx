@@ -1,6 +1,10 @@
 import { getProductBySlug, getProductsPreview } from '@/actions/productActions';
 import ProductPageClient from '@/components/ProductPageClient';
-import { extractPlainTextFromRichContent, parseTipTapDoc } from '@/lib/richContent';
+import { parseTipTapDoc } from '@/lib/richContent';
+import {
+  extractPlainTextFromProductDetailContent,
+  parseProductDetailContent,
+} from '@/lib/productDetailContent';
 import { convertJsonToHtml } from '@/lib/tiptap-utils';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -24,6 +28,21 @@ type RelatedProduct = {
     alt: string;
   } | null;
 };
+
+type ProductDetailRenderBlock =
+  | {
+      id: string;
+      type: 'description';
+      html: string | null;
+      text: string;
+    }
+  | {
+      id: string;
+      type: 'table';
+      title: string;
+      headers: string[];
+      rows: string[][];
+    };
 
 function getDescriptionHtml(description: string | null | undefined) {
   if (!description) return null;
@@ -50,6 +69,59 @@ function getRelatedTitle(categoryName: string | null | undefined) {
   return name ? `Diğer ${name} Modellerimiz` : 'Diğer Prefabrik Ev Modellerimiz';
 }
 
+function getProductDetailBlocks(
+  description: string | null | undefined,
+): ProductDetailRenderBlock[] {
+  const detailContent = parseProductDetailContent(description);
+
+  if (!detailContent) {
+    const html = getDescriptionHtml(description);
+    const text = extractPlainTextFromProductDetailContent(description);
+    return html || text
+      ? [
+          {
+            id: 'legacy-description',
+            type: 'description',
+            html,
+            text,
+          },
+        ]
+      : [];
+  }
+
+  return detailContent.blocks
+    .map((block): ProductDetailRenderBlock | null => {
+      if (block.type === 'description') {
+        const html = getDescriptionHtml(block.content);
+        const text = extractPlainTextFromProductDetailContent(block.content);
+        return html || text
+          ? {
+              id: block.id,
+              type: 'description',
+              html,
+              text,
+            }
+          : null;
+      }
+
+      const hasTableContent =
+        block.title.trim() ||
+        block.headers.some((header) => header.trim()) ||
+        block.rows.some((row) => row.some((cell) => cell.trim()));
+
+      return hasTableContent
+        ? {
+            id: block.id,
+            type: 'table',
+            title: block.title,
+            headers: block.headers,
+            rows: block.rows,
+          }
+        : null;
+    })
+    .filter((block): block is ProductDetailRenderBlock => block !== null);
+}
+
 // Metadata oluştur
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -64,8 +136,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const firstImage = product.images[0]?.url;
   const imageUrl = firstImage || 'https://ctprefabrik.com/og-image.png';
-  const plainDescription = extractPlainTextFromRichContent(product.description);
-  const fallbackDescription = `${product.name} - ${product.room ? `${product.room} oda` : ""} ${product.bath ? `${product.bath} banyo` : ""} prefabrik ev modeli. Uygun fiyatlarla hemen teslim.`;
+  const plainDescription = extractPlainTextFromProductDetailContent(product.description);
+  const fallbackDescription = `${product.name} prefabrik ev modeli. Detaylı bilgi için Hürtaş Beton ile iletişime geçin.`;
 
   // Açıklama oluştur
   const description = (
@@ -75,9 +147,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const keywords = [
     product.name,
     `${product.room} oda prefabrik ev`,
-    `${product.room} prefabrik ev fiyatı`,
     `${product.floor} katlı prefabrik ev`,
-    "Prefabrik ev fiyatları",
     'anahtar teslim prefabrik ev',
     'çelik konstrüksiyon prefabrik ev',
     'CT Prefabrik ürünleri',
@@ -143,8 +213,8 @@ export default async function ProductPage({ params }: Props) {
 
   const imageUrls = product.images.map((img) => img.url);
   const pageUrl = `https://ctprefabrik.com/prefabrik-ev/${slug}`;
-  const plainDescription = extractPlainTextFromRichContent(product.description);
-  const descriptionHtml = getDescriptionHtml(product.description);
+  const plainDescription = extractPlainTextFromProductDetailContent(product.description);
+  const detailBlocks = getProductDetailBlocks(product.description);
   const relatedCategoryId = product.categoryId ?? product.categoryIds?.[0];
   const relatedSource = relatedCategoryId
     ? await getProductsPreview(relatedCategoryId, 12)
@@ -209,22 +279,6 @@ export default async function ProductPage({ params }: Props) {
     },
   ].filter(Boolean);
 
-  const offer = product.price
-    ? {
-        "@type": "Offer",
-        url: pageUrl,
-        priceCurrency: "TRY",
-        price: product.price,
-        availability: "https://schema.org/InStock",
-        itemCondition: "https://schema.org/NewCondition",
-        seller: {
-          "@type": "Organization",
-          name: "CT Prefabrik",
-          url: "https://ctprefabrik.com",
-        },
-      }
-    : undefined;
-
   // JSON-LD Schema Markup
   const jsonLd = {
     "@context": "https://schema.org",
@@ -248,7 +302,6 @@ export default async function ProductPage({ params }: Props) {
       url: "https://ctprefabrik.com",
     },
     additionalProperty,
-    ...(offer ? { offers: offer } : {}),
     potentialAction: {
       "@type": "ViewAction",
       target: pageUrl,
@@ -296,7 +349,7 @@ export default async function ProductPage({ params }: Props) {
       {/* Client Component */}
       <ProductPageClient
         product={product}
-        descriptionHtml={descriptionHtml}
+        detailBlocks={detailBlocks}
         descriptionText={plainDescription}
         relatedProducts={relatedProducts}
         relatedTitle={relatedTitle}

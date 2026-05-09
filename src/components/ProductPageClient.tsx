@@ -9,17 +9,12 @@ import { ZoomableImage } from "@/components/ZoomableImage";
 import { handleCall, handleWhatsApp } from "@/lib/analytics/googleAds";
 import { motion } from "framer-motion";
 import {
-  ArrowUp,
   ArrowUpRight,
-  Bath,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
-  Info,
-  Layers3,
   MessageCircle,
   Phone,
-  Ruler,
   ZoomIn,
 } from "lucide-react";
 import Image from "next/image";
@@ -53,17 +48,13 @@ interface DetailProduct {
 
 interface ProductPageClientProps {
   product: DetailProduct;
-  descriptionHtml?: string | null;
+  detailBlocks?: ProductDetailRenderBlock[];
   descriptionText?: string | null;
   relatedProducts?: RelatedProduct[];
   relatedTitle?: string;
 }
 
 interface ProductImageProps {
-  product: DetailProduct;
-}
-
-interface ProductPriceProps {
   product: DetailProduct;
 }
 
@@ -82,6 +73,21 @@ interface RelatedProduct {
     alt: string;
   } | null;
 }
+
+type ProductDetailRenderBlock =
+  | {
+      id: string;
+      type: "description";
+      html: string | null;
+      text: string;
+    }
+  | {
+      id: string;
+      type: "table";
+      title: string;
+      headers: string[];
+      rows: string[][];
+    };
 
 export function ProductImage({ product }: ProductImageProps) {
   const [api, setApi] = React.useState<CarouselApi | null>(null);
@@ -130,7 +136,7 @@ export function ProductImage({ product }: ProductImageProps) {
         <div className="relative group">
           <Carousel
             setApi={setApi}
-            className="w-full overflow-hidden rounded-[1rem] border border-white"
+            className="w-full overflow-hidden rounded-[3px] border border-slate-200 bg-slate-100 shadow-[0_24px_70px_-48px_rgba(15,23,42,0.55)]"
           >
             <CarouselContent>
               {product.images.map((item, index) => (
@@ -153,10 +159,10 @@ export function ProductImage({ product }: ProductImageProps) {
           {/* Yakınlaştırma İkonu */}
           <button
             onClick={() => setSelectedProduct(product)}
-            className="absolute top-4 right-4 z-30 bg-white/95 hover:bg-white p-2 rounded-lg shadow transition-all"
+            className="absolute top-4 right-4 z-30 rounded-[2px] bg-white/95 p-2 text-[#152f51] shadow transition-all hover:bg-white"
             aria-label="Resmi büyüt"
           >
-            <ZoomIn />
+            <ZoomIn className="h-5 w-5" />
           </button>
 
           {product.images.length > 1 && (
@@ -170,7 +176,7 @@ export function ProductImage({ product }: ProductImageProps) {
                   }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   className={`h-2.5 rounded-full cursor-pointer ${
-                    current === index ? "bg-secondary" : "bg-white/70"
+                    current === index ? "bg-[#d6a94a]" : "bg-white/70"
                   }`}
                 />
               ))}
@@ -184,9 +190,9 @@ export function ProductImage({ product }: ProductImageProps) {
               <button
                 key={index}
                 type="button"
-                className={`overflow-hidden rounded-lg border transition-all ${
+                className={`overflow-hidden rounded-[3px] border transition-all ${
                   current === index
-                    ? "border-secondary ring-1 ring-secondary/30"
+                    ? "border-[#d6a94a] ring-1 ring-[#d6a94a]/35"
                     : "border-slate-200"
                 }`}
                 onClick={() => api?.scrollTo(index)}
@@ -209,136 +215,156 @@ export function ProductImage({ product }: ProductImageProps) {
   );
 }
 
-function ProductFeatures({ product }: ProductPriceProps) {
-  const featureItems = [
-    product.area && {
-      icon: <Ruler size={16} className="text-[#152f51]" />,
-      label: `Boy: ${product.area}`,
-    },
-    product.room && {
-      icon: <Layers3 size={16} className="text-[#152f51]" />,
-      label: `Cidar: ${product.room}`,
-    },
-    product.bath && {
-      icon: <Bath size={16} className="text-[#49202d]" />,
-      label: `${product.bath} banyo`,
-    },
-    product.floor && {
-      icon: <Ruler size={16} className="text-[#49202d]" />,
-      label: `${product.floor} kat`,
-    },
-    product.height && {
-      icon: <ArrowUp size={16} className="text-[#49202d]" />,
-      label: `${product.height}m yükseklik`,
-    },
-  ].filter(Boolean) as { icon: React.ReactNode; label: string }[];
+function ProductActions() {
+  return (
+    <div className="mt-5">
+      <div className="hidden gap-3 md:flex">
+        <button
+          type="button"
+          onClick={handleWhatsApp}
+          className="inline-flex min-h-12 flex-1 cursor-pointer items-center justify-center gap-2 rounded-[2px] bg-[#d6a94a] px-5 py-3.5 text-xs font-black uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#bf943b] ads-whatsapp"
+        >
+          <MessageCircle className="h-5 w-5" />
+          WhatsApp
+        </button>
+        <Link
+          href="/iletisim"
+          prefetch={false}
+          className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-[2px] bg-[#152f51] px-5 py-3.5 text-xs font-black uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#0d1f36] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d6a94a] focus-visible:ring-offset-2 ads-contact"
+        >
+          İletişim
+          <ArrowUpRight className="h-4 w-4" />
+        </Link>
+      </div>
 
-  if (!featureItems.length) return null;
+      <div className="grid grid-cols-2 gap-3 md:hidden">
+        <button
+          type="button"
+          onClick={handleWhatsApp}
+          className="inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-[2px] bg-[#d6a94a] px-3 py-3 text-xs font-black uppercase tracking-[0.1em] text-white transition-colors hover:bg-[#bf943b] ads-whatsapp"
+        >
+          <MessageCircle className="h-5 w-5" />
+          WhatsApp
+        </button>
+        <button
+          type="button"
+          onClick={handleCall}
+          className="inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-[2px] bg-[#152f51] px-3 py-3 text-xs font-black uppercase tracking-[0.1em] text-white transition-colors hover:bg-[#0d1f36] ads-phone-call"
+        >
+          <Phone className="h-5 w-5" />
+          Bizi Arayın
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function TrustFeatures() {
+  const items = [
+    "Dayanıklı Beton Üretimi",
+    "Planlı Sevkiyat",
+    "Altyapı ve Çevre Düzenleme Ürünleri",
+  ];
 
   return (
-    <div className="grid grid-cols-2 gap-2 sm:gap-3">
-      {featureItems.map((item) => (
+    <div className="mt-6 grid gap-3 border-y border-slate-200 py-5">
+      {items.map((item) => (
         <div
-          key={item.label}
-          className="flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-slate-700"
+          key={item}
+          className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.08em] text-slate-700"
         >
-          {item.icon}
-          <span className="text-xs sm:text-sm font-semibold">{item.label}</span>
+          <CheckCircle2 className="h-4 w-4 shrink-0 text-[#152f51]" />
+          <span>{item}</span>
         </div>
       ))}
     </div>
   );
 }
 
-function ProductPrice({ product }: ProductPriceProps) {
-  const oldPriceNum = product.oldPrice ? Number(product.oldPrice) : 0;
-
-  return (
-    <div className="rounded-[1rem] border border-slate-200 bg-slate-50 p-4 md:p-6">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
-        Başlangıç Fiyatı
-      </p>
-      {oldPriceNum > 0 && (
-        <div className="flex items-center gap-3 mb-2">
-          <span className="text-slate-300 line-through font-bold">
-            {oldPriceNum.toLocaleString("tr-TR")} TL
-          </span>
-        </div>
-      )}
-      <div className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-1">
-        {formatPrice(product?.price)} TL
-      </div>
-      <p className="text-slate-500 text-xs font-medium">Ücretsiz Kurulum</p>
-    </div>
-  );
-}
-const formatPrice = (price: string | null | undefined) => {
-  if (!price || price === "null") return null;
-  return new Intl.NumberFormat("tr-TR").format(Number(price));
-};
-
-function ProductActions() {
-  return (
-    <div className="space-y-3">
-      <button
-        onClick={handleWhatsApp}
-        className="cursor-pointer w-full bg-secondary text-white py-4 rounded-[1rem] font-black text-sm tracking-[0.08em] flex items-center justify-center gap-3 hover:bg-[#20ba5a] transition-colors ads-whatsapp"
-      >
-        <MessageCircle size={22} /> WHATSAPP
-      </button>
-      <button
-        onClick={handleCall}
-        className="cursor-pointer w-full bg-primary text-white py-4 rounded-[1rem] font-black text-sm tracking-[0.08em] flex items-center justify-center gap-3 hover:bg-[#3d1a26] transition-colors ads-phone-call"
-      >
-        <Phone size={22} /> BİZİ ARAYIN
-      </button>
-      <p className="text-xs text-slate-500">
-        Uzman ekibimiz ortalama 2 dakika içinde size geri dönüş sağlar.
-      </p>
-    </div>
-  );
-}
-
-function TrustFeatures() {
-  return (
-    <div className="bg-white border border-slate-200 p-4 rounded-[1rem] space-y-3 shadow-sm">
-      <div className="flex items-center gap-3 text-xs font-bold text-slate-600 uppercase tracking-wide">
-        <CheckCircle2 size={16} className="text-secondary" />
-        TSE Onaylı Malzemeler
-      </div>
-      <div className="flex items-center gap-3 text-xs font-bold text-slate-600 uppercase tracking-wide">
-        <CheckCircle2 size={16} className="text-secondary" />
-        10 Yıl Resmi Garanti
-      </div>
-      <div className="flex items-center gap-3 text-xs font-bold text-slate-600 uppercase tracking-wide">
-        <Info size={16} className="text-[#49202d]" />
-        Hemen Teslim İmkanı
-      </div>
-    </div>
-  );
-}
-
 function ProductDescription({
-  descriptionHtml,
+  detailBlocks = [],
   descriptionText,
 }: {
-  descriptionHtml?: string | null;
+  detailBlocks?: ProductDetailRenderBlock[];
   descriptionText?: string | null;
 }) {
-  if (!descriptionHtml && !descriptionText) return null;
+  if (detailBlocks.length === 0 && !descriptionText) return null;
 
   return (
-    <div className="mt-8 md:mt-10 rounded-[1rem] border border-slate-200 bg-white p-4 md:p-6">
-      <h2 className="text-lg md:text-xl font-black tracking-tight text-[#49202d]">
+    <div className="mt-8 md:mt-10">
+      <div className="mb-4 inline-flex items-center gap-2 rounded-[2px] border border-slate-200 bg-white px-3 py-1.5">
+        <span className="h-2 w-2 rounded-[1px] bg-[#d6a94a]" />
+        <span className="text-[10px] font-black uppercase tracking-[0.18em] text-[#152f51]">
+          Ürün Bilgisi
+        </span>
+      </div>
+      <h2 className="text-xl font-black tracking-tight text-slate-900 md:text-3xl">
         Ürün Açıklaması
       </h2>
-      {descriptionHtml ? (
-        <div
-          className="blog-content product-content mt-3 text-sm md:text-base text-slate-700"
-          dangerouslySetInnerHTML={{ __html: descriptionHtml }}
-        />
+      {detailBlocks.length > 0 ? (
+        <div className="mt-5 space-y-8">
+          {detailBlocks.map((block) =>
+            block.type === "description" ? (
+              block.html ? (
+                <div
+                  key={block.id}
+                  className="blog-content product-content max-w-4xl text-sm text-slate-700 md:text-base"
+                  dangerouslySetInnerHTML={{ __html: block.html }}
+                />
+              ) : (
+                <p
+                  key={block.id}
+                  className="max-w-4xl whitespace-pre-line text-sm leading-relaxed text-slate-700 md:text-base"
+                >
+                  {block.text}
+                </p>
+              )
+            ) : (
+              <div key={block.id} className="max-w-5xl">
+                {block.title ? (
+                  <h3 className="mb-3 text-lg font-black tracking-tight text-slate-900 md:text-2xl">
+                    {block.title}
+                  </h3>
+                ) : null}
+                <div className="overflow-x-auto rounded-[3px] border border-slate-200 bg-white">
+                  <table className="w-full min-w-[560px] border-collapse text-left text-sm">
+                    <thead className="bg-[#152f51] text-white">
+                      <tr>
+                        {block.headers.map((header, index) => (
+                          <th
+                            key={`${block.id}-header-${index}`}
+                            className="border-r border-white/15 px-4 py-3 font-black"
+                          >
+                            {header || "-"}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {block.rows.map((row, rowIndex) => (
+                        <tr
+                          key={`${block.id}-row-${rowIndex}`}
+                          className="border-t border-slate-200 odd:bg-slate-50/70"
+                        >
+                          {block.headers.map((_, columnIndex) => (
+                            <td
+                              key={`${block.id}-cell-${rowIndex}-${columnIndex}`}
+                              className="border-r border-slate-200 px-4 py-3 text-slate-700 last:border-r-0"
+                            >
+                              {row[columnIndex] || "-"}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ),
+          )}
+        </div>
       ) : (
-        <p className="mt-3 text-sm md:text-base leading-relaxed text-slate-700 whitespace-pre-line">
+        <p className="mt-4 max-w-4xl whitespace-pre-line text-sm leading-relaxed text-slate-700 md:text-base">
           {descriptionText}
         </p>
       )}
@@ -351,13 +377,13 @@ function RelatedProductCard({ product }: { product: RelatedProduct }) {
     <Link
       href={`/prefabrik-ev/${product.slug}`}
       prefetch={false}
-      className="group flex h-full flex-col overflow-hidden rounded-[1rem] border border-slate-300 bg-white shadow-[0_16px_38px_-32px_rgba(15,23,42,0.24)] transition-all duration-300 hover:-translate-y-1.5 hover:border-slate-400 hover:shadow-[0_24px_52px_-30px_rgba(15,23,42,0.3)]"
+      className="group flex h-full flex-col overflow-hidden rounded-[3px] border border-slate-300 bg-white shadow-[0_16px_38px_-32px_rgba(15,23,42,0.24)] transition-all duration-300 hover:-translate-y-1.5 hover:border-slate-400 hover:shadow-[0_24px_52px_-30px_rgba(15,23,42,0.3)]"
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-slate-100">
         {product.image ? (
           <Image
             src={product.image.url}
-            alt={product.image.alt}
+            alt={product.image.alt?.trim() || product.name}
             fill
             quality={75}
             className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
@@ -366,7 +392,7 @@ function RelatedProductCard({ product }: { product: RelatedProduct }) {
         ) : null}
 
         {product.categoryName ? (
-          <div className="absolute right-4 top-4 rounded-lg border border-slate-200/80 bg-white/92 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-[#152f51] shadow-sm backdrop-blur">
+          <div className="absolute right-4 top-4 rounded-[2px] border border-slate-200/80 bg-white/92 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-[#152f51] shadow-sm backdrop-blur">
             {product.categoryName}
           </div>
         ) : null}
@@ -504,64 +530,54 @@ function RelatedProductsSlider({
 
 export default function ProductPageClient({
   product,
-  descriptionHtml,
+  detailBlocks,
   descriptionText,
   relatedProducts = [],
   relatedTitle,
 }: ProductPageClientProps) {
+  const shortDescription = product.metaDescription || descriptionText;
+
   return (
-    <main className="min-h-screen bg-slate-50/30">
-      <section className="pt-14 pb-12 lg:pt-24">
+    <main className="min-h-screen bg-[#f4f7fb]">
+      <section className="pt-8 pb-12 lg:pt-14">
         <div className="container mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10 items-start">
-            <div className="lg:col-span-7">
+          <div className="grid gap-7 lg:grid-cols-12 lg:items-start">
+            <div className="lg:col-span-7 xl:col-span-8">
               <ProductImage product={product} />
-              <div className="hidden lg:block">
-                <ProductDescription
-                  descriptionHtml={descriptionHtml}
-                  descriptionText={descriptionText}
-                />
-              </div>
             </div>
 
-            <aside className="lg:col-span-5 mt-1 lg:mt-0 space-y-4 p-0 border-0 shadow-none bg-transparent lg:sticky lg:top-28 lg:rounded-[1rem] lg:border lg:border-slate-200 lg:bg-white lg:p-6 lg:shadow-sm lg:space-y-5">
-              <div className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1">
-                <span className="w-4 h-[1px] bg-primary" />
-                <span className="text-[10px] font-black text-[#49202d] uppercase tracking-[0.18em]">
-                  CT PREFABRİK
+            <aside className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-28">
+              <div className="inline-flex items-center gap-2 rounded-[2px] border border-slate-200 bg-white px-3 py-1.5">
+                <span className="h-2 w-2 rounded-[1px] bg-[#d6a94a]" />
+                <span className="text-[10px] font-black uppercase tracking-[0.18em] text-[#152f51]">
+                  Hürtaş Beton
                 </span>
               </div>
 
-              <h1 className="text-3xl md:text-5xl lg:text-4xl xl:text-5xl font-black text-slate-900 tracking-tight leading-[1.05]">
+              <h1 className="mt-4 text-3xl font-black leading-tight tracking-tight text-slate-900 md:text-5xl lg:text-4xl xl:text-5xl">
                 {product.name}
               </h1>
 
-              {product.metaDescription ? (
-                <p className="text-sm md:text-base leading-relaxed text-slate-600 [text-wrap:pretty]">
-                  {product.metaDescription}
+              {shortDescription ? (
+                <p className="mt-4 line-clamp-5 text-sm leading-7 text-slate-600 [text-wrap:pretty] md:text-base">
+                  {shortDescription}
                 </p>
               ) : null}
-
-              <ProductFeatures product={product} />
-
-              {product.price && <ProductPrice product={product} />}
 
               <ProductActions />
               <TrustFeatures />
             </aside>
-
-            <div className="lg:hidden">
-              <ProductDescription
-                descriptionHtml={descriptionHtml}
-                descriptionText={descriptionText}
-              />
-            </div>
           </div>
+
+          <ProductDescription
+            detailBlocks={detailBlocks}
+            descriptionText={descriptionText}
+          />
         </div>
       </section>
 
       {relatedProducts.length > 0 ? (
-        <section className="pb-16">
+        <section className="bg-white pb-16 pt-2">
           <div className="container mx-auto max-w-7xl">
             <RelatedProductsSlider
               title={relatedTitle}

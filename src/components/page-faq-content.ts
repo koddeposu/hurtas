@@ -2,127 +2,67 @@ import type { SeoFaqItem } from "@/components/seo-faq-section";
 
 export const ABOUT_FAQS: readonly SeoFaqItem[] = [
   {
-    question: "CT Prefabrik hangi alanlarda hizmet veriyor?",
+    question: "Hürtaş Beton hangi ürün gruplarında hizmet veriyor?",
     answer:
-      "CT Prefabrik; prefabrik ev, çelik ev, dubleks prefabrik, prefabrik villa ve konteyner ev çözümlerinde projelendirme, üretim, sevkiyat ve montaj hizmeti sunar.",
+      "Hürtaş Beton; beton boru, parke taşı, bordür, menhol, yağmur oluğu ve çevre düzenleme ürünleri gibi beton elemanları alanında üretim ve tedarik hizmeti sunar.",
   },
   {
-    question: "CT Prefabrik Türkiye geneline hizmet veriyor mu?",
+    question: "Hürtaş Beton hangi projelere ürün sağlar?",
     answer:
-      "Evet, CT Prefabrik Sakarya başta olmak üzere Türkiye geneline prefabrik ev, çelik ev ve konteyner yapı çözümleri sunar. Proje kapsamına göre sevkiyat ve kurulum planı oluşturulur.",
+      "Altyapı, üst yapı, yol, kaldırım, saha düzenleme, belediye ve şantiye projeleri için ihtiyaca uygun beton elemanları sağlar.",
   },
   {
-    question: "CT Prefabrik neden güvenilir prefabrik firma olarak tercih ediliyor?",
+    question: "Ürün seçimi konusunda destek veriliyor mu?",
     answer:
-      "CT Prefabrik; planlı süreç yönetimi, teknik detaylara odaklı üretim, şeffaf teklif yaklaşımı ve satış öncesinden montaja kadar kontrollü ilerleyen iş modeliyle güvenilir prefabrik firma arayan kullanıcılar için güçlü bir alternatiftir.",
+      "Evet, kullanım alanı, ihtiyaç duyulan adet, ölçü ve sevkiyat planı birlikte değerlendirilerek doğru ürün grubu için yönlendirme yapılır.",
   },
   {
-    question: "CT Prefabrik hangi yapı tiplerinde uzmanlaşmıştır?",
+    question: "Sevkiyat planı nasıl oluşturulur?",
     answer:
-      "Tek katlı prefabrik ev, çift katlı prefabrik ev, çelik konstrüksiyon ev, prefabrik villa ve konteyner ev modelleri CT Prefabrik'in öne çıkan çözüm alanlarıdır.",
+      "Sipariş içeriği, ürün uygunluğu, teslim adresi ve saha programı birlikte değerlendirilir. Amaç ürünlerin sahaya ihtiyaç duyulan zamanda ulaşmasını sağlamaktır.",
   },
   {
-    question: "Prefabrik ev üreticisi seçerken nelere dikkat edilmeli?",
+    question: "TSE onaylı belgeler hakkında bilgi alınabilir mi?",
     answer:
-      "Prefabrik ev üreticisi seçerken üretim kalitesi, kullanılan malzeme standardı, teslim kapsamı, ruhsat süreçlerine yaklaşım ve saha uygulama tecrübesi birlikte değerlendirilmelidir.",
+      "Evet, ürün gruplarına ait belge ve kalite standardı bilgileri için iletişim kanallarından Hürtaş Beton ekibine ulaşabilirsiniz.",
   },
   {
-    question: "CT Prefabrik anahtar teslim çalışıyor mu?",
+    question: "Fiyat almak için hangi bilgiler gerekir?",
     answer:
-      "Proje kapsamına göre anahtar teslim prefabrik ev ve çelik ev çözümleri planlanabilir. Teklif içeriğinde nelerin dahil olduğu açık biçimde belirtilerek süreç şeffaf ilerletilir.",
-  },
-  {
-    question: "CT Prefabrik'in üretim yaklaşımı nasıldır?",
-    answer:
-      "CT Prefabrik'te üretim süreci ihtiyaç analizi, proje planı, malzeme seçimi, kontrollü üretim ve montaj koordinasyonu ile ilerler. Amaç hem kaliteyi hem de teslim disiplinini korumaktır.",
-  },
-  {
-    question: "Kaliteli prefabrik ev nasıl anlaşılır?",
-    answer:
-      "Kaliteli prefabrik ev; doğru taşıyıcı sistem, güçlü ısı yalıtımı, uygun malzeme seçimi, iyi işçilik ve net uygulama kapsamı ile anlaşılır. Sadece fiyat değil teknik içerik de değerlendirilmelidir.",
-  },
-  {
-    question: "CT Prefabrik proje öncesi destek veriyor mu?",
-    answer:
-      "Evet, arsa uygunluğu, yaşam planı, model seçimi, metrekare ve teslim kapsamı gibi konularda proje öncesi yönlendirme yapılır. Bu sayede kullanıcı daha doğru model seçebilir.",
-  },
-  {
-    question: "Prefabrik şirket seçimi yatırım kararını etkiler mi?",
-    answer:
-      "Evet, prefabrik şirket seçimi; teslim süresi, maliyet kontrolü, uygulama kalitesi ve satış sonrası destek açısından doğrudan etkilidir. Bu nedenle yalnızca kampanya değil şirket yaklaşımı da önemlidir.",
-  },
-  {
-    question: "CT Prefabrik Sakarya prefabrik ev projelerinde aktif mi?",
-    answer:
-      "Evet, Sakarya prefabrik ev talepleri CT Prefabrik için ana odak alanlarından biridir. Sakarya ve çevresinde keşif, planlama ve uygulama süreçleri daha yakın koordinasyonla yürütülür.",
-  },
-  {
-    question: "CT Prefabrik sadece prefabrik ev mi yapıyor?",
-    answer:
-      "Hayır, prefabrik evlerin yanında çelik ev, konteyner yapı ve projeye özel yaşam alanı çözümleri de geliştirir. Kullanım senaryosuna göre en uygun yapı tipi birlikte belirlenir.",
+      "Ürün adı, yaklaşık adet, teslim adresi ve kullanım alanı bilgisi teklif sürecini hızlandırır. Gerekirse ürün seçimi için ek bilgi istenir.",
   },
 ] as const;
 
 export const PROJECTS_FAQS: readonly SeoFaqItem[] = [
   {
-    question: "CT Prefabrik projelerimiz sayfasında neler gösteriliyor?",
+    question: "Galeri sayfasında neler gösteriliyor?",
     answer:
-      "Bu sayfada tamamlanan veya referans niteliği taşıyan prefabrik ev, çelik ev, dubleks prefabrik ve farklı yaşam alanı projeleri yer alır. Amaç model ve uygulama çeşitliliğini daha net göstermektir.",
+      "Galeri sayfasında beton ürünleri, saha uygulamaları ve referans niteliği taşıyan ürün görselleri yer alır. Amaç ürünleri sahadaki kullanım bağlamıyla göstermektir.",
   },
   {
-    question: "Projelerimiz sayfasındaki yapılar gerçek uygulamalar mı?",
+    question: "Galeri görselleri ürün seçimine yardımcı olur mu?",
     answer:
-      "Evet, projelerimiz sayfasında sergilenen çalışmalar gerçek uygulama, referans veya temsil gücü yüksek proje örneklerinden oluşur. Bu içerikler, tercih edilebilecek planlar hakkında fikir verir.",
+      "Evet, görseller beton boru, parke taşı, bordür ve diğer beton elemanlarının kullanım alanlarını daha net görmeye yardımcı olur.",
   },
   {
-    question: "Prefabrik ev projeleri kişiye özel değiştirilebilir mi?",
+    question: "Bir ürünü galeride gördüğümde teklif alabilir miyim?",
     answer:
-      "Evet, prefabrik ev projeleri arsa koşulları, oda ihtiyacı, cephe beklentisi ve kullanım amacına göre yeniden planlanabilir. Mevcut projeler bir başlangıç noktası olarak değerlendirilebilir.",
+      "Evet, ilgilendiğiniz ürün veya uygulama görselini belirterek iletişim kanallarından teklif talebi oluşturabilirsiniz.",
   },
   {
-    question: "Çelik ev projeleri ile prefabrik ev projeleri arasında ne fark var?",
+    question: "Galeride tüm ürün grupları yer alır mı?",
     answer:
-      "Çelik ev projeleri taşıyıcı sistem ve teknik detay bakımından farklılık gösterirken, prefabrik ev projeleri daha geniş model çeşitliliğiyle öne çıkar. Doğru seçim kullanım amacı ve bütçe ile belirlenir.",
+      "Galeri içerikleri zaman içinde güncellenir. Beton boru, parke taşı, bordür, menhol ve çevre düzenleme ürünlerine ait görseller eklenebilir.",
   },
   {
-    question: "Dubleks prefabrik projeler hangi kullanıcılar için uygundur?",
+    question: "Görsellerdeki ürünler aynı ölçülerde temin edilir mi?",
     answer:
-      "Dubleks prefabrik projeler geniş aileler, kat ayrımı isteyen kullanıcılar ve villa tipi yaşam planı arayanlar için uygundur. Özellikle büyük arsa ve ferah yaşam beklentisi olan kullanıcılar bu yapıları tercih eder.",
+      "Ürün ölçüleri stok, üretim ve proje ihtiyacına göre değerlendirilir. Net ölçü ve adet bilgisi için iletişime geçilmesi önerilir.",
   },
   {
-    question: "Projelerimiz sayfasındaki modellerin fiyatları birebir aynı mı olur?",
+    question: "Saha uygulaması da Hürtaş Beton tarafından mı yapılır?",
     answer:
-      "Hayır, burada görülen projeler doğrudan sabit fiyat anlamına gelmez. Fiyatlar metrekare, malzeme seviyesi, teslim kapsamı, nakliye ve arsa koşullarına göre değişiklik gösterebilir.",
-  },
-  {
-    question: "Referans projeler model seçimini kolaylaştırır mı?",
-    answer:
-      "Evet, referans projeler oda planı, dış cephe dili, yapı ölçüsü ve genel yaşam hissi hakkında fikir verir. Kullanıcı ihtiyacına en yakın çözümü daha hızlı belirleyebilir.",
-  },
-  {
-    question: "Konteyner ev projeleri de burada yer alır mı?",
-    answer:
-      "Projeye ve yayına açılan içerik yapısına bağlı olarak konteyner ev veya modüler yaşam projeleri de bu sayfada gösterilebilir. Bu sayede kullanıcı farklı yapı türlerini karşılaştırabilir.",
-  },
-  {
-    question: "Projelerimiz sayfası SEO açısından neden önemlidir?",
-    answer:
-      "Projelerimiz sayfası; prefabrik ev projeleri, çelik ev projeleri, dubleks prefabrik örnekleri ve referans yapılar gibi aramalarda kullanıcıya somut örnekler sunduğu için yüksek arama niyeti taşır.",
-  },
-  {
-    question: "Bir projeyi beğendiğimde aynı planı yaptırabilir miyim?",
-    answer:
-      "Beğenilen projeler birebir ya da ihtiyaçlara göre revize edilerek yeniden planlanabilir. Nihai çözüm; arsa yapısı, ruhsat uygunluğu ve kullanıcı beklentilerine göre birlikte belirlenir.",
-  },
-  {
-    question: "Projelerde kullanılan metrekare ve oda planları değiştirilebilir mi?",
-    answer:
-      "Evet, projelerdeki metrekare, oda dağılımı, banyo sayısı ve cephe detayları çoğu zaman kullanıcı ihtiyacına göre yeniden şekillendirilebilir. Bu esneklik prefabrik sistemlerin önemli avantajlarından biridir.",
-  },
-  {
-    question: "Projelerimiz sayfası üzerinden teklif alınabilir mi?",
-    answer:
-      "Evet, beğenilen proje örnekleri üzerinden iletişime geçilerek benzer model, özel plan veya anahtar teslim çözüm için teklif süreci başlatılabilir.",
+      "Hürtaş Beton temel olarak beton elemanları üretimi ve tedariki odağında çalışır. Uygulama kapsamı proje bazında ayrıca değerlendirilir.",
   },
 ] as const;
 

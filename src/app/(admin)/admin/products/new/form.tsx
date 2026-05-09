@@ -15,12 +15,17 @@ import Link from "next/link";
 import { createProduct } from "@/actions/productActions";
 import { uploadImage } from "@/actions/uploadActions";
 import { toast } from "sonner";
-import { BlogContentEditor } from "@/components/admin/blog-content-editor";
+import { ProductDetailContentEditor } from "@/components/admin/product-detail-content-editor";
 import {
   SortableImageGrid,
   type SortableImage,
 } from "@/components/admin/sortable-image-grid";
-import { hasRichContent, toTipTapDocJson } from "@/lib/richContent";
+import { AltTextEditDialog } from "@/components/admin/alt-text-edit-dialog";
+import {
+  hasProductDetailContent,
+  toProductDetailContentJson,
+} from "@/lib/productDetailContent";
+import { buildCategoryOptions } from "@/lib/categoryTree";
 
 interface PendingImage {
   tempId: string;
@@ -31,7 +36,9 @@ interface PendingImage {
 
 interface Category {
   id: string;
+  parentId: string | null;
   name: string;
+  order: number;
 }
 
 interface NewProductFormProps {
@@ -43,20 +50,23 @@ export function NewProductForm({ categories }: NewProductFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [pendingImages, setPendingImages] = useState<PendingImage[]>([]);
+  const [editingImage, setEditingImage] = useState<{
+    id: string;
+    alt: string;
+  } | null>(null);
   const [formData, setFormData] = useState({
     categoryIds: [] as string[],
     name: "",
-    area: "",
-    room: "",
-    floor: "1",
-    bath: "1",
-    height: "2.5",
-    price: "",
-    oldPrice: "",
-    description: toTipTapDocJson(""),
+    area: "-",
+    room: "-",
+    floor: "-",
+    bath: "-",
+    height: "-",
+    description: toProductDetailContentJson(""),
     metaDescription: "",
     isActive: true,
   });
+  const categoryOptions = buildCategoryOptions(categories);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,9 +77,7 @@ export function NewProductForm({ categories }: NewProductFormProps) {
         ...formData,
         categoryIds:
           formData.categoryIds.length > 0 ? formData.categoryIds : undefined,
-        price: formData.price || undefined,
-        oldPrice: formData.oldPrice || undefined,
-        description: hasRichContent(formData.description)
+        description: hasProductDetailContent(formData.description)
           ? formData.description
           : undefined,
         metaDescription: formData.metaDescription.trim() || undefined,
@@ -140,6 +148,22 @@ export function NewProductForm({ categories }: NewProductFormProps) {
     );
   };
 
+  const handleEditPendingAlt = (id: string, currentAlt: string) => {
+    setEditingImage({ id, alt: currentAlt });
+  };
+
+  const handleSavePendingAlt = async (newAlt: string) => {
+    if (!editingImage) return;
+
+    setPendingImages((prev) =>
+      prev.map((img) =>
+        img.tempId === editingImage.id ? { ...img, alt: newAlt } : img
+      )
+    );
+    setEditingImage(null);
+    toast.success("Alt metin güncellendi");
+  };
+
   const toggleCategory = (categoryId: string) => {
     setFormData((prev) => {
       const isSelected = prev.categoryIds.includes(categoryId);
@@ -193,9 +217,28 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                     </div>
 
                     <div className="space-y-2">
+                      <Label htmlFor="metaDescription">Meta Description</Label>
+                      <Textarea
+                        id="metaDescription"
+                        value={formData.metaDescription}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            metaDescription: e.target.value,
+                          })
+                        }
+                        placeholder="SEO için kısa açıklama (öneri: 140-160 karakter)"
+                        rows={4}
+                      />
+                      <p className="text-xs text-slate-500">
+                        Ürün kartlarında ve ürün detay sayfası meta etiketlerinde kullanılabilir.
+                      </p>
+                    </div>
+
+                    <div className="space-y-2">
                       <Label>Kategoriler</Label>
                       <div className="flex flex-wrap gap-2">
-                        {categories.map((cat) => {
+                        {categoryOptions.map(({ category: cat, depth }) => {
                           const selected = formData.categoryIds.includes(cat.id);
                           return (
                             <Button
@@ -209,6 +252,7 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                                   : ""
                               }
                             >
+                              {depth > 0 ? `${"-- ".repeat(depth)}` : ""}
                               {cat.name}
                             </Button>
                           );
@@ -233,8 +277,8 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="description">Açıklama</Label>
-                      <BlogContentEditor
+                      <Label htmlFor="description">Ürün Detay İçeriği</Label>
+                      <ProductDetailContentEditor
                         content={formData.description}
                         onChange={(json) =>
                           setFormData({
@@ -243,95 +287,6 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                           })
                         }
                       />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="metaDescription">Meta Description</Label>
-                      <Textarea
-                        id="metaDescription"
-                        value={formData.metaDescription}
-                        onChange={(e) =>
-                          setFormData({
-                            ...formData,
-                            metaDescription: e.target.value,
-                          })
-                        }
-                        placeholder="SEO için kısa açıklama (öneri: 140-160 karakter)"
-                        rows={4}
-                      />
-                      <p className="text-xs text-slate-500">
-                        Ürün kartlarında ve ürün detay sayfası meta etiketlerinde kullanılabilir.
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Özellikler</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="area">Alan (m²) *</Label>
-                        <Input
-                          id="area"
-                          value={formData.area}
-                          onChange={(e) =>
-                            setFormData({ ...formData, area: e.target.value })
-                          }
-                          placeholder="65"
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="room">Oda *</Label>
-                        <Input
-                          id="room"
-                          value={formData.room}
-                          onChange={(e) =>
-                            setFormData({ ...formData, room: e.target.value })
-                          }
-                          placeholder="2+1"
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="floor">Kat *</Label>
-                        <Input
-                          id="floor"
-                          value={formData.floor}
-                          onChange={(e) =>
-                            setFormData({ ...formData, floor: e.target.value })
-                          }
-                          placeholder="1"
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="bath">Banyo *</Label>
-                        <Input
-                          id="bath"
-                          value={formData.bath}
-                          onChange={(e) =>
-                            setFormData({ ...formData, bath: e.target.value })
-                          }
-                          placeholder="1"
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="height">Yükseklik (m) *</Label>
-                        <Input
-                          id="height"
-                          value={formData.height}
-                          onChange={(e) =>
-                            setFormData({ ...formData, height: e.target.value })
-                          }
-                          placeholder="2.5"
-                          required
-                        />
-                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -352,45 +307,13 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                       onDelete={handleDeletePendingImage}
                       onUpload={handleImageUpload}
                       isUploading={isUploading}
+                      onEditAlt={handleEditPendingAlt}
                     />
                   </CardContent>
                 </Card>
               </div>
 
               <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Fiyatlandırma</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="price">Fiyat (₺)</Label>
-                      <Input
-                        id="price"
-                        value={formData.price}
-                        onChange={(e) =>
-                          setFormData({ ...formData, price: e.target.value })
-                        }
-                        placeholder="650000"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="oldPrice">Eski Fiyat (₺)</Label>
-                      <Input
-                        id="oldPrice"
-                        value={formData.oldPrice}
-                        onChange={(e) =>
-                          setFormData({ ...formData, oldPrice: e.target.value })
-                        }
-                        placeholder="700000"
-                      />
-                      <p className="text-xs text-slate-500">
-                        İndirim göstermek için
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-
                 <Card>
                   <CardHeader>
                     <CardTitle>Durum</CardTitle>
@@ -429,6 +352,14 @@ export function NewProductForm({ categories }: NewProductFormProps) {
               </div>
             </div>
           </form>
+
+          <AltTextEditDialog
+            open={!!editingImage}
+            onOpenChange={(open) => !open && setEditingImage(null)}
+            currentAlt={editingImage?.alt || ""}
+            onSave={handleSavePendingAlt}
+            isLoading={false}
+          />
         </main>
       </div>
     </div>

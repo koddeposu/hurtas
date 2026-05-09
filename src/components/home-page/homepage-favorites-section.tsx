@@ -9,7 +9,7 @@ export async function HomepageFavoritesSection() {
   }
 
   return (
-    <section className="flex justify-center mt-10 md:mt-40  md:pt-0 lg:pg-0">
+    <section className="flex justify-center mt-10 md:mt-24  md:pt-0 lg:pg-0">
       <div className="max-w-[1280px] w-full">
         <BestSellingHouses favorites={favorites} />
       </div>

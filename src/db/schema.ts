@@ -108,9 +108,13 @@ export const accountRelations = relations(account, ({ one }) => ({
 // Categories for Prefabrik Evler (Tek Katlı, Çift Katlı, Çelik Ev)
 export const category = pgTable("category", {
   id: text("id").primaryKey(),
+  parentId: text("parent_id"),
   name: text("name").notNull(),
   slug: text("slug").notNull().unique(),
+  title: text("title"),
   description: text("description"),
+  subtitle: text("subtitle"),
+  subdescription: text("subdescription"),
   order: integer("order").default(0).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
@@ -217,25 +221,37 @@ export const projectImage = pgTable(
 );
 
 // Blog Posts
-export const blogPost = pgTable("blog_post", {
-  id: text("id").primaryKey(),
-  title: text("title").notNull(),
-  slug: text("slug").notNull().unique(),
-  excerpt: text("excerpt").notNull(),
-  content: text("content"),
-  category: text("category").notNull(),
-  imageUrl: text("image_url").notNull(),
-  imageAlt: text("image_alt"),
-  readTime: integer("read_time").default(1),
-  isPublished: boolean("is_published").default(false).notNull(),
-  order: integer("order").default(0).notNull(),
-  publishedAt: timestamp("published_at"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdate(() => new Date())
-    .notNull(),
-});
+export const blogPost = pgTable(
+  "blog_post",
+  {
+    id: text("id").primaryKey(),
+    title: text("title").notNull(),
+    slug: text("slug").notNull().unique(),
+    excerpt: text("excerpt").notNull(),
+    content: text("content"),
+    category: text("category").notNull(),
+    productCategoryId: text("product_category_id").references(
+      () => category.id,
+      {
+        onDelete: "set null",
+      },
+    ),
+    imageUrl: text("image_url").notNull(),
+    imageAlt: text("image_alt"),
+    readTime: integer("read_time").default(1),
+    isPublished: boolean("is_published").default(false).notNull(),
+    order: integer("order").default(0).notNull(),
+    publishedAt: timestamp("published_at"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  },
+  (table) => [
+    index("blog_post_product_category_idx").on(table.productCategoryId),
+  ],
+);
 
 // Contact Form Submissions
 export const contactSubmission = pgTable("contact_submission", {

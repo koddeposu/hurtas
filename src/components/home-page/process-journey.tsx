@@ -44,7 +44,7 @@ export function ProcessJourney() {
       <div className="mx-auto max-w-7xl ">
         {/* SEO Odaklı Üst Başlık ve İçerik */}
         <div className="mx-auto max-w-3xl text-center">
-          <div className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-bold text-primary">
+          <div className="inline-flex items-center gap-1.5 rounded-[2px] bg-primary/10 px-4 py-1.5 text-sm font-bold text-primary">
             <BadgeCheck className="h-4 w-4" aria-hidden="true" />
             <span>CT Prefabrik Güvencesi</span>
           </div>
@@ -74,11 +74,11 @@ export function ProcessJourney() {
 
             return (
               <li key={step.id} className="relative group">
-                <article className="flex h-full flex-col rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:p-6 transition-all duration-300 hover:bg-white hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:border-primary/40 hover:-translate-y-1">
+                <article className="flex h-full flex-col rounded-[3px] border border-slate-200 bg-slate-50 p-3 sm:p-6 transition-all duration-300 hover:bg-white hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:border-primary/40 hover:-translate-y-1">
                   {/* İkon ve Numara */}
                   <header className="mb-3 flex items-center justify-between sm:mb-5">
                     <div
-                      className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary sm:h-12 sm:w-12"
+                      className="flex h-9 w-9 items-center justify-center rounded-[2px] bg-primary/10 text-primary sm:h-12 sm:w-12"
                       aria-hidden="true"
                     >
                       <Icon className="h-4 w-4 sm:h-6 sm:w-6" />

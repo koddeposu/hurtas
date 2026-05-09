@@ -1,11 +1,10 @@
 "use client";
 
-import Logo from "@/assets/logo.webp";
+import Logo from "@/assets/ana-logo.webp";
 import { handleCall, handleWhatsApp } from "@/lib/analytics/googleAds";
 import { CONTACT_INFO } from "@/lib/contact";
 import {
   ChevronDown,
-  FileText,
   Mail,
   MapPin,
   Menu,
@@ -39,13 +38,15 @@ const COMPANY = {
 };
 
 const CORPORATE_LINKS = [
+  { href: "/calistigimiz-markalar", label: "Çalıştığımız Markalar" },
   { href: "/hakkimizda", label: "Hakkımızda" },
+  { href: "/arge", label: "Arge" },
   { href: "/iletisim", label: "İletişim" },
-  { href: "/katalog", label: "Katalog" },
+  { href: "/tse-onayli-belgeler", label: "TSE Onaylı Belgeler" },
 ];
 
 const NAV_LINKS = [
-  { href: "/projelerimiz", label: "Projelerimiz" },
+  { href: "/galeri", label: "Galeri" },
   { href: "/blog", label: "Blog" },
 ];
 
@@ -206,7 +207,8 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
   );
   const isProductsActive = pathname.startsWith("/prefabrik-evler");
   const pathSegments = pathname.split("/").filter(Boolean);
-  const isBlogSlugPage = pathSegments[0] === "blog" && pathSegments.length === 2;
+  const isBlogSlugPage =
+    pathSegments[0] === "blog" && pathSegments.length === 2;
 
   return (
     <>
@@ -287,7 +289,7 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
             <div className="ml-auto flex min-w-0 flex-1 items-center justify-end gap-3">
               <form
                 onSubmit={handleProductSearch}
-                className="flex min-w-0 flex-1 overflow-hidden rounded-lg border border-[#152f51]/15 bg-white shadow-[0_16px_36px_-32px_rgba(21,47,81,0.65)]"
+                className="flex min-w-0 flex-1 overflow-hidden rounded-[3px] border border-[#152f51]/15 bg-white shadow-[0_16px_36px_-32px_rgba(21,47,81,0.65)]"
               >
                 <label htmlFor="desktop-product-category" className="sr-only">
                   Ürün kategorisi
@@ -298,7 +300,7 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                   onChange={(event) =>
                     setSelectedProductCategory(event.target.value)
                   }
-                  className="w-44 shrink-0 border-r border-[#152f51]/15 bg-[#f4f7fb] px-3 text-sm font-bold text-[#152f51] outline-none transition-colors hover:bg-[#e9eff6]"
+                  className="w-44 shrink-0 border-r border-[#152f51]/15 bg-[#f4f7fb] px-3 text-sm font-bold text-[#152f51] outline-none transition-colors hover:bg-[#e9eff6] "
                 >
                   <option value="all">Tüm Ürünler</option>
                   {categories.map((item) => (
@@ -317,7 +319,9 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                     id="desktop-product-search"
                     type="search"
                     value={productSearchQuery}
-                    onChange={(event) => setProductSearchQuery(event.target.value)}
+                    onChange={(event) =>
+                      setProductSearchQuery(event.target.value)
+                    }
                     placeholder="Ürün ara..."
                     className="h-12 w-full min-w-0 px-10 text-sm font-semibold text-[#152f51] outline-none placeholder:text-slate-400"
                   />
@@ -335,7 +339,7 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
               <button
                 type="button"
                 onClick={handleWhatsApp}
-                className="inline-flex h-12 shrink-0 cursor-pointer items-center gap-2 rounded-lg bg-[#d6a94a] px-4 text-xs font-black uppercase tracking-[0.12em] text-[#152f51] transition-colors hover:bg-[#bf943b] ads-whatsapp"
+                className="inline-flex h-12 shrink-0 cursor-pointer items-center gap-2 rounded-[2px] bg-[#d6a94a] px-4 text-xs font-black uppercase tracking-[0.12em] text-[#152f51] transition-colors hover:bg-[#bf943b] ads-whatsapp"
               >
                 <MessageCircle className="h-4 w-4" />
                 WhatsApp
@@ -343,7 +347,7 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
               <Link
                 href="/iletisim"
                 prefetch={false}
-                className="inline-flex h-12 shrink-0 cursor-pointer items-center gap-2 rounded-lg bg-[#152f51] px-4 text-xs font-black uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#10243d]"
+                className="inline-flex h-12 shrink-0 cursor-pointer items-center gap-2 rounded-[2px] bg-[#152f51] px-4 text-xs font-black uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#10243d]"
               >
                 <Mail className="h-4 w-4" />
                 İletişim
@@ -455,14 +459,15 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                 </Link>
               ))}
             </nav>
-
           </div>
         </div>
       </header>
 
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-transform duration-300 ${
-          showMobileNavbar ? "translate-y-0" : "-translate-y-full pointer-events-none"
+          showMobileNavbar
+            ? "translate-y-0"
+            : "-translate-y-full pointer-events-none"
         } ${
           showCompact
             ? "lg:pointer-events-auto lg:translate-y-0"
@@ -798,17 +803,6 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                         {item.label}
                       </Link>
                     ))}
-                    <Link
-                      href="/katalog"
-                      prefetch={false}
-                      onClick={closeMobileMenu}
-                      className="rounded-xl px-3 py-2 text-sm font-semibold text-slate-700 transition-colors hover:bg-[#f4f7fb] hover:text-[#152f51]"
-                    >
-                      <span className="inline-flex items-center gap-2">
-                        <FileText className="h-4 w-4" />
-                        Katalog
-                      </span>
-                    </Link>
                   </div>
                 </div>
               </div>

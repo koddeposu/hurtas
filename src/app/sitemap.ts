@@ -3,7 +3,7 @@ import { getProductsWithImages } from "@/actions/productActions";
 import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://ctprefabrik.com";
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hurtasbeton.com";
 
   // Veritabanından ürünleri al
   const dbProducts = await getProductsWithImages();
@@ -51,6 +51,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${baseUrl}/hakkimizda`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/arge`,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 0.7,

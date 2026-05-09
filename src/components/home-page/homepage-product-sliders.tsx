@@ -9,86 +9,110 @@ interface CategoryItem {
 
 interface HomepageProductSlidersProps {
   categories: CategoryItem[];
+  group?: "core" | "environment";
 }
 
-function getCategory(categories: CategoryItem[], matcher: string) {
-  return categories.find((category) => category.name.includes(matcher)) ?? null;
+function getCategory(categories: CategoryItem[], matchers: string[]) {
+  return (
+    categories.find((category) =>
+      matchers.some((matcher) => category.name.includes(matcher)),
+    ) ?? null
+  );
 }
 
 export async function HomepageProductSliders({
   categories,
+  group = "core",
 }: HomepageProductSlidersProps) {
-  const singleFloorCategory = getCategory(categories, "Tek Kat");
-  const doubleFloorCategory = getCategory(categories, "Çift Kat");
-  const steelHouseCategory = getCategory(categories, "Çelik");
+  const infrastructureCategory = getCategory(categories, [
+    "Altyapı",
+    "Alt Yapı",
+    "Tek Kat",
+  ]);
+  const superstructureCategory = getCategory(categories, [
+    "Üst Yapı",
+    "Üstyapı",
+    "Çift Kat",
+  ]);
+  const environmentCategory = getCategory(categories, [
+    "Çevre",
+    "Bahçe",
+    "Çelik",
+  ]);
 
-  const [singleFloorProducts, doubleFloorProducts, steelHouseProducts] =
-    await Promise.all([
-      singleFloorCategory
-        ? getProductsPreview(singleFloorCategory.id, 8)
-        : Promise.resolve([]),
-      doubleFloorCategory
-        ? getProductsPreview(doubleFloorCategory.id, 8)
-        : Promise.resolve([]),
-      steelHouseCategory
-        ? getProductsPreview(steelHouseCategory.id, 8)
-        : Promise.resolve([]),
-    ]);
+  if (group === "environment") {
+    const environmentProducts = environmentCategory
+      ? await getProductsPreview(environmentCategory.id, 8)
+      : [];
+
+    return (
+      <>
+        {environmentProducts.length > 0 ? (
+          <section className="flex justify-center py-5 lg:pt-5">
+            <div className="max-w-[1280px] w-full">
+              <HomepageCategorySlider
+                title="Ürünleri"
+                accent="Çevre Düzenleme"
+                seoLabel="Çevre Düzenleme Ürünleri"
+                description="Bahçe, yol, kaldırım ve saha düzenlemelerinde kullanılan tamamlayıcı beton ürünlerini bir arada görün."
+                href={
+                  environmentCategory
+                    ? `/prefabrik-evler/${environmentCategory.slug}`
+                    : "/prefabrik-evler"
+                }
+                products={environmentProducts}
+              />
+            </div>
+          </section>
+        ) : null}
+      </>
+    );
+  }
+
+  const [infrastructureProducts, superstructureProducts] = await Promise.all([
+    infrastructureCategory
+      ? getProductsPreview(infrastructureCategory.id, 8)
+      : Promise.resolve([]),
+    superstructureCategory
+      ? getProductsPreview(superstructureCategory.id, 8)
+      : Promise.resolve([]),
+  ]);
 
   return (
     <>
-      {singleFloorProducts.length > 0 ? (
+      {infrastructureProducts.length > 0 ? (
         <section className="flex justify-center py-5 lg:pt-7">
           <div className="max-w-[1280px] w-full">
             <HomepageCategorySlider
-              title="Prefabrik Evler"
-              accent="Tek Katlı"
-              seoLabel="Tek Katlı Prefabrik Ev Modelleri"
-              description="Tek katlı prefabrik ev modellerimizi metraj, oda dağılımı ve yaşam ihtiyacınıza göre tek tek inceleyin."
+              title="Elemanları"
+              accent="Altyapı"
+              seoLabel="Altyapı Beton Ürünleri"
+              description="Beton boru, menhol, baca ve altyapı projeleri için ihtiyaç duyulan dayanıklı beton ürünlerini inceleyin."
               href={
-                singleFloorCategory
-                  ? `/prefabrik-evler/${singleFloorCategory.slug}`
+                infrastructureCategory
+                  ? `/prefabrik-evler/${infrastructureCategory.slug}`
                   : "/prefabrik-evler"
               }
-              products={singleFloorProducts}
+              products={infrastructureProducts}
             />
           </div>
         </section>
       ) : null}
 
-      {doubleFloorProducts.length > 0 ? (
+      {superstructureProducts.length > 0 ? (
         <section className="flex justify-center py-5 lg:pt-5">
           <div className="max-w-[1280px] w-full">
             <HomepageCategorySlider
-              title="Prefabrik Evler"
-              accent="Çift Katlı"
-              seoLabel="Çift Katlı Prefabrik Ev Modelleri"
-              description="Geniş aileler ve villa tipi planlama ihtiyaçları için çift katlı prefabrik ev seçeneklerini kaydırarak inceleyin."
+              title="Elemanları"
+              accent="Üst Yapı"
+              seoLabel="Üst Yapı Beton Ürünleri"
+              description="Parke taşı, bordür ve saha kaplama çözümleriyle üst yapı projeleriniz için uygun ürünleri keşfedin."
               href={
-                doubleFloorCategory
-                  ? `/prefabrik-evler/${doubleFloorCategory.slug}`
+                superstructureCategory
+                  ? `/prefabrik-evler/${superstructureCategory.slug}`
                   : "/prefabrik-evler"
               }
-              products={doubleFloorProducts}
-            />
-          </div>
-        </section>
-      ) : null}
-
-      {steelHouseProducts.length > 0 ? (
-        <section className="flex justify-center py-5 lg:pt-5">
-          <div className="max-w-[1280px] w-full">
-            <HomepageCategorySlider
-              title="Evler"
-              accent="Çelik"
-              seoLabel="Çelik Ev Modelleri ve Fiyatları"
-              description="Çelik yapı gücü, modern cephe dili ve uzun ömürlü yaşam kurgusunu bir araya getiren modeller burada."
-              href={
-                steelHouseCategory
-                  ? `/prefabrik-evler/${steelHouseCategory.slug}`
-                  : "/prefabrik-evler"
-              }
-              products={steelHouseProducts}
+              products={superstructureProducts}
             />
           </div>
         </section>

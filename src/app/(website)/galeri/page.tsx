@@ -4,36 +4,30 @@ import { Metadata } from "next";
 import ProjectsClient from "./projects-client";
 
 export const metadata: Metadata = {
-  title:
-    "Projelerimiz | Prefabrik Ev Modelleri, Çelik Ev ve Dubleks Prefabrik Uygulamaları | CT Prefabrik",
+  title: "Galeri | Hürtaş Beton Ürün ve Saha Görselleri",
   description:
-    "CT Prefabrik projelerimizi inceleyin. Prefabrik ev modelleri, prefabrik villa, çelik konstrüksiyon ev, dubleks prefabrik ev ve anahtar teslim yapı uygulamalarında tamamlanan örneklerle fikir alın.",
+    "Hürtaş Beton galerisini inceleyin. Beton boru, parke taşı, bordür, menhol ve saha beton elemanlarına ait ürün ve uygulama görsellerini görün.",
   keywords: [
-    "prefabrik ev projeleri",
-    "prefabrik ev modelleri",
-    "prefabrik ev fiyatları",
-    "anahtar teslim prefabrik ev",
-    "çelik konstrüksiyon ev",
-    "çelik ev projeleri",
-    "dubleks prefabrik ev",
-    "prefabrik villa projeleri",
-    "konteyner ev fiyatları",
-    "Sakarya prefabrik ev projeleri",
-    "CT Prefabrik projeler",
+    "Hürtaş Beton galeri",
+    "beton ürünleri galeri",
+    "beton boru görselleri",
+    "parke taşı görselleri",
+    "bordür görselleri",
+    "menhol görselleri",
+    "saha beton elemanları",
   ],
   openGraph: {
-    title:
-      "Projelerimiz | CT Prefabrik Tamamlanan Prefabrik Ev ve Çelik Ev Uygulamaları",
+    title: "Galeri | Hürtaş Beton Ürün Görselleri",
     description:
-      "Tek katlı prefabrik ev, çift katlı prefabrik ev, çelik ev ve prefabrik villa projelerimizi inceleyerek yaşam alanı planları hakkında fikir alın.",
+      "Beton boru, parke taşı, bordür ve altyapı beton ürünleri için ürün ve saha görsellerini inceleyin.",
     url: "https://ctprefabrik.com/projelerimiz",
-    siteName: "CT Prefabrik",
+    siteName: "Hürtaş Beton",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "CT Prefabrik projelerimiz sayfasında prefabrik ev ve çelik ev uygulamaları",
+        alt: "Hürtaş Beton galeri sayfasında beton ürünleri görselleri",
       },
     ],
     locale: "tr_TR",
@@ -41,9 +35,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Projelerimiz | CT Prefabrik Referans Yapılar",
+    title: "Galeri | Hürtaş Beton",
     description:
-      "Prefabrik ev modelleri, dubleks prefabrik ev ve çelik ev uygulamalarında tamamlanan CT Prefabrik projelerini keşfedin.",
+      "Beton ürünleri ve saha uygulamalarında Hürtaş Beton galerisini keşfedin.",
     images: ["/og-image.png"],
   },
   alternates: {
@@ -66,7 +60,7 @@ export default async function ProjectsPage() {
       alt:
         img.alt?.trim()
           ? img.alt
-          : `${project.title} prefabrik ev projesi${project.location ? ` ${project.location}` : ""} görseli ${index + 1}`,
+          : `${project.title} beton ürünü${project.location ? ` ${project.location}` : ""} görseli ${index + 1}`,
     })),
     title: project.title,
     area: project.area,
@@ -92,7 +86,7 @@ export default async function ProjectsPage() {
               {
                 "@type": "ListItem",
                 position: 2,
-                name: "Projelerimiz",
+                name: "Galeri",
                 item: "https://ctprefabrik.com/projelerimiz",
               },
             ],

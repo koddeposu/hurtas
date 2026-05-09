@@ -1,83 +1,106 @@
+import CategoryImage1 from "@/assets/hero/home-page-1.webp";
+import CategoryImage2 from "@/assets/hero/home-page-2.webp";
 import { ArrowRight, Building2, Layers3 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 const STRUCTURE_CATEGORIES = [
   {
-    title: "Üst Yapı Elemanları",
+    title: "Altyapı Elemanları",
     description:
-      "Parke taşı, bordür ve saha düzenleme ürünleriyle projelerinizde düzenli ve dayanıklı yüzey çözümleri.",
-    action: "Tüm üst yapı elemanlarını gör",
-    icon: Building2,
-    tone: "navy",
+      "Beton boru, menhol ve saha altyapısı.",
+    action: "Altyapı Elemanlarını İncele",
+    icon: Layers3,
+    image: CategoryImage1,
+    matchers: ["Altyapı", "Alt Yapı", "Tek Kat"],
   },
   {
-    title: "Alt Yapı Elemanları",
+    title: "Üst Yapı Elemanları",
     description:
-      "Beton boru, menhol ve altyapı elemanlarıyla belediye, yol ve şantiye projeleri için güvenilir üretim.",
-    action: "Tüm alt yapı elemanlarını gör",
-    icon: Layers3,
-    tone: "gold",
+      "Parke taşı, bordür ve yüzey çözümleri.",
+    action: "Üst Yapı Elemanlarını İncele",
+    icon: Building2,
+    image: CategoryImage2,
+    matchers: ["Üst Yapı", "Üstyapı", "Çift Kat"],
   },
 ];
 
-export function StructureCategoryBoxes() {
+interface CategoryItem {
+  id: string;
+  name: string;
+  slug: string;
+}
+
+interface StructureCategoryBoxesProps {
+  categories?: CategoryItem[];
+}
+
+function getCategoryHref(categories: CategoryItem[], matchers: string[]) {
+  const matchedCategory = categories.find((category) =>
+    matchers.some((matcher) => category.name.includes(matcher)),
+  );
+
+  return matchedCategory
+    ? `/prefabrik-evler/${matchedCategory.slug}`
+    : "/prefabrik-evler";
+}
+
+export function StructureCategoryBoxes({
+  categories = [],
+}: StructureCategoryBoxesProps) {
   return (
-    <section className="mt-6 px-4 sm:px-6 md:mt-8 lg:mt-10 lg:px-8">
-      <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-2">
+    <section className="px-4 pt-4 sm:px-6 lg:px-8">
+      <div className="mx-auto grid max-w-7xl gap-3 md:grid-cols-2">
         {STRUCTURE_CATEGORIES.map((item) => {
           const Icon = item.icon;
-          const isGold = item.tone === "gold";
+          const href = getCategoryHref(categories, item.matchers);
 
           return (
-            <article
+            <Link
               key={item.title}
-              className={`group relative overflow-hidden rounded-lg border p-5 shadow-[0_20px_48px_-36px_rgba(15,23,42,0.45)] transition-all duration-300 hover:-translate-y-1 md:p-6 ${
-                isGold
-                  ? "border-[#d6a94a]/35 bg-[#fffaf0]"
-                  : "border-[#152f51]/15 bg-[#f4f7fb]"
-              }`}
+              href={href}
+              prefetch={false}
+              aria-label={`${item.title} ürünlerini incele`}
+              className="group block overflow-hidden rounded-[3px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d6a94a] focus-visible:ring-offset-2"
             >
-              <div className="flex min-h-52 flex-col justify-between gap-8 sm:min-h-48">
-                <div className="flex items-start gap-4">
-                  <span
-                    className={`inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-lg ${
-                      isGold
-                        ? "bg-[#d6a94a] text-[#152f51]"
-                        : "bg-[#152f51] text-white"
-                    }`}
-                  >
-                    <Icon className="h-5 w-5" />
-                  </span>
+              <article className="relative overflow-hidden border border-slate-300 bg-[#152f51] shadow-[0_18px_40px_-34px_rgba(15,23,42,0.6)]">
+                <Image
+                  src={item.image}
+                  alt=""
+                  fill
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                  quality={60}
+                  className="object-cover opacity-45 transition-transform duration-500 group-hover:scale-[1.04]"
+                  aria-hidden="true"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-[#152f51]/96 via-[#152f51]/78 to-[#152f51]/28" />
 
-                  <div className="min-w-0">
-                    <p
-                      className={`text-xs font-black uppercase tracking-[0.18em] ${
-                        isGold ? "text-[#9b7430]" : "text-[#6f839d]"
-                      }`}
-                    >
-                      Beton Ürünleri
-                    </p>
-                    <h2 className="mt-2 text-2xl font-black tracking-tight text-[#152f51]">
-                      {item.title}
-                    </h2>
-                    <p className="mt-3 max-w-xl text-sm font-medium leading-6 text-slate-600">
-                      {item.description}
-                    </p>
+                <div className="relative flex min-h-32 flex-col justify-between gap-4 p-4 sm:min-h-32 sm:flex-row sm:items-center sm:p-5">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-[2px] bg-[#d6a94a] text-[#152f51]">
+                      <Icon className="h-5 w-5" />
+                    </span>
+
+                    <div className="min-w-0">
+                      <p className="text-[9px] font-black uppercase tracking-[0.18em] text-[#f4d78d]">
+                        Beton Ürünleri
+                      </p>
+                      <h2 className="mt-1 text-lg font-black tracking-tight text-white sm:text-xl">
+                        {item.title}
+                      </h2>
+                      <p className="mt-1 line-clamp-1 text-xs font-medium text-slate-200 sm:text-sm">
+                        {item.description}
+                      </p>
+                    </div>
                   </div>
-                </div>
 
-                <button
-                  type="button"
-                  className={`inline-flex w-fit cursor-pointer items-center gap-2 rounded-lg px-4 py-3 text-xs font-black uppercase tracking-[0.12em] transition-colors ${
-                    isGold
-                      ? "bg-[#152f51] text-white hover:bg-[#10243d]"
-                      : "bg-[#d6a94a] text-[#152f51] hover:bg-[#bf943b]"
-                  }`}
-                >
-                  {item.action}
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                </button>
-              </div>
-            </article>
+                  <span className="inline-flex min-h-12 w-fit shrink-0 items-center justify-center gap-2 rounded-[2px] border border-white/30 bg-white/10 px-4 py-3 text-[11px] font-black uppercase tracking-[0.1em] text-white transition-colors group-hover:border-[#d6a94a] group-hover:text-[#f4d78d] sm:text-xs">
+                    {item.action}
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  </span>
+                </div>
+              </article>
+            </Link>
           );
         })}
       </div>
