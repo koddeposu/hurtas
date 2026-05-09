@@ -179,15 +179,22 @@ const MobileToolbarContent = ({
 
     <ToolbarSeparator />
 
-    {type === "highlighter" ? <ColorHighlightPopoverContent /> : <LinkContent />}
+    {type === "highlighter" ? (
+      <ColorHighlightPopoverContent />
+    ) : (
+      <LinkContent />
+    )}
   </>
 );
 
-export function BlogContentEditor({ content, onChange }: BlogContentEditorProps) {
+export function BlogContentEditor({
+  content,
+  onChange,
+}: BlogContentEditorProps) {
   const isMobile = useIsBreakpoint();
   const { height } = useWindowSize();
   const [mobileView, setMobileView] = useState<"main" | "highlighter" | "link">(
-    "main"
+    "main",
   );
   const toolbarRef = useRef<HTMLDivElement>(null);
 
@@ -260,48 +267,48 @@ export function BlogContentEditor({ content, onChange }: BlogContentEditorProps)
   return (
     <div className="blog-content-editor">
       <div className="simple-editor-wrapper border rounded-lg overflow-hidden">
-      <EditorContext.Provider value={{ editor }}>
-        <Toolbar
-          ref={toolbarRef}
-          style={{
-            position: "relative",
-          }}
-        >
-          {mobileView === "main" ? (
-            <MainToolbarContent
-              onHighlighterClick={() => setMobileView("highlighter")}
-              onLinkClick={() => setMobileView("link")}
-              isMobile={isMobile}
-            />
-          ) : (
-            <MobileToolbarContent
-              type={mobileView === "highlighter" ? "highlighter" : "link"}
-              onBack={() => setMobileView("main")}
-            />
+        <EditorContext.Provider value={{ editor }}>
+          <Toolbar
+            ref={toolbarRef}
+            style={{
+              position: "relative",
+            }}
+          >
+            {mobileView === "main" ? (
+              <MainToolbarContent
+                onHighlighterClick={() => setMobileView("highlighter")}
+                onLinkClick={() => setMobileView("link")}
+                isMobile={isMobile}
+              />
+            ) : (
+              <MobileToolbarContent
+                type={mobileView === "highlighter" ? "highlighter" : "link"}
+                onBack={() => setMobileView("main")}
+              />
+            )}
+          </Toolbar>
+
+          {editor && (
+            <DragHandle editor={editor}>
+              <div className="blog-editor-drag-handle">
+                <svg viewBox="0 0 10 16" width="10" height="16">
+                  <circle cx="2" cy="2" r="1.5" />
+                  <circle cx="8" cy="2" r="1.5" />
+                  <circle cx="2" cy="8" r="1.5" />
+                  <circle cx="8" cy="8" r="1.5" />
+                  <circle cx="2" cy="14" r="1.5" />
+                  <circle cx="8" cy="14" r="1.5" />
+                </svg>
+              </div>
+            </DragHandle>
           )}
-        </Toolbar>
 
-        {editor && (
-          <DragHandle editor={editor}>
-            <div className="blog-editor-drag-handle">
-              <svg viewBox="0 0 10 16" width="10" height="16">
-                <circle cx="2" cy="2" r="1.5" />
-                <circle cx="8" cy="2" r="1.5" />
-                <circle cx="2" cy="8" r="1.5" />
-                <circle cx="8" cy="8" r="1.5" />
-                <circle cx="2" cy="14" r="1.5" />
-                <circle cx="8" cy="14" r="1.5" />
-              </svg>
-            </div>
-          </DragHandle>
-        )}
-
-        <EditorContent
-          editor={editor}
-          role="presentation"
-          className="simple-editor-content"
-        />
-      </EditorContext.Provider>
+          <EditorContent
+            editor={editor}
+            role="presentation"
+            className="simple-editor-content"
+          />
+        </EditorContext.Provider>
       </div>
     </div>
   );

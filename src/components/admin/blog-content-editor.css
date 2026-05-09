@@ -17,6 +17,24 @@
   min-height: 300px;
 }
 
+.product-detail-rich-editor .blog-content-editor .simple-editor-wrapper {
+  min-height: 200px;
+  max-height: 400px;
+}
+
+.product-detail-rich-editor .blog-content-editor .simple-editor-content {
+  height: auto;
+  min-height: 200px;
+  max-height: 400px;
+}
+
+.product-detail-rich-editor
+  .blog-content-editor
+  .simple-editor-content
+  .tiptap.ProseMirror.simple-editor {
+  min-height: 200px;
+}
+
 /* Drag handle styles */
 .blog-editor-drag-handle {
   display: flex;

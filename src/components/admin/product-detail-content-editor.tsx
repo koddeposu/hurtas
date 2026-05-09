@@ -202,12 +202,14 @@ export function ProductDetailContentEditor({
             </div>
 
             {block.type === "description" ? (
-              <BlogContentEditor
-                content={block.content}
-                onChange={(json) =>
-                  updateBlock(block.id, { ...block, content: json })
-                }
-              />
+              <div className="product-detail-rich-editor">
+                <BlogContentEditor
+                  content={block.content}
+                  onChange={(json) =>
+                    updateBlock(block.id, { ...block, content: json })
+                  }
+                />
+              </div>
             ) : (
               <div className="space-y-4">
                 <div className="space-y-2">

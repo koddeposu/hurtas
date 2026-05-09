@@ -1,31 +1,31 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { AdminSidebar } from "@/components/admin/sidebar";
-import { AdminHeader } from "@/components/admin/header";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Loader2 } from "lucide-react";
-import Link from "next/link";
 import { createProduct } from "@/actions/productActions";
 import { uploadImage } from "@/actions/uploadActions";
-import { toast } from "sonner";
+import { AltTextEditDialog } from "@/components/admin/alt-text-edit-dialog";
+import { AdminHeader } from "@/components/admin/header";
 import { ProductDetailContentEditor } from "@/components/admin/product-detail-content-editor";
+import { AdminSidebar } from "@/components/admin/sidebar";
 import {
   SortableImageGrid,
   type SortableImage,
 } from "@/components/admin/sortable-image-grid";
-import { AltTextEditDialog } from "@/components/admin/alt-text-edit-dialog";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { buildCategoryOptions } from "@/lib/categoryTree";
 import {
   hasProductDetailContent,
   toProductDetailContentJson,
 } from "@/lib/productDetailContent";
-import { buildCategoryOptions } from "@/lib/categoryTree";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface PendingImage {
   tempId: string;
@@ -99,13 +99,15 @@ export function NewProductForm({ categories }: NewProductFormProps) {
         metaDescription: formData.metaDescription.trim() || undefined,
         metaDescriptionEn: formData.metaDescriptionEn.trim() || undefined,
         metaDescriptionAr: formData.metaDescriptionAr.trim() || undefined,
-        pendingImages: pendingImages.map(({ url, alt, altEn, altAr, order }) => ({
-          url,
-          alt,
-          altEn,
-          altAr,
-          order,
-        })),
+        pendingImages: pendingImages.map(
+          ({ url, alt, altEn, altAr, order }) => ({
+            url,
+            alt,
+            altEn,
+            altAr,
+            order,
+          }),
+        ),
       });
       toast.success("Ürün oluşturuldu");
       router.push("/admin/products");
@@ -168,7 +170,7 @@ export function NewProductForm({ categories }: NewProductFormProps) {
         altEn: img.altEn,
         altAr: img.altAr,
         order: index,
-      }))
+      })),
     );
   };
 
@@ -191,8 +193,8 @@ export function NewProductForm({ categories }: NewProductFormProps) {
 
     setPendingImages((prev) =>
       prev.map((img) =>
-        img.tempId === editingImage.id ? { ...img, ...values } : img
-      )
+        img.tempId === editingImage.id ? { ...img, ...values } : img,
+      ),
     );
     setEditingImage(null);
     toast.success("Alt metin güncellendi");
@@ -281,6 +283,7 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                         />
                       </div>
                     </div>
+                    <hr className="h-[3px] w-full bg-secondary" />
 
                     <div className="space-y-2">
                       <Label htmlFor="metaDescription">Meta Description</Label>
@@ -297,7 +300,8 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                         rows={4}
                       />
                       <p className="text-xs text-slate-500">
-                        Ürün kartlarında ve ürün detay sayfası meta etiketlerinde kullanılabilir.
+                        Ürün kartlarında ve ürün detay sayfası meta
+                        etiketlerinde kullanılabilir.
                       </p>
                     </div>
 
@@ -338,12 +342,15 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                         />
                       </div>
                     </div>
+                    <hr className="h-[3px] w-full bg-secondary" />
 
                     <div className="space-y-2">
                       <Label>Kategoriler</Label>
                       <div className="flex flex-wrap gap-2">
                         {categoryOptions.map(({ category: cat, depth }) => {
-                          const selected = formData.categoryIds.includes(cat.id);
+                          const selected = formData.categoryIds.includes(
+                            cat.id,
+                          );
                           return (
                             <Button
                               key={cat.id}
@@ -351,9 +358,7 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                               variant={selected ? "default" : "outline"}
                               onClick={() => toggleCategory(cat.id)}
                               className={
-                                selected
-                                  ? "bg-primary hover:bg-[#3a1924]"
-                                  : ""
+                                selected ? "bg-primary hover:bg-[#3a1924]" : ""
                               }
                             >
                               {depth > 0 ? `${"-- ".repeat(depth)}` : ""}
@@ -363,8 +368,8 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                         })}
                       </div>
                       <p className="text-xs text-slate-500">
-                        Birden fazla kategori seçebilirsiniz. İlk seçilen kategori
-                        ana kategori olarak kullanılır.
+                        Birden fazla kategori seçebilirsiniz. İlk seçilen
+                        kategori ana kategori olarak kullanılır.
                       </p>
                       {formData.categoryIds.length > 0 ? (
                         <Button
@@ -372,7 +377,10 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                           variant="ghost"
                           className="h-auto px-0 text-xs text-slate-500 hover:text-slate-700"
                           onClick={() =>
-                            setFormData((prev) => ({ ...prev, categoryIds: [] }))
+                            setFormData((prev) => ({
+                              ...prev,
+                              categoryIds: [],
+                            }))
                           }
                         >
                           Seçimi temizle
@@ -505,4 +513,3 @@ export function NewProductForm({ categories }: NewProductFormProps) {
     </div>
   );
 }
-

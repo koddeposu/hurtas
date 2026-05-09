@@ -1,19 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { AdminSidebar } from "@/components/admin/sidebar";
+import { createCategory } from "@/actions/categoryActions";
 import { AdminHeader } from "@/components/admin/header";
+import { AdminSidebar } from "@/components/admin/sidebar";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { buildCategoryOptions } from "@/lib/categoryTree";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { createCategory } from "@/actions/categoryActions";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
-import { buildCategoryOptions } from "@/lib/categoryTree";
 
 interface Category {
   id: string;
@@ -145,6 +145,7 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                   </div>
                 </div>
 
+                <hr className="h-[3px] w-full bg-secondary" />
                 <div className="space-y-2">
                   <Label htmlFor="parentId">Üst Kategori</Label>
                   <select
@@ -157,7 +158,10 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                   >
                     <option value="">Ana kategori</option>
                     {categoryOptions.map((option) => (
-                      <option key={option.category.id} value={option.category.id}>
+                      <option
+                        key={option.category.id}
+                        value={option.category.id}
+                      >
                         {option.label}
                       </option>
                     ))}
@@ -201,6 +205,7 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                     />
                   </div>
                 </div>
+                <hr className="h-[3px] w-full bg-secondary" />
 
                 <div className="space-y-2">
                   <Label htmlFor="description">Kategori Description</Label>
@@ -252,6 +257,7 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                     />
                   </div>
                 </div>
+                <hr className="h-[3px] w-full bg-secondary" />
 
                 <div className="space-y-2">
                   <Label htmlFor="subtitle">Kategori Subtitle</Label>
@@ -280,7 +286,9 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="subtitleAr">Kategori Subtitle (Arapça)</Label>
+                    <Label htmlFor="subtitleAr">
+                      Kategori Subtitle (Arapça)
+                    </Label>
                     <Input
                       id="subtitleAr"
                       dir="rtl"
@@ -292,9 +300,12 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                     />
                   </div>
                 </div>
+                <hr className="h-[3px] w-full bg-secondary" />
 
                 <div className="space-y-2">
-                  <Label htmlFor="subdescription">Kategori Subdescription</Label>
+                  <Label htmlFor="subdescription">
+                    Kategori Subdescription
+                  </Label>
                   <Textarea
                     id="subdescription"
                     value={formData.subdescription}
