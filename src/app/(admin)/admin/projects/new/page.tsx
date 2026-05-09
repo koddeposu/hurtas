@@ -18,11 +18,14 @@ import {
   SortableImageGrid,
   type SortableImage,
 } from "@/components/admin/sortable-image-grid";
+import { AltTextEditDialog } from "@/components/admin/alt-text-edit-dialog";
 
 interface PendingImage {
   tempId: string;
   url: string;
   alt: string;
+  altEn?: string | null;
+  altAr?: string | null;
   order: number;
 }
 
@@ -31,11 +34,21 @@ export default function NewProjectPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [pendingImages, setPendingImages] = useState<PendingImage[]>([]);
+  const [editingImage, setEditingImage] = useState<{
+    id: string;
+    alt: string;
+    altEn?: string | null;
+    altAr?: string | null;
+  } | null>(null);
   const [formData, setFormData] = useState({
     title: "",
+    titleEn: "",
+    titleAr: "",
     area: "",
     room: "",
     location: "",
+    locationEn: "",
+    locationAr: "",
     isActive: true,
   });
 
@@ -46,9 +59,11 @@ export default function NewProjectPage() {
     try {
       await createProject({
         ...formData,
-        pendingImages: pendingImages.map(({ url, alt, order }) => ({
+        pendingImages: pendingImages.map(({ url, alt, altEn, altAr, order }) => ({
           url,
           alt,
+          altEn,
+          altAr,
           order,
         })),
       });
@@ -85,6 +100,8 @@ export default function NewProjectPage() {
               tempId: crypto.randomUUID(),
               url: result.url,
               alt: file.name.replace(/\.[^/.]+$/, ""),
+              altEn: "",
+              altAr: "",
               order: prev.length,
             },
           ]);
@@ -108,9 +125,37 @@ export default function NewProjectPage() {
         tempId: img.id,
         url: img.url,
         alt: img.alt,
+        altEn: img.altEn,
+        altAr: img.altAr,
         order: index,
       }))
     );
+  };
+
+  const handleEditPendingAlt = (id: string, currentAlt: string) => {
+    const image = pendingImages.find((item) => item.tempId === id);
+    setEditingImage({
+      id,
+      alt: currentAlt,
+      altEn: image?.altEn,
+      altAr: image?.altAr,
+    });
+  };
+
+  const handleSavePendingAlt = async (values: {
+    alt: string;
+    altEn?: string | null;
+    altAr?: string | null;
+  }) => {
+    if (!editingImage) return;
+
+    setPendingImages((prev) =>
+      prev.map((img) =>
+        img.tempId === editingImage.id ? { ...img, ...values } : img
+      )
+    );
+    setEditingImage(null);
+    toast.success("Alt metin güncellendi");
   };
 
   return (
@@ -148,6 +193,38 @@ export default function NewProjectPage() {
                         placeholder="Örn: Sapanca Modern Villa"
                         required
                       />
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="titleEn">Başlık (İngilizce)</Label>
+                        <Input
+                          id="titleEn"
+                          value={formData.titleEn}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              titleEn: e.target.value,
+                            })
+                          }
+                          placeholder="Project title"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="titleAr">Başlık (Arapça)</Label>
+                        <Input
+                          id="titleAr"
+                          dir="rtl"
+                          value={formData.titleAr}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              titleAr: e.target.value,
+                            })
+                          }
+                          placeholder="عنوان المشروع"
+                        />
+                      </div>
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -191,6 +268,38 @@ export default function NewProjectPage() {
                         />
                       </div>
                     </div>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="locationEn">Konum (İngilizce)</Label>
+                        <Input
+                          id="locationEn"
+                          value={formData.locationEn}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              locationEn: e.target.value,
+                            })
+                          }
+                          placeholder="Location"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="locationAr">Konum (Arapça)</Label>
+                        <Input
+                          id="locationAr"
+                          dir="rtl"
+                          value={formData.locationAr}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              locationAr: e.target.value,
+                            })
+                          }
+                          placeholder="الموقع"
+                        />
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
 
@@ -204,12 +313,15 @@ export default function NewProjectPage() {
                         id: img.tempId,
                         url: img.url,
                         alt: img.alt,
+                        altEn: img.altEn,
+                        altAr: img.altAr,
                         order: img.order,
                       }))}
                       onReorder={handleReorderPendingImages}
                       onDelete={handleDeletePendingImage}
                       onUpload={handleImageUpload}
                       isUploading={isUploading}
+                      onEditAlt={handleEditPendingAlt}
                     />
                   </CardContent>
                 </Card>
@@ -251,6 +363,16 @@ export default function NewProjectPage() {
               </div>
             </div>
           </form>
+
+          <AltTextEditDialog
+            open={!!editingImage}
+            onOpenChange={(open) => !open && setEditingImage(null)}
+            currentAlt={editingImage?.alt || ""}
+            currentAltEn={editingImage?.altEn || ""}
+            currentAltAr={editingImage?.altAr || ""}
+            onSave={handleSavePendingAlt}
+            isLoading={false}
+          />
         </main>
       </div>
     </div>

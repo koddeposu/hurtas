@@ -54,6 +54,8 @@ export interface DBProductImage {
   productId: string;
   url: string;
   alt: string;
+  altEn: string | null;
+  altAr: string | null;
   order: number;
   createdAt: Date;
 }
@@ -62,11 +64,21 @@ export interface DBCategory {
   id: string;
   parentId: string | null;
   name: string;
+  nameEn: string | null;
+  nameAr: string | null;
   slug: string;
   title: string | null;
+  titleEn: string | null;
+  titleAr: string | null;
   description: string | null;
+  descriptionEn: string | null;
+  descriptionAr: string | null;
   subtitle: string | null;
+  subtitleEn: string | null;
+  subtitleAr: string | null;
   subdescription: string | null;
+  subdescriptionEn: string | null;
+  subdescriptionAr: string | null;
   order: number;
   createdAt: Date;
   updatedAt: Date;
@@ -77,6 +89,8 @@ export interface DBProduct {
   categoryId: string | null;
   categoryIds?: string[];
   name: string;
+  nameEn: string | null;
+  nameAr: string | null;
   slug: string;
   area: string;
   room: string;
@@ -86,7 +100,11 @@ export interface DBProduct {
   price: string | null;
   oldPrice: string | null;
   description: string | null;
+  descriptionEn: string | null;
+  descriptionAr: string | null;
   metaDescription: string | null;
+  metaDescriptionEn: string | null;
+  metaDescriptionAr: string | null;
   isActive: boolean;
   order: number;
   createdAt: Date;
@@ -101,6 +119,8 @@ export interface DBProductPreview {
   categoryId: string | null;
   categoryIds?: string[];
   name: string;
+  nameEn: string | null;
+  nameAr: string | null;
   slug: string;
   area: string;
   room: string;
@@ -110,7 +130,11 @@ export interface DBProductPreview {
   price: string | null;
   oldPrice: string | null;
   description: string | null;
+  descriptionEn: string | null;
+  descriptionAr: string | null;
   metaDescription: string | null;
+  metaDescriptionEn: string | null;
+  metaDescriptionAr: string | null;
   isActive: boolean;
   order: number;
   createdAt: Date;

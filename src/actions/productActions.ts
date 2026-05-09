@@ -13,6 +13,11 @@ function generateId() {
   return crypto.randomUUID();
 }
 
+function toNullableText(value: string | null | undefined) {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : null;
+}
+
 function normalizeCategoryIds(
   categoryIds?: Array<string | null | undefined> | null,
   fallbackCategoryId?: string | null,
@@ -412,6 +417,8 @@ export async function createProduct(data: {
   categoryId?: string;
   categoryIds?: string[];
   name: string;
+  nameEn?: string;
+  nameAr?: string;
   area: string;
   room: string;
   floor: string;
@@ -420,10 +427,20 @@ export async function createProduct(data: {
   price?: string;
   oldPrice?: string;
   description?: string;
+  descriptionEn?: string;
+  descriptionAr?: string;
   metaDescription?: string;
+  metaDescriptionEn?: string;
+  metaDescriptionAr?: string;
   isActive?: boolean;
   order?: number;
-  pendingImages?: Array<{ url: string; alt: string; order: number }>;
+  pendingImages?: Array<{
+    url: string;
+    alt: string;
+    altEn?: string | null;
+    altAr?: string | null;
+    order: number;
+  }>;
 }) {
   await requireAuth();
 
@@ -437,6 +454,8 @@ export async function createProduct(data: {
       id,
       categoryId: primaryCategoryId,
       name: data.name,
+      nameEn: toNullableText(data.nameEn),
+      nameAr: toNullableText(data.nameAr),
       slug,
       area: data.area,
       room: data.room,
@@ -446,7 +465,11 @@ export async function createProduct(data: {
       price: data.price ?? null,
       oldPrice: data.oldPrice ?? null,
       description: data.description ?? null,
-      metaDescription: data.metaDescription ?? null,
+      descriptionEn: data.descriptionEn ?? null,
+      descriptionAr: data.descriptionAr ?? null,
+      metaDescription: toNullableText(data.metaDescription),
+      metaDescriptionEn: toNullableText(data.metaDescriptionEn),
+      metaDescriptionAr: toNullableText(data.metaDescriptionAr),
       isActive: data.isActive ?? true,
       order: data.order ?? 0,
     });
@@ -468,6 +491,8 @@ export async function createProduct(data: {
           productId: id,
           url: img.url,
           alt: img.alt,
+          altEn: toNullableText(img.altEn),
+          altAr: toNullableText(img.altAr),
           order: img.order,
         });
       }
@@ -486,6 +511,8 @@ export async function updateProduct(
     categoryId?: string | null;
     categoryIds?: string[] | null;
     name?: string;
+    nameEn?: string | null;
+    nameAr?: string | null;
     area?: string;
     room?: string;
     floor?: string;
@@ -494,7 +521,11 @@ export async function updateProduct(
     price?: string | null;
     oldPrice?: string | null;
     description?: string | null;
+    descriptionEn?: string | null;
+    descriptionAr?: string | null;
     metaDescription?: string | null;
+    metaDescriptionEn?: string | null;
+    metaDescriptionAr?: string | null;
     isActive?: boolean;
     order?: number;
   },
@@ -512,6 +543,8 @@ export async function updateProduct(
     updateData.name = data.name;
     updateData.slug = await generateUniqueSlug("product", data.name, id);
   }
+  if (data.nameEn !== undefined) updateData.nameEn = toNullableText(data.nameEn);
+  if (data.nameAr !== undefined) updateData.nameAr = toNullableText(data.nameAr);
   if (data.categoryIds !== undefined) {
     updateData.categoryId = normalizedCategoryIds[0] ?? null;
   } else if (data.categoryId !== undefined) {
@@ -525,8 +558,20 @@ export async function updateProduct(
   if (data.price !== undefined) updateData.price = data.price;
   if (data.oldPrice !== undefined) updateData.oldPrice = data.oldPrice;
   if (data.description !== undefined) updateData.description = data.description;
+  if (data.descriptionEn !== undefined) {
+    updateData.descriptionEn = data.descriptionEn;
+  }
+  if (data.descriptionAr !== undefined) {
+    updateData.descriptionAr = data.descriptionAr;
+  }
   if (data.metaDescription !== undefined) {
-    updateData.metaDescription = data.metaDescription;
+    updateData.metaDescription = toNullableText(data.metaDescription);
+  }
+  if (data.metaDescriptionEn !== undefined) {
+    updateData.metaDescriptionEn = toNullableText(data.metaDescriptionEn);
+  }
+  if (data.metaDescriptionAr !== undefined) {
+    updateData.metaDescriptionAr = toNullableText(data.metaDescriptionAr);
   }
   if (data.isActive !== undefined) updateData.isActive = data.isActive;
   if (data.order !== undefined) updateData.order = data.order;
@@ -571,6 +616,8 @@ export async function addProductImage(
   data: {
     url: string;
     alt: string;
+    altEn?: string | null;
+    altAr?: string | null;
     order?: number;
   },
 ) {
@@ -583,6 +630,8 @@ export async function addProductImage(
     productId,
     url: data.url,
     alt: data.alt,
+    altEn: toNullableText(data.altEn),
+    altAr: toNullableText(data.altAr),
     order: data.order ?? 0,
   });
 
@@ -652,12 +701,21 @@ export async function updateProductsOrder(
   return { success: true };
 }
 
-export async function updateProductImageAlt(imageId: string, alt: string) {
+export async function updateProductImageAlt(
+  imageId: string,
+  alt: string,
+  altEn?: string | null,
+  altAr?: string | null,
+) {
   await requireAuth();
 
   await db
     .update(productImage)
-    .set({ alt })
+    .set({
+      alt,
+      altEn: toNullableText(altEn),
+      altAr: toNullableText(altAr),
+    })
     .where(eq(productImage.id, imageId));
 
   revalidatePath("/admin/products");

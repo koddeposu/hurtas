@@ -18,7 +18,13 @@ interface AltTextEditDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   currentAlt: string;
-  onSave: (alt: string) => Promise<void>;
+  currentAltEn?: string | null;
+  currentAltAr?: string | null;
+  onSave: (values: {
+    alt: string;
+    altEn?: string | null;
+    altAr?: string | null;
+  }) => Promise<void>;
   isLoading: boolean;
 }
 
@@ -26,19 +32,29 @@ export function AltTextEditDialog({
   open,
   onOpenChange,
   currentAlt,
+  currentAltEn = "",
+  currentAltAr = "",
   onSave,
   isLoading,
 }: AltTextEditDialogProps) {
   const [altText, setAltText] = useState(currentAlt);
+  const [altTextEn, setAltTextEn] = useState(currentAltEn ?? "");
+  const [altTextAr, setAltTextAr] = useState(currentAltAr ?? "");
 
   useEffect(() => {
     if (open) {
       setAltText(currentAlt);
+      setAltTextEn(currentAltEn ?? "");
+      setAltTextAr(currentAltAr ?? "");
     }
-  }, [open, currentAlt]);
+  }, [open, currentAlt, currentAltEn, currentAltAr]);
 
   const handleSave = async () => {
-    await onSave(altText);
+    await onSave({
+      alt: altText,
+      altEn: altTextEn,
+      altAr: altTextAr,
+    });
   };
 
   return (
@@ -76,6 +92,31 @@ export function AltTextEditDialog({
               value={altText}
               onChange={(e) => setAltText(e.target.value)}
               placeholder="Görseli kısaca tanımlayın..."
+              rows={3}
+              disabled={isLoading}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="alt-text-en">Alt Metin (İngilizce)</Label>
+            <Textarea
+              id="alt-text-en"
+              value={altTextEn}
+              onChange={(e) => setAltTextEn(e.target.value)}
+              placeholder="Describe the image in English..."
+              rows={3}
+              disabled={isLoading}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="alt-text-ar">Alt Metin (Arapça)</Label>
+            <Textarea
+              id="alt-text-ar"
+              dir="rtl"
+              value={altTextAr}
+              onChange={(e) => setAltTextAr(e.target.value)}
+              placeholder="صف الصورة..."
               rows={3}
               disabled={isLoading}
             />

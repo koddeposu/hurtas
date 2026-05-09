@@ -45,11 +45,21 @@ export async function getCategoryBySlug(slug: string) {
 
 export async function createCategory(data: {
   name: string;
+  nameEn?: string;
+  nameAr?: string;
   parentId?: string | null;
   title?: string;
+  titleEn?: string;
+  titleAr?: string;
   description?: string;
+  descriptionEn?: string;
+  descriptionAr?: string;
   subtitle?: string;
+  subtitleEn?: string;
+  subtitleAr?: string;
   subdescription?: string;
+  subdescriptionEn?: string;
+  subdescriptionAr?: string;
   order?: number;
 }) {
   await requireAuth();
@@ -61,11 +71,21 @@ export async function createCategory(data: {
     id,
     parentId: data.parentId || null,
     name: data.name,
+    nameEn: toNullableText(data.nameEn),
+    nameAr: toNullableText(data.nameAr),
     slug,
     title: toNullableText(data.title),
+    titleEn: toNullableText(data.titleEn),
+    titleAr: toNullableText(data.titleAr),
     description: toNullableText(data.description),
+    descriptionEn: toNullableText(data.descriptionEn),
+    descriptionAr: toNullableText(data.descriptionAr),
     subtitle: toNullableText(data.subtitle),
+    subtitleEn: toNullableText(data.subtitleEn),
+    subtitleAr: toNullableText(data.subtitleAr),
     subdescription: toNullableText(data.subdescription),
+    subdescriptionEn: toNullableText(data.subdescriptionEn),
+    subdescriptionAr: toNullableText(data.subdescriptionAr),
     order: data.order ?? 0,
   });
 
@@ -80,11 +100,21 @@ export async function updateCategory(
   id: string,
   data: {
     name?: string;
+    nameEn?: string;
+    nameAr?: string;
     parentId?: string | null;
     title?: string;
+    titleEn?: string;
+    titleAr?: string;
     description?: string;
+    descriptionEn?: string;
+    descriptionAr?: string;
     subtitle?: string;
+    subtitleEn?: string;
+    subtitleAr?: string;
     subdescription?: string;
+    subdescriptionEn?: string;
+    subdescriptionAr?: string;
     order?: number;
   },
 ) {
@@ -96,20 +126,50 @@ export async function updateCategory(
     updateData.name = data.name;
     updateData.slug = await generateUniqueSlug("category", data.name, id);
   }
+  if (data.nameEn !== undefined) {
+    updateData.nameEn = toNullableText(data.nameEn);
+  }
+  if (data.nameAr !== undefined) {
+    updateData.nameAr = toNullableText(data.nameAr);
+  }
   if (data.parentId !== undefined) {
     updateData.parentId = data.parentId === id ? null : data.parentId;
   }
   if (data.title !== undefined) {
     updateData.title = toNullableText(data.title);
   }
+  if (data.titleEn !== undefined) {
+    updateData.titleEn = toNullableText(data.titleEn);
+  }
+  if (data.titleAr !== undefined) {
+    updateData.titleAr = toNullableText(data.titleAr);
+  }
   if (data.description !== undefined) {
     updateData.description = toNullableText(data.description);
+  }
+  if (data.descriptionEn !== undefined) {
+    updateData.descriptionEn = toNullableText(data.descriptionEn);
+  }
+  if (data.descriptionAr !== undefined) {
+    updateData.descriptionAr = toNullableText(data.descriptionAr);
   }
   if (data.subtitle !== undefined) {
     updateData.subtitle = toNullableText(data.subtitle);
   }
+  if (data.subtitleEn !== undefined) {
+    updateData.subtitleEn = toNullableText(data.subtitleEn);
+  }
+  if (data.subtitleAr !== undefined) {
+    updateData.subtitleAr = toNullableText(data.subtitleAr);
+  }
   if (data.subdescription !== undefined) {
     updateData.subdescription = toNullableText(data.subdescription);
+  }
+  if (data.subdescriptionEn !== undefined) {
+    updateData.subdescriptionEn = toNullableText(data.subdescriptionEn);
+  }
+  if (data.subdescriptionAr !== undefined) {
+    updateData.subdescriptionAr = toNullableText(data.subdescriptionAr);
   }
   if (data.order !== undefined) {
     updateData.order = data.order;

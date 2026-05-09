@@ -1,25 +1,29 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { getUnreadCount } from "@/actions/contactActions";
 import {
-  LayoutDashboard,
-  FolderTree,
-  Package,
-  Star,
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import { authClient } from "@/lib/auth-client";
+import { cn } from "@/lib/utils";
+import {
   Building2,
   FileText,
-  MessageSquare,
-  Settings,
+  FolderTree,
+  LayoutDashboard,
   LogOut,
   Menu,
+  MessageSquare,
+  Package,
+  Settings,
+  Star,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { authClient } from "@/lib/auth-client";
-import { useRouter } from "next/navigation";
-import { getUnreadCount } from "@/actions/contactActions";
-import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const menuItems = [
   {
@@ -84,7 +88,7 @@ export function AdminSidebar() {
           <SheetClose asChild>
             <Link href="/admin" className="flex items-center gap-2">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-white">
-                CT
+                Hurtas
               </div>
               <span className="text-lg font-bold text-slate-900">Admin</span>
             </Link>
@@ -92,7 +96,7 @@ export function AdminSidebar() {
         ) : (
           <Link href="/admin" className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-white">
-              CT
+              H
             </div>
             <span className="text-lg font-bold text-slate-900">Admin</span>
           </Link>
@@ -122,7 +126,9 @@ export function AdminSidebar() {
                 <span
                   className={cn(
                     "ml-auto flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs font-medium",
-                    isActive ? "bg-white text-primary" : "bg-red-500 text-white",
+                    isActive
+                      ? "bg-white text-primary"
+                      : "bg-red-500 text-white",
                   )}
                 >
                   {unreadCount}

@@ -19,11 +19,21 @@ interface Category {
   id: string;
   parentId: string | null;
   name: string;
+  nameEn: string | null;
+  nameAr: string | null;
   slug: string;
   title: string | null;
+  titleEn: string | null;
+  titleAr: string | null;
   description: string | null;
+  descriptionEn: string | null;
+  descriptionAr: string | null;
   subtitle: string | null;
+  subtitleEn: string | null;
+  subtitleAr: string | null;
   subdescription: string | null;
+  subdescriptionEn: string | null;
+  subdescriptionAr: string | null;
   order: number;
 }
 
@@ -37,11 +47,21 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: category.name,
+    nameEn: category.nameEn || "",
+    nameAr: category.nameAr || "",
     parentId: category.parentId || "",
     title: category.title || "",
+    titleEn: category.titleEn || "",
+    titleAr: category.titleAr || "",
     description: category.description || "",
+    descriptionEn: category.descriptionEn || "",
+    descriptionAr: category.descriptionAr || "",
     subtitle: category.subtitle || "",
+    subtitleEn: category.subtitleEn || "",
+    subtitleAr: category.subtitleAr || "",
     subdescription: category.subdescription || "",
+    subdescriptionEn: category.subdescriptionEn || "",
+    subdescriptionAr: category.subdescriptionAr || "",
   });
   const categoryOptions = buildCategoryOptions(categories, category.id);
 
@@ -52,11 +72,21 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
     try {
       await updateCategory(category.id, {
         name: formData.name,
+        nameEn: formData.nameEn,
+        nameAr: formData.nameAr,
         parentId: formData.parentId || null,
         title: formData.title,
+        titleEn: formData.titleEn,
+        titleAr: formData.titleAr,
         description: formData.description,
+        descriptionEn: formData.descriptionEn,
+        descriptionAr: formData.descriptionAr,
         subtitle: formData.subtitle,
+        subtitleEn: formData.subtitleEn,
+        subtitleAr: formData.subtitleAr,
         subdescription: formData.subdescription,
+        subdescriptionEn: formData.subdescriptionEn,
+        subdescriptionAr: formData.subdescriptionAr,
       });
       toast.success("Kategori güncellendi");
       router.push("/admin/categories");
@@ -102,6 +132,32 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
                   />
                 </div>
 
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="nameEn">Kategori Adı (İngilizce)</Label>
+                    <Input
+                      id="nameEn"
+                      value={formData.nameEn}
+                      onChange={(e) =>
+                        setFormData({ ...formData, nameEn: e.target.value })
+                      }
+                      placeholder="English category name"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="nameAr">Kategori Adı (Arapça)</Label>
+                    <Input
+                      id="nameAr"
+                      dir="rtl"
+                      value={formData.nameAr}
+                      onChange={(e) =>
+                        setFormData({ ...formData, nameAr: e.target.value })
+                      }
+                      placeholder="اسم التصنيف"
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="parentId">Üst Kategori</Label>
                   <select
@@ -133,6 +189,32 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
                   />
                 </div>
 
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="titleEn">Kategori Title (İngilizce)</Label>
+                    <Input
+                      id="titleEn"
+                      value={formData.titleEn}
+                      onChange={(e) =>
+                        setFormData({ ...formData, titleEn: e.target.value })
+                      }
+                      placeholder="Top page title"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="titleAr">Kategori Title (Arapça)</Label>
+                    <Input
+                      id="titleAr"
+                      dir="rtl"
+                      value={formData.titleAr}
+                      onChange={(e) =>
+                        setFormData({ ...formData, titleAr: e.target.value })
+                      }
+                      placeholder="عنوان الصفحة"
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="description">Kategori Description</Label>
                   <Textarea
@@ -146,6 +228,44 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
                   />
                 </div>
 
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="descriptionEn">
+                      Kategori Description (İngilizce)
+                    </Label>
+                    <Textarea
+                      id="descriptionEn"
+                      value={formData.descriptionEn}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          descriptionEn: e.target.value,
+                        })
+                      }
+                      placeholder="Top page description"
+                      rows={3}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="descriptionAr">
+                      Kategori Description (Arapça)
+                    </Label>
+                    <Textarea
+                      id="descriptionAr"
+                      dir="rtl"
+                      value={formData.descriptionAr}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          descriptionAr: e.target.value,
+                        })
+                      }
+                      placeholder="وصف الصفحة"
+                      rows={3}
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="subtitle">Kategori Subtitle</Label>
                   <Input
@@ -156,6 +276,34 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
                     }
                     placeholder="Ürünlerden sonra gösterilecek başlık"
                   />
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="subtitleEn">
+                      Kategori Subtitle (İngilizce)
+                    </Label>
+                    <Input
+                      id="subtitleEn"
+                      value={formData.subtitleEn}
+                      onChange={(e) =>
+                        setFormData({ ...formData, subtitleEn: e.target.value })
+                      }
+                      placeholder="Title shown after products"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="subtitleAr">Kategori Subtitle (Arapça)</Label>
+                    <Input
+                      id="subtitleAr"
+                      dir="rtl"
+                      value={formData.subtitleAr}
+                      onChange={(e) =>
+                        setFormData({ ...formData, subtitleAr: e.target.value })
+                      }
+                      placeholder="العنوان بعد المنتجات"
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-2">
@@ -172,6 +320,44 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
                     placeholder="Ürünlerden sonra gösterilecek açıklama"
                     rows={4}
                   />
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="subdescriptionEn">
+                      Kategori Subdescription (İngilizce)
+                    </Label>
+                    <Textarea
+                      id="subdescriptionEn"
+                      value={formData.subdescriptionEn}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          subdescriptionEn: e.target.value,
+                        })
+                      }
+                      placeholder="Description shown after products"
+                      rows={4}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="subdescriptionAr">
+                      Kategori Subdescription (Arapça)
+                    </Label>
+                    <Textarea
+                      id="subdescriptionAr"
+                      dir="rtl"
+                      value={formData.subdescriptionAr}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          subdescriptionAr: e.target.value,
+                        })
+                      }
+                      placeholder="الوصف بعد المنتجات"
+                      rows={4}
+                    />
+                  </div>
                 </div>
 
                 <div className="flex gap-4">

@@ -31,6 +31,8 @@ interface PendingImage {
   tempId: string;
   url: string;
   alt: string;
+  altEn?: string | null;
+  altAr?: string | null;
   order: number;
 }
 
@@ -53,17 +55,25 @@ export function NewProductForm({ categories }: NewProductFormProps) {
   const [editingImage, setEditingImage] = useState<{
     id: string;
     alt: string;
+    altEn?: string | null;
+    altAr?: string | null;
   } | null>(null);
   const [formData, setFormData] = useState({
     categoryIds: [] as string[],
     name: "",
+    nameEn: "",
+    nameAr: "",
     area: "-",
     room: "-",
     floor: "-",
     bath: "-",
     height: "-",
     description: toProductDetailContentJson(""),
+    descriptionEn: toProductDetailContentJson(""),
+    descriptionAr: toProductDetailContentJson(""),
     metaDescription: "",
+    metaDescriptionEn: "",
+    metaDescriptionAr: "",
     isActive: true,
   });
   const categoryOptions = buildCategoryOptions(categories);
@@ -80,10 +90,20 @@ export function NewProductForm({ categories }: NewProductFormProps) {
         description: hasProductDetailContent(formData.description)
           ? formData.description
           : undefined,
+        descriptionEn: hasProductDetailContent(formData.descriptionEn)
+          ? formData.descriptionEn
+          : undefined,
+        descriptionAr: hasProductDetailContent(formData.descriptionAr)
+          ? formData.descriptionAr
+          : undefined,
         metaDescription: formData.metaDescription.trim() || undefined,
-        pendingImages: pendingImages.map(({ url, alt, order }) => ({
+        metaDescriptionEn: formData.metaDescriptionEn.trim() || undefined,
+        metaDescriptionAr: formData.metaDescriptionAr.trim() || undefined,
+        pendingImages: pendingImages.map(({ url, alt, altEn, altAr, order }) => ({
           url,
           alt,
+          altEn,
+          altAr,
           order,
         })),
       });
@@ -120,6 +140,8 @@ export function NewProductForm({ categories }: NewProductFormProps) {
               tempId: crypto.randomUUID(),
               url: result.url,
               alt: file.name.replace(/\.[^/.]+$/, ""),
+              altEn: "",
+              altAr: "",
               order: prev.length,
             },
           ]);
@@ -143,21 +165,33 @@ export function NewProductForm({ categories }: NewProductFormProps) {
         tempId: img.id,
         url: img.url,
         alt: img.alt,
+        altEn: img.altEn,
+        altAr: img.altAr,
         order: index,
       }))
     );
   };
 
   const handleEditPendingAlt = (id: string, currentAlt: string) => {
-    setEditingImage({ id, alt: currentAlt });
+    const image = pendingImages.find((item) => item.tempId === id);
+    setEditingImage({
+      id,
+      alt: currentAlt,
+      altEn: image?.altEn,
+      altAr: image?.altAr,
+    });
   };
 
-  const handleSavePendingAlt = async (newAlt: string) => {
+  const handleSavePendingAlt = async (values: {
+    alt: string;
+    altEn?: string | null;
+    altAr?: string | null;
+  }) => {
     if (!editingImage) return;
 
     setPendingImages((prev) =>
       prev.map((img) =>
-        img.tempId === editingImage.id ? { ...img, alt: newAlt } : img
+        img.tempId === editingImage.id ? { ...img, ...values } : img
       )
     );
     setEditingImage(null);
@@ -216,6 +250,38 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                       />
                     </div>
 
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="nameEn">Ürün Adı (İngilizce)</Label>
+                        <Input
+                          id="nameEn"
+                          value={formData.nameEn}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              nameEn: e.target.value,
+                            })
+                          }
+                          placeholder="Product name"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="nameAr">Ürün Adı (Arapça)</Label>
+                        <Input
+                          id="nameAr"
+                          dir="rtl"
+                          value={formData.nameAr}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              nameAr: e.target.value,
+                            })
+                          }
+                          placeholder="اسم المنتج"
+                        />
+                      </div>
+                    </div>
+
                     <div className="space-y-2">
                       <Label htmlFor="metaDescription">Meta Description</Label>
                       <Textarea
@@ -233,6 +299,44 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                       <p className="text-xs text-slate-500">
                         Ürün kartlarında ve ürün detay sayfası meta etiketlerinde kullanılabilir.
                       </p>
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="metaDescriptionEn">
+                          Meta Description (İngilizce)
+                        </Label>
+                        <Textarea
+                          id="metaDescriptionEn"
+                          value={formData.metaDescriptionEn}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              metaDescriptionEn: e.target.value,
+                            })
+                          }
+                          placeholder="Short SEO description in English"
+                          rows={4}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="metaDescriptionAr">
+                          Meta Description (Arapça)
+                        </Label>
+                        <Textarea
+                          id="metaDescriptionAr"
+                          dir="rtl"
+                          value={formData.metaDescriptionAr}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              metaDescriptionAr: e.target.value,
+                            })
+                          }
+                          placeholder="وصف قصير للسيو"
+                          rows={4}
+                        />
+                      </div>
                     </div>
 
                     <div className="space-y-2">
@@ -288,6 +392,38 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                         }
                       />
                     </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="descriptionEn">
+                        Ürün Detay İçeriği (İngilizce)
+                      </Label>
+                      <ProductDetailContentEditor
+                        content={formData.descriptionEn}
+                        onChange={(json) =>
+                          setFormData({
+                            ...formData,
+                            descriptionEn: json,
+                          })
+                        }
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="descriptionAr">
+                        Ürün Detay İçeriği (Arapça)
+                      </Label>
+                      <div dir="rtl">
+                        <ProductDetailContentEditor
+                          content={formData.descriptionAr}
+                          onChange={(json) =>
+                            setFormData({
+                              ...formData,
+                              descriptionAr: json,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
 
@@ -301,6 +437,8 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                         id: img.tempId,
                         url: img.url,
                         alt: img.alt,
+                        altEn: img.altEn,
+                        altAr: img.altAr,
                         order: img.order,
                       }))}
                       onReorder={handleReorderPendingImages}
@@ -357,6 +495,8 @@ export function NewProductForm({ categories }: NewProductFormProps) {
             open={!!editingImage}
             onOpenChange={(open) => !open && setEditingImage(null)}
             currentAlt={editingImage?.alt || ""}
+            currentAltEn={editingImage?.altEn || ""}
+            currentAltAr={editingImage?.altAr || ""}
             onSave={handleSavePendingAlt}
             isLoading={false}
           />

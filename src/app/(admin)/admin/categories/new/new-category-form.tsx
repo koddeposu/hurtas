@@ -31,11 +31,21 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
+    nameEn: "",
+    nameAr: "",
     parentId: "",
     title: "",
+    titleEn: "",
+    titleAr: "",
     description: "",
+    descriptionEn: "",
+    descriptionAr: "",
     subtitle: "",
+    subtitleEn: "",
+    subtitleAr: "",
     subdescription: "",
+    subdescriptionEn: "",
+    subdescriptionAr: "",
   });
   const categoryOptions = buildCategoryOptions(categories);
 
@@ -46,11 +56,21 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
     try {
       await createCategory({
         name: formData.name,
+        nameEn: formData.nameEn,
+        nameAr: formData.nameAr,
         parentId: formData.parentId || null,
         title: formData.title,
+        titleEn: formData.titleEn,
+        titleAr: formData.titleAr,
         description: formData.description,
+        descriptionEn: formData.descriptionEn,
+        descriptionAr: formData.descriptionAr,
         subtitle: formData.subtitle,
+        subtitleEn: formData.subtitleEn,
+        subtitleAr: formData.subtitleAr,
         subdescription: formData.subdescription,
+        subdescriptionEn: formData.subdescriptionEn,
+        subdescriptionAr: formData.subdescriptionAr,
       });
       toast.success("Kategori oluşturuldu");
       router.push("/admin/categories");
@@ -99,6 +119,32 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                   />
                 </div>
 
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="nameEn">Kategori Adı (İngilizce)</Label>
+                    <Input
+                      id="nameEn"
+                      value={formData.nameEn}
+                      onChange={(e) =>
+                        setFormData({ ...formData, nameEn: e.target.value })
+                      }
+                      placeholder="English category name"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="nameAr">Kategori Adı (Arapça)</Label>
+                    <Input
+                      id="nameAr"
+                      dir="rtl"
+                      value={formData.nameAr}
+                      onChange={(e) =>
+                        setFormData({ ...formData, nameAr: e.target.value })
+                      }
+                      placeholder="اسم التصنيف"
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="parentId">Üst Kategori</Label>
                   <select
@@ -130,6 +176,32 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                   />
                 </div>
 
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="titleEn">Kategori Title (İngilizce)</Label>
+                    <Input
+                      id="titleEn"
+                      value={formData.titleEn}
+                      onChange={(e) =>
+                        setFormData({ ...formData, titleEn: e.target.value })
+                      }
+                      placeholder="Top page title"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="titleAr">Kategori Title (Arapça)</Label>
+                    <Input
+                      id="titleAr"
+                      dir="rtl"
+                      value={formData.titleAr}
+                      onChange={(e) =>
+                        setFormData({ ...formData, titleAr: e.target.value })
+                      }
+                      placeholder="عنوان الصفحة"
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="description">Kategori Description</Label>
                   <Textarea
@@ -143,6 +215,44 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                   />
                 </div>
 
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="descriptionEn">
+                      Kategori Description (İngilizce)
+                    </Label>
+                    <Textarea
+                      id="descriptionEn"
+                      value={formData.descriptionEn}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          descriptionEn: e.target.value,
+                        })
+                      }
+                      placeholder="Top page description"
+                      rows={3}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="descriptionAr">
+                      Kategori Description (Arapça)
+                    </Label>
+                    <Textarea
+                      id="descriptionAr"
+                      dir="rtl"
+                      value={formData.descriptionAr}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          descriptionAr: e.target.value,
+                        })
+                      }
+                      placeholder="وصف الصفحة"
+                      rows={3}
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="subtitle">Kategori Subtitle</Label>
                   <Input
@@ -153,6 +263,34 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                     }
                     placeholder="Ürünlerden sonra gösterilecek başlık"
                   />
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="subtitleEn">
+                      Kategori Subtitle (İngilizce)
+                    </Label>
+                    <Input
+                      id="subtitleEn"
+                      value={formData.subtitleEn}
+                      onChange={(e) =>
+                        setFormData({ ...formData, subtitleEn: e.target.value })
+                      }
+                      placeholder="Title shown after products"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="subtitleAr">Kategori Subtitle (Arapça)</Label>
+                    <Input
+                      id="subtitleAr"
+                      dir="rtl"
+                      value={formData.subtitleAr}
+                      onChange={(e) =>
+                        setFormData({ ...formData, subtitleAr: e.target.value })
+                      }
+                      placeholder="العنوان بعد المنتجات"
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-2">
@@ -169,6 +307,44 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                     placeholder="Ürünlerden sonra gösterilecek açıklama"
                     rows={4}
                   />
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="subdescriptionEn">
+                      Kategori Subdescription (İngilizce)
+                    </Label>
+                    <Textarea
+                      id="subdescriptionEn"
+                      value={formData.subdescriptionEn}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          subdescriptionEn: e.target.value,
+                        })
+                      }
+                      placeholder="Description shown after products"
+                      rows={4}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="subdescriptionAr">
+                      Kategori Subdescription (Arapça)
+                    </Label>
+                    <Textarea
+                      id="subdescriptionAr"
+                      dir="rtl"
+                      value={formData.subdescriptionAr}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          subdescriptionAr: e.target.value,
+                        })
+                      }
+                      placeholder="الوصف بعد المنتجات"
+                      rows={4}
+                    />
+                  </div>
                 </div>
 
                 <div className="flex gap-4">

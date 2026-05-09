@@ -50,6 +50,13 @@
       "when": 1778283600000,
       "tag": "0006_category_content_fields",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1778287200000,
+      "tag": "0007_multilingual_admin_fields",
+      "breakpoints": true
     }
   ]
 }

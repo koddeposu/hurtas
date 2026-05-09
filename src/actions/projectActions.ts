@@ -11,6 +11,11 @@ function generateId() {
   return crypto.randomUUID();
 }
 
+function toNullableText(value: string | null | undefined) {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : null;
+}
+
 export async function getProjects(activeOnly: boolean = false) {
   let query = db
     .select()
@@ -76,12 +81,22 @@ export async function getProjectByIdWithImages(id: string) {
 
 export async function createProject(data: {
   title: string;
+  titleEn?: string;
+  titleAr?: string;
   area: string;
   room: string;
   location: string;
+  locationEn?: string;
+  locationAr?: string;
   isActive?: boolean;
   order?: number;
-  pendingImages?: Array<{ url: string; alt: string; order: number }>;
+  pendingImages?: Array<{
+    url: string;
+    alt: string;
+    altEn?: string | null;
+    altAr?: string | null;
+    order: number;
+  }>;
 }) {
   await requireAuth();
 
@@ -91,10 +106,14 @@ export async function createProject(data: {
   await db.insert(project).values({
     id,
     title: data.title,
+    titleEn: toNullableText(data.titleEn),
+    titleAr: toNullableText(data.titleAr),
     slug,
     area: data.area,
     room: data.room,
     location: data.location,
+    locationEn: toNullableText(data.locationEn),
+    locationAr: toNullableText(data.locationAr),
     isActive: data.isActive ?? true,
     order: data.order ?? 0,
   });
@@ -107,6 +126,8 @@ export async function createProject(data: {
         projectId: id,
         url: img.url,
         alt: img.alt,
+        altEn: toNullableText(img.altEn),
+        altAr: toNullableText(img.altAr),
         order: img.order,
       });
     }
@@ -122,9 +143,13 @@ export async function updateProject(
   id: string,
   data: {
     title?: string;
+    titleEn?: string | null;
+    titleAr?: string | null;
     area?: string;
     room?: string;
     location?: string;
+    locationEn?: string | null;
+    locationAr?: string | null;
     isActive?: boolean;
     order?: number;
   },
@@ -137,9 +162,17 @@ export async function updateProject(
     updateData.title = data.title;
     updateData.slug = await generateUniqueSlug("project", data.title, id);
   }
+  if (data.titleEn !== undefined) updateData.titleEn = toNullableText(data.titleEn);
+  if (data.titleAr !== undefined) updateData.titleAr = toNullableText(data.titleAr);
   if (data.area !== undefined) updateData.area = data.area;
   if (data.room !== undefined) updateData.room = data.room;
   if (data.location !== undefined) updateData.location = data.location;
+  if (data.locationEn !== undefined) {
+    updateData.locationEn = toNullableText(data.locationEn);
+  }
+  if (data.locationAr !== undefined) {
+    updateData.locationAr = toNullableText(data.locationAr);
+  }
   if (data.isActive !== undefined) updateData.isActive = data.isActive;
   if (data.order !== undefined) updateData.order = data.order;
 
@@ -187,6 +220,8 @@ export async function addProjectImage(
   data: {
     url: string;
     alt: string;
+    altEn?: string | null;
+    altAr?: string | null;
     order?: number;
   },
 ) {
@@ -199,6 +234,8 @@ export async function addProjectImage(
     projectId,
     url: data.url,
     alt: data.alt,
+    altEn: toNullableText(data.altEn),
+    altAr: toNullableText(data.altAr),
     order: data.order ?? 0,
   });
 
@@ -250,12 +287,21 @@ export async function updateProjectImagesOrder(
   return { success: true };
 }
 
-export async function updateProjectImageAlt(imageId: string, alt: string) {
+export async function updateProjectImageAlt(
+  imageId: string,
+  alt: string,
+  altEn?: string | null,
+  altAr?: string | null,
+) {
   await requireAuth();
 
   await db
     .update(projectImage)
-    .set({ alt })
+    .set({
+      alt,
+      altEn: toNullableText(altEn),
+      altAr: toNullableText(altAr),
+    })
     .where(eq(projectImage.id, imageId));
 
   revalidatePath("/admin/projects");

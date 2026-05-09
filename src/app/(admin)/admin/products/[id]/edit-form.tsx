@@ -37,6 +37,8 @@ interface ProductImage {
   id: string;
   url: string;
   alt: string;
+  altEn: string | null;
+  altAr: string | null;
   order: number;
 }
 
@@ -45,6 +47,8 @@ interface Product {
   categoryId: string | null;
   categoryIds?: string[];
   name: string;
+  nameEn: string | null;
+  nameAr: string | null;
   slug: string;
   area: string;
   room: string;
@@ -54,7 +58,11 @@ interface Product {
   price: string | null;
   oldPrice: string | null;
   description: string | null;
+  descriptionEn: string | null;
+  descriptionAr: string | null;
   metaDescription: string | null;
+  metaDescriptionEn: string | null;
+  metaDescriptionAr: string | null;
   isActive: boolean;
   order: number;
   images: ProductImage[];
@@ -80,6 +88,8 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
   const [editingImage, setEditingImage] = useState<{
     id: string;
     alt: string;
+    altEn?: string | null;
+    altAr?: string | null;
   } | null>(null);
   const [isUpdatingAlt, setIsUpdatingAlt] = useState(false);
   const [formData, setFormData] = useState({
@@ -90,13 +100,19 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
           ? [product.categoryId]
           : [],
     name: product.name,
+    nameEn: product.nameEn || "",
+    nameAr: product.nameAr || "",
     area: product.area,
     room: product.room,
     floor: product.floor,
     bath: product.bath,
     height: product.height,
     description: toProductDetailContentJson(product.description || ""),
+    descriptionEn: toProductDetailContentJson(product.descriptionEn || ""),
+    descriptionAr: toProductDetailContentJson(product.descriptionAr || ""),
     metaDescription: product.metaDescription || "",
+    metaDescriptionEn: product.metaDescriptionEn || "",
+    metaDescriptionAr: product.metaDescriptionAr || "",
     isActive: product.isActive,
   });
   const categoryOptions = buildCategoryOptions(categories);
@@ -112,7 +128,15 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
         description: hasProductDetailContent(formData.description)
           ? formData.description
           : null,
+        descriptionEn: hasProductDetailContent(formData.descriptionEn)
+          ? formData.descriptionEn
+          : null,
+        descriptionAr: hasProductDetailContent(formData.descriptionAr)
+          ? formData.descriptionAr
+          : null,
         metaDescription: formData.metaDescription.trim() || null,
+        metaDescriptionEn: formData.metaDescriptionEn.trim() || null,
+        metaDescriptionAr: formData.metaDescriptionAr.trim() || null,
       });
       toast.success("Ürün güncellendi");
       router.push("/admin/products");
@@ -145,11 +169,20 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
           const { id } = await addProductImage(product.id, {
             url: result.url,
             alt: imageAlt,
+            altEn: "",
+            altAr: "",
             order: images.length,
           });
           setImages([
             ...images,
-            { id, url: result.url, alt: imageAlt, order: images.length },
+            {
+              id,
+              url: result.url,
+              alt: imageAlt,
+              altEn: "",
+              altAr: "",
+              order: images.length,
+            },
           ]);
         }
       }
@@ -173,7 +206,13 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
 
   const handleReorderImages = async (reorderedImages: SortableImage[]) => {
     const previousImages = [...images];
-    setImages(reorderedImages);
+    setImages(
+      reorderedImages.map((image) => ({
+        ...image,
+        altEn: image.altEn ?? null,
+        altAr: image.altAr ?? null,
+      })),
+    );
 
     try {
       await updateProductImagesOrder(
@@ -190,17 +229,32 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
   };
 
   const handleEditAlt = (id: string, currentAlt: string) => {
-    setEditingImage({ id, alt: currentAlt });
+    const image = images.find((item) => item.id === id);
+    setEditingImage({
+      id,
+      alt: currentAlt,
+      altEn: image?.altEn,
+      altAr: image?.altAr,
+    });
   };
 
-  const handleSaveAlt = async (newAlt: string) => {
+  const handleSaveAlt = async (values: {
+    alt: string;
+    altEn?: string | null;
+    altAr?: string | null;
+  }) => {
     if (!editingImage) return;
     setIsUpdatingAlt(true);
     try {
-      await updateProductImageAlt(editingImage.id, newAlt);
+      await updateProductImageAlt(
+        editingImage.id,
+        values.alt,
+        values.altEn,
+        values.altAr,
+      );
       setImages(
         images.map((img) =>
-          img.id === editingImage.id ? { ...img, alt: newAlt } : img
+          img.id === editingImage.id ? { ...img, ...values } : img
         )
       );
       toast.success("Alt metin güncellendi");
@@ -260,6 +314,38 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                       />
                     </div>
 
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="nameEn">Ürün Adı (İngilizce)</Label>
+                        <Input
+                          id="nameEn"
+                          value={formData.nameEn}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              nameEn: e.target.value,
+                            })
+                          }
+                          placeholder="Product name"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="nameAr">Ürün Adı (Arapça)</Label>
+                        <Input
+                          id="nameAr"
+                          dir="rtl"
+                          value={formData.nameAr}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              nameAr: e.target.value,
+                            })
+                          }
+                          placeholder="اسم المنتج"
+                        />
+                      </div>
+                    </div>
+
                     <div className="space-y-2">
                       <Label htmlFor="metaDescription">Meta Description</Label>
                       <Textarea
@@ -277,6 +363,44 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                       <p className="text-xs text-slate-500">
                         Ürün kartlarında ve ürün detay sayfası meta etiketlerinde kullanılabilir.
                       </p>
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="metaDescriptionEn">
+                          Meta Description (İngilizce)
+                        </Label>
+                        <Textarea
+                          id="metaDescriptionEn"
+                          value={formData.metaDescriptionEn}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              metaDescriptionEn: e.target.value,
+                            })
+                          }
+                          placeholder="Short SEO description in English"
+                          rows={4}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="metaDescriptionAr">
+                          Meta Description (Arapça)
+                        </Label>
+                        <Textarea
+                          id="metaDescriptionAr"
+                          dir="rtl"
+                          value={formData.metaDescriptionAr}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              metaDescriptionAr: e.target.value,
+                            })
+                          }
+                          placeholder="وصف قصير للسيو"
+                          rows={4}
+                        />
+                      </div>
                     </div>
 
                     <div className="space-y-2">
@@ -331,6 +455,38 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                           })
                         }
                       />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="descriptionEn">
+                        Ürün Detay İçeriği (İngilizce)
+                      </Label>
+                      <ProductDetailContentEditor
+                        content={formData.descriptionEn}
+                        onChange={(json) =>
+                          setFormData({
+                            ...formData,
+                            descriptionEn: json,
+                          })
+                        }
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="descriptionAr">
+                        Ürün Detay İçeriği (Arapça)
+                      </Label>
+                      <div dir="rtl">
+                        <ProductDetailContentEditor
+                          content={formData.descriptionAr}
+                          onChange={(json) =>
+                            setFormData({
+                              ...formData,
+                              descriptionAr: json,
+                            })
+                          }
+                        />
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -393,6 +549,8 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
             open={!!editingImage}
             onOpenChange={(open) => !open && setEditingImage(null)}
             currentAlt={editingImage?.alt || ""}
+            currentAltEn={editingImage?.altEn || ""}
+            currentAltAr={editingImage?.altAr || ""}
             onSave={handleSaveAlt}
             isLoading={isUpdatingAlt}
           />

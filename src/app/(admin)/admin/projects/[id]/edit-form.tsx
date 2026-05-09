@@ -30,15 +30,21 @@ interface ProjectImage {
   id: string;
   url: string;
   alt: string;
+  altEn: string | null;
+  altAr: string | null;
   order: number;
 }
 
 interface Project {
   id: string;
   title: string;
+  titleEn: string | null;
+  titleAr: string | null;
   area: string;
   room: string;
   location: string;
+  locationEn: string | null;
+  locationAr: string | null;
   isActive: boolean;
   order: number;
   images: ProjectImage[];
@@ -52,13 +58,19 @@ export function EditProjectForm({ project }: { project: Project }) {
   const [editingImage, setEditingImage] = useState<{
     id: string;
     alt: string;
+    altEn?: string | null;
+    altAr?: string | null;
   } | null>(null);
   const [isUpdatingAlt, setIsUpdatingAlt] = useState(false);
   const [formData, setFormData] = useState({
     title: project.title,
+    titleEn: project.titleEn || "",
+    titleAr: project.titleAr || "",
     area: project.area,
     room: project.room,
     location: project.location,
+    locationEn: project.locationEn || "",
+    locationAr: project.locationAr || "",
     isActive: project.isActive,
   });
 
@@ -83,11 +95,20 @@ export function EditProjectForm({ project }: { project: Project }) {
           const { id } = await addProjectImage(project.id, {
             url: result.url,
             alt: file.name.replace(/\.[^/.]+$/, ""),
+            altEn: "",
+            altAr: "",
             order: images.length,
           });
           setImages((prev) => [
             ...prev,
-            { id, url: result.url, alt: file.name, order: prev.length },
+            {
+              id,
+              url: result.url,
+              alt: file.name,
+              altEn: "",
+              altAr: "",
+              order: prev.length,
+            },
           ]);
         }
       }
@@ -111,7 +132,13 @@ export function EditProjectForm({ project }: { project: Project }) {
 
   const handleReorderImages = async (reorderedImages: SortableImage[]) => {
     const previousImages = [...images];
-    setImages(reorderedImages);
+    setImages(
+      reorderedImages.map((image) => ({
+        ...image,
+        altEn: image.altEn ?? null,
+        altAr: image.altAr ?? null,
+      })),
+    );
 
     try {
       await updateProjectImagesOrder(
@@ -128,17 +155,32 @@ export function EditProjectForm({ project }: { project: Project }) {
   };
 
   const handleEditAlt = (id: string, currentAlt: string) => {
-    setEditingImage({ id, alt: currentAlt });
+    const image = images.find((item) => item.id === id);
+    setEditingImage({
+      id,
+      alt: currentAlt,
+      altEn: image?.altEn,
+      altAr: image?.altAr,
+    });
   };
 
-  const handleSaveAlt = async (newAlt: string) => {
+  const handleSaveAlt = async (values: {
+    alt: string;
+    altEn?: string | null;
+    altAr?: string | null;
+  }) => {
     if (!editingImage) return;
     setIsUpdatingAlt(true);
     try {
-      await updateProjectImageAlt(editingImage.id, newAlt);
+      await updateProjectImageAlt(
+        editingImage.id,
+        values.alt,
+        values.altEn,
+        values.altAr,
+      );
       setImages(
         images.map((img) =>
-          img.id === editingImage.id ? { ...img, alt: newAlt } : img
+          img.id === editingImage.id ? { ...img, ...values } : img
         )
       );
       toast.success("Alt metin güncellendi");
@@ -201,6 +243,38 @@ export function EditProjectForm({ project }: { project: Project }) {
                       />
                     </div>
 
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="titleEn">Başlık (İngilizce)</Label>
+                        <Input
+                          id="titleEn"
+                          value={formData.titleEn}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              titleEn: e.target.value,
+                            })
+                          }
+                          placeholder="Project title"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="titleAr">Başlık (Arapça)</Label>
+                        <Input
+                          id="titleAr"
+                          dir="rtl"
+                          value={formData.titleAr}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              titleAr: e.target.value,
+                            })
+                          }
+                          placeholder="عنوان المشروع"
+                        />
+                      </div>
+                    </div>
+
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                       <div className="space-y-2">
                         <Label htmlFor="area">Alan *</Label>
@@ -236,6 +310,38 @@ export function EditProjectForm({ project }: { project: Project }) {
                             })
                           }
                           required
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label htmlFor="locationEn">Konum (İngilizce)</Label>
+                        <Input
+                          id="locationEn"
+                          value={formData.locationEn}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              locationEn: e.target.value,
+                            })
+                          }
+                          placeholder="Location"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="locationAr">Konum (Arapça)</Label>
+                        <Input
+                          id="locationAr"
+                          dir="rtl"
+                          value={formData.locationAr}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              locationAr: e.target.value,
+                            })
+                          }
+                          placeholder="الموقع"
                         />
                       </div>
                     </div>
@@ -300,6 +406,8 @@ export function EditProjectForm({ project }: { project: Project }) {
             open={!!editingImage}
             onOpenChange={(open) => !open && setEditingImage(null)}
             currentAlt={editingImage?.alt || ""}
+            currentAltEn={editingImage?.altEn || ""}
+            currentAltAr={editingImage?.altAr || ""}
             onSave={handleSaveAlt}
             isLoading={isUpdatingAlt}
           />

@@ -26,6 +26,8 @@ export interface SortableImage {
   id: string;
   url: string;
   alt: string;
+  altEn?: string | null;
+  altAr?: string | null;
   order: number;
 }
 
@@ -90,6 +92,7 @@ function SortableImageItem({ image, onDelete, onEditAlt }: SortableImageItemProp
       <div className="absolute inset-x-0 bottom-0 z-10 flex items-center gap-2 bg-black/65 px-2 py-1.5 text-white">
         <span className="min-w-0 flex-1 truncate text-[11px]">
           {image.alt?.trim() ? image.alt : "Alt metin girilmedi"}
+          {image.altEn?.trim() || image.altAr?.trim() ? " (+çeviri)" : ""}
         </span>
         {onEditAlt && (
           <button
