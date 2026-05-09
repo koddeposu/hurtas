@@ -1,24 +1,24 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { AdminSidebar } from "@/components/admin/sidebar";
-import { AdminHeader } from "@/components/admin/header";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Loader2 } from "lucide-react";
-import Link from "next/link";
 import { createProject } from "@/actions/projectActions";
 import { uploadImage } from "@/actions/uploadActions";
-import { toast } from "sonner";
+import { AltTextEditDialog } from "@/components/admin/alt-text-edit-dialog";
+import { AdminHeader } from "@/components/admin/header";
+import { AdminSidebar } from "@/components/admin/sidebar";
 import {
   SortableImageGrid,
   type SortableImage,
 } from "@/components/admin/sortable-image-grid";
-import { AltTextEditDialog } from "@/components/admin/alt-text-edit-dialog";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface PendingImage {
   tempId: string;
@@ -59,13 +59,15 @@ export default function NewProjectPage() {
     try {
       await createProject({
         ...formData,
-        pendingImages: pendingImages.map(({ url, alt, altEn, altAr, order }) => ({
-          url,
-          alt,
-          altEn,
-          altAr,
-          order,
-        })),
+        pendingImages: pendingImages.map(
+          ({ url, alt, altEn, altAr, order }) => ({
+            url,
+            alt,
+            altEn,
+            altAr,
+            order,
+          }),
+        ),
       });
       toast.success("Proje oluşturuldu");
       router.push("/admin/projects");
@@ -128,7 +130,7 @@ export default function NewProjectPage() {
         altEn: img.altEn,
         altAr: img.altAr,
         order: index,
-      }))
+      })),
     );
   };
 
@@ -151,8 +153,8 @@ export default function NewProjectPage() {
 
     setPendingImages((prev) =>
       prev.map((img) =>
-        img.tempId === editingImage.id ? { ...img, ...values } : img
-      )
+        img.tempId === editingImage.id ? { ...img, ...values } : img,
+      ),
     );
     setEditingImage(null);
     toast.success("Alt metin güncellendi");
@@ -378,4 +380,3 @@ export default function NewProjectPage() {
     </div>
   );
 }
-

@@ -17,10 +17,6 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { buildCategoryOptions } from "@/lib/categoryTree";
-import {
-  hasProductDetailContent,
-  toProductDetailContentJson,
-} from "@/lib/productDetailContent";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -68,9 +64,7 @@ export function NewProductForm({ categories }: NewProductFormProps) {
     floor: "-",
     bath: "-",
     height: "-",
-    description: toProductDetailContentJson(""),
-    descriptionEn: toProductDetailContentJson(""),
-    descriptionAr: toProductDetailContentJson(""),
+    detailContent: "",
     metaDescription: "",
     metaDescriptionEn: "",
     metaDescriptionAr: "",
@@ -83,19 +77,24 @@ export function NewProductForm({ categories }: NewProductFormProps) {
     setIsLoading(true);
 
     try {
+      // detailContent içinden tr/en/ar'ı parse edip ilgili action alanlarına dağıt
+      let parsedDetail: {
+        descriptions?: Record<string, string>;
+        tables?: Record<string, unknown>;
+      } = {};
+      try {
+        parsedDetail = formData.detailContent
+          ? JSON.parse(formData.detailContent)
+          : {};
+      } catch {}
+
       await createProduct({
         ...formData,
         categoryIds:
           formData.categoryIds.length > 0 ? formData.categoryIds : undefined,
-        description: hasProductDetailContent(formData.description)
-          ? formData.description
-          : undefined,
-        descriptionEn: hasProductDetailContent(formData.descriptionEn)
-          ? formData.descriptionEn
-          : undefined,
-        descriptionAr: hasProductDetailContent(formData.descriptionAr)
-          ? formData.descriptionAr
-          : undefined,
+        description: parsedDetail.descriptions?.tr || undefined,
+        descriptionEn: parsedDetail.descriptions?.en || undefined,
+        descriptionAr: parsedDetail.descriptions?.ar || undefined,
         metaDescription: formData.metaDescription.trim() || undefined,
         metaDescriptionEn: formData.metaDescriptionEn.trim() || undefined,
         metaDescriptionAr: formData.metaDescriptionAr.trim() || undefined,
@@ -259,10 +258,7 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                           id="nameEn"
                           value={formData.nameEn}
                           onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              nameEn: e.target.value,
-                            })
+                            setFormData({ ...formData, nameEn: e.target.value })
                           }
                           placeholder="Product name"
                         />
@@ -274,15 +270,13 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                           dir="rtl"
                           value={formData.nameAr}
                           onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              nameAr: e.target.value,
-                            })
+                            setFormData({ ...formData, nameAr: e.target.value })
                           }
                           placeholder="اسم المنتج"
                         />
                       </div>
                     </div>
+
                     <hr className="h-[3px] w-full bg-secondary" />
 
                     <div className="space-y-2">
@@ -344,6 +338,30 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                     </div>
                     <hr className="h-[3px] w-full bg-secondary" />
 
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Görseller</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <SortableImageGrid
+                          images={pendingImages.map((img) => ({
+                            id: img.tempId,
+                            url: img.url,
+                            alt: img.alt,
+                            altEn: img.altEn,
+                            altAr: img.altAr,
+                            order: img.order,
+                          }))}
+                          onReorder={handleReorderPendingImages}
+                          onDelete={handleDeletePendingImage}
+                          onUpload={handleImageUpload}
+                          isUploading={isUploading}
+                          onEditAlt={handleEditPendingAlt}
+                        />
+                      </CardContent>
+                    </Card>
+                    <hr className="h-[3px] w-full bg-secondary" />
+
                     <div className="space-y-2">
                       <Label>Kategoriler</Label>
                       <div className="flex flex-wrap gap-2">
@@ -388,73 +406,16 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                       ) : null}
                     </div>
 
+                    {/* TEK editor — TR/EN/AR içinde */}
                     <div className="space-y-2">
-                      <Label htmlFor="description">Ürün Detay İçeriği</Label>
+                      <Label>Ürün Detay İçeriği</Label>
                       <ProductDetailContentEditor
-                        content={formData.description}
+                        content={formData.detailContent}
                         onChange={(json) =>
-                          setFormData({
-                            ...formData,
-                            description: json,
-                          })
+                          setFormData({ ...formData, detailContent: json })
                         }
                       />
                     </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="descriptionEn">
-                        Ürün Detay İçeriği (İngilizce)
-                      </Label>
-                      <ProductDetailContentEditor
-                        content={formData.descriptionEn}
-                        onChange={(json) =>
-                          setFormData({
-                            ...formData,
-                            descriptionEn: json,
-                          })
-                        }
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="descriptionAr">
-                        Ürün Detay İçeriği (Arapça)
-                      </Label>
-                      <div dir="rtl">
-                        <ProductDetailContentEditor
-                          content={formData.descriptionAr}
-                          onChange={(json) =>
-                            setFormData({
-                              ...formData,
-                              descriptionAr: json,
-                            })
-                          }
-                        />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Görseller</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <SortableImageGrid
-                      images={pendingImages.map((img) => ({
-                        id: img.tempId,
-                        url: img.url,
-                        alt: img.alt,
-                        altEn: img.altEn,
-                        altAr: img.altAr,
-                        order: img.order,
-                      }))}
-                      onReorder={handleReorderPendingImages}
-                      onDelete={handleDeletePendingImage}
-                      onUpload={handleImageUpload}
-                      isUploading={isUploading}
-                      onEditAlt={handleEditPendingAlt}
-                    />
                   </CardContent>
                 </Card>
               </div>
