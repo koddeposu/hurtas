@@ -15,6 +15,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { handleCall, handleWhatsApp } from "@/lib/analytics/googleAds";
+import { ALL_PRODUCTS_PATH } from "@/lib/productRoutes";
 import { CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -219,7 +220,7 @@ export const Hero4 = () => {
                 Hemen Ara
               </button>
               <Link
-                href="/prefabrik-evler"
+                href={ALL_PRODUCTS_PATH}
                 prefetch={false}
                 className="inline-flex min-h-12 items-center justify-center rounded-[2px] border border-white/50 px-6 py-3.5 text-xs font-black uppercase tracking-[0.14em] text-white transition-colors hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#152f51] sm:text-sm"
               >

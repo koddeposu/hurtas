@@ -15,6 +15,7 @@ import { SectionSkeleton } from "@/components/home-page/section-skeleton";
 import { SiteDroneVideo } from "@/components/home-page/site-drone-video";
 import { StructureCategoryBoxes } from "@/components/home-page/structure-category-boxes";
 import { CONTACT_INFO, CONTACT_MAP_EMBED_URL } from "@/lib/contact";
+import { ALL_PRODUCTS_PATH } from "@/lib/productRoutes";
 import { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -85,7 +86,7 @@ export default async function Page() {
             potentialAction: {
               "@type": "SearchAction",
               target:
-                "https://ctprefabrik.com/prefabrik-ev?q={search_term_string}",
+                `https://ctprefabrik.com${ALL_PRODUCTS_PATH}?q={search_term_string}`,
               "query-input": "required name=search_term_string",
             },
           }),

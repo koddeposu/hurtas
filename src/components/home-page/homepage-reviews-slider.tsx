@@ -6,6 +6,7 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import { ALL_PRODUCTS_PATH } from "@/lib/productRoutes";
 import { ChevronLeft, ChevronRight, Quote, Star } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -24,7 +25,7 @@ const REVIEW_SLIDES: ReviewSlide[] = [
   {
     id: "review-1",
     productName: "Beton Boru",
-    href: "/prefabrik-evler?q=Beton%20Boru",
+    href: `${ALL_PRODUCTS_PATH}?q=Beton%20Boru`,
     customerName: "Murat K.",
     city: "Kocaeli",
     rating: 5,
@@ -34,7 +35,7 @@ const REVIEW_SLIDES: ReviewSlide[] = [
   {
     id: "review-2",
     productName: "Parke Taşı",
-    href: "/prefabrik-evler?q=Parke%20Ta%C5%9F%C4%B1",
+    href: `${ALL_PRODUCTS_PATH}?q=Parke%20Ta%C5%9F%C4%B1`,
     customerName: "Ayşe Y.",
     city: "Tekirdağ",
     rating: 4,
@@ -44,7 +45,7 @@ const REVIEW_SLIDES: ReviewSlide[] = [
   {
     id: "review-3",
     productName: "Bordür",
-    href: "/prefabrik-evler?q=Bord%C3%BCr",
+    href: `${ALL_PRODUCTS_PATH}?q=Bord%C3%BCr`,
     customerName: "Zehra A.",
     city: "Bursa",
     rating: 5,
@@ -54,7 +55,7 @@ const REVIEW_SLIDES: ReviewSlide[] = [
   {
     id: "review-4",
     productName: "Menhol Elemanları",
-    href: "/prefabrik-evler?q=Menhol",
+    href: `${ALL_PRODUCTS_PATH}?q=Menhol`,
     customerName: "Hasan D.",
     city: "Sakarya",
     rating: 4,
@@ -64,7 +65,7 @@ const REVIEW_SLIDES: ReviewSlide[] = [
   {
     id: "review-5",
     productName: "Yağmur Oluğu",
-    href: "/prefabrik-evler?q=Ya%C4%9Fmur%20Olu%C4%9Fu",
+    href: `${ALL_PRODUCTS_PATH}?q=Ya%C4%9Fmur%20Olu%C4%9Fu`,
     customerName: "Elif T.",
     city: "Balıkesir",
     rating: 5,
@@ -74,7 +75,7 @@ const REVIEW_SLIDES: ReviewSlide[] = [
   {
     id: "review-6",
     productName: "Saha Beton Elemanları",
-    href: "/prefabrik-evler",
+    href: ALL_PRODUCTS_PATH,
     customerName: "Mehmet S.",
     city: "Yalova",
     rating: 4,

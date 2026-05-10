@@ -145,6 +145,7 @@ export const product = pgTable(
     nameEn: text("name_en"),
     nameAr: text("name_ar"),
     slug: text("slug").notNull().unique(),
+    url: text("url"), // ← bunu ekle
     area: text("area").notNull(),
     room: text("room").notNull(),
     floor: text("floor").notNull(),
@@ -212,11 +213,6 @@ export const project = pgTable("project", {
   titleEn: text("title_en"),
   titleAr: text("title_ar"),
   slug: text("slug").notNull().unique(),
-  area: text("area").notNull(),
-  room: text("room").notNull(),
-  location: text("location").notNull(),
-  locationEn: text("location_en"),
-  locationAr: text("location_ar"),
   isActive: boolean("is_active").default(true).notNull(),
   order: integer("order").default(0).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -349,7 +345,10 @@ export const contactClick = pgTable(
       table.bucketStart,
     ),
     index("contact_click_created_at_idx").on(table.createdAt),
-    index("contact_click_button_created_at_idx").on(table.buttonId, table.createdAt),
+    index("contact_click_button_created_at_idx").on(
+      table.buttonId,
+      table.createdAt,
+    ),
   ],
 );
 
@@ -372,16 +371,19 @@ export const productRelations = relations(product, ({ one, many }) => ({
   favorites: many(favorite),
 }));
 
-export const productCategoryRelations = relations(productCategory, ({ one }) => ({
-  product: one(product, {
-    fields: [productCategory.productId],
-    references: [product.id],
+export const productCategoryRelations = relations(
+  productCategory,
+  ({ one }) => ({
+    product: one(product, {
+      fields: [productCategory.productId],
+      references: [product.id],
+    }),
+    category: one(category, {
+      fields: [productCategory.categoryId],
+      references: [category.id],
+    }),
   }),
-  category: one(category, {
-    fields: [productCategory.categoryId],
-    references: [category.id],
-  }),
-}));
+);
 
 export const productImageRelations = relations(productImage, ({ one }) => ({
   product: one(product, {

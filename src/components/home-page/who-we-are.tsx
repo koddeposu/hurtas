@@ -65,7 +65,7 @@ export const WhoWeAre = () => {
                 </p>
               </div>
               <button
-                aria-label="prefabrik-evler"
+                aria-label="beton ürünleri"
                 className="bg-[#152f51] text-white p-4 rounded-[2px] hover:bg-[#10243d] transition-colors shadow-lg"
               >
                 <ArrowRight size={20} />

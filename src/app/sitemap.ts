@@ -1,17 +1,31 @@
 import { getBlogPosts } from "@/actions/blogActions";
+import { getCategories } from "@/actions/categoryActions";
 import { getProductsWithImages } from "@/actions/productActions";
+import {
+  ALL_PRODUCTS_PATH,
+  getCategoryHref,
+  getProductCategoryDetailHref,
+} from "@/lib/productRoutes";
 import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hurtasbeton.com";
 
   // Veritabanından ürünleri al
+  const dbCategories = await getCategories();
   const dbProducts = await getProductsWithImages();
   const products = dbProducts.map((product) => ({
-    url: `${baseUrl}/prefabrik-ev/${product.slug}`,
+    url: `${baseUrl}${getProductCategoryDetailHref(product, dbCategories)}`,
     lastModified: product.updatedAt ?? product.createdAt,
     changeFrequency: "weekly" as const,
     priority: 0.8,
+  }));
+
+  const categories = dbCategories.map((category) => ({
+    url: `${baseUrl}${getCategoryHref(dbCategories, category)}`,
+    lastModified: category.updatedAt ?? category.createdAt,
+    changeFrequency: "weekly" as const,
+    priority: category.parentId ? 0.75 : 0.85,
   }));
 
   // Veritabanından blog yazılarını al
@@ -32,7 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     {
-      url: `${baseUrl}/prefabrik-evler`,
+      url: `${baseUrl}${ALL_PRODUCTS_PATH}`,
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 0.9,
@@ -67,6 +81,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.7,
     },
+    ...categories,
     ...products,
     ...blogPosts,
   ];

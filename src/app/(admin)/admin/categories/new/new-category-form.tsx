@@ -107,7 +107,28 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Kategori Adı *</Label>
+                  <Label htmlFor="parentId">Üst Kategori</Label>
+                  <select
+                    id="parentId"
+                    value={formData.parentId}
+                    onChange={(e) =>
+                      setFormData({ ...formData, parentId: e.target.value })
+                    }
+                    className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border px-3 py-1 text-sm shadow-xs transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+                  >
+                    <option value="">Ana kategori</option>
+                    {categoryOptions.map((option) => (
+                      <option
+                        key={option.category.id}
+                        value={option.category.id}
+                      >
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="name">Kategori Adı * (url ismi)</Label>
                   <Input
                     id="name"
                     value={formData.name}
@@ -146,27 +167,6 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                 </div>
 
                 <hr className="h-[3px] w-full bg-secondary" />
-                <div className="space-y-2">
-                  <Label htmlFor="parentId">Üst Kategori</Label>
-                  <select
-                    id="parentId"
-                    value={formData.parentId}
-                    onChange={(e) =>
-                      setFormData({ ...formData, parentId: e.target.value })
-                    }
-                    className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border px-3 py-1 text-sm shadow-xs transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
-                  >
-                    <option value="">Ana kategori</option>
-                    {categoryOptions.map((option) => (
-                      <option
-                        key={option.category.id}
-                        value={option.category.id}
-                      >
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="title">Kategori Title</Label>
@@ -182,7 +182,9 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
 
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="titleEn">Kategori Title (İngilizce)</Label>
+                    <Label htmlFor="titleEn">
+                      Kategori Üst Başlık Açıklama (İngilizce)
+                    </Label>
                     <Input
                       id="titleEn"
                       value={formData.titleEn}
@@ -193,7 +195,9 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="titleAr">Kategori Title (Arapça)</Label>
+                    <Label htmlFor="titleAr">
+                      Kategori Üst Başlık Açıklama (Arapça)
+                    </Label>
                     <Input
                       id="titleAr"
                       dir="rtl"
@@ -208,7 +212,7 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                 <hr className="h-[3px] w-full bg-secondary" />
 
                 <div className="space-y-2">
-                  <Label htmlFor="description">Kategori Description</Label>
+                  <Label htmlFor="description">Kategori Üst Açıklama </Label>
                   <Textarea
                     id="description"
                     value={formData.description}
@@ -223,7 +227,7 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="descriptionEn">
-                      Kategori Description (İngilizce)
+                      Kategori Üst Açıklama (İngilizce)
                     </Label>
                     <Textarea
                       id="descriptionEn"
@@ -240,7 +244,7 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="descriptionAr">
-                      Kategori Description (Arapça)
+                      Kategori Üst Açıklama (Arapça)
                     </Label>
                     <Textarea
                       id="descriptionAr"
@@ -260,7 +264,7 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                 <hr className="h-[3px] w-full bg-secondary" />
 
                 <div className="space-y-2">
-                  <Label htmlFor="subtitle">Kategori Subtitle</Label>
+                  <Label htmlFor="subtitle">Sayfa Altbaşlık</Label>
                   <Input
                     id="subtitle"
                     value={formData.subtitle}
@@ -274,7 +278,7 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="subtitleEn">
-                      Kategori Subtitle (İngilizce)
+                      Sayfa Altbaşlık (İngilizce)
                     </Label>
                     <Input
                       id="subtitleEn"
@@ -286,9 +290,7 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="subtitleAr">
-                      Kategori Subtitle (Arapça)
-                    </Label>
+                    <Label htmlFor="subtitleAr">Sayfa Altbaşlık (Arapça)</Label>
                     <Input
                       id="subtitleAr"
                       dir="rtl"
@@ -303,9 +305,7 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                 <hr className="h-[3px] w-full bg-secondary" />
 
                 <div className="space-y-2">
-                  <Label htmlFor="subdescription">
-                    Kategori Subdescription
-                  </Label>
+                  <Label htmlFor="subdescription">Sayfa Alt Açıklama</Label>
                   <Textarea
                     id="subdescription"
                     value={formData.subdescription}
@@ -323,7 +323,7 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="subdescriptionEn">
-                      Kategori Subdescription (İngilizce)
+                      Sayfa Alt Açıklama (İngilizce)
                     </Label>
                     <Textarea
                       id="subdescriptionEn"
@@ -340,7 +340,7 @@ export function NewCategoryForm({ categories }: NewCategoryFormProps) {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="subdescriptionAr">
-                      Kategori Subdescription (Arapça)
+                      Sayfa Alt Açıklama (Arapça)
                     </Label>
                     <Textarea
                       id="subdescriptionAr"

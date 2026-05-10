@@ -77,8 +77,7 @@ const HERO_BY_PATH: Record<string, PageHeroData> = {
 function getHeroData(pathname: string) {
   if (
     pathname === "/" ||
-    pathname.startsWith("/prefabrik-evler") ||
-    pathname.startsWith("/prefabrik-ev") ||
+    pathname.startsWith("/tum-urunler") ||
     pathname.startsWith("/urun-detay")
   ) {
     return null;

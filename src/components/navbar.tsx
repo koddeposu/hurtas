@@ -4,6 +4,14 @@ import Logo from "@/assets/ana-logo.webp";
 import { handleCall, handleWhatsApp } from "@/lib/analytics/googleAds";
 import { CONTACT_INFO } from "@/lib/contact";
 import {
+  ALL_PRODUCTS_PATH,
+  getCategoryDisplayName,
+  getCategoryHref,
+  getChildCategories,
+  getTopLevelCategories,
+  isCategoryPathActive,
+} from "@/lib/productRoutes";
+import {
   ChevronDown,
   Mail,
   MapPin,
@@ -20,8 +28,11 @@ import { type FormEvent, useEffect, useRef, useState } from "react";
 
 interface Category {
   id: string;
+  parentId: string | null;
   name: string;
+  title: string | null;
   slug: string;
+  order: number;
 }
 
 interface NavbarProps {
@@ -181,14 +192,34 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
   const showMainNavbar = isAtTop;
   const showCompact = !isAtTop && showCompactNavbar;
+  const categoryLinks = categories.map((item) => ({
+    ...item,
+    href: getCategoryHref(categories, item),
+    label: getCategoryDisplayName(item),
+    children: getChildCategories(categories, item.id).map((child) => ({
+      ...child,
+      href: getCategoryHref(categories, child),
+      label: getCategoryDisplayName(child),
+    })),
+  }));
+  const topLevelCategoryLinks = getTopLevelCategories(categories).map((item) => ({
+    ...item,
+    href: getCategoryHref(categories, item),
+    label: getCategoryDisplayName(item),
+    children: getChildCategories(categories, item.id).map((child) => ({
+      ...child,
+      href: getCategoryHref(categories, child),
+      label: getCategoryDisplayName(child),
+    })),
+  }));
   const handleProductSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const trimmedQuery = productSearchQuery.trim();
     const nextPath =
       selectedProductCategory === "all"
-        ? "/prefabrik-evler"
-        : `/prefabrik-evler/${selectedProductCategory}`;
+        ? ALL_PRODUCTS_PATH
+        : selectedProductCategory;
     const query = new URLSearchParams();
 
     if (trimmedQuery) {
@@ -205,10 +236,69 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
   const isCorporateActive = CORPORATE_LINKS.some((item) =>
     isSectionActive(item.href),
   );
-  const isProductsActive = pathname.startsWith("/prefabrik-evler");
   const pathSegments = pathname.split("/").filter(Boolean);
   const isBlogSlugPage =
     pathSegments[0] === "blog" && pathSegments.length === 2;
+  const renderCategoryNavItems = (compact = false) =>
+    topLevelCategoryLinks.map((item) => {
+      const isActive = isCategoryPathActive(pathname, item.href);
+      const linkClass = compact
+        ? `inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] transition-colors ${
+            isActive
+              ? "bg-[#152f51] text-white"
+              : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51] group-hover:bg-[#f4f7fb] group-hover:text-[#152f51]"
+          }`
+        : `inline-flex shrink-0 items-center gap-1 whitespace-nowrap rounded-full px-4 py-2 text-sm font-bold uppercase tracking-[0.03em] transition-colors ${
+            isActive
+              ? "bg-white text-[#152f51]"
+              : "text-white hover:bg-white/15 group-hover:bg-white/15"
+          }`;
+
+      return (
+        <div key={`nav-category-${compact ? "compact" : "main"}-${item.id}`} className="group relative">
+          <Link href={item.href} prefetch={false} className={linkClass}>
+            <span>{item.label}</span>
+            {item.children.length > 0 ? (
+              <ChevronDown className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} />
+            ) : null}
+          </Link>
+
+          {item.children.length > 0 ? (
+            <div className="invisible absolute left-0 top-full z-50 w-72 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100">
+              <div className={`overflow-hidden border border-slate-200 bg-white shadow-xl ${
+                compact ? "rounded-xl" : "rounded-2xl"
+              }`}>
+                <Link
+                  href={item.href}
+                  prefetch={false}
+                  className={`block border-b border-slate-100 px-4 py-3 text-sm font-semibold transition-colors ${
+                    pathname === item.href
+                      ? "bg-[#f4f7fb] text-[#152f51]"
+                      : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
+                  }`}
+                >
+                  Tüm {item.label}
+                </Link>
+                {item.children.map((child) => (
+                  <Link
+                    key={`nav-child-${compact ? "compact" : "main"}-${child.id}`}
+                    href={child.href}
+                    prefetch={false}
+                    className={`block border-b border-slate-100 px-4 py-3 text-sm font-semibold transition-colors last:border-b-0 ${
+                      pathname === child.href
+                        ? "bg-[#f4f7fb] text-[#152f51]"
+                        : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
+                    }`}
+                  >
+                    {child.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </div>
+      );
+    });
 
   return (
     <>
@@ -303,9 +393,9 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                   className="w-44 shrink-0 border-r border-[#152f51]/15 bg-[#f4f7fb] px-3 text-sm font-bold text-[#152f51] outline-none transition-colors hover:bg-[#e9eff6] "
                 >
                   <option value="all">Tüm Ürünler</option>
-                  {categories.map((item) => (
-                    <option key={`desktop-search-${item.id}`} value={item.slug}>
-                      {item.name}
+                  {categoryLinks.map((item) => (
+                    <option key={`desktop-search-${item.id}`} value={item.href}>
+                      {item.label}
                     </option>
                   ))}
                 </select>
@@ -369,6 +459,20 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                 Ana Sayfa
               </Link>
 
+              <Link
+                href={ALL_PRODUCTS_PATH}
+                prefetch={false}
+                className={`rounded-full px-4 py-2 text-sm font-bold uppercase tracking-[0.03em] transition-colors ${
+                  pathname === ALL_PRODUCTS_PATH
+                    ? "bg-white text-[#152f51]"
+                    : "text-white hover:bg-white/15"
+                }`}
+              >
+                Tüm Ürünler
+              </Link>
+
+              {renderCategoryNavItems()}
+
               <div className="group relative">
                 <button
                   type="button"
@@ -395,49 +499,6 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                         }`}
                       >
                         {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="group relative">
-                <button
-                  type="button"
-                  className={`inline-flex items-center gap-1 rounded-full px-4 py-2 text-sm font-bold uppercase tracking-[0.03em] transition-colors ${
-                    isProductsActive
-                      ? "bg-white text-[#152f51]"
-                      : "text-white group-hover:bg-white/15"
-                  }`}
-                >
-                  Beton Ürünleri
-                  <ChevronDown className="h-4 w-4" />
-                </button>
-                <div className="invisible absolute left-0 top-full z-50 w-72 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100">
-                  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl">
-                    <Link
-                      href="/prefabrik-evler"
-                      prefetch={false}
-                      className={`block border-b border-slate-100 px-4 py-3 text-sm font-semibold transition-colors ${
-                        pathname === "/prefabrik-evler"
-                          ? "bg-[#f4f7fb] text-[#152f51]"
-                          : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
-                      }`}
-                    >
-                      Tüm Ürünler
-                    </Link>
-                    {categories.map((item) => (
-                      <Link
-                        key={item.id}
-                        href={`/prefabrik-evler/${item.slug}`}
-                        prefetch={false}
-                        className={`block border-b border-slate-100 px-4 py-3 text-sm font-semibold transition-colors last:border-b-0 ${
-                          pathname === `/prefabrik-evler/${item.slug}`
-                            ? "bg-[#f4f7fb] text-[#152f51]"
-                            : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
-                        }`}
-                      >
-                        {item.name}
                       </Link>
                     ))}
                   </div>
@@ -515,6 +576,20 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
               Ana Sayfa
             </Link>
 
+            <Link
+              href={ALL_PRODUCTS_PATH}
+              prefetch={false}
+              className={`rounded-full px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] transition-colors ${
+                pathname === ALL_PRODUCTS_PATH
+                  ? "bg-[#152f51] text-white"
+                  : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
+              }`}
+            >
+              Tüm Ürünler
+            </Link>
+
+            {renderCategoryNavItems(true)}
+
             <div className="group relative">
               <button
                 type="button"
@@ -541,49 +616,6 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                       }`}
                     >
                       {item.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="group relative">
-              <button
-                type="button"
-                className={`inline-flex items-center gap-1 rounded-full px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] transition-colors ${
-                  isProductsActive
-                    ? "bg-[#152f51] text-white"
-                    : "text-slate-700 group-hover:bg-[#f4f7fb] group-hover:text-[#152f51]"
-                }`}
-              >
-                Beton Ürünleri
-                <ChevronDown className="h-3.5 w-3.5" />
-              </button>
-              <div className="invisible absolute left-0 top-full z-50 w-72 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100">
-                <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
-                  <Link
-                    href="/prefabrik-evler"
-                    prefetch={false}
-                    className={`block border-b border-slate-100 px-4 py-3 text-sm font-semibold transition-colors ${
-                      pathname === "/prefabrik-evler"
-                        ? "bg-[#f4f7fb] text-[#152f51]"
-                        : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
-                    }`}
-                  >
-                    Tüm Ürünler
-                  </Link>
-                  {categories.map((item) => (
-                    <Link
-                      key={`compact-category-${item.id}`}
-                      href={`/prefabrik-evler/${item.slug}`}
-                      prefetch={false}
-                      className={`block border-b border-slate-100 px-4 py-3 text-sm font-semibold transition-colors last:border-b-0 ${
-                        pathname === `/prefabrik-evler/${item.slug}`
-                          ? "bg-[#f4f7fb] text-[#152f51]"
-                          : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
-                      }`}
-                    >
-                      {item.name}
                     </Link>
                   ))}
                 </div>
@@ -753,31 +785,51 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
                   {isMobileCategoriesOpen ? (
                     <div className="mt-3 grid gap-2">
                       <Link
-                        href="/prefabrik-evler"
+                        href={ALL_PRODUCTS_PATH}
                         prefetch={false}
                         onClick={closeMobileMenu}
                         className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
-                          pathname === "/prefabrik-evler"
+                          pathname === ALL_PRODUCTS_PATH
                             ? "bg-[#f4f7fb] text-[#152f51]"
                             : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
                         }`}
                       >
                         Tüm Ürünler
                       </Link>
-                      {categories.map((item) => (
-                        <Link
-                          key={`mobile-category-${item.id}`}
-                          href={`/prefabrik-evler/${item.slug}`}
-                          prefetch={false}
-                          onClick={closeMobileMenu}
-                          className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
-                            pathname === `/prefabrik-evler/${item.slug}`
-                              ? "bg-[#f4f7fb] text-[#152f51]"
-                              : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
-                          }`}
-                        >
-                          {item.name}
-                        </Link>
+                      {topLevelCategoryLinks.map((item) => (
+                        <div key={`mobile-category-${item.id}`}>
+                          <Link
+                            href={item.href}
+                            prefetch={false}
+                            onClick={closeMobileMenu}
+                            className={`block rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
+                              isCategoryPathActive(pathname, item.href)
+                                ? "bg-[#f4f7fb] text-[#152f51]"
+                                : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
+                            }`}
+                          >
+                            {item.label}
+                          </Link>
+                          {item.children.length > 0 ? (
+                            <div className="mt-1 grid gap-1 pl-3">
+                              {item.children.map((child) => (
+                                <Link
+                                  key={`mobile-category-child-${child.id}`}
+                                  href={child.href}
+                                  prefetch={false}
+                                  onClick={closeMobileMenu}
+                                  className={`block rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
+                                    pathname === child.href
+                                      ? "bg-[#f4f7fb] text-[#152f51]"
+                                      : "text-slate-600 hover:bg-[#f4f7fb] hover:text-[#152f51]"
+                                  }`}
+                                >
+                                  {child.label}
+                                </Link>
+                              ))}
+                            </div>
+                          ) : null}
+                        </div>
                       ))}
                     </div>
                   ) : null}

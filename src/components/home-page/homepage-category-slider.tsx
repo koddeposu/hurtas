@@ -8,6 +8,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { DBProductPreview } from "@/types/product";
+import type { RouteCategory } from "@/lib/productRoutes";
 import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -19,6 +20,7 @@ interface HomepageCategorySliderProps {
   description: string;
   href: string;
   products: DBProductPreview[];
+  categories?: RouteCategory[];
 }
 
 export function HomepageCategorySlider({
@@ -28,6 +30,7 @@ export function HomepageCategorySlider({
   description,
   href,
   products,
+  categories = [],
 }: HomepageCategorySliderProps) {
   const [api, setApi] = useState<CarouselApi | null>(null);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
@@ -134,7 +137,7 @@ export function HomepageCategorySlider({
                 key={product.id}
                 className="basis-full sm:basis-1/2 xl:basis-1/4"
               >
-                <HomeProductCard product={product} />
+                <HomeProductCard product={product} categories={categories} />
               </CarouselItem>
             ))}
           </CarouselContent>

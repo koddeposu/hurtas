@@ -1,11 +1,11 @@
 "use server";
 
-import { and, eq, desc, asc, inArray, sql } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
 import { db } from "@/db/drizzle";
-import { product, productImage, category, productCategory } from "@/db/schema";
+import { category, product, productCategory, productImage } from "@/db/schema";
 import { requireAuth } from "@/lib/requireAuth";
 import { generateUniqueSlug } from "@/lib/slug";
+import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 type DBCategory = typeof category.$inferSelect;
 
@@ -16,6 +16,15 @@ function generateId() {
 function toNullableText(value: string | null | undefined) {
   const trimmed = value?.trim();
   return trimmed ? trimmed : null;
+}
+
+function getProductSlugCandidates(slug: string) {
+  const trimmed = slug.trim();
+  const withoutOrderPrefix = trimmed.replace(/^\d+-/, "");
+
+  return Array.from(
+    new Set([trimmed, withoutOrderPrefix].filter((item) => item.length > 0)),
+  );
 }
 
 function normalizeCategoryIds(
@@ -30,7 +39,11 @@ function normalizeCategoryIds(
         : [];
 
   return Array.from(
-    new Set(source.filter((id): id is string => typeof id === "string" && id.length > 0)),
+    new Set(
+      source.filter(
+        (id): id is string => typeof id === "string" && id.length > 0,
+      ),
+    ),
   );
 }
 
@@ -176,6 +189,9 @@ export async function getProducts(categoryId?: string) {
 }
 
 export async function getProductBySlug(slug: string) {
+  const slugCandidates = getProductSlugCandidates(slug);
+  const exactSlug = slugCandidates[0];
+  const fallbackSlug = slugCandidates[1];
   const result = await db
     .select({
       product: product,
@@ -183,8 +199,22 @@ export async function getProductBySlug(slug: string) {
     })
     .from(product)
     .leftJoin(category, eq(product.categoryId, category.id))
-    .where(eq(product.slug, slug))
+    .where(eq(product.slug, exactSlug))
     .limit(1);
+
+  if (!result[0] && fallbackSlug) {
+    const fallbackResult = await db
+      .select({
+        product: product,
+        category: category,
+      })
+      .from(product)
+      .leftJoin(category, eq(product.categoryId, category.id))
+      .where(eq(product.slug, fallbackSlug))
+      .limit(1);
+
+    result.push(...fallbackResult);
+  }
 
   if (!result[0]) return null;
 
@@ -434,6 +464,7 @@ export async function createProduct(data: {
   metaDescriptionAr?: string;
   isActive?: boolean;
   order?: number;
+  url?: string;
   pendingImages?: Array<{
     url: string;
     alt: string;
@@ -445,9 +476,16 @@ export async function createProduct(data: {
   await requireAuth();
 
   const id = generateId();
-  const slug = await generateUniqueSlug("product", data.name);
+  const slug = await generateUniqueSlug(
+    "product",
+    data.url?.trim() || data.name,
+  );
   const categoryIds = normalizeCategoryIds(data.categoryIds, data.categoryId);
   const primaryCategoryId = categoryIds[0] ?? null;
+
+  if (!primaryCategoryId) {
+    throw new Error("Ürün için en az bir kategori seçilmelidir.");
+  }
 
   await db.transaction(async (tx) => {
     await tx.insert(product).values({
@@ -457,6 +495,7 @@ export async function createProduct(data: {
       nameEn: toNullableText(data.nameEn),
       nameAr: toNullableText(data.nameAr),
       slug,
+      url: data.url?.trim() || null, // ← buraya
       area: data.area,
       room: data.room,
       floor: data.floor,
@@ -500,7 +539,7 @@ export async function createProduct(data: {
   });
 
   revalidatePath("/admin/products");
-  revalidatePath("/prefabrik-evler", "layout");
+  revalidatePath("/tum-urunler", "layout");
 
   return { id, slug };
 }
@@ -528,6 +567,7 @@ export async function updateProduct(
     metaDescriptionAr?: string | null;
     isActive?: boolean;
     order?: number;
+    url?: string | null;
   },
 ) {
   await requireAuth();
@@ -539,12 +579,22 @@ export async function updateProduct(
     ? normalizeCategoryIds(data.categoryIds, data.categoryId)
     : [];
 
-  if (data.name !== undefined) {
-    updateData.name = data.name;
-    updateData.slug = await generateUniqueSlug("product", data.name, id);
+  if (shouldSyncCategories && normalizedCategoryIds.length === 0) {
+    throw new Error("Ürün için en az bir kategori seçilmelidir.");
   }
-  if (data.nameEn !== undefined) updateData.nameEn = toNullableText(data.nameEn);
-  if (data.nameAr !== undefined) updateData.nameAr = toNullableText(data.nameAr);
+
+  if (data.name !== undefined || data.url !== undefined) {
+    if (data.name !== undefined) updateData.name = data.name;
+    const slugSource = data.url?.trim() || data.name || "";
+    if (slugSource) {
+      updateData.slug = await generateUniqueSlug("product", slugSource, id);
+    }
+  }
+  if (data.url !== undefined) updateData.url = data.url?.trim() || null;
+  if (data.nameEn !== undefined)
+    updateData.nameEn = toNullableText(data.nameEn);
+  if (data.nameAr !== undefined)
+    updateData.nameAr = toNullableText(data.nameAr);
   if (data.categoryIds !== undefined) {
     updateData.categoryId = normalizedCategoryIds[0] ?? null;
   } else if (data.categoryId !== undefined) {
@@ -594,7 +644,7 @@ export async function updateProduct(
   });
 
   revalidatePath("/admin/products");
-  revalidatePath("/prefabrik-evler", "layout");
+  revalidatePath("/tum-urunler", "layout");
 
   return { success: true };
 }
@@ -606,7 +656,7 @@ export async function deleteProduct(id: string) {
   await db.delete(product).where(eq(product.id, id));
 
   revalidatePath("/admin/products");
-  revalidatePath("/prefabrik-evler", "layout");
+  revalidatePath("/tum-urunler", "layout");
 
   return { success: true };
 }
@@ -636,7 +686,7 @@ export async function addProductImage(
   });
 
   revalidatePath("/admin/products");
-  revalidatePath("/prefabrik-evler", "layout");
+  revalidatePath("/tum-urunler", "layout");
 
   return { id };
 }
@@ -647,7 +697,7 @@ export async function deleteProductImage(imageId: string) {
   await db.delete(productImage).where(eq(productImage.id, imageId));
 
   revalidatePath("/admin/products");
-  revalidatePath("/prefabrik-evler", "layout");
+  revalidatePath("/tum-urunler", "layout");
 
   return { success: true };
 }
@@ -678,7 +728,7 @@ export async function updateProductImagesOrder(
   }
 
   revalidatePath("/admin/products");
-  revalidatePath("/prefabrik-evler", "layout");
+  revalidatePath("/tum-urunler", "layout");
 
   return { success: true };
 }
@@ -696,7 +746,7 @@ export async function updateProductsOrder(
   }
 
   revalidatePath("/admin/products");
-  revalidatePath("/prefabrik-evler", "layout");
+  revalidatePath("/tum-urunler", "layout");
 
   return { success: true };
 }
@@ -719,8 +769,8 @@ export async function updateProductImageAlt(
     .where(eq(productImage.id, imageId));
 
   revalidatePath("/admin/products");
-  revalidatePath("/prefabrik-evler", "layout");
-  revalidatePath("/prefabrik-ev", "layout");
+  revalidatePath("/tum-urunler", "layout");
+  revalidatePath("/urun-detay", "layout");
 
   return { success: true };
 }

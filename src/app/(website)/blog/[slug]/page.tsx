@@ -2,6 +2,11 @@ import { getBlogPostBySlug } from "@/actions/blogActions";
 import { getCategories } from "@/actions/categoryActions";
 import { getProductsPreview } from "@/actions/productActions";
 import { HomepageCategorySlider } from "@/components/home-page/homepage-category-slider";
+import {
+  ALL_PRODUCTS_PATH,
+  getCategoryDisplayName,
+  getCategoryHref,
+} from "@/lib/productRoutes";
 import { convertJsonToHtml } from "@/lib/tiptap-utils";
 import type { JSONContent } from "@tiptap/core";
 import {
@@ -20,8 +25,11 @@ import { ShareButtons } from "./share-buttons";
 
 interface CategorySummary {
   id: string;
+  parentId: string | null;
   name: string;
+  title: string | null;
   slug: string;
+  order: number;
   description: string | null;
 }
 
@@ -88,9 +96,11 @@ function getCategory(categories: CategorySummary[], matchers: string[]) {
 }
 
 function MobileQuickLinks({
+  categories,
   infrastructureCategory,
   superstructureCategory,
 }: {
+  categories: CategorySummary[];
   infrastructureCategory: CategorySummary | null;
   superstructureCategory: CategorySummary | null;
 }) {
@@ -107,8 +117,8 @@ function MobileQuickLinks({
         <Link
           href={
             infrastructureCategory
-              ? `/prefabrik-evler/${infrastructureCategory.slug}`
-              : "/prefabrik-evler"
+              ? getCategoryHref(categories, infrastructureCategory)
+              : ALL_PRODUCTS_PATH
           }
           className="group relative overflow-hidden rounded-[3px] border border-slate-200 bg-white p-4 shadow-[0_12px_26px_-24px_rgba(15,23,42,0.32)] transition-all active:scale-95"
         >
@@ -127,8 +137,8 @@ function MobileQuickLinks({
         <Link
           href={
             superstructureCategory
-              ? `/prefabrik-evler/${superstructureCategory.slug}`
-              : "/prefabrik-evler"
+              ? getCategoryHref(categories, superstructureCategory)
+              : ALL_PRODUCTS_PATH
           }
           className="group relative overflow-hidden rounded-[3px] border border-slate-200 bg-white p-4 shadow-[0_12px_26px_-24px_rgba(15,23,42,0.32)] transition-all active:scale-95"
         >
@@ -149,9 +159,11 @@ function MobileQuickLinks({
 }
 
 function SuggestedLinks({
+  categories,
   infrastructureCategory,
   superstructureCategory,
 }: {
+  categories: CategorySummary[];
   infrastructureCategory: CategorySummary | null;
   superstructureCategory: CategorySummary | null;
 }) {
@@ -161,16 +173,16 @@ function SuggestedLinks({
       description:
         "Beton boru, menhol, baca ve altyapı projeleri için kullanılan ürünleri inceleyin.",
       href: infrastructureCategory
-        ? `/prefabrik-evler/${infrastructureCategory.slug}`
-        : "/prefabrik-evler",
+        ? getCategoryHref(categories, infrastructureCategory)
+        : ALL_PRODUCTS_PATH,
     },
     {
       title: "Üst Yapı Elemanları",
       description:
         "Parke taşı, bordür ve saha kaplama çözümlerini kategori bazında görün.",
       href: superstructureCategory
-        ? `/prefabrik-evler/${superstructureCategory.slug}`
-        : "/prefabrik-evler",
+        ? getCategoryHref(categories, superstructureCategory)
+        : ALL_PRODUCTS_PATH,
     },
   ];
 
@@ -324,6 +336,7 @@ export default async function BlogPostPage({
 
       <article className="container mx-auto max-w-4xl py-10">
         <MobileQuickLinks
+          categories={categories}
           infrastructureCategory={infrastructureCategory}
           superstructureCategory={superstructureCategory}
         />
@@ -343,11 +356,12 @@ export default async function BlogPostPage({
         <section className="container mx-auto max-w-7xl pb-10">
           <HomepageCategorySlider
             title="Ürünleri"
-            accent={sliderCategory.name}
+            accent={getCategoryDisplayName(sliderCategory)}
             seoLabel="Blog İçeriğine Uygun Ürünler"
-            description={`${post.title} içeriğiyle ilgili ${sliderCategory.name.toLocaleLowerCase("tr-TR")} ürünlerini inceleyin.`}
-            href={`/prefabrik-evler/${sliderCategory.slug}`}
+            description={`${post.title} içeriğiyle ilgili ${getCategoryDisplayName(sliderCategory).toLocaleLowerCase("tr-TR")} ürünlerini inceleyin.`}
+            href={getCategoryHref(categories, sliderCategory)}
             products={sliderProducts}
+            categories={categories}
           />
         </section>
       ) : null}
@@ -363,6 +377,7 @@ export default async function BlogPostPage({
         </div>
 
         <SuggestedLinks
+          categories={categories}
           infrastructureCategory={infrastructureCategory}
           superstructureCategory={superstructureCategory}
         />

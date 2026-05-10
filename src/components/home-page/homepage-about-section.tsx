@@ -1,13 +1,14 @@
 import AboutImage from "@/assets/who-we-are.webp";
+import { ALL_PRODUCTS_PATH } from "@/lib/productRoutes";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 const PRODUCT_LINKS = [
-  { label: "Tüm Ürünler", href: "/prefabrik-evler" },
-  { label: "Beton Boru", href: "/prefabrik-evler?q=Beton%20Boru" },
-  { label: "Parke Taşı", href: "/prefabrik-evler?q=Parke%20Ta%C5%9F%C4%B1" },
-  { label: "Bordür", href: "/prefabrik-evler?q=Bord%C3%BCr" },
+  { label: "Tüm Ürünler", href: ALL_PRODUCTS_PATH },
+  { label: "Beton Boru", href: `${ALL_PRODUCTS_PATH}?q=Beton%20Boru` },
+  { label: "Parke Taşı", href: `${ALL_PRODUCTS_PATH}?q=Parke%20Ta%C5%9F%C4%B1` },
+  { label: "Bordür", href: `${ALL_PRODUCTS_PATH}?q=Bord%C3%BCr` },
 ];
 
 export function HomepageAboutSection() {
@@ -48,7 +49,7 @@ export function HomepageAboutSection() {
 
           <div className="mt-5 flex flex-wrap gap-2.5 sm:gap-3">
             <Link
-              href="/prefabrik-evler"
+              href={ALL_PRODUCTS_PATH}
               prefetch={false}
               className="inline-flex items-center gap-2 rounded-[2px] bg-[#d6a94a] px-4 py-2.5 text-[11px] font-black uppercase tracking-[0.12em] text-[#152f51] transition-colors hover:bg-[#bf943b] sm:px-5 sm:py-3 sm:text-xs"
             >

@@ -1,4 +1,5 @@
 import { ArrowUpRight, Building2, MapPinned, Truck } from "lucide-react";
+import { ALL_PRODUCTS_PATH } from "@/lib/productRoutes";
 import Link from "next/link";
 
 const FOCUS_CITIES = [
@@ -57,7 +58,7 @@ export function ServiceRegions() {
           {/* Aksiyon Butonları */}
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
-              href="/prefabrik-evler"
+              href={ALL_PRODUCTS_PATH}
               className="inline-flex items-center gap-2 rounded-[2px] bg-primary px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white transition-all hover:bg-primary/90 hover:shadow-lg hover:-translate-y-0.5"
             >
               Modelleri İncele

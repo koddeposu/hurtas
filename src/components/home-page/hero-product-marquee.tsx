@@ -1,11 +1,15 @@
+import { getCategories } from "@/actions/categoryActions";
 import { getProductsPreview } from "@/actions/productActions";
+import { getProductCategoryDetailHref } from "@/lib/productRoutes";
 import Image from "next/image";
 import Link from "next/link";
 
 export async function HeroProductMarquee() {
-  const products = (await getProductsPreview(undefined, 18)).filter(
-    (product) => product.image,
-  );
+  const [productResults, categories] = await Promise.all([
+    getProductsPreview(undefined, 18),
+    getCategories(),
+  ]);
+  const products = productResults.filter((product) => product.image);
 
   if (!products.length) {
     return null;
@@ -53,7 +57,7 @@ export async function HeroProductMarquee() {
             return (
               <Link
                 key={`${product.id}-${index}`}
-                href={`/prefabrik-ev/${product.slug}`}
+                href={getProductCategoryDetailHref(product, categories)}
                 prefetch={false}
                 className="group relative h-24 w-40 shrink-0 overflow-hidden border border-slate-200 bg-slate-100 sm:h-28 sm:w-52 lg:h-32 lg:w-60"
                 aria-label={`${product.name} ürününü incele`}

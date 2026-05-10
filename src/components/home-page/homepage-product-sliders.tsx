@@ -1,10 +1,14 @@
 import { getProductsPreview } from "@/actions/productActions";
+import { ALL_PRODUCTS_PATH, getCategoryHref } from "@/lib/productRoutes";
 import { HomepageCategorySlider } from "./homepage-category-slider";
 
 interface CategoryItem {
   id: string;
+  parentId: string | null;
   name: string;
+  title?: string | null;
   slug: string;
+  order: number;
 }
 
 interface HomepageProductSlidersProps {
@@ -57,10 +61,11 @@ export async function HomepageProductSliders({
                 description="Bahçe, yol, kaldırım ve saha düzenlemelerinde kullanılan tamamlayıcı beton ürünlerini bir arada görün."
                 href={
                   environmentCategory
-                    ? `/prefabrik-evler/${environmentCategory.slug}`
-                    : "/prefabrik-evler"
+                    ? getCategoryHref(categories, environmentCategory)
+                    : ALL_PRODUCTS_PATH
                 }
                 products={environmentProducts}
+                categories={categories}
               />
             </div>
           </section>
@@ -90,10 +95,11 @@ export async function HomepageProductSliders({
               description="Beton boru, menhol, baca ve altyapı projeleri için ihtiyaç duyulan dayanıklı beton ürünlerini inceleyin."
               href={
                 infrastructureCategory
-                  ? `/prefabrik-evler/${infrastructureCategory.slug}`
-                  : "/prefabrik-evler"
+                  ? getCategoryHref(categories, infrastructureCategory)
+                  : ALL_PRODUCTS_PATH
               }
               products={infrastructureProducts}
+              categories={categories}
             />
           </div>
         </section>
@@ -109,10 +115,11 @@ export async function HomepageProductSliders({
               description="Parke taşı, bordür ve saha kaplama çözümleriyle üst yapı projeleriniz için uygun ürünleri keşfedin."
               href={
                 superstructureCategory
-                  ? `/prefabrik-evler/${superstructureCategory.slug}`
-                  : "/prefabrik-evler"
+                  ? getCategoryHref(categories, superstructureCategory)
+                  : ALL_PRODUCTS_PATH
               }
               products={superstructureProducts}
+              categories={categories}
             />
           </div>
         </section>

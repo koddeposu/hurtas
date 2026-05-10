@@ -1,4 +1,9 @@
 import { DBProductPreview } from "@/types/product";
+import {
+  getCategoryDisplayName,
+  getProductCategoryDetailHref,
+} from "@/lib/productRoutes";
+import type { RouteCategory } from "@/lib/productRoutes";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,12 +11,21 @@ import Link from "next/link";
 interface HomeProductCardProps {
   product: DBProductPreview;
   badge?: string;
+  categories?: RouteCategory[];
 }
 
-export function HomeProductCard({ product, badge }: HomeProductCardProps) {
+export function HomeProductCard({
+  product,
+  badge,
+  categories = [],
+}: HomeProductCardProps) {
+  const categoryLabel = product.category
+    ? getCategoryDisplayName(product.category)
+    : undefined;
+
   return (
     <Link
-      href={`/prefabrik-ev/${product.slug}`}
+      href={getProductCategoryDetailHref(product, categories)}
       prefetch={false}
       className="group flex h-full flex-col overflow-hidden rounded-[3px] border border-slate-200 bg-white shadow-[0_14px_34px_-30px_rgba(15,23,42,0.28)] transition-all duration-300 hover:-translate-y-1 hover:border-[#d6a94a]/70 hover:shadow-[0_24px_46px_-34px_rgba(21,47,81,0.34)]"
     >
@@ -40,9 +54,9 @@ export function HomeProductCard({ product, badge }: HomeProductCardProps) {
           </div>
         ) : null}
 
-        {product.category?.name ? (
+        {categoryLabel ? (
           <div className="absolute bottom-3 left-3 rounded-[2px] border border-white/30 bg-white/92 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.16em] text-[#152f51] shadow-sm backdrop-blur">
-            {product.category.name}
+            {categoryLabel}
           </div>
         ) : null}
       </div>

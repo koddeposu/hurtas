@@ -69,11 +69,18 @@ export function NewProductForm({ categories }: NewProductFormProps) {
     metaDescriptionEn: "",
     metaDescriptionAr: "",
     isActive: true,
+    url: "",
   });
   const categoryOptions = buildCategoryOptions(categories);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (formData.categoryIds.length === 0) {
+      toast.error("Ürün URL yapısı için en az bir kategori seçin");
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -239,6 +246,63 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
+                      <Label>Kategoriler</Label>
+                      <div className="flex flex-wrap gap-2">
+                        {categoryOptions.map(({ category: cat, depth }) => {
+                          const selected = formData.categoryIds.includes(
+                            cat.id,
+                          );
+                          return (
+                            <Button
+                              key={cat.id}
+                              type="button"
+                              variant={selected ? "default" : "outline"}
+                              onClick={() => toggleCategory(cat.id)}
+                              className={
+                                selected ? "bg-primary hover:bg-[#3a1924]" : ""
+                              }
+                            >
+                              {depth > 0 ? `${"-- ".repeat(depth)}` : ""}
+                              {cat.name}
+                            </Button>
+                          );
+                        })}
+                      </div>
+                      <p className="text-xs text-slate-500">
+                        Birden fazla kategori seçebilirsiniz. İlk seçilen
+                        kategori ana kategori olarak kullanılır.
+                      </p>
+                      {formData.categoryIds.length > 0 ? (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          className="h-auto px-0 text-xs text-slate-500 hover:text-slate-700"
+                          onClick={() =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              categoryIds: [],
+                            }))
+                          }
+                        >
+                          Seçimi temizle
+                        </Button>
+                      ) : null}
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="url">URL (opsiyonel)</Label>
+                      <Input
+                        id="url"
+                        value={formData.url}
+                        onChange={(e) =>
+                          setFormData({ ...formData, url: e.target.value })
+                        }
+                        placeholder="bos-birakilirsa-urun-adindan-olusturulur"
+                      />
+                      <p className="text-xs text-slate-500">
+                        Boş bırakılırsa ürün adından otomatik oluşturulur.
+                      </p>
+                    </div>
+                    <div className="space-y-2">
                       <Label htmlFor="name">Ürün Adı *</Label>
                       <Input
                         id="name"
@@ -361,50 +425,6 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                       </CardContent>
                     </Card>
                     <hr className="h-[3px] w-full bg-secondary" />
-
-                    <div className="space-y-2">
-                      <Label>Kategoriler</Label>
-                      <div className="flex flex-wrap gap-2">
-                        {categoryOptions.map(({ category: cat, depth }) => {
-                          const selected = formData.categoryIds.includes(
-                            cat.id,
-                          );
-                          return (
-                            <Button
-                              key={cat.id}
-                              type="button"
-                              variant={selected ? "default" : "outline"}
-                              onClick={() => toggleCategory(cat.id)}
-                              className={
-                                selected ? "bg-primary hover:bg-[#3a1924]" : ""
-                              }
-                            >
-                              {depth > 0 ? `${"-- ".repeat(depth)}` : ""}
-                              {cat.name}
-                            </Button>
-                          );
-                        })}
-                      </div>
-                      <p className="text-xs text-slate-500">
-                        Birden fazla kategori seçebilirsiniz. İlk seçilen
-                        kategori ana kategori olarak kullanılır.
-                      </p>
-                      {formData.categoryIds.length > 0 ? (
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          className="h-auto px-0 text-xs text-slate-500 hover:text-slate-700"
-                          onClick={() =>
-                            setFormData((prev) => ({
-                              ...prev,
-                              categoryIds: [],
-                            }))
-                          }
-                        >
-                          Seçimi temizle
-                        </Button>
-                      ) : null}
-                    </div>
 
                     {/* TEK editor — TR/EN/AR içinde */}
                     <div className="space-y-2">

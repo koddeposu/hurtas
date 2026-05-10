@@ -44,11 +44,6 @@ export default function NewProjectPage() {
     title: "",
     titleEn: "",
     titleAr: "",
-    area: "",
-    room: "",
-    location: "",
-    locationEn: "",
-    locationAr: "",
     isActive: true,
   });
 
@@ -82,34 +77,38 @@ export default function NewProjectPage() {
     const files = e.target.files;
     if (!files?.length) return;
 
+    if (pendingImages.length >= 1) {
+      toast.error("En fazla 1 görsel eklenebilir");
+      return;
+    }
+
     setIsUploading(true);
     try {
-      for (const file of Array.from(files)) {
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("folder", "projects");
+      const file = Array.from(files)[0];
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "projects");
 
-        const result = await uploadImage(formData);
-        if (result.error) {
-          toast.error(result.error);
-          continue;
-        }
-
-        if (result.url) {
-          setPendingImages((prev) => [
-            ...prev,
-            {
-              tempId: crypto.randomUUID(),
-              url: result.url,
-              alt: file.name.replace(/\.[^/.]+$/, ""),
-              altEn: "",
-              altAr: "",
-              order: prev.length,
-            },
-          ]);
-        }
+      const result = await uploadImage(formData);
+      if (result.error) {
+        toast.error(result.error);
+        return;
       }
-      toast.success("Görseller yüklendi");
+
+      if (result.url) {
+        setPendingImages([
+          {
+            tempId: crypto.randomUUID(),
+            url: result.url,
+            alt: file.name.replace(/\.[^/.]+$/, ""),
+            altEn: "",
+            altAr: "",
+            order: 0,
+          },
+        ]);
+      }
+
+      toast.success("Görsel yüklendi");
     } catch {
       toast.error("Görsel yüklenirken hata oluştu");
     } finally {
@@ -228,86 +227,12 @@ export default function NewProjectPage() {
                         />
                       </div>
                     </div>
-
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="area">Alan *</Label>
-                        <Input
-                          id="area"
-                          value={formData.area}
-                          onChange={(e) =>
-                            setFormData({ ...formData, area: e.target.value })
-                          }
-                          placeholder="145m²"
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="room">Oda *</Label>
-                        <Input
-                          id="room"
-                          value={formData.room}
-                          onChange={(e) =>
-                            setFormData({ ...formData, room: e.target.value })
-                          }
-                          placeholder="3+1"
-                          required
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="location">Konum *</Label>
-                        <Input
-                          id="location"
-                          value={formData.location}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              location: e.target.value,
-                            })
-                          }
-                          placeholder="Sakarya"
-                          required
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid gap-4 md:grid-cols-2">
-                      <div className="space-y-2">
-                        <Label htmlFor="locationEn">Konum (İngilizce)</Label>
-                        <Input
-                          id="locationEn"
-                          value={formData.locationEn}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              locationEn: e.target.value,
-                            })
-                          }
-                          placeholder="Location"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="locationAr">Konum (Arapça)</Label>
-                        <Input
-                          id="locationAr"
-                          dir="rtl"
-                          value={formData.locationAr}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              locationAr: e.target.value,
-                            })
-                          }
-                          placeholder="الموقع"
-                        />
-                      </div>
-                    </div>
                   </CardContent>
                 </Card>
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>Görseller</CardTitle>
+                    <CardTitle>Görsel</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <SortableImageGrid
@@ -321,7 +246,9 @@ export default function NewProjectPage() {
                       }))}
                       onReorder={handleReorderPendingImages}
                       onDelete={handleDeletePendingImage}
-                      onUpload={handleImageUpload}
+                      onUpload={
+                        pendingImages.length < 1 ? handleImageUpload : undefined
+                      }
                       isUploading={isUploading}
                       onEditAlt={handleEditPendingAlt}
                     />

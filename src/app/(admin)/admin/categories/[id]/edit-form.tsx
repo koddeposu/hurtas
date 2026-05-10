@@ -1,19 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { AdminSidebar } from "@/components/admin/sidebar";
+import { updateCategory } from "@/actions/categoryActions";
 import { AdminHeader } from "@/components/admin/header";
+import { AdminSidebar } from "@/components/admin/sidebar";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { buildCategoryOptions } from "@/lib/categoryTree";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { updateCategory } from "@/actions/categoryActions";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
-import { buildCategoryOptions } from "@/lib/categoryTree";
 
 interface Category {
   id: string;
@@ -42,7 +42,10 @@ interface EditCategoryFormProps {
   categories: Category[];
 }
 
-export function EditCategoryForm({ category, categories }: EditCategoryFormProps) {
+export function EditCategoryForm({
+  category,
+  categories,
+}: EditCategoryFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -120,6 +123,27 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
+                  <Label htmlFor="parentId">Üst Kategori</Label>
+                  <select
+                    id="parentId"
+                    value={formData.parentId}
+                    onChange={(e) =>
+                      setFormData({ ...formData, parentId: e.target.value })
+                    }
+                    className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border px-3 py-1 text-sm shadow-xs transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+                  >
+                    <option value="">Ana kategori</option>
+                    {categoryOptions.map((option) => (
+                      <option
+                        key={option.category.id}
+                        value={option.category.id}
+                      >
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
                   <Label htmlFor="name">Kategori Adı *</Label>
                   <Input
                     id="name"
@@ -157,28 +181,10 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
                     />
                   </div>
                 </div>
+                <hr className="h-[3px] w-full bg-secondary" />
 
                 <div className="space-y-2">
-                  <Label htmlFor="parentId">Üst Kategori</Label>
-                  <select
-                    id="parentId"
-                    value={formData.parentId}
-                    onChange={(e) =>
-                      setFormData({ ...formData, parentId: e.target.value })
-                    }
-                    className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-9 w-full rounded-md border px-3 py-1 text-sm shadow-xs transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
-                  >
-                    <option value="">Ana kategori</option>
-                    {categoryOptions.map((option) => (
-                      <option key={option.category.id} value={option.category.id}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="title">Kategori Title</Label>
+                  <Label htmlFor="title">Kategori Üst Başlık Açıklama</Label>
                   <Input
                     id="title"
                     value={formData.title}
@@ -191,7 +197,9 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
 
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="titleEn">Kategori Title (İngilizce)</Label>
+                    <Label htmlFor="titleEn">
+                      Kategori Üst Başlık Açıklama (İngilizce)
+                    </Label>
                     <Input
                       id="titleEn"
                       value={formData.titleEn}
@@ -202,7 +210,9 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="titleAr">Kategori Title (Arapça)</Label>
+                    <Label htmlFor="titleAr">
+                      Kategori Üst Başlık Açıklama (Arapça)
+                    </Label>
                     <Input
                       id="titleAr"
                       dir="rtl"
@@ -214,9 +224,10 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
                     />
                   </div>
                 </div>
+                <hr className="h-[3px] w-full bg-secondary" />
 
                 <div className="space-y-2">
-                  <Label htmlFor="description">Kategori Description</Label>
+                  <Label htmlFor="description">Kategori Üst Açıklama</Label>
                   <Textarea
                     id="description"
                     value={formData.description}
@@ -231,7 +242,7 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="descriptionEn">
-                      Kategori Description (İngilizce)
+                      Kategori Üst Açıklama (İngilizce)
                     </Label>
                     <Textarea
                       id="descriptionEn"
@@ -248,7 +259,7 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="descriptionAr">
-                      Kategori Description (Arapça)
+                      Kategori Üst Açıklama (Arapça)
                     </Label>
                     <Textarea
                       id="descriptionAr"
@@ -265,9 +276,10 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
                     />
                   </div>
                 </div>
+                <hr className="h-[3px] w-full bg-secondary" />
 
                 <div className="space-y-2">
-                  <Label htmlFor="subtitle">Kategori Subtitle</Label>
+                  <Label htmlFor="subtitle">Kategori Alt Başlık Açıklama</Label>
                   <Input
                     id="subtitle"
                     value={formData.subtitle}
@@ -281,7 +293,7 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="subtitleEn">
-                      Kategori Subtitle (İngilizce)
+                      Kategori Alt Başlık Açıklama (İngilizce)
                     </Label>
                     <Input
                       id="subtitleEn"
@@ -293,7 +305,9 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="subtitleAr">Kategori Subtitle (Arapça)</Label>
+                    <Label htmlFor="subtitleAr">
+                      Kategori Alt Başlık Açıklama (Arapça)
+                    </Label>
                     <Input
                       id="subtitleAr"
                       dir="rtl"
@@ -305,9 +319,10 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
                     />
                   </div>
                 </div>
+                <hr className="h-[3px] w-full bg-secondary" />
 
                 <div className="space-y-2">
-                  <Label htmlFor="subdescription">Kategori Subdescription</Label>
+                  <Label htmlFor="subdescription">Kategori Alt Açıklama</Label>
                   <Textarea
                     id="subdescription"
                     value={formData.subdescription}
@@ -325,7 +340,7 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="subdescriptionEn">
-                      Kategori Subdescription (İngilizce)
+                      Kategori Alt Açıklama (İngilizce)
                     </Label>
                     <Textarea
                       id="subdescriptionEn"
@@ -342,7 +357,7 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="subdescriptionAr">
-                      Kategori Subdescription (Arapça)
+                      Kategori Alt Açıklama (Arapça)
                     </Label>
                     <Textarea
                       id="subdescriptionAr"
@@ -389,4 +404,3 @@ export function EditCategoryForm({ category, categories }: EditCategoryFormProps
     </div>
   );
 }
-

@@ -1,8 +1,13 @@
+import { getCategories } from "@/actions/categoryActions";
 import { getRandomProductsPreview } from "@/actions/productActions";
 import { HomepageCategorySlider } from "@/components/home-page/homepage-category-slider";
+import { ALL_PRODUCTS_PATH } from "@/lib/productRoutes";
 
 export async function RandomProductsSliderSection() {
-  const products = await getRandomProductsPreview(10);
+  const [products, categories] = await Promise.all([
+    getRandomProductsPreview(10),
+    getCategories(),
+  ]);
 
   if (!products.length) {
     return null;
@@ -16,8 +21,9 @@ export async function RandomProductsSliderSection() {
           accent="Öne Çıkan"
           seoLabel="Ürünlerimizden Seçmeler"
           description="Hürtaş Beton ürünleri arasından rastgele seçilen modelleri inceleyin."
-          href="/prefabrik-evler"
+          href={ALL_PRODUCTS_PATH}
           products={products}
+          categories={categories}
         />
       </div>
     </section>

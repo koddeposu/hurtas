@@ -3,6 +3,12 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { CONTACT_INFO, CONTACT_PHONES } from "@/lib/contact";
 import {
+  ALL_PRODUCTS_PATH,
+  getCategoryDisplayName,
+  getCategoryHref,
+  getTopLevelCategories,
+} from "@/lib/productRoutes";
+import {
   ArrowUpRight,
   Building2,
   Check,
@@ -16,8 +22,11 @@ import { useState } from "react";
 
 interface Category {
   id: string;
+  parentId: string | null;
   name: string;
+  title: string | null;
   slug: string;
+  order: number;
 }
 
 interface FooterProps {
@@ -27,7 +36,7 @@ interface FooterProps {
 const pageLinks = [
   { name: "Hakkımızda", href: "/hakkimizda" },
   { name: "Arge", href: "/arge" },
-  { name: "Ürünler", href: "/prefabrik-evler" },
+  { name: "Ürünler", href: ALL_PRODUCTS_PATH },
   { name: "Blog", href: "/blog" },
   { name: "Projelerimiz", href: "/projelerimiz" },
   { name: "İletişim", href: "/iletisim" },
@@ -70,13 +79,13 @@ const Footer = ({ categories = [] }: FooterProps) => {
 
   const productLinks =
     categories.length > 0
-      ? categories.slice(0, 5).map((category) => ({
-          name: category.name,
-          href: `/prefabrik-evler/${category.slug}`,
+      ? getTopLevelCategories(categories).slice(0, 5).map((category) => ({
+          name: getCategoryDisplayName(category),
+          href: getCategoryHref(categories, category),
         }))
       : FOOTER_PRODUCTS.map((name) => ({
           name,
-          href: `/prefabrik-evler?q=${encodeURIComponent(name)}`,
+          href: `${ALL_PRODUCTS_PATH}?q=${encodeURIComponent(name)}`,
         }));
 
   return (

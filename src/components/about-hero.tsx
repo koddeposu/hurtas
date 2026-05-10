@@ -82,7 +82,7 @@ const AboutHero = () => {
                 src={MissionImage}
                 fill
                 className="w-full h-full object-cover"
-                alt="prefabrik-evler"
+                alt="beton ürünleri"
                 quality={40}
               />
             </div>

@@ -2,6 +2,7 @@
 
 import { PROJECTS_FAQS } from "@/components/page-faq-content";
 import { SeoFaqSection } from "@/components/seo-faq-section";
+import { ALL_PRODUCTS_PATH } from "@/lib/productRoutes";
 import { BookOpenText, Building2, Images, Link2, Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -73,7 +74,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
                   title: "Beton Ürün Kategorileri",
                   description:
                     "Altyapı, üst yapı ve çevre düzenleme ürünlerini kategori bazında inceleyin.",
-                  href: "/prefabrik-evler",
+                  href: ALL_PRODUCTS_PATH,
                   icon: Building2,
                 },
                 {

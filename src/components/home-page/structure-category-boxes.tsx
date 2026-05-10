@@ -1,5 +1,6 @@
 import CategoryImage1 from "@/assets/hero/home-page-1.webp";
 import CategoryImage2 from "@/assets/hero/home-page-2.webp";
+import { ALL_PRODUCTS_PATH, getCategoryHref } from "@/lib/productRoutes";
 import { ArrowRight, Building2, Layers3 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -27,22 +28,24 @@ const STRUCTURE_CATEGORIES = [
 
 interface CategoryItem {
   id: string;
+  parentId: string | null;
   name: string;
   slug: string;
+  order: number;
 }
 
 interface StructureCategoryBoxesProps {
   categories?: CategoryItem[];
 }
 
-function getCategoryHref(categories: CategoryItem[], matchers: string[]) {
+function getMatchedCategoryHref(categories: CategoryItem[], matchers: string[]) {
   const matchedCategory = categories.find((category) =>
     matchers.some((matcher) => category.name.includes(matcher)),
   );
 
   return matchedCategory
-    ? `/prefabrik-evler/${matchedCategory.slug}`
-    : "/prefabrik-evler";
+    ? getCategoryHref(categories, matchedCategory)
+    : ALL_PRODUCTS_PATH;
 }
 
 export function StructureCategoryBoxes({
@@ -53,7 +56,7 @@ export function StructureCategoryBoxes({
       <div className="mx-auto grid max-w-7xl gap-3 md:grid-cols-2">
         {STRUCTURE_CATEGORIES.map((item) => {
           const Icon = item.icon;
-          const href = getCategoryHref(categories, item.matchers);
+          const href = getMatchedCategoryHref(categories, item.matchers);
 
           return (
             <Link

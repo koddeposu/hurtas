@@ -1,11 +1,11 @@
 "use server";
 
-import { eq, asc, desc, inArray } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
 import { db } from "@/db/drizzle";
 import { project, projectImage } from "@/db/schema";
 import { requireAuth } from "@/lib/requireAuth";
 import { generateUniqueSlug } from "@/lib/slug";
+import { asc, desc, eq, inArray } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 
 function generateId() {
   return crypto.randomUUID();
@@ -83,11 +83,6 @@ export async function createProject(data: {
   title: string;
   titleEn?: string;
   titleAr?: string;
-  area: string;
-  room: string;
-  location: string;
-  locationEn?: string;
-  locationAr?: string;
   isActive?: boolean;
   order?: number;
   pendingImages?: Array<{
@@ -109,16 +104,10 @@ export async function createProject(data: {
     titleEn: toNullableText(data.titleEn),
     titleAr: toNullableText(data.titleAr),
     slug,
-    area: data.area,
-    room: data.room,
-    location: data.location,
-    locationEn: toNullableText(data.locationEn),
-    locationAr: toNullableText(data.locationAr),
     isActive: data.isActive ?? true,
     order: data.order ?? 0,
   });
 
-  // Create image records if pending images were provided
   if (data.pendingImages && data.pendingImages.length > 0) {
     for (const img of data.pendingImages) {
       await db.insert(projectImage).values({
@@ -145,11 +134,6 @@ export async function updateProject(
     title?: string;
     titleEn?: string | null;
     titleAr?: string | null;
-    area?: string;
-    room?: string;
-    location?: string;
-    locationEn?: string | null;
-    locationAr?: string | null;
     isActive?: boolean;
     order?: number;
   },
@@ -162,17 +146,10 @@ export async function updateProject(
     updateData.title = data.title;
     updateData.slug = await generateUniqueSlug("project", data.title, id);
   }
-  if (data.titleEn !== undefined) updateData.titleEn = toNullableText(data.titleEn);
-  if (data.titleAr !== undefined) updateData.titleAr = toNullableText(data.titleAr);
-  if (data.area !== undefined) updateData.area = data.area;
-  if (data.room !== undefined) updateData.room = data.room;
-  if (data.location !== undefined) updateData.location = data.location;
-  if (data.locationEn !== undefined) {
-    updateData.locationEn = toNullableText(data.locationEn);
-  }
-  if (data.locationAr !== undefined) {
-    updateData.locationAr = toNullableText(data.locationAr);
-  }
+  if (data.titleEn !== undefined)
+    updateData.titleEn = toNullableText(data.titleEn);
+  if (data.titleAr !== undefined)
+    updateData.titleAr = toNullableText(data.titleAr);
   if (data.isActive !== undefined) updateData.isActive = data.isActive;
   if (data.order !== undefined) updateData.order = data.order;
 

@@ -8,8 +8,11 @@ import BottomBar from "./bottomBar";
 
 interface Category {
   id: string;
+  parentId: string | null;
   name: string;
+  title: string | null;
   slug: string;
+  order: number;
 }
 
 interface ClientLayoutProps {

@@ -1,18 +1,18 @@
 "use client";
 
 import { ProductCard } from "@/components/ProductCard";
-import { getProductFaqsByCategory } from "@/components/page-faq-content";
-import { SeoFaqSection } from "@/components/seo-faq-section";
+import {
+  ALL_PRODUCTS_PATH,
+  getCategoryDisplayName,
+  getCategoryHref,
+} from "@/lib/productRoutes";
 import { DBCategory, DBProduct } from "@/types/product";
 import {
   ArrowUpRight,
-  Building2,
   ChevronRight,
   Factory,
   Filter,
   Home,
-  Layers3,
-  ShieldCheck,
   X,
 } from "lucide-react";
 import dynamic from "next/dynamic";
@@ -83,16 +83,6 @@ function getCategoryKey(
   return "all";
 }
 
-function getCategoryHref(categories: DBCategory[], matcher: string) {
-  const matchedCategory = categories.find((category) =>
-    category.name.includes(matcher),
-  );
-
-  return matchedCategory
-    ? `/prefabrik-evler/${matchedCategory.slug}`
-    : "/prefabrik-evler";
-}
-
 function normalizeSearchValue(value: string | null | undefined) {
   return (value ?? "").toLocaleLowerCase("tr-TR").trim();
 }
@@ -111,8 +101,13 @@ function productMatchesQuery(product: DBProduct, query: string) {
     product.description,
     product.metaDescription,
     product.category?.name,
+    product.category?.title,
     product.category?.slug,
-    ...(product.categories?.flatMap((item) => [item.name, item.slug]) ?? []),
+    ...(product.categories?.flatMap((item) => [
+      item.name,
+      item.title,
+      item.slug,
+    ]) ?? []),
   ]
     .map((item) => normalizeSearchValue(item))
     .join(" ");
@@ -273,10 +268,10 @@ function getPageContent(categoryName?: string, categorySlug?: string) {
   }
 
   return {
-    eyebrow: "CT Prefabrik Ürün Seçkisi",
-    title: "Prefabrik Ev Modelleri ve Fiyatları",
+    eyebrow: "Hürtaş Beton Ürün Seçkisi",
+    title: "Tüm Beton Ürünleri",
     description:
-      "Tek katlı prefabrik ev, çift katlı prefabrik ev, çelik ev, prefabrik villa ve farklı yaşam çözümlerini tek sayfada inceleyin. Model, fiyat ve teslim kapsamını ihtiyacınıza göre karşılaştırın.",
+      "Altyapı, üst yapı ve çevre düzenleme projeleri için beton ürünlerini kategori, kullanım alanı ve proje ihtiyacına göre inceleyin.",
     seoTitle: `Prefabrik Ev Modelleri ve Fiyatları ${CURRENT_YEAR}`,
     seoDescription:
       "Prefabrik ev modelleri, prefabrik villa, dubleks prefabrik, çelik prefabrik ev modelleri fiyatları ve konteyner ev çözümleri arasında doğru karar verebilmek için model yapısı, proje kapsamı, üretim kalitesi ve fiyat-performans dengesi birlikte değerlendirilmelidir.",
@@ -310,80 +305,6 @@ function getPageContent(categoryName?: string, categorySlug?: string) {
   };
 }
 
-function getFaqContent(categoryName?: string, categorySlug?: string) {
-  const categoryKey = getCategoryKey(categoryName, categorySlug);
-
-  if (categoryKey === "room-1-1") {
-    return {
-      title: "1+1 Prefabrik Evler İçin",
-      accent: "En Çok Aranan Sorular",
-      description:
-        "1+1 prefabrik ev fiyatları, metrekare planı, teslim süreci ve anahtar teslim kapsam hakkında en çok sorulan soruları burada topladık.",
-    };
-  }
-
-  if (categoryKey === "room-2-1") {
-    return {
-      title: "2+1 Prefabrik Evler İçin",
-      accent: "En Çok Aranan Sorular",
-      description:
-        "2+1 prefabrik ev modelleri, fiyat detayları, ruhsat süreci ve aile kullanımına uygun plan seçimiyle ilgili soruları burada yanıtladık.",
-    };
-  }
-
-  if (categoryKey === "room-3-1") {
-    return {
-      title: "3+1 Prefabrik Evler İçin",
-      accent: "En Çok Aranan Sorular",
-      description:
-        "3+1 prefabrik ev fiyatları, büyük aileler için planlama, anahtar teslim kapsam ve teslim süreci hakkında merak edilenleri burada bulabilirsiniz.",
-    };
-  }
-
-  if (categoryKey === "room-4-1") {
-    return {
-      title: "4+1 Prefabrik Evler İçin",
-      accent: "En Çok Aranan Sorular",
-      description:
-        "4+1 prefabrik ev modelleri, geniş yaşam planı, dubleks çözümler ve proje kapsamıyla ilgili en çok aranan soruları bu bölümde topladık.",
-    };
-  }
-
-  if (categoryKey === "single") {
-    return {
-      title: "Tek Katlı Prefabrik Evler İçin",
-      accent: "En Çok Aranan Sorular",
-      description:
-        "Tek katlı prefabrik ev fiyatları, modelleri, anahtar teslim kapsam, ruhsat süreci ve Sakarya uygulamaları hakkında kullanıcıların en çok aradığı soruları burada topladık.",
-    };
-  }
-
-  if (categoryKey === "double") {
-    return {
-      title: "Çift Katlı Prefabrik Evler İçin",
-      accent: "En Çok Aranan Sorular",
-      description:
-        "Dubleks prefabrik ev fiyatları, çift katlı plan seçenekleri, anahtar teslim kapsam, ruhsat süreci ve Sakarya uygulamaları hakkında en çok sorulan başlıkları burada yanıtladık.",
-    };
-  }
-
-  if (categoryKey === "steel") {
-    return {
-      title: "Çelik Evler İçin",
-      accent: "En Çok Aranan Sorular",
-      description:
-        "Çelik prefabrik ev modelleri, çelik ev fiyatları, anahtar teslim çelik konstrüksiyon ev kapsamı, yalıtım ve uygulama süreci hakkında en çok aranan soruları burada bulabilirsiniz.",
-    };
-  }
-
-  return {
-    title: "Prefabrik Evler Sayfası İçin",
-    accent: "En Çok Aranan Sorular",
-    description:
-      "Prefabrik ev modelleri, çelik prefabrik ev fiyatları, dubleks prefabrik çözümler, prefabrik villa seçenekleri ve anahtar teslim kapsam hakkında kullanıcıların en çok aradığı soruları burada topladık.",
-  };
-}
-
 function ProductSidebarMenu({
   categories,
   activeCategory,
@@ -393,66 +314,13 @@ function ProductSidebarMenu({
   activeCategory?: string;
   onNavigate?: () => void;
 }) {
-  const activeCategoryItem = activeCategory
-    ? categories.find((item) => item.slug === activeCategory)
-    : undefined;
-  const activeCategoryKey = getCategoryKey(
-    activeCategoryItem?.name,
-    activeCategoryItem?.slug,
-  );
-
-  const roomLinks = (
-    [
-      { room: "1+1", key: "room-1-1", icon: Home },
-      { room: "2+1", key: "room-2-1", icon: Home },
-      { room: "3+1", key: "room-3-1", icon: Home },
-      { room: "4+1", key: "room-4-1", icon: Home },
-    ] as const
-  )
-    .map((item) => {
-      const category = categories.find(
-        (cat) =>
-          includesRoom(cat.slug, item.room) ||
-          includesRoom(cat.name, item.room),
-      );
-
-      if (!category) return null;
-
-      return {
-        label: item.room,
-        href: `/prefabrik-evler/${category.slug}`,
-        active: activeCategoryKey === item.key,
-        icon: item.icon,
-      };
-    })
-    .filter((item): item is NonNullable<typeof item> => item !== null);
-
   const quickLinks = [
     {
       label: "Tümü",
-      href: "/prefabrik-evler",
+      href: ALL_PRODUCTS_PATH,
       active: !activeCategory,
       icon: Home,
     },
-    {
-      label: "Tek Katlı",
-      href: getCategoryHref(categories, "Tek Kat"),
-      active: activeCategoryKey === "single",
-      icon: Building2,
-    },
-    {
-      label: "Çift Katlı",
-      href: getCategoryHref(categories, "Çift Kat"),
-      active: activeCategoryKey === "double",
-      icon: Layers3,
-    },
-    {
-      label: "Çelik Ev",
-      href: getCategoryHref(categories, "Çelik"),
-      active: activeCategoryKey === "steel",
-      icon: ShieldCheck,
-    },
-    ...roomLinks,
   ];
 
   return (
@@ -509,11 +377,12 @@ function ProductSidebarMenu({
           <div className="space-y-1">
             {categories.map((category) => {
               const isActive = activeCategory === category.slug;
+              const categoryLabel = getCategoryDisplayName(category);
 
               return (
                 <Link
                   key={category.id}
-                  href={`/prefabrik-evler/${category.slug}`}
+                  href={getCategoryHref(categories, category)}
                   onClick={onNavigate}
                   className={`group flex min-h-11 items-center justify-between border px-3 py-2 text-sm font-bold transition-colors ${
                     isActive
@@ -523,7 +392,9 @@ function ProductSidebarMenu({
                 >
                   <span className="flex min-w-0 items-center gap-2">
                     <Factory className="h-4 w-4 shrink-0" />
-                    <span className="truncate">{category.name}</span>
+                    <span className="min-w-0 break-words leading-snug">
+                      {categoryLabel}
+                    </span>
                   </span>
                   <ChevronRight className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5" />
                 </Link>
@@ -536,16 +407,6 @@ function ProductSidebarMenu({
   );
 }
 
-function getShortText(text: string, maxLength = 150) {
-  if (text.length <= maxLength) return text;
-
-  const trimmed = text.slice(0, maxLength).trim();
-  const lastSpaceIndex = trimmed.lastIndexOf(" ");
-  const endIndex = lastSpaceIndex > 80 ? lastSpaceIndex : trimmed.length;
-
-  return `${trimmed.slice(0, endIndex)}...`;
-}
-
 function getFilledText(value: string | null | undefined) {
   const trimmed = value?.trim();
   return trimmed ? trimmed : undefined;
@@ -554,42 +415,28 @@ function getFilledText(value: string | null | undefined) {
 function SeoFooter({
   title,
   description,
-  cards,
 }: {
-  title: string;
-  description: string;
-  cards: Array<{ title: string; text: string }>;
+  title?: string;
+  description?: string;
 }) {
-  const visibleCards = cards.slice(0, 3);
+  if (!title && !description) return null;
 
   return (
-    <section className="mt-12 border-t border-slate-200 pt-8">
+    <section className="mt-60 border-t border-slate-200 pt-8">
       <div className="max-w-3xl">
         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#6f839d]">
           Ürün Bilgisi
         </p>
-        <h2 className="mt-2 text-2xl font-black tracking-tight text-[#152f51] md:text-3xl">
-          {title}
-        </h2>
-        <p className="mt-3 text-sm font-medium leading-7 text-slate-600">
-          {getShortText(description, 190)}
-        </p>
-      </div>
-
-      <div className="mt-6 grid gap-4 md:grid-cols-3">
-        {visibleCards.map((card) => (
-          <article
-            key={card.title}
-            className="border border-slate-200 bg-white p-5"
-          >
-            <h3 className="text-base font-black leading-snug text-slate-900">
-              {card.title}
-            </h3>
-            <p className="mt-3 text-sm font-medium leading-6 text-slate-600">
-              {getShortText(card.text)}
-            </p>
-          </article>
-        ))}
+        {title ? (
+          <h2 className="mt-2 text-2xl font-black tracking-tight text-[#152f51] md:text-3xl">
+            {title}
+          </h2>
+        ) : null}
+        {description ? (
+          <p className="mt-3 text-sm font-medium leading-7 text-slate-600">
+            {description}
+          </p>
+        ) : null}
       </div>
     </section>
   );
@@ -616,17 +463,23 @@ const ProductsClient = ({
     ? categories.find((category) => category.slug === activeCategory)
     : undefined;
   const activeCategoryName = activeCategoryItem?.name;
+  const activeCategoryLabel = activeCategoryItem
+    ? getCategoryDisplayName(activeCategoryItem)
+    : undefined;
 
   const content = getPageContent(activeCategoryName, activeCategory);
+  const headerEyebrow =
+    getFilledText(activeCategoryItem?.name) ?? content.eyebrow;
   const headerTitle =
-    getFilledText(activeCategoryItem?.title) ?? content.title;
+    getFilledText(activeCategoryItem?.title) ??
+    activeCategoryName ??
+    content.title;
   const headerDescription =
-    getFilledText(activeCategoryItem?.description) ?? content.description;
+    getFilledText(activeCategoryItem?.description) ??
+    (activeCategoryItem ? undefined : content.description);
   const bottomTitle = getFilledText(activeCategoryItem?.subtitle);
   const bottomDescription = getFilledText(activeCategoryItem?.subdescription);
   const hasBottomContent = Boolean(bottomTitle || bottomDescription);
-  const faqContent = getFaqContent(activeCategoryName, activeCategory);
-  const faqItems = getProductFaqsByCategory(activeCategoryName, activeCategory);
 
   useEffect(() => {
     document.body.style.overflow = isMobileMenuOpen ? "hidden" : "";
@@ -683,23 +536,25 @@ const ProductsClient = ({
         </div>
       ) : null}
 
-      <section className="pb-10 pt-14 lg:pb-12 lg:pt-18">
-        <div className="relative py-2">
-          <div className="mx-auto max-w-4xl text-center">
-            <p className="text-[10px] font-black uppercase tracking-[0.32em] text-secondary">
-              {content.eyebrow}
-            </p>
-            <h1 className="mt-3 text-2xl font-black leading-tight tracking-tight text-slate-900 md:text-4xl lg:text-5xl">
-              {headerTitle}
-            </h1>
-            <p className="mx-auto mt-3 max-w-3xl text-sm font-medium leading-7 text-slate-600">
-              {headerDescription}
-            </p>
-          </div>
-        </div>
-      </section>
-
       <section className="pb-20">
+        <section className="pb-10 pt-14 lg:pb-12 lg:pt-18">
+          <div className="relative py-2">
+            <div className="mx-auto max-w-5xl text-center">
+              <p className="text-[10px] font-black uppercase tracking-[0.32em] text-secondary">
+                {headerEyebrow}
+              </p>
+              <h1 className="mt-3 text-2xl font-black leading-tight tracking-tight text-slate-900 md:text-4xl lg:text-5xl">
+                {headerTitle}
+              </h1>
+              {headerDescription ? (
+                <p className="mx-auto mt-3 max-w-5xl text-sm font-medium leading-7 text-slate-600">
+                  {headerDescription}
+                </p>
+              ) : null}
+            </div>
+          </div>
+        </section>
+
         <div className="mb-5 lg:hidden">
           <button
             type="button"
@@ -741,12 +596,12 @@ const ProductsClient = ({
                 <p className="mt-2 max-w-md text-center text-slate-500">
                   {normalizedSearchQuery
                     ? `"${searchQuery}" araması için uygun ürün bulunamadı.`
-                    : activeCategoryName
-                      ? `"${activeCategoryName}" kategorisinde henüz ürün bulunmuyor.`
+                    : activeCategoryLabel
+                      ? `"${activeCategoryLabel}" kategorisinde henüz ürün bulunmuyor.`
                       : "Henüz ürün eklenmemiş."}
                 </p>
                 <Link
-                  href="/prefabrik-evler"
+                  href={ALL_PRODUCTS_PATH}
                   className="mt-6 inline-flex items-center gap-2 bg-primary px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-primary/90"
                 >
                   Tüm Ürünleri Gör
@@ -759,43 +614,18 @@ const ProductsClient = ({
                   <ProductCard
                     key={product.id}
                     product={product}
+                    categories={categories}
                     fullscreenChange={() => setSelectedProduct(product)}
                   />
                 ))}
               </div>
             )}
-
-            {hasBottomContent ? (
-              <section className="mt-12 border-t border-slate-200 pt-8">
-                {bottomTitle ? (
-                  <h2 className="text-2xl font-black tracking-tight text-[#152f51] md:text-3xl">
-                    {bottomTitle}
-                  </h2>
-                ) : null}
-                {bottomDescription ? (
-                  <p className="mt-3 text-sm font-medium leading-7 text-slate-600">
-                    {bottomDescription}
-                  </p>
-                ) : null}
-              </section>
-            ) : null}
           </div>
         </div>
 
-        <SeoFooter
-          title={content.seoTitle}
-          description={content.seoDescription}
-          cards={content.seoCards}
-        />
-
-        <div className="mt-14">
-          <SeoFaqSection
-            title={faqContent.title}
-            accent={faqContent.accent}
-            description={faqContent.description}
-            items={faqItems}
-          />
-        </div>
+        {hasBottomContent ? (
+          <SeoFooter title={bottomTitle} description={bottomDescription} />
+        ) : null}
       </section>
     </div>
   );

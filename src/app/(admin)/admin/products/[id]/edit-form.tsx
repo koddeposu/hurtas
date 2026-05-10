@@ -1,37 +1,37 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { AdminSidebar } from "@/components/admin/sidebar";
-import { AdminHeader } from "@/components/admin/header";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Loader2 } from "lucide-react";
-import Link from "next/link";
 import {
-  updateProduct,
   addProductImage,
   deleteProductImage,
-  updateProductImagesOrder,
+  updateProduct,
   updateProductImageAlt,
+  updateProductImagesOrder,
 } from "@/actions/productActions";
 import { uploadImage } from "@/actions/uploadActions";
-import { toast } from "sonner";
+import { AltTextEditDialog } from "@/components/admin/alt-text-edit-dialog";
+import { AdminHeader } from "@/components/admin/header";
+import { ProductDetailContentEditor } from "@/components/admin/product-detail-content-editor";
+import { AdminSidebar } from "@/components/admin/sidebar";
 import {
   SortableImageGrid,
   type SortableImage,
 } from "@/components/admin/sortable-image-grid";
-import { AltTextEditDialog } from "@/components/admin/alt-text-edit-dialog";
-import { ProductDetailContentEditor } from "@/components/admin/product-detail-content-editor";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { buildCategoryOptions } from "@/lib/categoryTree";
 import {
   hasProductDetailContent,
   toProductDetailContentJson,
 } from "@/lib/productDetailContent";
-import { buildCategoryOptions } from "@/lib/categoryTree";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface ProductImage {
   id: string;
@@ -66,6 +66,7 @@ interface Product {
   isActive: boolean;
   order: number;
   images: ProductImage[];
+  url?: string | null;
 }
 
 interface Category {
@@ -100,6 +101,8 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
           ? [product.categoryId]
           : [],
     name: product.name,
+    url: product.url || "",
+
     nameEn: product.nameEn || "",
     nameAr: product.nameAr || "",
     area: product.area,
@@ -119,11 +122,18 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (formData.categoryIds.length === 0) {
+      toast.error("Ürün URL yapısı için en az bir kategori seçin");
+      return;
+    }
+
     setIsLoading(true);
 
     try {
       await updateProduct(product.id, {
         ...formData,
+        url: formData.url.trim() || null,
         categoryIds: formData.categoryIds,
         description: hasProductDetailContent(formData.description)
           ? formData.description
@@ -219,7 +229,7 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
         reorderedImages.map((img, index) => ({
           id: img.id,
           order: index,
-        }))
+        })),
       );
       toast.success("Sıralama kaydedildi");
     } catch {
@@ -254,8 +264,8 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
       );
       setImages(
         images.map((img) =>
-          img.id === editingImage.id ? { ...img, ...values } : img
-        )
+          img.id === editingImage.id ? { ...img, ...values } : img,
+        ),
       );
       toast.success("Alt metin güncellendi");
       setEditingImage(null);
@@ -302,6 +312,63 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                     <CardTitle>Temel Bilgiler</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <Label>Kategoriler</Label>
+                      <div className="flex flex-wrap gap-2">
+                        {categoryOptions.map(({ category: cat, depth }) => {
+                          const selected = formData.categoryIds.includes(
+                            cat.id,
+                          );
+                          return (
+                            <Button
+                              key={cat.id}
+                              type="button"
+                              variant={selected ? "default" : "outline"}
+                              onClick={() => toggleCategory(cat.id)}
+                              className={
+                                selected ? "bg-primary hover:bg-[#3a1924]" : ""
+                              }
+                            >
+                              {depth > 0 ? `${"-- ".repeat(depth)}` : ""}
+                              {cat.name}
+                            </Button>
+                          );
+                        })}
+                      </div>
+                      <p className="text-xs text-slate-500">
+                        Birden fazla kategori seçebilirsiniz. İlk seçilen
+                        kategori ana kategori olarak kullanılır.
+                      </p>
+                      {formData.categoryIds.length > 0 ? (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          className="h-auto px-0 text-xs text-slate-500 hover:text-slate-700"
+                          onClick={() =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              categoryIds: [],
+                            }))
+                          }
+                        >
+                          Seçimi temizle
+                        </Button>
+                      ) : null}
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="url">URL (opsiyonel)</Label>
+                      <Input
+                        id="url"
+                        value={formData.url}
+                        onChange={(e) =>
+                          setFormData({ ...formData, url: e.target.value })
+                        }
+                        placeholder="mevcut-url-slug"
+                      />
+                      <p className="text-xs text-slate-500">
+                        Boş bırakılırsa ürün adından otomatik oluşturulur.
+                      </p>
+                    </div>
                     <div className="space-y-2">
                       <Label htmlFor="name">Ürün Adı *</Label>
                       <Input
@@ -361,7 +428,8 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                         rows={4}
                       />
                       <p className="text-xs text-slate-500">
-                        Ürün kartlarında ve ürün detay sayfası meta etiketlerinde kullanılabilir.
+                        Ürün kartlarında ve ürün detay sayfası meta
+                        etiketlerinde kullanılabilir.
                       </p>
                     </div>
 
@@ -401,47 +469,6 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                           rows={4}
                         />
                       </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label>Kategoriler</Label>
-                      <div className="flex flex-wrap gap-2">
-                        {categoryOptions.map(({ category: cat, depth }) => {
-                          const selected = formData.categoryIds.includes(cat.id);
-                          return (
-                            <Button
-                              key={cat.id}
-                              type="button"
-                              variant={selected ? "default" : "outline"}
-                              onClick={() => toggleCategory(cat.id)}
-                              className={
-                                selected
-                                  ? "bg-primary hover:bg-[#3a1924]"
-                                  : ""
-                              }
-                            >
-                              {depth > 0 ? `${"-- ".repeat(depth)}` : ""}
-                              {cat.name}
-                            </Button>
-                          );
-                        })}
-                      </div>
-                      <p className="text-xs text-slate-500">
-                        Birden fazla kategori seçebilirsiniz. İlk seçilen kategori
-                        ana kategori olarak kullanılır.
-                      </p>
-                      {formData.categoryIds.length > 0 ? (
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          className="h-auto px-0 text-xs text-slate-500 hover:text-slate-700"
-                          onClick={() =>
-                            setFormData((prev) => ({ ...prev, categoryIds: [] }))
-                          }
-                        >
-                          Seçimi temizle
-                        </Button>
-                      ) : null}
                     </div>
 
                     <div className="space-y-2">
@@ -559,4 +586,3 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
     </div>
   );
 }
-

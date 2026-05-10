@@ -60,6 +60,7 @@ interface ProductImageProps {
 
 interface RelatedProduct {
   id: string;
+  href: string;
   slug: string;
   name: string;
   area: string;
@@ -375,7 +376,7 @@ function ProductDescription({
 function RelatedProductCard({ product }: { product: RelatedProduct }) {
   return (
     <Link
-      href={`/prefabrik-ev/${product.slug}`}
+      href={product.href}
       prefetch={false}
       className="group flex h-full flex-col overflow-hidden rounded-[3px] border border-slate-300 bg-white shadow-[0_16px_38px_-32px_rgba(15,23,42,0.24)] transition-all duration-300 hover:-translate-y-1.5 hover:border-slate-400 hover:shadow-[0_24px_52px_-30px_rgba(15,23,42,0.3)]"
     >
@@ -457,7 +458,7 @@ function RelatedProductsSlider({
     <section className="font-[family-name:var(--font-poppins)]">
       <div className="mb-6 md:mb-8">
         <h2 className="text-2xl md:text-4xl font-black tracking-tight text-slate-900">
-          {title || "Diğer Prefabrik Ev Modellerimiz"}
+          {title || "Diğer Beton Ürünlerimiz"}
         </h2>
       </div>
 

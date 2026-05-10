@@ -1,3 +1,9 @@
+import type { RouteCategory } from "@/lib/productRoutes";
+import {
+  getCategoryDisplayName,
+  getProductCategoryDetailHref,
+  getProductDetailHref,
+} from "@/lib/productRoutes";
 import { DBProduct, Product } from "@/types/product";
 import { ArrowUpRight, Maximize2 } from "lucide-react";
 import Image from "next/image";
@@ -13,10 +19,12 @@ export const ProductCard = ({
   product,
   bestseller,
   fullscreenChange,
+  categories = [],
 }: {
   bestseller?: boolean;
   fullscreenChange: () => void;
   product: ProductCardProduct;
+  categories?: RouteCategory[];
 }) => {
   const images = isDBProduct(product)
     ? product.images.map((img) => ({ src: img.url, alt: img.alt }))
@@ -26,56 +34,64 @@ export const ProductCard = ({
       }));
 
   const categoryName = isDBProduct(product)
-    ? product.category?.name
+    ? product.category
+      ? getCategoryDisplayName(product.category)
+      : undefined
     : product.category;
   const categoryLabel = categoryName?.toLocaleLowerCase("tr-TR");
 
   const detailSlug = isDBProduct(product)
     ? product.slug
     : `${product.slug}-${product.id}`;
+  const detailHref = isDBProduct(product)
+    ? getProductCategoryDetailHref(product, categories)
+    : getProductDetailHref(detailSlug);
 
   const coverImage = images[0];
-  const coverAlt = coverImage.alt?.trim() || product.name;
+  const coverAlt = coverImage?.alt?.trim() || product.name;
   const metaDescription =
     "metaDescription" in product && typeof product.metaDescription === "string"
       ? product.metaDescription
       : "";
   const cardDescription = metaDescription.trim() || null;
 
-  if (!coverImage) {
-    return null;
-  }
-
   return (
     <Link
-      href={`/prefabrik-ev/${detailSlug}`}
+      href={detailHref}
       prefetch={false}
       className="group flex w-full flex-col justify-between overflow-hidden rounded-[3px] border border-slate-300 bg-white text-left shadow-[0_16px_34px_-28px_rgba(15,23,42,0.12)] transition-all duration-200 hover:-translate-y-1 hover:border-slate-400 hover:shadow-[0_22px_44px_-28px_rgba(15,23,42,0.18)]"
     >
       <div className="relative overflow-hidden">
         <div className="relative aspect-video w-full bg-slate-100">
-          <Image
-            src={coverImage.src}
-            alt={coverAlt}
-            fill
-            quality={75}
-            sizes="(min-width: 1280px) 30vw, (min-width: 768px) 46vw, 94vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-            draggable={false}
-          />
-
-          <button
-            type="button"
-            onClick={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              fullscreenChange();
-            }}
-            aria-label="Ürün görselini büyüt"
-            className="absolute bottom-4 right-4 flex h-9 w-9 items-center justify-center rounded-[2px] bg-black/35 text-white transition-all duration-200 hover:scale-105"
-          >
-            <Maximize2 size={18} className="text-white" />
-          </button>
+          {coverImage ? (
+            <>
+              <Image
+                src={coverImage.src}
+                alt={coverAlt}
+                fill
+                quality={75}
+                sizes="(min-width: 1280px) 30vw, (min-width: 768px) 46vw, 94vw"
+                className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                draggable={false}
+              />
+              <button
+                type="button"
+                onClick={(event) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  fullscreenChange();
+                }}
+                aria-label="Ürün görselini büyüt"
+                className="absolute bottom-4 right-4 flex h-9 w-9 items-center justify-center rounded-[2px] bg-black/35 text-white transition-all duration-200 hover:scale-105"
+              >
+                <Maximize2 size={18} className="text-white" />
+              </button>
+            </>
+          ) : (
+            <div className="flex h-full w-full items-center justify-center">
+              <span className="text-sm text-slate-400">Görsel yok</span>
+            </div>
+          )}
 
           {bestseller ? (
             <div className="absolute left-4 top-4 z-10 rounded-[2px] bg-[#d6a94a] px-3 py-1 text-[9px] font-black uppercase tracking-widest text-[#152f51] shadow-sm">
@@ -101,7 +117,6 @@ export const ProductCard = ({
             {cardDescription}
           </p>
         ) : null}
-
       </div>
 
       <div className="px-5 pb-5">

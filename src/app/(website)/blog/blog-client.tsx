@@ -2,6 +2,10 @@
 
 import { Input } from "@/components/ui/input";
 import { blogPost, category } from "@/db/schema";
+import {
+  getCategoryDisplayName,
+  getCategoryHref,
+} from "@/lib/productRoutes";
 import { InferSelectModel } from "drizzle-orm";
 import { motion } from "framer-motion";
 import {
@@ -216,7 +220,7 @@ export function BlogPageClient({
 
   const filteredCategories = hasActiveSearch
     ? prefabricCategories.filter((item) =>
-        [item.name, item.description ?? ""].some((value) =>
+        [item.name, item.title ?? "", item.description ?? ""].some((value) =>
           value.toLocaleLowerCase("tr-TR").includes(normalizedQuery),
         ),
       )
@@ -372,10 +376,10 @@ export function BlogPageClient({
                         filteredCategories.map((item) => (
                           <Link
                             key={item.id}
-                            href={`/prefabrik-evler/${item.slug}`}
+                            href={getCategoryHref(prefabricCategories, item)}
                             className="group flex items-center justify-between rounded-[3px] border border-slate-300 px-4 py-4 text-sm font-bold text-slate-700 transition-colors hover:border-[#152f51]/20 hover:bg-slate-50 hover:text-[#152f51]"
                           >
-                            <span>{item.name}</span>
+                            <span>{getCategoryDisplayName(item)}</span>
                             <ChevronRight
                               size={16}
                               className="transition-transform group-hover:translate-x-1"

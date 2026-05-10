@@ -91,7 +91,7 @@ export async function createCategory(data: {
 
   revalidatePath("/", "layout");
   revalidatePath("/admin/categories");
-  revalidatePath("/prefabrik-evler");
+  revalidatePath("/tum-urunler");
 
   return { id, slug };
 }
@@ -179,7 +179,7 @@ export async function updateCategory(
 
   revalidatePath("/", "layout");
   revalidatePath("/admin/categories");
-  revalidatePath("/prefabrik-evler");
+  revalidatePath("/tum-urunler");
 
   return { success: true };
 }
@@ -191,7 +191,7 @@ export async function deleteCategory(id: string) {
 
   revalidatePath("/", "layout");
   revalidatePath("/admin/categories");
-  revalidatePath("/prefabrik-evler");
+  revalidatePath("/tum-urunler");
 
   return { success: true };
 }
@@ -210,7 +210,7 @@ export async function updateCategoriesOrder(
 
   revalidatePath("/", "layout");
   revalidatePath("/admin/categories");
-  revalidatePath("/prefabrik-evler");
+  revalidatePath("/tum-urunler");
 
   return { success: true };
 }
