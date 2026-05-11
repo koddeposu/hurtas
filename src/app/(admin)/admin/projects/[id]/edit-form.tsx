@@ -145,7 +145,7 @@ export function EditProjectForm({ project }: { project: Project }) {
         reorderedImages.map((img, index) => ({
           id: img.id,
           order: index,
-        }))
+        })),
       );
       toast.success("Sıralama kaydedildi");
     } catch {
@@ -180,8 +180,8 @@ export function EditProjectForm({ project }: { project: Project }) {
       );
       setImages(
         images.map((img) =>
-          img.id === editingImage.id ? { ...img, ...values } : img
-        )
+          img.id === editingImage.id ? { ...img, ...values } : img,
+        ),
       );
       toast.success("Alt metin güncellendi");
       setEditingImage(null);
@@ -416,4 +416,3 @@ export function EditProjectForm({ project }: { project: Project }) {
     </div>
   );
 }
-

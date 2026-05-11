@@ -246,9 +246,7 @@ export default function NewProjectPage() {
                       }))}
                       onReorder={handleReorderPendingImages}
                       onDelete={handleDeletePendingImage}
-                      onUpload={
-                        pendingImages.length < 1 ? handleImageUpload : undefined
-                      }
+                      onUpload={handleImageUpload}
                       isUploading={isUploading}
                       onEditAlt={handleEditPendingAlt}
                     />

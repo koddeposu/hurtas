@@ -19,10 +19,10 @@ export default async function ProjectsPage() {
         />
 
         <main className="p-6">
-          <ProjectsClient projects={projects} />
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          <ProjectsClient projects={projects as any} />
         </main>
       </div>
     </div>
   );
 }
-

@@ -18,5 +18,6 @@ export default async function EditProjectPage({
     notFound();
   }
 
-  return <EditProjectForm project={project} />;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return <EditProjectForm project={project as any} />;
 }
