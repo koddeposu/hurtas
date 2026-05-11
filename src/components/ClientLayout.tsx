@@ -56,9 +56,7 @@ export default function ClientLayout({
         }`}
       >
         <PageHero pathname={pathname} />
-        <div
-          className={`w-full ${hideLayout && "h-screen"} ${!hideLayout2 && "px-5 pb-5"}`}
-        >
+        <div className={`w-full ${!hideLayout2 && "px-5 pb-5"}`}>
           {children}
         </div>
       </main>

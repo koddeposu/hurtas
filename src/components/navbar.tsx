@@ -37,12 +37,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
-  type FormEvent,
-  type MouseEvent,
   useEffect,
   useMemo,
   useRef,
   useState,
+  type FormEvent,
+  type MouseEvent,
 } from "react";
 
 interface Category {
@@ -94,6 +94,7 @@ const CORPORATE_LINKS = [
 const NAV_LINKS = [
   { href: "/galeri", labelKey: "gallery" },
   { href: "/blog", labelKey: "blog" },
+  { href: "/katalog", labelKey: "katalog" },
 ] as const;
 
 function normalizeSearchValue(value: string | null | undefined) {
@@ -267,16 +268,18 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
       label: getCategoryDisplayName(child, locale),
     })),
   }));
-  const topLevelCategoryLinks = getTopLevelCategories(categories).map((item) => ({
-    ...item,
-    href: getCategoryHref(categories, item),
-    label: getCategoryDisplayName(item, locale),
-    children: getChildCategories(categories, item.id).map((child) => ({
-      ...child,
-      href: getCategoryHref(categories, child),
-      label: getCategoryDisplayName(child, locale),
-    })),
-  }));
+  const topLevelCategoryLinks = getTopLevelCategories(categories).map(
+    (item) => ({
+      ...item,
+      href: getCategoryHref(categories, item),
+      label: getCategoryDisplayName(item, locale),
+      children: getChildCategories(categories, item.id).map((child) => ({
+        ...child,
+        href: getCategoryHref(categories, child),
+        label: getCategoryDisplayName(child, locale),
+      })),
+    }),
+  );
   const normalizedProductSearchQuery = normalizeSearchValue(productSearchQuery);
   const productSearchResults = useMemo(() => {
     if (!normalizedProductSearchQuery) return [];
@@ -320,7 +323,9 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
 
     const queryString = query.toString();
     setIsProductSearchOpen(false);
-    router.push(localizedPath(queryString ? `${nextPath}?${queryString}` : nextPath));
+    router.push(
+      localizedPath(queryString ? `${nextPath}?${queryString}` : nextPath),
+    );
   };
 
   const isExactActive = (href: string) => pathname === href;
@@ -440,7 +445,10 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
           }`;
 
       return (
-        <div key={`nav-category-${compact ? "compact" : "main"}-${item.id}`} className="group relative">
+        <div
+          key={`nav-category-${compact ? "compact" : "main"}-${item.id}`}
+          className="group relative"
+        >
           <Link
             href={localizedPath(item.href)}
             prefetch={false}
@@ -454,9 +462,11 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
 
           {item.children.length > 0 ? (
             <div className="invisible absolute left-0 top-full z-50 w-72 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100">
-              <div className={`overflow-hidden border border-slate-200 bg-white shadow-xl ${
-                compact ? "rounded-xl" : "rounded-2xl"
-              }`}>
+              <div
+                className={`overflow-hidden border border-slate-200 bg-white shadow-xl ${
+                  compact ? "rounded-xl" : "rounded-2xl"
+                }`}
+              >
                 <Link
                   href={localizedPath(item.href)}
                   prefetch={false}
@@ -885,7 +895,9 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
           </nav>
 
           <div className="ml-auto flex items-center gap-2">
-            <div className="hidden lg:block">{renderLanguageSelector(true)}</div>
+            <div className="hidden lg:block">
+              {renderLanguageSelector(true)}
+            </div>
             <Link
               href={localizedPath("/iletisim")}
               prefetch={false}

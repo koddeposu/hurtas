@@ -22,7 +22,6 @@ const HERO_IMAGES: Record<string, StaticImageData> = {
   "/galeri": GalleryImage,
   "/calistigimiz-markalar": BrandsImage,
   "/tse-onayli-belgeler": TSEImage,
-  "/katalog": BlogImage,
 };
 
 function getHeroData(
@@ -73,9 +72,12 @@ export function PageHero({ pathname }: { pathname: string }) {
           src={data.image}
           alt=""
           fill
-          priority
+          preload
+          fetchPriority="high"
+          loading="eager"
+          placeholder="blur"
           sizes="100vw"
-          quality={70}
+          quality={60}
           className="object-cover"
           aria-hidden="true"
         />

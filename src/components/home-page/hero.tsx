@@ -21,7 +21,7 @@ import {
 import { handleCall, handleWhatsApp } from "@/lib/analytics/googleAds";
 import { ALL_PRODUCTS_PATH } from "@/lib/productRoutes";
 import { CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -42,6 +42,58 @@ const SLIDE_IMAGES = [
     mobilImage: HeroMobilSlideImage3,
   },
 ];
+
+const HERO_IMAGE_SIZES = "100vw";
+
+function HeroSlidePicture({
+  slide,
+  alt,
+  isActive,
+  isFirst,
+}: {
+  slide: (typeof SLIDE_IMAGES)[number];
+  alt: string;
+  isActive: boolean;
+  isFirst: boolean;
+}) {
+  const {
+    props: { srcSet: desktopSrcSet, sizes: desktopSizes },
+  } = getImageProps({
+    src: slide.image,
+    alt,
+    fill: true,
+    sizes: HERO_IMAGE_SIZES,
+    quality: isFirst ? 70 : 60,
+  });
+
+  return (
+    <div
+      className={`absolute inset-0 overflow-hidden ${
+        isActive ? "hero-zoom" : ""
+      }`}
+    >
+      <picture>
+        <source
+          media="(min-width: 768px)"
+          srcSet={desktopSrcSet}
+          sizes={desktopSizes}
+        />
+        <Image
+          src={slide.mobilImage}
+          alt={alt}
+          fill
+          fetchPriority={isFirst ? "high" : "auto"}
+          loading={isFirst ? "eager" : "lazy"}
+          quality={isFirst ? 70 : 60}
+          placeholder="blur"
+          sizes={HERO_IMAGE_SIZES}
+          className="object-cover"
+        />
+      </picture>
+      <div className="absolute inset-0 bg-gradient-to-r from-[#152f51]/90 via-[#152f51]/62 to-slate-950/36 md:from-[#152f51]/88 md:via-[#152f51]/50 md:to-slate-950/24" />
+    </div>
+  );
+}
 
 export const Hero4 = () => {
   const dict = useDictionary();
@@ -126,45 +178,12 @@ export const Hero4 = () => {
               return (
                 <CarouselItem key={slide.id} className="h-full basis-full pl-0">
                   <div className="relative h-full overflow-hidden">
-                    <div
-                      className={`absolute inset-0 hidden md:block ${
-                        isActive ? "hero-zoom" : ""
-                      }`}
-                    >
-                      <Image
-                        src={slide.image}
-                        alt={slideText.title}
-                        fill
-                        preload={index === 0}
-                        fetchPriority={index === 0 ? "high" : "auto"}
-                        loading={index === 0 ? "eager" : "lazy"}
-                        quality={80}
-                        placeholder="blur"
-                        sizes="100vw"
-                        className="object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#152f51]/88 via-[#152f51]/50 to-slate-950/24" />
-                    </div>
-
-                    <div
-                      className={`absolute inset-0 md:hidden ${
-                        isActive ? "hero-zoom" : ""
-                      }`}
-                    >
-                      <Image
-                        src={slide.mobilImage}
-                        alt={slideText.title}
-                        fill
-                        preload={index === 0}
-                        fetchPriority={index === 0 ? "high" : "auto"}
-                        loading={index === 0 ? "eager" : "lazy"}
-                        quality={80}
-                        placeholder="blur"
-                        sizes="100vw"
-                        className="object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#152f51]/90 via-[#152f51]/62 to-slate-950/36" />
-                    </div>
+                    <HeroSlidePicture
+                      slide={slide}
+                      alt={slideText.title}
+                      isActive={isActive}
+                      isFirst={index === 0}
+                    />
                   </div>
                 </CarouselItem>
               );

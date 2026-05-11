@@ -164,14 +164,22 @@ export function getLocalizedCategoryField<
       string | null | undefined
     >
   >,
->(category: T, field: "name" | "title" | "description" | "subtitle" | "subdescription", locale: Locale) {
+>(
+  category: T,
+  field: "name" | "title" | "description" | "subtitle" | "subdescription",
+  locale: Locale,
+) {
   const suffix = locale === "en" ? "En" : locale === "ar" ? "Ar" : "";
   const localizedKey = `${field}${suffix}`;
 
   return (
-    getFilledText(category[localizedKey as keyof T] as string | null | undefined) ??
+    getFilledText(
+      category[localizedKey as keyof T] as string | null | undefined,
+    ) ??
     (locale === "ar"
-      ? getFilledText(category[`${field}En` as keyof T] as string | null | undefined)
+      ? getFilledText(
+          category[`${field}En` as keyof T] as string | null | undefined,
+        )
       : undefined) ??
     getFilledText(category[field])
   );
@@ -180,7 +188,12 @@ export function getLocalizedCategoryField<
 export function getLocalizedProductName<
   T extends { name: string; nameEn?: string | null; nameAr?: string | null },
 >(product: T, locale: Locale = DEFAULT_LOCALE) {
-  return pickLocalizedText(locale, product.name, product.nameEn, product.nameAr);
+  return pickLocalizedText(
+    locale,
+    product.name,
+    product.nameEn,
+    product.nameAr,
+  );
 }
 
 export function getLocalizedProductDescription<
@@ -302,6 +315,7 @@ export const dictionaries = {
     nav: {
       corporate: "Kurumsal",
       gallery: "Galeri",
+      katalog: "katalog",
       blog: "Blog",
       contact: "İletişim",
       brands: "Çalıştığımız Markalar",
@@ -671,8 +685,7 @@ export const dictionaries = {
       all: "Tümü",
       notFound: "Ürün Bulunamadı",
       notFoundSearch: '"{query}" araması için uygun ürün bulunamadı.',
-      notFoundCategory:
-        '"{category}" kategorisinde henüz ürün bulunmuyor.',
+      notFoundCategory: '"{category}" kategorisinde henüz ürün bulunmuyor.',
       notAdded: "Henüz ürün eklenmemiş.",
       seeAll: "Tüm Ürünleri Gör",
       imageZoom: "Ürün görselini büyüt",
@@ -904,8 +917,7 @@ export const dictionaries = {
       minutes: "min",
     },
     seo: {
-      siteTitle:
-        "Hürtaş Concrete | Concrete Pipes, Manholes, Kerbs and Pavers",
+      siteTitle: "Hürtaş Concrete | Concrete Pipes, Manholes, Kerbs and Pavers",
       siteDescription:
         "Contact Hürtaş Concrete for concrete pipes, paving stones, kerbs and infrastructure elements.",
       siteOgTitle:
@@ -945,7 +957,8 @@ export const dictionaries = {
         "Learn about Hürtaş Concrete's TSE document approach, quality standards and concrete element production processes.",
       notFoundTitle: "Page Not Found | Hürtaş Concrete",
       productNotFoundTitle: "Product Not Found | Hürtaş Concrete",
-      productNotFoundDescription: "The product you are looking for was not found.",
+      productNotFoundDescription:
+        "The product you are looking for was not found.",
       categoryNotFoundTitle: "Category Not Found",
     },
     nav: {
@@ -1068,7 +1081,8 @@ export const dictionaries = {
     faq: {
       label: "Frequently Asked Questions",
       cta: "Request a Quote",
-      homepageTitle: "About Concrete Infrastructure and Superstructure Products",
+      homepageTitle:
+        "About Concrete Infrastructure and Superstructure Products",
       homepageAccent: "Frequently Asked Questions",
       homepageDescription:
         "Find answers about concrete pipes, parcel manholes, kerbs, paving stones, box culverts, concrete barriers and more.",
@@ -1156,7 +1170,11 @@ export const dictionaries = {
       title: "Project-ready concrete products.",
       description:
         "We quickly clarify the right product, quantity and delivery plan for your need.",
-      items: ["Standard production", "Clear product selection", "Planned delivery"],
+      items: [
+        "Standard production",
+        "Clear product selection",
+        "Planned delivery",
+      ],
     },
     drone: {
       eyebrow: "Site Footage",
@@ -1274,7 +1292,8 @@ export const dictionaries = {
       addressSub: "You are welcome to visit our facilities",
       mapTitle: "Hürtaş Concrete Head Office Location",
       directions: "Directions",
-      directionsText: "You can get directions to visit our production facilities.",
+      directionsText:
+        "You can get directions to visit our production facilities.",
       openMaps: "Open in Maps",
       copy: "copy",
       copied: "✓ Copied!",
@@ -1300,7 +1319,8 @@ export const dictionaries = {
       messageLabel: "Message / Product Need",
       messagePlaceholder: "Briefly tell us about your project...",
       verifyError: "Please wait for verification and try again.",
-      submitError: "An error occurred while sending the form. Please try again.",
+      submitError:
+        "An error occurred while sending the form. Please try again.",
       connectionError: "A connection error occurred. Please try again.",
       submitting: "Sending...",
       submit: "Send Request",
@@ -1388,7 +1408,8 @@ export const dictionaries = {
     gallery: {
       empty: "No projects are available yet.",
       visualToProduct: "From Visual to Product",
-      title: "Describe the concrete element you do not know by using the gallery",
+      title:
+        "Describe the concrete element you do not know by using the gallery",
       description:
         "A product searched as pipe, culvert, manhole, rainwater channel, roadside stone or floor stone may correspond to concrete pipe, manhole element, kerb, paving stone, channel, culvert or slope stone in the gallery.",
       quote: "Request a Quote",
@@ -1454,7 +1475,11 @@ export const dictionaries = {
           text: "We offer solutions for concrete products needed in pavements, gardens, fields and road arrangements.",
         },
       ],
-      bullets: ["Standard product selection", "Planned delivery", "Trackable communication"],
+      bullets: [
+        "Standard product selection",
+        "Planned delivery",
+        "Trackable communication",
+      ],
     },
     argePage: {
       eyebrow: "Research and Development",
@@ -1463,8 +1488,7 @@ export const dictionaries = {
       description:
         "Our R&D approach focuses on improving product quality, production continuity and supply plans that fit project site needs.",
       approachEyebrow: "Our R&D Approach",
-      approachTitle:
-        "We develop field needs with engineering data.",
+      approachTitle: "We develop field needs with engineering data.",
       paragraphs: [
         "HÜRTAŞ CONCRETE strengthens its position in the sector not only with quality production but also with its focus on research and development.",
         "We develop innovative solutions at every stage of concrete elements by considering field needs, engineering data and technological developments.",
@@ -1479,7 +1503,8 @@ export const dictionaries = {
         "New-generation concrete pipe, manhole, slope stone, paver and barrier systems",
       ],
       supportEyebrow: "Project Support",
-      supportTitle: "Contact us for a product solution suitable for your project.",
+      supportTitle:
+        "Contact us for a product solution suitable for your project.",
       cta: "Contact Us",
       imageAlts: [
         "Hürtaş Concrete R&D and laboratory work",
@@ -1547,18 +1572,15 @@ export const dictionaries = {
       minutes: "دقيقة",
     },
     seo: {
-      siteTitle:
-        "هورتاش للخرسانة | أنابيب خرسانية ومناهل وبردورات وإنترلوك",
+      siteTitle: "هورتاش للخرسانة | أنابيب خرسانية ومناهل وبردورات وإنترلوك",
       siteDescription:
         "تواصل مع هورتاش للخرسانة للحصول على الأنابيب الخرسانية وحجارة الرصف والبردورات وعناصر البنية التحتية.",
-      siteOgTitle:
-        "هورتاش للخرسانة | عناصر خرسانية للبنية التحتية والفوقية",
+      siteOgTitle: "هورتاش للخرسانة | عناصر خرسانية للبنية التحتية والفوقية",
       siteOgDescription:
         "أنابيب خرسانية ومسلحة، عناصر مناهل، عبارات صندوقية، بردورات، حجارة رصف ومنتجات خرسانية للمواقع من هورتاش.",
       locale: "ar",
       category: "Construction Materials",
-      homeTitle:
-        "هورتاش للخرسانة | أنابيب خرسانية ومناهل وبردورات وحجارة رصف",
+      homeTitle: "هورتاش للخرسانة | أنابيب خرسانية ومناهل وبردورات وحجارة رصف",
       homeDescription:
         "تنتج هورتاش للخرسانة الأنابيب الخرسانية والمسلحة، مناهل التفتيش، مناهل parcel، العبارات الصندوقية، البردورات، حجارة الرصف، أحجار المنحدرات والحواجز الخرسانية.",
       productsTitle: "كل المنتجات | هورتاش للخرسانة",
@@ -1567,8 +1589,7 @@ export const dictionaries = {
       blogTitle: "المدونة | هورتاش للخرسانة",
       blogDescription:
         "أدلة حول اختيار وتوريد وتطبيق الأنابيب الخرسانية وحجارة الرصف والبردورات ومنتجات البنية التحتية.",
-      galleryTitle:
-        "المعرض | صور أنابيب ومناهل وبردورات وحجارة رصف هورتاش",
+      galleryTitle: "المعرض | صور أنابيب ومناهل وبردورات وحجارة رصف هورتاش",
       galleryDescription:
         "استعرض صور المنتجات والمواقع للأنابيب الخرسانية وعناصر المناهل والعبارات الصندوقية والبردورات وحجارة الرصف.",
       aboutTitle: "من نحن | هورتاش للعناصر الخرسانية",
@@ -1796,8 +1817,7 @@ export const dictionaries = {
     },
     supply: {
       title: "منتجات خرسانية جاهزة للمشاريع.",
-      description:
-        "نوضح بسرعة المنتج والكمية وخطة التسليم المناسبة لاحتياجك.",
+      description: "نوضح بسرعة المنتج والكمية وخطة التسليم المناسبة لاحتياجك.",
       items: ["إنتاج قياسي", "اختيار واضح للمنتج", "تسليم مخطط"],
     },
     drone: {
