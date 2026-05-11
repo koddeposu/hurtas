@@ -1,8 +1,19 @@
 "use client";
 
 import Logo from "@/assets/ana-logo.webp";
+import {
+  useDictionary,
+  useLocale,
+  useLocalizedPath,
+} from "@/components/i18n-provider";
 import { handleCall, handleWhatsApp } from "@/lib/analytics/googleAds";
 import { CONTACT_INFO } from "@/lib/contact";
+import {
+  LANGUAGE_OPTIONS,
+  localizePath,
+  stripLocaleFromPathname,
+  type Locale,
+} from "@/lib/i18n";
 import {
   ALL_PRODUCTS_PATH,
   getCategoryDisplayName,
@@ -13,6 +24,7 @@ import {
 } from "@/lib/productRoutes";
 import {
   ChevronDown,
+  Globe2,
   Mail,
   MapPin,
   Menu,
@@ -24,13 +36,24 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import {
+  type FormEvent,
+  type MouseEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 interface Category {
   id: string;
   parentId: string | null;
   name: string;
+  nameEn?: string | null;
+  nameAr?: string | null;
   title: string | null;
+  titleEn?: string | null;
+  titleAr?: string | null;
   slug: string;
   order: number;
 }
@@ -61,17 +84,17 @@ const COMPANY = {
 };
 
 const CORPORATE_LINKS = [
-  { href: "/calistigimiz-markalar", label: "Çalıştığımız Markalar" },
-  { href: "/hakkimizda", label: "Hakkımızda" },
-  { href: "/arge", label: "Arge" },
-  { href: "/iletisim", label: "İletişim" },
-  { href: "/tse-onayli-belgeler", label: "TSE Onaylı Belgeler" },
-];
+  { href: "/calistigimiz-markalar", labelKey: "brands" },
+  { href: "/hakkimizda", labelKey: "about" },
+  { href: "/arge", labelKey: "arge" },
+  { href: "/iletisim", labelKey: "contact" },
+  { href: "/tse-onayli-belgeler", labelKey: "tse" },
+] as const;
 
 const NAV_LINKS = [
-  { href: "/galeri", label: "Galeri" },
-  { href: "/blog", label: "Blog" },
-];
+  { href: "/galeri", labelKey: "gallery" },
+  { href: "/blog", labelKey: "blog" },
+] as const;
 
 function normalizeSearchValue(value: string | null | undefined) {
   return (value ?? "")
@@ -83,6 +106,9 @@ function normalizeSearchValue(value: string | null | undefined) {
 }
 
 const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
+  const locale = useLocale();
+  const dict = useDictionary();
+  const localizedPath = useLocalizedPath();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileCorporateOpen, setIsMobileCorporateOpen] = useState(false);
   const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(true);
@@ -93,7 +119,8 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
   const [showCompactNavbar, setShowCompactNavbar] = useState(false);
   const [showMobileNavbar, setShowMobileNavbar] = useState(true);
   const [mainNavbarHeight, setMainNavbarHeight] = useState(260);
-  const pathname = usePathname();
+  const rawPathname = usePathname();
+  const pathname = stripLocaleFromPathname(rawPathname);
   const router = useRouter();
   const lastScrollYRef = useRef(0);
   const isAtTopRef = useRef(true);
@@ -233,21 +260,21 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
   const categoryLinks = categories.map((item) => ({
     ...item,
     href: getCategoryHref(categories, item),
-    label: getCategoryDisplayName(item),
+    label: getCategoryDisplayName(item, locale),
     children: getChildCategories(categories, item.id).map((child) => ({
       ...child,
       href: getCategoryHref(categories, child),
-      label: getCategoryDisplayName(child),
+      label: getCategoryDisplayName(child, locale),
     })),
   }));
   const topLevelCategoryLinks = getTopLevelCategories(categories).map((item) => ({
     ...item,
     href: getCategoryHref(categories, item),
-    label: getCategoryDisplayName(item),
+    label: getCategoryDisplayName(item, locale),
     children: getChildCategories(categories, item.id).map((child) => ({
       ...child,
       href: getCategoryHref(categories, child),
-      label: getCategoryDisplayName(child),
+      label: getCategoryDisplayName(child, locale),
     })),
   }));
   const normalizedProductSearchQuery = normalizeSearchValue(productSearchQuery);
@@ -293,7 +320,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
 
     const queryString = query.toString();
     setIsProductSearchOpen(false);
-    router.push(queryString ? `${nextPath}?${queryString}` : nextPath);
+    router.push(localizedPath(queryString ? `${nextPath}?${queryString}` : nextPath));
   };
 
   const isExactActive = (href: string) => pathname === href;
@@ -305,6 +332,62 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
   const pathSegments = pathname.split("/").filter(Boolean);
   const isBlogSlugPage =
     pathSegments[0] === "blog" && pathSegments.length === 2;
+  const currentLanguage =
+    LANGUAGE_OPTIONS.find((item) => item.locale === locale) ??
+    LANGUAGE_OPTIONS[0];
+  const getLanguageHref = (nextLocale: Locale) =>
+    localizePath(pathname, nextLocale);
+  const handleLanguageChange = (
+    event: MouseEvent<HTMLAnchorElement>,
+    nextLocale: Locale,
+  ) => {
+    if (nextLocale === locale) return;
+
+    event.preventDefault();
+    setIsMobileMenuOpen(false);
+
+    const currentPath = `${stripLocaleFromPathname(window.location.pathname)}${
+      window.location.search
+    }${window.location.hash}`;
+
+    window.location.assign(localizePath(currentPath, nextLocale));
+  };
+  const renderLanguageSelector = (compact = false) => (
+    <div className="group relative">
+      <button
+        type="button"
+        aria-label={dict.nav.language}
+        className={`inline-flex items-center gap-1.5 rounded-[2px] border font-black uppercase transition-colors ${
+          compact
+            ? "h-10 border-slate-200 bg-white px-3 text-[11px] tracking-[0.12em] text-slate-700 hover:bg-[#f4f7fb]"
+            : "h-12 border-[#152f51]/15 bg-white px-3 text-xs tracking-[0.12em] text-[#152f51] hover:bg-[#f4f7fb]"
+        }`}
+      >
+        <Globe2 className="h-4 w-4" />
+        {currentLanguage.shortLabel}
+        <ChevronDown className="h-3.5 w-3.5" />
+      </button>
+      <div className="invisible absolute right-0 top-full z-[80] w-40 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100">
+        <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
+          {LANGUAGE_OPTIONS.map((item) => (
+            <Link
+              key={item.locale}
+              href={getLanguageHref(item.locale)}
+              prefetch={false}
+              onClick={(event) => handleLanguageChange(event, item.locale)}
+              className={`block px-4 py-3 text-sm font-bold transition-colors ${
+                item.locale === locale
+                  ? "bg-[#f4f7fb] text-[#152f51]"
+                  : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
+              }`}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
   const renderCategoryNavItems = (compact = false) =>
     topLevelCategoryLinks.map((item) => {
       const isActive = isCategoryPathActive(pathname, item.href);
@@ -322,7 +405,11 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
 
       return (
         <div key={`nav-category-${compact ? "compact" : "main"}-${item.id}`} className="group relative">
-          <Link href={item.href} prefetch={false} className={linkClass}>
+          <Link
+            href={localizedPath(item.href)}
+            prefetch={false}
+            className={linkClass}
+          >
             <span>{item.label}</span>
             {item.children.length > 0 ? (
               <ChevronDown className={compact ? "h-3.5 w-3.5" : "h-4 w-4"} />
@@ -335,7 +422,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                 compact ? "rounded-xl" : "rounded-2xl"
               }`}>
                 <Link
-                  href={item.href}
+                  href={localizedPath(item.href)}
                   prefetch={false}
                   className={`block border-b border-slate-100 px-4 py-3 text-sm font-semibold transition-colors ${
                     pathname === item.href
@@ -343,12 +430,12 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                       : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
                   }`}
                 >
-                  Tüm {item.label}
+                  {dict.nav.allCategoryPrefix} {item.label}
                 </Link>
                 {item.children.map((child) => (
                   <Link
                     key={`nav-child-${compact ? "compact" : "main"}-${child.id}`}
-                    href={child.href}
+                    href={localizedPath(child.href)}
                     prefetch={false}
                     className={`block border-b border-slate-100 px-4 py-3 text-sm font-semibold transition-colors last:border-b-0 ${
                       pathname === child.href
@@ -401,7 +488,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                 {COMPANY.email}
               </a>
               <Link
-                href="/iletisim"
+                href={localizedPath("/iletisim")}
                 prefetch={false}
                 className="inline-flex items-center gap-2 transition-colors hover:text-white"
               >
@@ -413,7 +500,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
 
           <div className="mx-auto flex max-w-7xl items-center gap-8 bg-white px-4 py-5 sm:px-6">
             <Link
-              href="/"
+              href={localizedPath("/")}
               prefetch={false}
               className="inline-flex shrink-0 items-center gap-4"
               onClick={closeMobileMenu}
@@ -437,7 +524,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                   Hürtaş
                 </span>
                 <span className="block text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
-                  Beton Elemanları
+                  {dict.common.brandTagline}
                 </span>
               </span>
             </Link>
@@ -449,7 +536,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                   className="flex min-w-0 overflow-hidden rounded-[3px] border border-[#152f51]/15 bg-white shadow-[0_16px_36px_-32px_rgba(21,47,81,0.65)]"
                 >
                   <label htmlFor="desktop-product-category" className="sr-only">
-                    Ürün kategorisi
+                    {dict.nav.productCategory}
                   </label>
                   <select
                     id="desktop-product-category"
@@ -460,7 +547,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                     }}
                     className="w-44 shrink-0 border-r border-[#152f51]/15 bg-[#f4f7fb] px-3 text-sm font-bold text-[#152f51] outline-none transition-colors hover:bg-[#e9eff6] "
                   >
-                    <option value="all">Tüm Ürünler</option>
+                    <option value="all">{dict.common.allProducts}</option>
                     {categoryLinks.map((item) => (
                       <option
                         key={`desktop-search-${item.id}`}
@@ -472,7 +559,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                   </select>
 
                   <label htmlFor="desktop-product-search" className="sr-only">
-                    Ürün ara
+                    {dict.nav.searchProduct}
                   </label>
                   <div className="relative min-w-0 flex-1">
                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6f839d]" />
@@ -485,7 +572,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                         setIsProductSearchOpen(true);
                       }}
                       onFocus={() => setIsProductSearchOpen(true)}
-                      placeholder="Ürün ara..."
+                      placeholder={dict.nav.searchPlaceholder}
                       className="h-12 w-full min-w-0 px-10 text-sm font-semibold text-[#152f51] outline-none placeholder:text-slate-400"
                     />
                   </div>
@@ -493,7 +580,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                   <button
                     type="submit"
                     className="inline-flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center bg-[#152f51] text-white transition-colors hover:bg-[#10243d]"
-                    aria-label="Ürün ara"
+                    aria-label={dict.nav.searchProduct}
                   >
                     <Search className="h-4 w-4" />
                   </button>
@@ -506,7 +593,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                         {productSearchResults.map((item) => (
                           <Link
                             key={`desktop-product-result-${item.id}`}
-                            href={item.href}
+                            href={localizedPath(item.href)}
                             prefetch={false}
                             onClick={() => setIsProductSearchOpen(false)}
                             className="group flex items-center gap-3 border-b border-slate-100 px-3 py-3 transition-colors last:border-b-0 hover:bg-[#f4f7fb]"
@@ -541,7 +628,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                       </div>
                     ) : (
                       <div className="px-4 py-5 text-sm font-semibold text-slate-500">
-                        Bu aramaya uygun ürün bulunamadı.
+                        {dict.nav.noSearchResults}
                       </div>
                     )}
                   </div>
@@ -554,15 +641,16 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                 className="inline-flex h-12 shrink-0 cursor-pointer items-center gap-2 rounded-[2px] bg-[#d6a94a] px-4 text-xs font-black uppercase tracking-[0.12em] text-[#152f51] transition-colors hover:bg-[#bf943b] ads-whatsapp"
               >
                 <MessageCircle className="h-4 w-4" />
-                WhatsApp
+                {dict.common.whatsapp}
               </button>
+              {renderLanguageSelector()}
               <Link
-                href="/iletisim"
+                href={localizedPath("/iletisim")}
                 prefetch={false}
                 className="inline-flex h-12 shrink-0 cursor-pointer items-center gap-2 rounded-[2px] bg-[#152f51] px-4 text-xs font-black uppercase tracking-[0.12em] text-white transition-colors hover:bg-[#10243d]"
               >
                 <Mail className="h-4 w-4" />
-                İletişim
+                {dict.common.contact}
               </Link>
             </div>
           </div>
@@ -570,7 +658,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
           <div className="flex min-h-16 items-center justify-center bg-[#152f51] px-4 sm:px-6">
             <nav className="hidden items-center justify-center gap-2 lg:flex">
               <Link
-                href="/"
+                href={localizedPath("/")}
                 prefetch={false}
                 className={`rounded-full px-4 py-2 text-sm font-bold uppercase tracking-[0.03em] transition-colors ${
                   isExactActive("/")
@@ -578,11 +666,11 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                     : "text-white hover:bg-white/15"
                 }`}
               >
-                Ana Sayfa
+                {dict.common.home}
               </Link>
 
               <Link
-                href={ALL_PRODUCTS_PATH}
+                href={localizedPath(ALL_PRODUCTS_PATH)}
                 prefetch={false}
                 className={`rounded-full px-4 py-2 text-sm font-bold uppercase tracking-[0.03em] transition-colors ${
                   pathname === ALL_PRODUCTS_PATH
@@ -590,7 +678,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                     : "text-white hover:bg-white/15"
                 }`}
               >
-                Tüm Ürünler
+                {dict.common.allProducts}
               </Link>
 
               {renderCategoryNavItems()}
@@ -604,7 +692,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                       : "text-white group-hover:bg-white/15"
                   }`}
                 >
-                  Kurumsal
+                  {dict.nav.corporate}
                   <ChevronDown className="h-4 w-4" />
                 </button>
                 <div className="invisible absolute left-0 top-full z-50 w-56 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100">
@@ -612,7 +700,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                     {CORPORATE_LINKS.map((item) => (
                       <Link
                         key={item.href}
-                        href={item.href}
+                        href={localizedPath(item.href)}
                         prefetch={false}
                         className={`block border-b border-slate-100 px-4 py-3 text-sm font-semibold transition-colors last:border-b-0 ${
                           isSectionActive(item.href)
@@ -620,7 +708,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                             : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
                         }`}
                       >
-                        {item.label}
+                        {dict.nav[item.labelKey]}
                       </Link>
                     ))}
                   </div>
@@ -630,7 +718,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
               {NAV_LINKS.map((item) => (
                 <Link
                   key={item.href}
-                  href={item.href}
+                  href={localizedPath(item.href)}
                   prefetch={false}
                   className={`rounded-full px-4 py-2 text-sm font-bold uppercase tracking-[0.03em] transition-colors ${
                     isSectionActive(item.href)
@@ -638,7 +726,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                       : "text-white hover:bg-white/15"
                   }`}
                 >
-                  {item.label}
+                  {dict.nav[item.labelKey]}
                 </Link>
               ))}
             </nav>
@@ -659,7 +747,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
       >
         <div className="flex min-h-[5.25rem] w-full items-center gap-3 border-b border-slate-200 bg-white/95 px-4 shadow-[0_12px_34px_-26px_rgba(15,23,42,0.9)] backdrop-blur sm:px-5 m">
           <Link
-            href="/"
+            href={localizedPath("/")}
             prefetch={false}
             className="inline-flex items-center gap-3"
             onClick={closeMobileMenu}
@@ -680,14 +768,14 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                 Hürtaş
               </span>
               <span className="block text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-500 sm:text-[10px]">
-                Beton Elemanları
+                {dict.common.brandTagline}
               </span>
             </span>
           </Link>
 
           <nav className="hidden items-center gap-2 lg:flex">
             <Link
-              href="/"
+              href={localizedPath("/")}
               prefetch={false}
               className={`rounded-full px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] transition-colors ${
                 isExactActive("/")
@@ -695,11 +783,11 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                   : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
               }`}
             >
-              Ana Sayfa
+              {dict.common.home}
             </Link>
 
             <Link
-              href={ALL_PRODUCTS_PATH}
+              href={localizedPath(ALL_PRODUCTS_PATH)}
               prefetch={false}
               className={`rounded-full px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] transition-colors ${
                 pathname === ALL_PRODUCTS_PATH
@@ -707,7 +795,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                   : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
               }`}
             >
-              Tüm Ürünler
+              {dict.common.allProducts}
             </Link>
 
             {renderCategoryNavItems(true)}
@@ -721,7 +809,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                     : "text-slate-700 group-hover:bg-[#f4f7fb] group-hover:text-[#152f51]"
                 }`}
               >
-                Kurumsal
+                {dict.nav.corporate}
                 <ChevronDown className="h-3.5 w-3.5" />
               </button>
               <div className="invisible absolute left-0 top-full z-50 w-56 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100">
@@ -729,7 +817,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                   {CORPORATE_LINKS.map((item) => (
                     <Link
                       key={`compact-corporate-${item.href}`}
-                      href={item.href}
+                      href={localizedPath(item.href)}
                       prefetch={false}
                       className={`block border-b border-slate-100 px-4 py-3 text-sm font-semibold transition-colors last:border-b-0 ${
                         isSectionActive(item.href)
@@ -737,7 +825,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                           : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
                       }`}
                     >
-                      {item.label}
+                      {dict.nav[item.labelKey]}
                     </Link>
                   ))}
                 </div>
@@ -747,7 +835,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
             {NAV_LINKS.map((item) => (
               <Link
                 key={`compact-nav-${item.href}`}
-                href={item.href}
+                href={localizedPath(item.href)}
                 prefetch={false}
                 className={`rounded-full px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] transition-colors ${
                   isSectionActive(item.href)
@@ -755,18 +843,19 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                     : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
                 }`}
               >
-                {item.label}
+                {dict.nav[item.labelKey]}
               </Link>
             ))}
           </nav>
 
           <div className="ml-auto flex items-center gap-2">
+            <div className="hidden lg:block">{renderLanguageSelector(true)}</div>
             <Link
-              href="/iletisim"
+              href={localizedPath("/iletisim")}
               prefetch={false}
               className="hidden rounded-xl bg-[#152f51] px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] text-white transition-colors hover:bg-[#10243d] lg:inline-flex"
             >
-              İletişim
+              {dict.common.contact}
             </Link>
             {isBlogSlugPage ? (
               <button
@@ -775,12 +864,14 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                 className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-[#152f51] px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] text-white transition-colors hover:bg-[#10243d] lg:hidden ads-phone-call"
               >
                 <PhoneCall className="h-4 w-4" />
-                Bizi Arayın
+                {dict.common.callUs}
               </button>
             ) : (
               <button
                 type="button"
-                aria-label={isMobileMenuOpen ? "Menüyü kapat" : "Menüyü aç"}
+                aria-label={
+                  isMobileMenuOpen ? dict.nav.closeMenu : dict.nav.openMenu
+                }
                 onClick={toggleMobileMenu}
                 className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-[#152f51]/30 bg-white px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#152f51] shadow-[0_12px_28px_-20px_rgba(21,47,81,0.55)] transition-all hover:bg-[#f4f7fb] lg:hidden"
               >
@@ -789,7 +880,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                 ) : (
                   <Menu className="h-4.5 w-4.5" />
                 )}
-                <span>{isMobileMenuOpen ? "Kapat" : "Menü"}</span>
+                <span>{isMobileMenuOpen ? dict.nav.close : dict.nav.menu}</span>
               </button>
             )}
           </div>
@@ -800,7 +891,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
         <div className="fixed inset-0 z-[60] lg:hidden">
           <button
             type="button"
-            aria-label="Menüyü kapat"
+            aria-label={dict.nav.closeMenu}
             onClick={closeMobileMenu}
             className="absolute inset-0 bg-black/45"
           />
@@ -808,7 +899,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
           <aside className="absolute right-0 top-0 flex h-full w-[86%] max-w-sm flex-col overflow-hidden border-l border-slate-200 bg-white shadow-[0_24px_80px_-28px_rgba(15,23,42,0.35)] pb-24">
             <div className="flex items-center justify-between border-b border-slate-200 px-4 py-4">
               <Link
-                href="/"
+                href={localizedPath("/")}
                 prefetch={false}
                 onClick={closeMobileMenu}
                 className="inline-flex items-center gap-3"
@@ -827,14 +918,14 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                     Hürtaş
                   </span>
                   <span className="block text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-500">
-                    Beton Elemanları
+                    {dict.common.brandTagline}
                   </span>
                 </span>
               </Link>
 
               <button
                 type="button"
-                aria-label="Menüyü kapat"
+                aria-label={dict.nav.closeMenu}
                 onClick={closeMobileMenu}
                 className="rounded-xl border border-slate-200 p-2 text-slate-700 transition-colors hover:bg-slate-50"
               >
@@ -845,7 +936,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
             <div className="flex-1 overflow-y-auto px-4 py-4">
               <div className="mt-4 grid gap-3">
                 <Link
-                  href="/"
+                  href={localizedPath("/")}
                   prefetch={false}
                   onClick={closeMobileMenu}
                   className={`rounded-2xl border px-4 py-3 text-sm font-extrabold uppercase tracking-[0.1em] transition-all duration-200 ${
@@ -854,8 +945,34 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                       : "border-slate-200 bg-white text-slate-800 hover:border-slate-200 hover:bg-slate-50"
                   }`}
                 >
-                  Ana Sayfa
+                  {dict.common.home}
                 </Link>
+
+                <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+                  <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+                    {dict.nav.language}
+                  </p>
+                  <div className="mt-3 grid grid-cols-3 gap-2">
+                    {LANGUAGE_OPTIONS.map((item) => (
+                      <Link
+                        key={`mobile-language-${item.locale}`}
+                        href={getLanguageHref(item.locale)}
+                        prefetch={false}
+                        onClick={(event) => {
+                          closeMobileMenu();
+                          handleLanguageChange(event, item.locale);
+                        }}
+                        className={`rounded-xl px-3 py-2 text-center text-sm font-black transition-colors ${
+                          item.locale === locale
+                            ? "bg-[#152f51] text-white"
+                            : "bg-[#f4f7fb] text-slate-700"
+                        }`}
+                      >
+                        {item.shortLabel}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
 
                 <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
                   <button
@@ -863,7 +980,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                     onClick={() => setIsMobileCorporateOpen((prev) => !prev)}
                     className="inline-flex w-full items-center justify-between text-xs font-black uppercase tracking-[0.18em] text-slate-500"
                   >
-                    Kurumsal
+                    {dict.nav.corporate}
                     <ChevronDown
                       className={`h-4 w-4 transition-transform ${
                         isMobileCorporateOpen ? "rotate-180" : ""
@@ -875,7 +992,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                       {CORPORATE_LINKS.map((item) => (
                         <Link
                           key={`mobile-corporate-${item.href}`}
-                          href={item.href}
+                          href={localizedPath(item.href)}
                           prefetch={false}
                           onClick={closeMobileMenu}
                           className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
@@ -884,7 +1001,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                               : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
                           }`}
                         >
-                          {item.label}
+                          {dict.nav[item.labelKey]}
                         </Link>
                       ))}
                     </div>
@@ -897,7 +1014,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                     onClick={() => setIsMobileCategoriesOpen((prev) => !prev)}
                     className="inline-flex w-full items-center justify-between text-xs font-black uppercase tracking-[0.18em] text-slate-500"
                   >
-                    Beton Ürünleri
+                    {dict.common.concreteProducts}
                     <ChevronDown
                       className={`h-4 w-4 transition-transform ${
                         isMobileCategoriesOpen ? "rotate-180" : ""
@@ -907,7 +1024,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                   {isMobileCategoriesOpen ? (
                     <div className="mt-3 grid gap-2">
                       <Link
-                        href={ALL_PRODUCTS_PATH}
+                        href={localizedPath(ALL_PRODUCTS_PATH)}
                         prefetch={false}
                         onClick={closeMobileMenu}
                         className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
@@ -916,12 +1033,12 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                             : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
                         }`}
                       >
-                        Tüm Ürünler
+                        {dict.common.allProducts}
                       </Link>
                       {topLevelCategoryLinks.map((item) => (
                         <div key={`mobile-category-${item.id}`}>
                           <Link
-                            href={item.href}
+                            href={localizedPath(item.href)}
                             prefetch={false}
                             onClick={closeMobileMenu}
                             className={`block rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
@@ -937,7 +1054,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                               {item.children.map((child) => (
                                 <Link
                                   key={`mobile-category-child-${child.id}`}
-                                  href={child.href}
+                                  href={localizedPath(child.href)}
                                   prefetch={false}
                                   onClick={closeMobileMenu}
                                   className={`block rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
@@ -959,13 +1076,13 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
 
                 <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
                   <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-500">
-                    Diğer Sayfalar
+                    {dict.nav.otherPages}
                   </p>
                   <div className="mt-3 grid gap-2">
                     {NAV_LINKS.map((item) => (
                       <Link
                         key={`mobile-nav-${item.href}`}
-                        href={item.href}
+                        href={localizedPath(item.href)}
                         prefetch={false}
                         onClick={closeMobileMenu}
                         className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
@@ -974,7 +1091,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                             : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
                         }`}
                       >
-                        {item.label}
+                        {dict.nav[item.labelKey]}
                       </Link>
                     ))}
                   </div>

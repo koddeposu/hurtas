@@ -1,3 +1,9 @@
+"use client";
+
+import {
+  useDictionary,
+  useLocalizedPath,
+} from "@/components/i18n-provider";
 import { ArrowUpRight, ChevronDown, HelpCircle } from "lucide-react";
 import Link from "next/link";
 
@@ -21,15 +27,19 @@ export function SeoFaqSection({
   description,
   items,
   ctaHref = "/iletisim",
-  ctaLabel = "Teklif Alın",
+  ctaLabel,
 }: SeoFaqSectionProps) {
+  const dict = useDictionary();
+  const localizedPath = useLocalizedPath();
+  const resolvedCtaLabel = ctaLabel ?? dict.faq.cta;
+
   return (
     <section aria-labelledby="faq-heading" className="mx-auto max-w-7xl ">
       {/* Üst Alan: Başlık ve Açıklama */}
       <div className="text-center mb-14">
         <div className="inline-flex items-center gap-1.5 rounded-[2px] bg-slate-100 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-slate-600">
           <HelpCircle className="h-4 w-4" />
-          Sıkça Sorulan Sorular
+          {dict.faq.label}
         </div>
 
         <h2
@@ -75,11 +85,11 @@ export function SeoFaqSection({
       {/* Alt Aksiyon Butonu */}
       <div className="mt-16 flex justify-center">
         <Link
-          href={ctaHref}
+          href={localizedPath(ctaHref)}
           prefetch={false}
           className="inline-flex items-center gap-2 rounded-[2px] bg-primary px-7 py-3.5 text-sm font-bold uppercase tracking-wider text-white transition-all hover:bg-primary/90 hover:shadow-lg hover:-translate-y-0.5"
         >
-          {ctaLabel}
+          {resolvedCtaLabel}
           <ArrowUpRight className="h-4.5 w-4.5" />
         </Link>
       </div>

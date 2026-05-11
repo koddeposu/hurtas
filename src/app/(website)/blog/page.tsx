@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import { getBlogPostsPaginated, getLatestBlogPosts } from "@/actions/blogActions";
 import { getCategories } from "@/actions/categoryActions";
+import { formatMessage, getDictionary, getMetadataAlternates } from "@/lib/i18n";
+import { getCurrentLocale } from "@/lib/i18n-server";
 import { BlogPageClient } from "./blog-client";
 
 interface BlogPageProps {
@@ -11,20 +13,21 @@ export async function generateMetadata({
   searchParams,
 }: BlogPageProps): Promise<Metadata> {
   const params = await searchParams;
+  const locale = await getCurrentLocale();
+  const dict = getDictionary(locale);
   const page = parseInt(params.page || "1", 10);
   const title =
-    page > 1 ? `Blog - Sayfa ${page} | Hürtaş Beton` : "Blog | Hürtaş Beton";
+    page > 1
+      ? formatMessage(dict.blog.pageTitle, { page })
+      : dict.seo.blogTitle;
 
   return {
     title,
-    description:
-      "Beton boru, parke taşı, bordür ve altyapı beton ürünleri hakkında ürün seçimi, tedarik ve uygulama rehberleri.",
-    alternates: {
-      canonical:
-        page > 1
-          ? `https://www.hurtasbeton.com/blog?page=${page}`
-          : "https://www.hurtasbeton.com/blog",
-    },
+    description: dict.seo.blogDescription,
+    alternates: getMetadataAlternates(
+      page > 1 ? `/blog?page=${page}` : "/blog",
+      locale,
+    ),
   };
 }
 

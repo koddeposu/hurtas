@@ -1,35 +1,39 @@
 import { RandomProductsSliderSection } from "@/components/random-products-slider-section";
+import {
+  getDictionary,
+  getMetadataAlternates,
+} from "@/lib/i18n";
+import { getCurrentLocale } from "@/lib/i18n-server";
 import { Building2, CheckCircle2, Factory, Handshake } from "lucide-react";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Çalıştığımız Markalar | Hürtaş Beton",
-  description:
-    "Hürtaş Beton'un beton elemanları tedarikinde çalıştığı sektörler, proje tipleri ve iş ortaklığı yaklaşımı hakkında bilgi alın.",
-  alternates: {
-    canonical: "https://www.hurtasbeton.com/calistigimiz-markalar",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getCurrentLocale();
+  const dict = getDictionary(locale);
+
+  return {
+    title: dict.seo.brandsTitle,
+    description: dict.seo.brandsDescription,
+    alternates: getMetadataAlternates("/calistigimiz-markalar", locale),
+  };
+}
 
 const PARTNER_GROUPS = [
   {
-    title: "Belediye ve Kamu Projeleri",
-    text: "Altyapı, yol ve çevre düzenleme işleri için beton elemanı tedarik süreçlerinde düzenli planlama sağlıyoruz.",
     icon: Building2,
   },
   {
-    title: "Şantiye ve Müteahhit Ekipleri",
-    text: "Saha programına uygun beton boru, bordür, parke taşı ve tamamlayıcı ürün sevkiyatı planlıyoruz.",
     icon: Factory,
   },
   {
-    title: "Peyzaj ve Çevre Düzenleme",
-    text: "Kaldırım, bahçe, saha ve yol düzenleme işlerinde ihtiyaç duyulan beton ürünleri için çözüm sunuyoruz.",
     icon: Handshake,
   },
 ];
 
-export default function BrandsPage() {
+export default async function BrandsPage() {
+  const locale = await getCurrentLocale();
+  const dict = getDictionary(locale);
+
   return (
     <main className="min-h-screen bg-white px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
       <div className="mx-auto max-w-7xl">
@@ -37,35 +41,36 @@ export default function BrandsPage() {
           <div className="flex items-center gap-3">
             <span className="h-px w-10 bg-[#d6a94a]" aria-hidden="true" />
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#6f839d]">
-              İş Birlikleri
+              {dict.brandsPage.eyebrow}
             </span>
           </div>
           <h2 className="mt-3 max-w-3xl text-2xl font-black tracking-tight text-[#152f51] sm:text-3xl">
-            Farklı ölçeklerdeki projeler için beton elemanı tedariki.
+            {dict.brandsPage.title}
           </h2>
           <p className="mt-3 max-w-3xl text-sm font-medium leading-7 text-slate-600">
-            Hürtaş Beton, marka ve kurum iş birliklerinde ürün standardı,
-            zamanında teslim ve açık iletişim başlıklarını önceliklendirir.
+            {dict.brandsPage.description}
           </p>
         </div>
 
         <section className="mt-8 grid gap-4 md:grid-cols-3">
-          {PARTNER_GROUPS.map((item) => {
+          {PARTNER_GROUPS.map((item, index) => {
             const Icon = item.icon;
+            const content =
+              dict.brandsPage.groups[index] ?? dict.brandsPage.groups[0];
 
             return (
               <article
-                key={item.title}
+                key={content.title}
                 className="border border-slate-200 bg-white p-5 shadow-[0_16px_34px_-30px_rgba(15,23,42,0.18)]"
               >
                 <div className="inline-flex h-11 w-11 items-center justify-center rounded-[2px] bg-[#152f51] text-white">
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-4 text-lg font-black text-slate-900">
-                  {item.title}
+                  {content.title}
                 </h3>
                 <p className="mt-3 text-sm font-medium leading-7 text-slate-600">
-                  {item.text}
+                  {content.text}
                 </p>
               </article>
             );
@@ -74,7 +79,7 @@ export default function BrandsPage() {
 
         <section className="mt-8 border border-slate-200 bg-[#0d1f36] p-5 text-white sm:p-6">
           <div className="grid gap-4 md:grid-cols-3">
-            {["Standart ürün seçimi", "Planlı sevkiyat", "Takip edilebilir iletişim"].map(
+            {dict.brandsPage.bullets.map(
               (item) => (
                 <div key={item} className="flex items-center gap-3">
                   <CheckCircle2 className="h-5 w-5 text-[#d6a94a]" />

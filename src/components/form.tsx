@@ -1,4 +1,5 @@
 "use client";
+import { useDictionary } from "@/components/i18n-provider";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   CheckCircle2,
@@ -14,6 +15,7 @@ import { Turnstile } from "@marsidev/react-turnstile";
 import { submitContactForm } from "@/actions/contactActions";
 
 export const LeadForm = () => {
+  const dict = useDictionary();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -53,7 +55,7 @@ export const LeadForm = () => {
 
     // Validate turnstile token
     if (!turnstileToken) {
-      setError("Lütfen doğrulamayı bekleyin ve tekrar deneyin.");
+      setError(dict.form.verifyError);
       setIsSubmitting(false);
       return;
     }
@@ -68,10 +70,10 @@ export const LeadForm = () => {
         setFormData({ name: "", phone: "", message: "", website: "" });
         setTurnstileToken("");
       } else {
-        setError("Form gönderilirken bir hata oluştu. Lütfen tekrar deneyin.");
+        setError(dict.form.submitError);
       }
     } catch (err) {
-      setError("Bir bağlantı hatası oluştu. Lütfen tekrar deneyin.");
+      setError(dict.form.connectionError);
       console.error("Form submission error:", err);
     } finally {
       setIsSubmitting(false);
@@ -103,25 +105,19 @@ export const LeadForm = () => {
                   viewport={{ once: true }}
                 >
                   <h2 className="text-3xl font-black leading-tight tracking-tighter text-white md:text-4xl">
-                    Ücretsiz <br />
+                    {dict.form.titleBefore} <br />
                     <span className="text-emerald-300 italic">
-                      Danışmanlık
+                      {dict.form.titleAccent}
                     </span>{" "}
-                    Alın.
+                    {dict.form.titleAfter}
                   </h2>
                   <p className="mt-4 text-sm font-medium leading-7 text-white/90">
-                    Hayalinizdeki prefabrik ev projesini uzman ekibimizle
-                    planlayın. Size en uygun çözümü ve bütçeyi birlikte
-                    belirleyelim.
+                    {dict.form.description}
                   </p>
                 </motion.div>
 
                 <div className="space-y-4 pt-4">
-                  {[
-                    "Kişiye özel mimari çizim",
-                    "Detaylı maliyet analizi",
-                    "Zemin ve arazi danışmanlığı",
-                  ].map((item, i) => (
+                  {dict.form.benefits.map((item, i) => (
                     <div
                       key={i}
                     className="flex items-center gap-3 text-sm font-semibold text-white/90"
@@ -153,18 +149,17 @@ export const LeadForm = () => {
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-slate-800">
-                        Mesajınız Alındı!
+                        {dict.form.successTitle}
                       </h3>
                       <p className="text-slate-500 mt-2 max-w-xs mx-auto">
-                        En kısa sürede uzman ekibimiz sizinle iletişime
-                        geçecektir. İlginiz için teşekkürler.
+                        {dict.form.successDescription}
                       </p>
                     </div>
                     <button
                       onClick={() => setIsSuccess(false)}
                       className="text-[#165b39] font-bold text-sm tracking-widest hover:underline"
                     >
-                      YENİ FORM GÖNDER
+                      {dict.form.newForm}
                     </button>
                   </motion.div>
                 ) : (
@@ -180,7 +175,7 @@ export const LeadForm = () => {
                       {/* Ad Soyad */}
                       <div className="space-y-2">
                         <label className="text-xs font-black text-slate-600 uppercase tracking-widest ml-1">
-                          Adınız Soyadınız
+                          {dict.form.nameLabel}
                         </label>
                         <div className="relative group">
                           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-[#165b39] transition-colors">
@@ -192,7 +187,7 @@ export const LeadForm = () => {
                             name="name"
                             value={formData.name}
                             onChange={handleChange}
-                            placeholder="Örn: Ahmet Yılmaz"
+                            placeholder={dict.form.namePlaceholder}
                             className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-4 font-medium text-slate-700 outline-none transition-all placeholder:text-slate-300 focus:border-[#165b39]/40 focus:bg-white focus:ring-4 focus:ring-[#165b39]/5"
                           />
                         </div>
@@ -201,7 +196,7 @@ export const LeadForm = () => {
                       {/* Telefon */}
                       <div className="space-y-2">
                         <label className="text-xs font-black text-slate-600 uppercase tracking-widest ml-1">
-                          Telefon Numaranız
+                          {dict.form.phoneLabel}
                         </label>
                         <div className="relative group">
                           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-300 group-focus-within:text-[#165b39] transition-colors">
@@ -223,7 +218,7 @@ export const LeadForm = () => {
                     {/* Mesaj */}
                     <div className="space-y-2">
                       <label className="text-xs font-black text-slate-600 uppercase tracking-widest ml-1">
-                        Mesajınız / Hayalinizdeki Ev
+                          {dict.form.messageLabel}
                       </label>
                       <div className="relative group">
                         <div className="absolute top-4 left-4 pointer-events-none text-slate-300 group-focus-within:text-[#165b39] transition-colors">
@@ -234,7 +229,7 @@ export const LeadForm = () => {
                           name="message"
                           value={formData.message}
                           onChange={handleChange}
-                          placeholder="Projenizden kısaca bahsedin..."
+                          placeholder={dict.form.messagePlaceholder}
                           className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-12 pr-4 font-medium text-slate-700 outline-none transition-all placeholder:text-slate-300 focus:border-[#165b39]/40 focus:bg-white focus:ring-4 focus:ring-[#165b39]/5"
                         ></textarea>
                       </div>
@@ -282,23 +277,22 @@ export const LeadForm = () => {
                     >
                       {isSubmitting ? (
                         <>
-                          GÖNDERİLİYOR...{" "}
+                          {dict.form.submitting}{" "}
                           <Loader2 size={18} className="animate-spin" />
                         </>
                       ) : (
                         <>
-                          TEKLİFİ GÖNDER <Send size={18} />
+                          {dict.form.submit} <Send size={18} />
                         </>
                       )}
                     </motion.button>
 
                     <p className="text-center text-[10px] text-slate-600 font-medium">
-                      Verileriniz KVKK kapsamında korunmaktadır. Formu
-                      göndererek{" "}
+                      {dict.form.kvkk}{" "}
                       <span className="underline cursor-pointer">
-                        aydınlatma metnini
+                        {dict.form.kvkkLink}
                       </span>{" "}
-                      kabul etmiş sayılırsınız.
+                      {dict.form.kvkkEnd}
                     </p>
                   </motion.form>
                 )}

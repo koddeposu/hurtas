@@ -1,57 +1,64 @@
 import AboutPageClient from "@/components/AboutPageClient";
 import { ABOUT_FAQS } from "@/components/page-faq-content";
 import { CONTACT_INFO } from "@/lib/contact";
+import {
+  getDictionary,
+  getMetadataAlternates,
+  getLocalizedUrl,
+  SITE_URL,
+} from "@/lib/i18n";
+import { getCurrentLocale } from "@/lib/i18n-server";
 import { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Hakkımızda | Hürtaş Beton Elemanları",
-  description:
-    "Hürtaş Beton hakkında bilgi alın. Beton boru, parke taşı, bordür, menhol ve çevre düzenleme ürünlerinde üretim, ürün seçimi ve planlı sevkiyat yaklaşımımızı inceleyin.",
-  keywords: [
-    "Hürtaş Beton hakkında",
-    "beton elemanları",
-    "beton boru",
-    "parke taşı",
-    "bordür",
-    "menhol",
-    "altyapı beton ürünleri",
-    "İstanbul beton elemanları",
-    "Arnavutköy beton",
-  ],
-  openGraph: {
-    title: "Hakkımızda | Hürtaş Beton Elemanları",
-    description:
-      "Hürtaş Beton'un beton elemanları üretim, ürün seçimi ve planlı tedarik yaklaşımı hakkında bilgi alın.",
-    url: "https://www.hurtasbeton.com/hakkimizda",
-    siteName: "Hürtaş Beton",
-    images: [
-      {
-        url: "/og-about.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Hürtaş Beton hakkında beton elemanları üretim yaklaşımı",
-      },
-    ],
-    locale: "tr_TR",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Hakkımızda | Hürtaş Beton",
-    description:
-      "Beton boru, parke taşı, bordür ve altyapı ürünlerinde Hürtaş Beton yaklaşımını inceleyin.",
-    images: ["/og-about.jpg"],
-  },
-  alternates: {
-    canonical: "https://www.hurtasbeton.com/hakkimizda",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getCurrentLocale();
+  const dict = getDictionary(locale);
 
-export default function AboutPage() {
+  return {
+    title: dict.seo.aboutTitle,
+    description: dict.seo.aboutDescription,
+    keywords: [
+      dict.common.companyName,
+      "about concrete elements",
+      "beton elemanları",
+      "concrete pipe",
+      "paving stone",
+      "kerb",
+    ],
+    openGraph: {
+      title: dict.seo.aboutTitle,
+      description: dict.seo.aboutDescription,
+      url: getMetadataAlternates("/hakkimizda", locale).canonical,
+      siteName: dict.common.companyName,
+      images: [
+        {
+          url: "/og-about.jpg",
+          width: 1200,
+          height: 630,
+          alt: dict.seo.aboutTitle,
+        },
+      ],
+      locale: dict.seo.locale,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: dict.seo.aboutTitle,
+      description: dict.seo.aboutDescription,
+      images: ["/og-about.jpg"],
+    },
+    alternates: getMetadataAlternates("/hakkimizda", locale),
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
+
+export default async function AboutPage() {
+  const locale = await getCurrentLocale();
+  const dict = getDictionary(locale);
+
   return (
     <>
       {/* AboutPage Schemas */}
@@ -61,17 +68,15 @@ export default function AboutPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "AboutPage",
-            name: "Hakkımızda",
-            description:
-              "Hürtaş Beton hakkında bilgiler, beton elemanları üretimi ve planlı tedarik yaklaşımımız",
-            url: "https://www.hurtasbeton.com/hakkimizda",
+            name: dict.about.title,
+            description: dict.seo.aboutDescription,
+            url: getMetadataAlternates("/hakkimizda", locale).canonical,
             mainEntity: {
               "@type": "Organization",
               name: CONTACT_INFO.companyName,
-              description:
-                "Beton boru, parke taşı, bordür, menhol ve çevre düzenleme ürünleri sunan beton elemanları üreticisi",
-              url: "https://www.hurtasbeton.com",
-              logo: "https://www.hurtasbeton.com/logo.png",
+              description: dict.seo.siteOgDescription,
+              url: getLocalizedUrl("/", locale),
+              logo: `${SITE_URL}/logo.png`,
               address: {
                 "@type": "PostalAddress",
                 streetAddress: `${CONTACT_INFO.address.street}, ${CONTACT_INFO.address.note}`,
@@ -85,7 +90,7 @@ export default function AboutPage() {
                 contactType: "customer service",
                 email: CONTACT_INFO.email,
                 areaServed: "TR",
-                availableLanguage: "Turkish",
+                availableLanguage: ["Turkish", "English", "Arabic"],
               },
             },
           }),
@@ -103,14 +108,14 @@ export default function AboutPage() {
               {
                 "@type": "ListItem",
                 position: 1,
-                name: "Ana Sayfa",
-                item: "https://www.hurtasbeton.com",
+                name: dict.common.home,
+                item: getLocalizedUrl("/", locale),
               },
               {
                 "@type": "ListItem",
                 position: 2,
-                name: "Hakkımızda",
-                item: "https://www.hurtasbeton.com/hakkimizda",
+                name: dict.about.title,
+                item: getMetadataAlternates("/hakkimizda", locale).canonical,
               },
             ],
           }),
@@ -144,16 +149,15 @@ export default function AboutPage() {
             "@context": "https://schema.org",
             "@type": "Organization",
             name: CONTACT_INFO.companyName,
-            url: "https://www.hurtasbeton.com",
-            logo: "https://www.hurtasbeton.com/logo.png",
-            description:
-              "Beton boru, parke taşı, bordür, menhol ve altyapı beton ürünleri sunan üretici marka",
+            url: getLocalizedUrl("/", locale),
+            logo: `${SITE_URL}/logo.png`,
+            description: dict.seo.siteOgDescription,
             numberOfEmployees: {
               "@type": "QuantitativeValue",
               value: 150,
             },
-            slogan: "Beton elemanlarında planlı üretim ve düzenli tedarik",
-            award: ["TSE Onaylı Belgeler", "Standart Üretim", "Planlı Sevkiyat"],
+            slogan: dict.supply.title,
+            award: dict.supply.items,
             areaServed: {
               "@type": "Country",
               name: "Turkey",

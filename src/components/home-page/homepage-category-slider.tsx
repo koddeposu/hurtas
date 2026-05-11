@@ -1,5 +1,9 @@
 "use client";
 
+import {
+  useDictionary,
+  useLocalizedPath,
+} from "@/components/i18n-provider";
 import { HomeProductCard } from "@/components/home-page/home-product-card";
 import {
   Carousel,
@@ -32,6 +36,8 @@ export function HomepageCategorySlider({
   products,
   categories = [],
 }: HomepageCategorySliderProps) {
+  const dict = useDictionary();
+  const localizedPath = useLocalizedPath();
   const [api, setApi] = useState<CarouselApi | null>(null);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
@@ -83,14 +89,14 @@ export function HomepageCategorySlider({
 
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex h-10 items-center rounded-[2px] border border-slate-300 bg-white px-3 text-[11px] font-black uppercase tracking-[0.14em] text-slate-600">
-              {products.length} Ürün
+              {products.length} {dict.common.productCount}
             </span>
             <Link
-              href={href}
+              href={localizedPath(href)}
               prefetch={false}
               className="inline-flex h-10 items-center gap-2 rounded-[2px] bg-[#152f51] px-4 text-[11px] font-black uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#10243d]"
             >
-              Tümünü Gör
+              {dict.common.viewAll}
               <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>
           </div>
@@ -105,7 +111,7 @@ export function HomepageCategorySlider({
               onClick={() => api?.scrollPrev()}
               disabled={!canScrollPrev}
               className="absolute left-0 top-1/2 z-20 inline-flex h-16 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-[2px] border border-[#152f51]/20 bg-[#152f51] text-white shadow-[0_18px_34px_-24px_rgba(15,23,42,0.7)] transition-colors hover:bg-[#d6a94a] hover:text-[#152f51] disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 sm:h-20 sm:w-10"
-              aria-label={`${accent} ${title} önceki ürünler`}
+              aria-label={`${accent} ${title} ${dict.sliders.prevProducts}`}
             >
               <ChevronLeft className="h-6 w-6" strokeWidth={1.8} />
             </button>
@@ -115,7 +121,7 @@ export function HomepageCategorySlider({
               onClick={() => api?.scrollNext()}
               disabled={!canScrollNext}
               className="absolute right-0 top-1/2 z-20 inline-flex h-16 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-[2px] border border-[#152f51]/20 bg-[#152f51] text-white shadow-[0_18px_34px_-24px_rgba(15,23,42,0.7)] transition-colors hover:bg-[#d6a94a] hover:text-[#152f51] disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400 sm:h-20 sm:w-10"
-              aria-label={`${accent} ${title} sonraki ürünler`}
+              aria-label={`${accent} ${title} ${dict.sliders.nextProducts}`}
             >
               <ChevronRight className="h-6 w-6" strokeWidth={1.8} />
             </button>

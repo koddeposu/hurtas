@@ -1,3 +1,9 @@
+import {
+  DEFAULT_LOCALE,
+  getLocalizedCategoryDisplayName,
+  type Locale,
+} from "@/lib/i18n";
+
 export const ALL_PRODUCTS_PATH = "/tum-urunler";
 export const PRODUCT_DETAIL_PREFIX = "/urun-detay";
 export const PRODUCT_ITEM_SEGMENT = "item";
@@ -6,7 +12,11 @@ export type RouteCategory = {
   id: string;
   parentId: string | null;
   name: string;
+  nameEn?: string | null;
+  nameAr?: string | null;
   title?: string | null;
+  titleEn?: string | null;
+  titleAr?: string | null;
   slug: string;
   order?: number;
 };
@@ -20,11 +30,6 @@ export type RouteProduct = {
   categories?: RouteCategory[];
 };
 
-function getFilledText(value: string | null | undefined) {
-  const trimmed = value?.trim();
-  return trimmed ? trimmed : undefined;
-}
-
 function getCategoryMap(categories: RouteCategory[]) {
   return new Map(categories.map((category) => [category.id, category]));
 }
@@ -34,9 +39,13 @@ export function getProductDetailHref(slug: string) {
 }
 
 export function getCategoryDisplayName(
-  category: Pick<RouteCategory, "name" | "title">,
+  category: Pick<
+    RouteCategory,
+    "name" | "nameEn" | "nameAr" | "title" | "titleEn" | "titleAr"
+  >,
+  locale: Locale = DEFAULT_LOCALE,
 ) {
-  return getFilledText(category.title) ?? category.name;
+  return getLocalizedCategoryDisplayName(category, locale);
 }
 
 function getProductItemSlug(product: RouteProduct) {

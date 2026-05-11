@@ -1,61 +1,63 @@
 import { getProjectsWithImages } from "@/actions/projectActions";
 import { PROJECTS_FAQS } from "@/components/page-faq-content";
+import {
+  getDictionary,
+  getLocalizedImageAlt,
+  getLocalizedProjectTitle,
+  getMetadataAlternates,
+} from "@/lib/i18n";
+import { getCurrentLocale } from "@/lib/i18n-server";
 import { Metadata } from "next";
 import ProjectsClient from "./projects-client";
 
-export const metadata: Metadata = {
-  title: "Galeri | Hürtaş Beton Boru, Baca, Bordür ve Parke Görselleri",
-  description:
-    "Hürtaş Beton galerisinde beton boru, betonarme boru, baca elemanları, kutu menfez, bordür, parke taşı, şev taşı ve saha beton ürünleri görsellerini inceleyin.",
-  keywords: [
-    "Hürtaş Beton galeri",
-    "beton ürünleri galeri",
-    "beton boru görselleri",
-    "betonarme boru görselleri",
-    "rögar baca görselleri",
-    "muayene baca görselleri",
-    "kutu menfez görselleri",
-    "parke taşı görselleri",
-    "bordür görselleri",
-    "şev taşı görselleri",
-    "beton bariyer görselleri",
-    "yağmur suyu ızgara tabanı",
-    "saha beton elemanları",
-  ],
-  openGraph: {
-    title: "Galeri | Hürtaş Beton Ürün ve Saha Görselleri",
-    description:
-      "Beton boru, baca elemanları, kutu menfez, parke taşı, bordür ve altyapı beton ürünleri için ürün ve saha görsellerini inceleyin.",
-    url: "https://www.hurtasbeton.com/galeri",
-    siteName: "Hürtaş Beton",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Hürtaş Beton galeri sayfasında beton ürünleri görselleri",
-      },
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getCurrentLocale();
+  const dict = getDictionary(locale);
+
+  return {
+    title: dict.seo.galleryTitle,
+    description: dict.seo.galleryDescription,
+    keywords: [
+      dict.common.companyName,
+      "concrete products gallery",
+      "beton ürünleri galeri",
+      "concrete pipe images",
+      "kerb",
+      "paving stone",
     ],
-    locale: "tr_TR",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Galeri | Hürtaş Beton",
-    description:
-      "Beton boru, baca elemanları, bordür, parke taşı ve saha ürünleri için Hürtaş Beton galerisini keşfedin.",
-    images: ["/og-image.png"],
-  },
-  alternates: {
-    canonical: "https://www.hurtasbeton.com/galeri",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+    openGraph: {
+      title: dict.seo.galleryTitle,
+      description: dict.seo.galleryDescription,
+      url: getMetadataAlternates("/galeri", locale).canonical,
+      siteName: dict.common.companyName,
+      images: [
+        {
+          url: "/og-image.png",
+          width: 1200,
+          height: 630,
+          alt: dict.seo.galleryTitle,
+        },
+      ],
+      locale: dict.seo.locale,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: dict.seo.galleryTitle,
+      description: dict.seo.galleryDescription,
+      images: ["/og-image.png"],
+    },
+    alternates: getMetadataAlternates("/galeri", locale),
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
 
 export default async function ProjectsPage() {
+  const locale = await getCurrentLocale();
+  const dict = getDictionary(locale);
   const dbProjects = await getProjectsWithImages(true);
 
   // Transform database format to UI format
@@ -63,9 +65,11 @@ export default async function ProjectsPage() {
     id: project.id,
     img: project.images.map((img, index) => ({
       src: img.url,
-      alt: img.alt?.trim() ? img.alt : `görseli ${index + 1}`,
+      alt:
+        getLocalizedImageAlt(img, locale) ||
+        `${dict.common.companyName} ${index + 1}`,
     })),
-    title: project.title,
+    title: getLocalizedProjectTitle(project, locale),
   }));
 
   return (
@@ -80,14 +84,14 @@ export default async function ProjectsPage() {
               {
                 "@type": "ListItem",
                 position: 1,
-                name: "Ana Sayfa",
-                item: "https://www.hurtasbeton.com",
+                name: dict.common.home,
+                item: getMetadataAlternates("/", locale).canonical,
               },
               {
                 "@type": "ListItem",
                 position: 2,
-                name: "Galeri",
-                item: "https://www.hurtasbeton.com/galeri",
+                name: dict.nav.gallery,
+                item: getMetadataAlternates("/galeri", locale).canonical,
               },
             ],
           }),

@@ -1,9 +1,12 @@
 "use client";
 
+import { useDictionary } from "@/components/i18n-provider";
 import { handleCall, handleWhatsApp } from "@/lib/analytics/googleAds";
 import { MessageCircle, Phone } from "lucide-react";
 
 const BottomBar = () => {
+  const dict = useDictionary();
+
   return (
     <div
       className="fixed inset-x-0 bottom-0 z-[100]     md:hidden bg-primary "
@@ -17,7 +20,7 @@ const BottomBar = () => {
         >
           <Phone size={20} fill="currentColor" />
           <div className="flex flex-col items-start">
-            <span className="text-sm font-black">Şimdi Ara</span>
+            <span className="text-sm font-black">{dict.bottomBar.call}</span>
           </div>
         </button>
 
@@ -28,7 +31,9 @@ const BottomBar = () => {
         >
           <MessageCircle size={20} fill="currentColor" />
           <div className="flex flex-col items-start">
-            <span className="text-sm font-black">Whatsapp İletişim</span>
+            <span className="text-sm font-black">
+              {dict.bottomBar.whatsapp}
+            </span>
           </div>
         </button>
       </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useDictionary, useLocalizedPath } from "@/components/i18n-provider";
 import { Facebook, Linkedin, Share2, Twitter, Check } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -10,6 +11,8 @@ interface ShareButtonsProps {
 }
 
 export function ShareButtons({ title, slug }: ShareButtonsProps) {
+  const dict = useDictionary();
+  const localizedPath = useLocalizedPath();
   const [copied, setCopied] = useState(false);
 
   // We can't access window/navigation directly in SSR, but component mounts on client.
@@ -18,7 +21,7 @@ export function ShareButtons({ title, slug }: ShareButtonsProps) {
 
   const getShareUrl = () => {
     if (typeof window !== "undefined") {
-      return `${window.location.origin}/blog/${slug}`;
+      return `${window.location.origin}${localizedPath(`/blog/${slug}`)}`;
     }
     return "";
   };
@@ -47,7 +50,7 @@ export function ShareButtons({ title, slug }: ShareButtonsProps) {
       case "copy":
         navigator.clipboard.writeText(url);
         setCopied(true);
-        toast.success("Bağlantı kopyalandı");
+        toast.success(dict.common.copied);
         setTimeout(() => setCopied(false), 2000);
         return;
     }
@@ -61,28 +64,28 @@ export function ShareButtons({ title, slug }: ShareButtonsProps) {
     <div className="flex items-center gap-4">
       <button
         onClick={() => handleShare("facebook")}
-        aria-label="Facebook'ta Paylaş"
+        aria-label={`Facebook ${dict.blog.sharePost}`}
         className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-600 hover:bg-[#1877F2] hover:text-white transition-all cursor-pointer"
       >
         <Facebook size={18} />
       </button>
       <button
         onClick={() => handleShare("twitter")}
-        aria-label="Twitter'da Paylaş"
+        aria-label={`Twitter ${dict.blog.sharePost}`}
         className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-600 hover:bg-[#1DA1F2] hover:text-white transition-all cursor-pointer"
       >
         <Twitter size={18} />
       </button>
       <button
         onClick={() => handleShare("linkedin")}
-        aria-label="LinkedIn'de Paylaş"
+        aria-label={`LinkedIn ${dict.blog.sharePost}`}
         className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-600 hover:bg-[#0A66C2] hover:text-white transition-all cursor-pointer"
       >
         <Linkedin size={18} />
       </button>
       <button
         onClick={() => handleShare("copy")}
-        aria-label="Bağlantıyı Kopyala"
+        aria-label={dict.common.copied}
         className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-600 hover:bg-slate-900 hover:text-white transition-all cursor-pointer relative"
       >
         <div

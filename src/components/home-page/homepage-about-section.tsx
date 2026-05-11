@@ -1,17 +1,26 @@
+"use client";
+
 import AboutImage from "@/assets/who-we-are.webp";
+import {
+  useDictionary,
+  useLocalizedPath,
+} from "@/components/i18n-provider";
 import { ALL_PRODUCTS_PATH } from "@/lib/productRoutes";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-const PRODUCT_LINKS = [
-  { label: "Tüm Ürünler", href: ALL_PRODUCTS_PATH },
-  { label: "Beton Boru", href: `${ALL_PRODUCTS_PATH}?q=Beton%20Boru` },
-  { label: "Parke Taşı", href: `${ALL_PRODUCTS_PATH}?q=Parke%20Ta%C5%9F%C4%B1` },
-  { label: "Bordür", href: `${ALL_PRODUCTS_PATH}?q=Bord%C3%BCr` },
-];
-
 export function HomepageAboutSection() {
+  const dict = useDictionary();
+  const localizedPath = useLocalizedPath();
+  const productLinks = dict.homeAbout.links.map((label, index) => ({
+    label,
+    href:
+      index === 0
+        ? ALL_PRODUCTS_PATH
+        : `${ALL_PRODUCTS_PATH}?q=${encodeURIComponent(label)}`,
+  }));
+
   return (
     <section
       aria-labelledby="homepage-about-heading"
@@ -31,51 +40,49 @@ export function HomepageAboutSection() {
       <div className="relative mx-auto grid max-w-7xl gap-5 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-center lg:px-8 lg:py-12">
         <div className="max-w-2xl">
           <div className="inline-flex items-center gap-2 rounded-[2px] border border-[#d6a94a]/35 bg-[#d6a94a]/10 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.18em] text-[#f4d78d] sm:text-[10px]">
-            Hürtaş Beton Elemanları
+            {dict.homeAbout.eyebrow}
           </div>
 
           <h2
             id="homepage-about-heading"
             className="mt-4 max-w-3xl text-2xl font-black leading-tight tracking-tight text-white sm:text-3xl lg:text-4xl"
           >
-            Projenize uygun beton ürünlerine hızlı ulaşın.
+            {dict.homeAbout.title}
           </h2>
 
           <p className="mt-3 max-w-xl overflow-hidden text-sm font-medium leading-6 text-slate-200 line-clamp-2 sm:line-clamp-none lg:text-base lg:leading-7">
-            Altyapı ve üst yapı projeleri için beton boru, parke taşı, bordür,
-            menhol ve saha düzenleme ürünlerinde dayanıklı üretim, net planlama
-            ve zamanında teslim yaklaşımıyla çalışıyoruz.
+            {dict.homeAbout.description}
           </p>
 
           <div className="mt-5 flex flex-wrap gap-2.5 sm:gap-3">
             <Link
-              href={ALL_PRODUCTS_PATH}
+              href={localizedPath(ALL_PRODUCTS_PATH)}
               prefetch={false}
               className="inline-flex items-center gap-2 rounded-[2px] bg-[#d6a94a] px-4 py-2.5 text-[11px] font-black uppercase tracking-[0.12em] text-[#152f51] transition-colors hover:bg-[#bf943b] sm:px-5 sm:py-3 sm:text-xs"
             >
-              Ürünleri İncele
+              {dict.common.viewProducts}
               <ArrowUpRight className="h-4 w-4" />
             </Link>
             <Link
-              href="/hakkimizda"
+              href={localizedPath("/hakkimizda")}
               prefetch={false}
               className="inline-flex items-center gap-2 rounded-[2px] border border-white/35 px-4 py-2.5 text-[11px] font-black uppercase tracking-[0.12em] text-white transition-colors hover:bg-white/10 sm:px-5 sm:py-3 sm:text-xs"
             >
-              Hakkımızda
+              {dict.homeAbout.about}
             </Link>
           </div>
         </div>
 
         <aside className="hidden rounded-[3px] border border-white/15 bg-white/10 p-4 backdrop-blur lg:block">
           <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#f4d78d]">
-            Ürünlere Hızlı Geçiş
+            {dict.homeAbout.quickAccess}
           </p>
 
           <div className="mt-3 divide-y divide-white/10">
-            {PRODUCT_LINKS.map((item) => (
+            {productLinks.map((item) => (
               <Link
                 key={item.label}
-                href={item.href}
+                href={localizedPath(item.href)}
                 prefetch={false}
                 className="flex items-center justify-between gap-3 py-3 text-sm font-black text-white transition-colors first:pt-0 last:pb-0 hover:text-[#f4d78d]"
               >

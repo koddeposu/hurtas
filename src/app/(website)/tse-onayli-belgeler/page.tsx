@@ -12,33 +12,36 @@ import TSEImage5 from "@/assets/tse/5.jpg";
 import TSEImage6 from "@/assets/tse/6.jpg";
 import TSEImage7 from "@/assets/tse/7.jpg";
 import { RandomProductsSliderSection } from "@/components/random-products-slider-section";
+import {
+  formatMessage,
+  getDictionary,
+  getMetadataAlternates,
+  localizePath,
+} from "@/lib/i18n";
+import { getCurrentLocale } from "@/lib/i18n-server";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: "TSE Onaylı Belgeler | Hürtaş Beton",
-  description:
-    "Hürtaş Beton'un TSE onaylı belge yaklaşımı, kalite standardı ve beton elemanları üretim süreçleri hakkında bilgi alın.",
-  alternates: {
-    canonical: "https://www.hurtasbeton.com/tse-onayli-belgeler",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getCurrentLocale();
+  const dict = getDictionary(locale);
+
+  return {
+    title: dict.seo.tseTitle,
+    description: dict.seo.tseDescription,
+    alternates: getMetadataAlternates("/tse-onayli-belgeler", locale),
+  };
+}
 
 const DOCUMENT_ITEMS = [
   {
-    title: "TSE Onaylı Üretim Yaklaşımı",
-    text: "Beton elemanlarında ürün standardını ve üretim takibini görünür kılan belge yaklaşımı.",
     icon: FileCheck2,
   },
   {
-    title: "Kalite Kontrol Süreci",
-    text: "Ürün grubu, ölçü ve sevkiyat öncesi kontrollerle proje teslim akışını destekleyen süreç.",
     icon: ClipboardCheck,
   },
   {
-    title: "Standartlara Uygun Ürün",
-    text: "Beton boru, parke taşı, bordür ve altyapı elemanlarında güven veren üretim disiplini.",
     icon: ShieldCheck,
   },
 ];
@@ -46,35 +49,31 @@ const DOCUMENT_ITEMS = [
 const TSE_IMAGES = [
   {
     src: TSEImage1,
-    alt: "Hürtaş Beton TSE onaylı belge görseli 1",
   },
   {
     src: TSEImage2,
-    alt: "Hürtaş Beton TSE onaylı belge görseli 2",
   },
   {
     src: TSEImage3,
-    alt: "Hürtaş Beton TSE onaylı belge görseli 3",
   },
   {
     src: TSEImage4,
-    alt: "Hürtaş Beton TSE onaylı belge görseli 4",
   },
   {
     src: TSEImage5,
-    alt: "Hürtaş Beton TSE onaylı belge görseli 5",
   },
   {
     src: TSEImage6,
-    alt: "Hürtaş Beton TSE onaylı belge görseli 6",
   },
   {
     src: TSEImage7,
-    alt: "Hürtaş Beton TSE onaylı belge görseli 7",
   },
 ];
 
-export default function TSEDocumentsPage() {
+export default async function TSEDocumentsPage() {
+  const locale = await getCurrentLocale();
+  const dict = getDictionary(locale);
+
   return (
     <main className="min-h-screen bg-white px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
       <div className="mx-auto max-w-7xl">
@@ -82,27 +81,28 @@ export default function TSEDocumentsPage() {
           <div className="flex items-center gap-3">
             <span className="h-px w-10 bg-[#d6a94a]" aria-hidden="true" />
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#6f839d]">
-              Kalite Belgeleri
+              {dict.tsePage.eyebrow}
             </span>
           </div>
           <h2 className="mt-3 max-w-3xl text-2xl font-black tracking-tight text-[#152f51] sm:text-3xl">
-            Beton elemanlarında standartlara bağlı üretim.
+            {dict.tsePage.title}
           </h2>
           <p className="mt-3 max-w-3xl text-sm font-medium leading-7 text-slate-600">
-            TSE onaylı belgeler ve kalite dokümanları, ürün grupları bazında
-            güncellendikçe bu sayfada yayınlanacaktır.
+            {dict.tsePage.description}
           </p>
         </section>
 
         <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {TSE_IMAGES.map((image, index) => (
             <div
-              key={image.alt}
+              key={`tse-image-${index}`}
               className="relative aspect-[3/4] overflow-hidden rounded-[3px] border border-slate-200 bg-white p-3 shadow-[0_16px_34px_-30px_rgba(15,23,42,0.18)]"
             >
               <Image
                 src={image.src}
-                alt={image.alt}
+                alt={formatMessage(dict.tsePage.imageAlt, {
+                  index: index + 1,
+                })}
                 fill
                 priority={index === 0}
                 sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
@@ -113,22 +113,23 @@ export default function TSEDocumentsPage() {
         </section>
 
         <section className="mt-8 grid gap-4 md:grid-cols-3">
-          {DOCUMENT_ITEMS.map((item) => {
+          {DOCUMENT_ITEMS.map((item, index) => {
             const Icon = item.icon;
+            const content = dict.tsePage.items[index] ?? dict.tsePage.items[0];
 
             return (
               <article
-                key={item.title}
+                key={content.title}
                 className="border border-slate-200 bg-white p-5 shadow-[0_16px_34px_-30px_rgba(15,23,42,0.18)]"
               >
                 <div className="inline-flex h-11 w-11 items-center justify-center rounded-[2px] bg-[#152f51] text-white">
                   <Icon className="h-5 w-5" />
                 </div>
                 <h3 className="mt-4 text-lg font-black text-slate-900">
-                  {item.title}
+                  {content.title}
                 </h3>
                 <p className="mt-3 text-sm font-medium leading-7 text-slate-600">
-                  {item.text}
+                  {content.text}
                 </p>
               </article>
             );
@@ -138,17 +139,17 @@ export default function TSEDocumentsPage() {
         <section className="mt-8 border border-slate-200 bg-[#0d1f36] p-5 text-white sm:p-6 lg:flex lg:items-center lg:justify-between lg:gap-6">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#d6a94a]">
-              Belge Talebi
+              {dict.tsePage.requestEyebrow}
             </p>
             <h2 className="mt-2 text-2xl font-black tracking-tight">
-              Projeniz için belge bilgisi mi gerekiyor?
+              {dict.tsePage.requestTitle}
             </h2>
           </div>
           <Link
-            href="/iletisim"
+            href={localizePath("/iletisim", locale)}
             className="mt-5 inline-flex h-11 items-center gap-2 rounded-[2px] bg-[#d6a94a] px-4 text-[11px] font-black uppercase tracking-[0.14em] text-[#152f51] transition-colors hover:bg-[#bf943b] lg:mt-0"
           >
-            İletişime Geç
+            {dict.tsePage.cta}
             <ArrowUpRight className="h-3.5 w-3.5" />
           </Link>
         </section>

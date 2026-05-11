@@ -1,6 +1,8 @@
 import { getCategories } from "@/actions/categoryActions";
 import { getProductsWithImages } from "@/actions/productActions";
 import ProductsClient from "@/components/ProductClient";
+import { getDictionary, getMetadataAlternates, SITE_URL } from "@/lib/i18n";
+import { getCurrentLocale } from "@/lib/i18n-server";
 import { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -8,29 +10,31 @@ interface ProductsPageProps {
   searchParams: Promise<{ q?: string }>;
 }
 
-export const metadata: Metadata = {
-  title: "Tüm Ürünler | Hürtaş Beton",
-  description:
-    "Hürtaş Beton altyapı, üst yapı ve çevre düzenleme ürünlerini kategori bazında inceleyin.",
-  openGraph: {
-    title: "Tüm Ürünler | Hürtaş Beton",
-    description:
-      "Beton boru, parke taşı, bordür, menhol ve saha ürünlerini Hürtaş Beton ürün kataloğunda inceleyin.",
-    images: [
-      {
-        url: "https://www.hurtasbeton.com/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Hürtaş Beton Ürünleri",
-      },
-    ],
-    type: "website",
-    url: "https://www.hurtasbeton.com/tum-urunler",
-  },
-  alternates: {
-    canonical: "https://www.hurtasbeton.com/tum-urunler",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getCurrentLocale();
+  const dict = getDictionary(locale);
+
+  return {
+    title: dict.seo.productsTitle,
+    description: dict.seo.productsDescription,
+    openGraph: {
+      title: dict.seo.productsTitle,
+      description: dict.seo.productsDescription,
+      images: [
+        {
+          url: `${SITE_URL}/og-image.png`,
+          width: 1200,
+          height: 630,
+          alt: dict.seo.productsTitle,
+        },
+      ],
+      type: "website",
+      url: getMetadataAlternates("/tum-urunler", locale).canonical,
+      locale: dict.seo.locale,
+    },
+    alternates: getMetadataAlternates("/tum-urunler", locale),
+  };
+}
 
 const ProductsPage = async ({ searchParams }: ProductsPageProps) => {
   const params = await searchParams;

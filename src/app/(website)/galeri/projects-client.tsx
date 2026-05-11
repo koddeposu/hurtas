@@ -1,6 +1,10 @@
 "use client";
 
 import { PROJECTS_FAQS } from "@/components/page-faq-content";
+import {
+  useDictionary,
+  useLocalizedPath,
+} from "@/components/i18n-provider";
 import { SeoFaqSection } from "@/components/seo-faq-section";
 import { ALL_PRODUCTS_PATH } from "@/lib/productRoutes";
 import {
@@ -32,6 +36,9 @@ interface ProjectsClientProps {
 }
 
 export default function ProjectsClient({ projects }: ProjectsClientProps) {
+  const dict = useDictionary();
+  const localizedPath = useLocalizedPath();
+
   return (
     <main className="flex min-h-screen w-full flex-col items-center justify-center pt-10 lg:pt-14">
       <div className="max-w-[1280px] w-full ">
@@ -50,7 +57,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
             ) : (
               <div className="text-center py-20">
                 <p className="text-slate-500 text-lg">
-                  Henüz proje bulunmamaktadır.
+                  {dict.gallery.empty}
                 </p>
               </div>
             )}
@@ -63,62 +70,37 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
               <div className="bg-primary p-6 text-white md:p-8 lg:p-10">
                 <p className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.22em] text-secondary">
                   <Search className="h-4 w-4" />
-                  Görselden Ürüne
+                  {dict.gallery.visualToProduct}
                 </p>
                 <h2 className="mt-4 max-w-2xl text-2xl font-black tracking-tight md:text-3xl">
-                  Adını bilmediğiniz beton elemanını galeriden kolayca
-                  tarif edin
+                  {dict.gallery.title}
                 </h2>
                 <p className="mt-4 max-w-2xl text-sm font-medium leading-7 text-slate-200 md:text-base">
-                  Künk, büz, rögar, yağmur suyu kanalı, yol kenarı taşı veya
-                  zemin taşı diye aradığınız ürün; galeride beton boru, baca
-                  elemanı, bordür, parke taşı, oluk taşı, menfez ya da şev taşı
-                  olarak karşılık bulabilir.
+                  {dict.gallery.description}
                 </p>
 
                 <div className="mt-7 flex flex-wrap gap-3">
                   <Link
-                    href={ALL_PRODUCTS_PATH}
+                    href={localizedPath(ALL_PRODUCTS_PATH)}
                     className="inline-flex items-center gap-2 rounded-[2px] bg-secondary px-5 py-3 text-xs font-black uppercase tracking-[0.12em] text-primary transition-all hover:-translate-y-0.5 hover:bg-secondary/90"
                   >
-                    Ürünleri İncele
+                    {dict.common.viewProducts}
                     <ArrowUpRight className="h-4 w-4" />
                   </Link>
                   <Link
-                    href="/iletisim"
+                    href={localizedPath("/iletisim")}
                     prefetch={false}
                     className="inline-flex items-center gap-2 rounded-[2px] border border-white/25 px-5 py-3 text-xs font-black uppercase tracking-[0.12em] text-white transition-all hover:-translate-y-0.5 hover:border-secondary hover:text-secondary"
                   >
                     <PhoneCall className="h-4 w-4" />
-                    Teklif Alın
+                    {dict.gallery.quote}
                   </Link>
                 </div>
               </div>
 
               <div className="grid sm:grid-cols-2">
-                {[
-                  {
-                    title: "Boru ve drenaj",
-                    text: "Beton boru, betonarme boru, contalı boru, lambazıvana boru",
-                    icon: Waves,
-                  },
-                  {
-                    title: "Baca ve menhol",
-                    text: "Muayene baca gövdesi, baca tabanı, parsel baca, konik eleman",
-                    icon: Building2,
-                  },
-                  {
-                    title: "Yol ve zemin",
-                    text: "Bordür taşı, parke taşı, oluk taşı, çim taşı",
-                    icon: Ruler,
-                  },
-                  {
-                    title: "Saha çözümleri",
-                    text: "Kutu menfez, şev taşı, Terra Blok, beton bariyer, briket",
-                    icon: ShieldCheck,
-                  },
-                ].map((item, index) => {
-                  const Icon = item.icon;
+                {[Waves, Building2, Ruler, ShieldCheck].map((Icon, index) => {
+                  const item = dict.gallery.groups[index] ?? dict.gallery.groups[0];
 
                   return (
                     <div
@@ -146,9 +128,9 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
           </div>
 
           <SeoFaqSection
-            title="Galeri Sayfası İçin"
-            accent="En Çok Aranan Sorular"
-            description="Beton elemanları, saha uygulamaları, ürün görselleri ve tedarik planlaması hakkında kullanıcıların en çok aradığı soruları bu bölümde topladık."
+            title={dict.gallery.faqTitle}
+            accent={dict.gallery.faqAccent}
+            description={dict.gallery.faqDescription}
             items={PROJECTS_FAQS}
           />
         </section>
@@ -158,6 +140,7 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
 }
 
 const ProjectCard = ({ project }: { project: Project; index: number }) => {
+  const dict = useDictionary();
   // Don't render if no images
   if (project.img.length === 0) return null;
   const coverImage = project.img[0];
@@ -183,7 +166,7 @@ const ProjectCard = ({ project }: { project: Project; index: number }) => {
           {project.img.length > 1 ? (
             <div className="inline-flex items-center gap-2 rounded-xs border border-slate-300 bg-[#f8f7f3] px-3 py-2 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600">
               <Images className="h-3.5 w-3.5 text-secondary" />
-              {project.img.length} Görsel
+              {project.img.length} {dict.gallery.imageCount}
             </div>
           ) : null}
         </div>

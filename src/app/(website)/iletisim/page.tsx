@@ -1,53 +1,61 @@
 import ContactPageClient from '@/components/ContactPageClient';
 import { CONTACT_INFO, CONTACT_MAP_EMBED_URL } from '@/lib/contact';
+import {
+  getDictionary,
+  getMetadataAlternates,
+  getLocalizedUrl,
+  SITE_URL,
+} from '@/lib/i18n';
+import { getCurrentLocale } from '@/lib/i18n-server';
 import { Metadata } from 'next';
 
-export const metadata: Metadata = {
-  title: 'İletişim | Hürtaş Beton - Bize Ulaşın',
-  description: `Hürtaş Beton ile iletişime geçin. Telefon: ${CONTACT_INFO.primaryPhone.display}, ${CONTACT_INFO.mobilePhone.display}, E-posta: ${CONTACT_INFO.email}. ${CONTACT_INFO.address.short} adresimizden veya online olarak bize ulaşabilirsiniz.`,
-  keywords: [
-    'Hürtaş Beton iletişim',
-    'Hürtaş Beton telefon',
-    'Hürtaş Beton adres',
-    'hurtas beton iletişim',
-    'beton ürünleri iletişim',
-    'beton elemanları telefon',
-    'Arnavutköy beton',
-    'İstanbul beton elemanları',
-    'beton ürünleri teklif al',
-  ],
-  openGraph: {
-    title: 'İletişim | Hürtaş Beton',
-    description: 'Hürtaş Beton ile iletişime geçin. Beton elemanları için hemen arayın.',
-    url: 'https://www.hurtasbeton.com/iletisim',
-    siteName: 'Hürtaş Beton',
-    images: [
-      {
-        url: '/og-contact.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Hürtaş Beton İletişim',
-      },
-    ],
-    locale: 'tr_TR',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'İletişim | Hürtaş Beton',
-    description: 'Hürtaş Beton ile iletişime geçin.',
-    images: ['/og-contact.jpg'],
-  },
-  alternates: {
-    canonical: 'https://www.hurtasbeton.com/iletisim',
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getCurrentLocale();
+  const dict = getDictionary(locale);
 
-export default function ContactPage() {
+  return {
+    title: dict.seo.contactTitle,
+    description: `${dict.seo.contactDescription} Telefon: ${CONTACT_INFO.primaryPhone.display}, ${CONTACT_INFO.mobilePhone.display}, E-posta: ${CONTACT_INFO.email}.`,
+    keywords: [
+      dict.common.companyName,
+      'contact concrete products',
+      'beton ürünleri iletişim',
+      'concrete product quote',
+    ],
+    openGraph: {
+      title: dict.seo.contactTitle,
+      description: dict.seo.contactDescription,
+      url: getMetadataAlternates('/iletisim', locale).canonical,
+      siteName: dict.common.companyName,
+      images: [
+        {
+          url: '/og-contact.jpg',
+          width: 1200,
+          height: 630,
+          alt: dict.seo.contactTitle,
+        },
+      ],
+      locale: dict.seo.locale,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: dict.seo.contactTitle,
+      description: dict.seo.contactDescription,
+      images: ['/og-contact.jpg'],
+    },
+    alternates: getMetadataAlternates('/iletisim', locale),
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
+
+export default async function ContactPage() {
+  const locale = await getCurrentLocale();
+  const dict = getDictionary(locale);
+
   return (
     <>
       {/* ContactPage Schema */}
@@ -57,9 +65,9 @@ export default function ContactPage() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'ContactPage',
-            name: 'İletişim',
-            description: 'Hürtaş Beton iletişim bilgileri',
-            url: 'https://www.hurtasbeton.com/iletisim',
+            name: dict.common.contact,
+            description: dict.seo.contactDescription,
+            url: getMetadataAlternates('/iletisim', locale).canonical,
           }),
         }}
       />
@@ -71,10 +79,10 @@ export default function ContactPage() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'LocalBusiness',
-            '@id': 'https://www.hurtasbeton.com',
+            '@id': getLocalizedUrl('/', locale),
             name: CONTACT_INFO.companyName,
-            image: 'https://www.hurtasbeton.com/logo.png',
-            url: 'https://www.hurtasbeton.com',
+            image: `${SITE_URL}/logo.png`,
+            url: getLocalizedUrl('/', locale),
             telephone: CONTACT_INFO.primaryPhone.schema,
             email: CONTACT_INFO.email,
             priceRange: '₺₺',
@@ -119,14 +127,14 @@ export default function ContactPage() {
               {
                 '@type': 'ListItem',
                 position: 1,
-                name: 'Ana Sayfa',
-                item: 'https://www.hurtasbeton.com',
+                name: dict.common.home,
+                item: getLocalizedUrl('/', locale),
               },
               {
                 '@type': 'ListItem',
                 position: 2,
-                name: 'İletişim',
-                item: 'https://www.hurtasbeton.com/iletisim',
+                name: dict.common.contact,
+                item: getMetadataAlternates('/iletisim', locale).canonical,
               },
             ],
           }),
@@ -141,7 +149,7 @@ export default function ContactPage() {
             '@context': 'https://schema.org',
             '@type': 'Organization',
             name: CONTACT_INFO.companyName,
-            url: 'https://www.hurtasbeton.com',
+            url: getLocalizedUrl('/', locale),
             contactPoint: [
               {
                 '@type': 'ContactPoint',
@@ -149,7 +157,7 @@ export default function ContactPage() {
                 contactType: 'customer service',
                 email: CONTACT_INFO.email,
                 areaServed: 'TR',
-                availableLanguage: ['Turkish'],
+                availableLanguage: ['Turkish', 'English', 'Arabic'],
                 hoursAvailable: {
                   '@type': 'OpeningHoursSpecification',
                   dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
@@ -163,7 +171,7 @@ export default function ContactPage() {
                 contactType: 'sales',
                 email: CONTACT_INFO.email,
                 areaServed: 'TR',
-                availableLanguage: ['Turkish'],
+                availableLanguage: ['Turkish', 'English', 'Arabic'],
               },
             ],
           }),

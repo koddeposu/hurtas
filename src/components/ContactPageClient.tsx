@@ -1,6 +1,7 @@
 "use client";
 
 import { LeadForm } from "@/components/form";
+import { useDictionary } from "@/components/i18n-provider";
 import {
   CONTACT_INFO,
   CONTACT_MAP_EMBED_URL,
@@ -12,6 +13,7 @@ import { ArrowRight, Check, Copy, Mail, MapPin, Phone } from "lucide-react";
 import { useState } from "react";
 
 export default function ContactPageClient() {
+  const dict = useDictionary();
   const [copiedPhone, setCopiedPhone] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [copiedAddress, setCopiedAddress] = useState(false);
@@ -54,9 +56,9 @@ export default function ContactPageClient() {
               <meta itemProp="contactType" content="customer service" />
               <ContactCard
                 icon={<Phone size={32} />}
-                label="Bizi Arayın"
+                label={dict.contactPage.phoneLabel}
                 value={`${CONTACT_INFO.primaryPhone.display} / ${CONTACT_INFO.mobilePhone.display}`}
-                sub="Hafta içi: 09:00 - 18:00"
+                sub={dict.contactPage.weekday}
                 delay={0.1}
                 onCopy={() =>
                   copyToClipboard(
@@ -65,6 +67,8 @@ export default function ContactPageClient() {
                   )
                 }
                 copied={copiedPhone}
+                copiedText={dict.contactPage.copied}
+                copySuffix={dict.contactPage.copy}
               />
             </div>
 
@@ -73,12 +77,14 @@ export default function ContactPageClient() {
               <meta itemProp="email" content={CONTACT_INFO.email} />
               <ContactCard
                 icon={<Mail size={32} />}
-                label="E-Posta Gönderin"
+                label={dict.contactPage.emailLabel}
                 value={CONTACT_INFO.email}
-                sub="7/24 Yanıt Garantisi"
+                sub={dict.contactPage.emailSub}
                 delay={0.2}
                 onCopy={() => copyToClipboard(CONTACT_INFO.email, "email")}
                 copied={copiedEmail}
+                copiedText={dict.contactPage.copied}
+                copySuffix={dict.contactPage.copy}
               />
             </div>
 
@@ -99,14 +105,16 @@ export default function ContactPageClient() {
               <meta itemProp="addressCountry" content="TR" />
               <ContactCard
                 icon={<MapPin size={32} />}
-                label="Merkez Ofisimiz"
+                label={dict.contactPage.addressLabel}
                 value={CONTACT_INFO.address.full}
-                sub="Tesislerimize Kahveye Bekleriz"
+                sub={dict.contactPage.addressSub}
                 delay={0.3}
                 onCopy={() =>
                   copyToClipboard(CONTACT_INFO.address.full, "address")
                 }
                 copied={copiedAddress}
+                copiedText={dict.contactPage.copied}
+                copySuffix={dict.contactPage.copy}
               />
             </div>
           </div>
@@ -139,15 +147,15 @@ export default function ContactPageClient() {
           style={{ border: 0 }}
           allowFullScreen
           loading="lazy"
-          title="Hürtaş Beton Merkez Ofis Konumu"
+          title={dict.contactPage.mapTitle}
           itemProp="hasMap"
         />
         <div className="absolute top-10 right-10 max-w-xs rounded-[3px] border border-slate-300 bg-white p-6 shadow-[0_20px_44px_-28px_rgba(15,23,42,0.24)]">
           <h4 className="font-black text-[#152f51] mb-2 uppercase text-xs tracking-widest">
-            Yol Tarifi
+            {dict.contactPage.directions}
           </h4>
           <p className="text-slate-500 text-sm mb-4">
-            Üretim tesislerimizi ziyaret etmek için konum alabilirsiniz.
+            {dict.contactPage.directionsText}
           </p>
           <a
             href={CONTACT_MAP_URL}
@@ -155,7 +163,7 @@ export default function ContactPageClient() {
             rel="noopener noreferrer"
             className="flex items-center gap-2 text-[#152f51] font-bold text-xs group"
           >
-            HARİTALARDA AÇ{" "}
+            {dict.contactPage.openMaps}{" "}
             <ArrowRight
               size={14}
               className="group-hover:translate-x-1 transition-transform"
@@ -175,6 +183,8 @@ interface ContactCardProps {
   delay: number;
   onCopy: () => void;
   copied: boolean;
+  copiedText: string;
+  copySuffix: string;
 }
 
 const ContactCard = ({
@@ -185,6 +195,8 @@ const ContactCard = ({
   delay,
   onCopy,
   copied,
+  copiedText,
+  copySuffix,
 }: ContactCardProps) => (
   <motion.div
     initial={{ opacity: 0, y: 30 }}
@@ -204,7 +216,7 @@ const ContactCard = ({
       <button
         onClick={onCopy}
         className="absolute right-0 top-0 p-1.5 rounded-[2px] hover:bg-slate-100 transition-colors"
-        aria-label={`${label} kopyala`}
+        aria-label={`${label} ${copySuffix}`}
       >
         {copied ? (
           <Check size={18} className="text-secondary" />
@@ -224,7 +236,7 @@ const ContactCard = ({
             exit={{ opacity: 0, y: 5 }}
             className="absolute -top-10 left-0 whitespace-nowrap rounded-[2px] bg-secondary px-3 py-1 text-xs font-semibold text-[#152f51] shadow-lg"
           >
-            ✓ Kopyalandı!
+            {copiedText}
           </motion.div>
         )}
       </AnimatePresence>

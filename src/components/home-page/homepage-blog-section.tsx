@@ -1,7 +1,11 @@
 import { getBlogPostsPaginated } from "@/actions/blogActions";
+import { getDictionary, getLocalizedUrl } from "@/lib/i18n";
+import { getCurrentLocale } from "@/lib/i18n-server";
 import { LatestBlogPosts } from "./latest-blog-posts";
 
 export async function HomepageBlogSection() {
+  const locale = await getCurrentLocale();
+  const dict = getDictionary(locale);
   const blogData = await getBlogPostsPaginated({
     page: 1,
     limit: 4,
@@ -20,11 +24,11 @@ export async function HomepageBlogSection() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "ItemList",
-            name: "Hürtaş Beton Blog Yazıları",
+            name: dict.blog.itemListName,
             itemListElement: blogData.posts.map((post, index) => ({
               "@type": "ListItem",
               position: index + 1,
-              url: `https://www.hurtasbeton.com/blog/${post.slug}`,
+              url: getLocalizedUrl(`/blog/${post.slug}`, locale),
               name: post.title,
             })),
           }),

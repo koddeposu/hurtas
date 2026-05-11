@@ -1,4 +1,16 @@
+"use client";
+
+import {
+  useDictionary,
+  useLocale,
+  useLocalizedPath,
+} from "@/components/i18n-provider";
 import { DBProductPreview } from "@/types/product";
+import {
+  getLocalizedImageAlt,
+  getLocalizedProductMetaDescription,
+  getLocalizedProductName,
+} from "@/lib/i18n";
 import {
   getCategoryDisplayName,
   getProductCategoryDetailHref,
@@ -19,13 +31,21 @@ export function HomeProductCard({
   badge,
   categories = [],
 }: HomeProductCardProps) {
+  const locale = useLocale();
+  const dict = useDictionary();
+  const localizedPath = useLocalizedPath();
+  const productName = getLocalizedProductName(product, locale);
+  const productMetaDescription = getLocalizedProductMetaDescription(
+    product,
+    locale,
+  );
   const categoryLabel = product.category
-    ? getCategoryDisplayName(product.category)
+    ? getCategoryDisplayName(product.category, locale)
     : undefined;
 
   return (
     <Link
-      href={getProductCategoryDetailHref(product, categories)}
+      href={localizedPath(getProductCategoryDetailHref(product, categories))}
       prefetch={false}
       className="group flex h-full flex-col overflow-hidden rounded-[3px] border border-slate-200 bg-white shadow-[0_14px_34px_-30px_rgba(15,23,42,0.28)] transition-all duration-300 hover:-translate-y-1 hover:border-[#d6a94a]/70 hover:shadow-[0_24px_46px_-34px_rgba(21,47,81,0.34)]"
     >
@@ -35,7 +55,7 @@ export function HomeProductCard({
         {product.image ? (
           <Image
             src={product.image.url}
-            alt={product.image.alt?.trim() || product.name}
+            alt={getLocalizedImageAlt(product.image, locale) || productName}
             fill
             quality={75}
             className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
@@ -63,17 +83,17 @@ export function HomeProductCard({
 
       <div className="flex flex-1 flex-col p-4">
         <h3 className="text-base font-black leading-snug tracking-tight text-slate-900 transition-colors duration-300 group-hover:text-[#152f51]">
-          {product.name}
+          {productName}
         </h3>
 
-        {product.metaDescription ? (
+        {productMetaDescription ? (
           <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">
-            {product.metaDescription}
+            {productMetaDescription}
           </p>
         ) : null}
 
         <div className="mt-auto flex items-center justify-between border-t border-slate-200 pt-4 text-[11px] font-black uppercase tracking-[0.14em] text-[#152f51]">
-          <span>Ürünü İncele</span>
+          <span>{dict.products.cardCta}</span>
           <span className="inline-flex h-9 w-9 items-center justify-center rounded-[2px] bg-[#152f51] text-white transition-colors group-hover:bg-[#d6a94a] group-hover:text-[#152f51]">
             <ArrowUpRight className="h-4 w-4" />
           </span>

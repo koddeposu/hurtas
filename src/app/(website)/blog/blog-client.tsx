@@ -1,7 +1,13 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
+import {
+  useDictionary,
+  useLocale,
+  useLocalizedPath,
+} from "@/components/i18n-provider";
 import { blogPost, category } from "@/db/schema";
+import { getDateLocale } from "@/lib/i18n";
 import {
   getCategoryDisplayName,
   getCategoryHref,
@@ -39,9 +45,9 @@ interface BlogPageClientProps {
   prefabricCategories: PrefabricCategory[];
 }
 
-function formatDate(date: Date | null) {
+function formatDate(date: Date | null, locale: string) {
   if (!date) return "";
-  return new Date(date).toLocaleDateString("tr-TR", {
+  return new Date(date).toLocaleDateString(locale, {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -49,34 +55,36 @@ function formatDate(date: Date | null) {
 }
 
 function EmptyState() {
+  const dict = useDictionary();
+
   return (
     <div className="flex flex-col items-center justify-center rounded-[1rem] border border-slate-300 bg-white px-6 py-24 text-center shadow-[0_18px_38px_-28px_rgba(15,23,42,0.12)]">
       <div className="mb-8 flex h-24 w-24 items-center justify-center rounded-xl bg-slate-100">
         <PencilLine size={40} className="text-slate-300" />
       </div>
       <h3 className="mb-4 text-2xl font-black text-slate-900">
-        Henüz Blog Yazısı Yok
+        {dict.blog.emptyTitle}
       </h3>
       <p className="max-w-md text-slate-500">
-        Yakında beton ürünleri, saha kullanımı ve tedarik planlaması hakkında
-        faydalı içerikler paylaşılacak.
+        {dict.blog.emptyDescription}
       </p>
     </div>
   );
 }
 
 function SearchResultsEmpty({ query }: { query: string }) {
+  const dict = useDictionary();
+
   return (
     <div className="flex flex-col items-center justify-center rounded-[1rem] border border-dashed border-slate-300 bg-white px-6 py-20 text-center">
       <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-xl bg-slate-100">
         <Search size={32} className="text-slate-400" />
       </div>
       <h3 className="mb-3 text-2xl font-black text-slate-900">
-        Sonuc Bulunamadi
+        {dict.blog.noResultTitle}
       </h3>
       <p className="max-w-md text-sm leading-relaxed text-slate-500 md:text-base">
-        &quot;{query}&quot; ile eslesen bir blog yazisi ya da kategori
-        bulunamadi.
+        &quot;{query}&quot; {dict.blog.noResultDescription}
       </p>
     </div>
   );
@@ -89,11 +97,13 @@ function SearchBox({
   value: string;
   onChange: (value: string) => void;
 }) {
+  const dict = useDictionary();
+
   return (
     <div className="rounded-[3px] border border-slate-300 bg-white p-5 shadow-[0_18px_40px_-30px_rgba(15,23,42,0.18)]">
       <div className="mb-3">
         <p className="text-[11px] font-black uppercase tracking-[0.28em] text-[#152f51]">
-          Blog Arama
+          {dict.blog.searchTitle}
         </p>
       </div>
 
@@ -106,7 +116,7 @@ function SearchBox({
           type="search"
           value={value}
           onChange={(event) => onChange(event.target.value)}
-          placeholder="Blog veya kategori ara"
+          placeholder={dict.blog.searchPlaceholder}
           className="h-12 rounded-[3px] border-slate-300 bg-slate-50 pl-11 pr-4 text-sm text-slate-700 placeholder:text-slate-400"
         />
       </div>
@@ -125,6 +135,8 @@ function Pagination({
   hasNextPage: boolean;
   hasPrevPage: boolean;
 }) {
+  const dict = useDictionary();
+  const localizedPath = useLocalizedPath();
   const getPageUrl = (page: number) => {
     return page === 1 ? "/blog" : `/blog?page=${page}`;
   };
@@ -160,10 +172,10 @@ function Pagination({
     <div className="mt-20 flex flex-wrap items-center justify-center gap-3 rounded-[3px]  px-4 py-4 shadow-[0_16px_30px_-24px_rgba(15,23,42,0.1)]">
       {hasPrevPage && (
         <Link
-          href={getPageUrl(currentPage - 1)}
+          href={localizedPath(getPageUrl(currentPage - 1))}
           className="inline-flex items-center gap-2 rounded-[3px] border border-slate-300 px-4 py-3 font-bold text-[#152f51] transition-colors hover:border-primary hover:bg-primary hover:text-white"
         >
-          <ArrowLeft size={18} /> Önceki
+          <ArrowLeft size={18} /> {dict.common.previous}
         </Link>
       )}
 
@@ -175,7 +187,7 @@ function Pagination({
         ) : (
           <Link
             key={page}
-            href={getPageUrl(page)}
+            href={localizedPath(getPageUrl(page))}
             className={`flex h-12 w-12 items-center justify-center rounded-[3px] border font-bold transition-all ${
               currentPage === page
                 ? "bg-primary text-white border-primary"
@@ -189,10 +201,10 @@ function Pagination({
 
       {hasNextPage && (
         <Link
-          href={getPageUrl(currentPage + 1)}
+          href={localizedPath(getPageUrl(currentPage + 1))}
           className="inline-flex items-center gap-2 rounded-[3px] border border-slate-300 px-4 py-3 font-bold text-[#152f51] transition-colors hover:border-primary hover:bg-primary hover:text-white"
         >
-          Sonraki <ArrowRight size={18} />
+          {dict.common.next} <ArrowRight size={18} />
         </Link>
       )}
     </div>
@@ -204,24 +216,38 @@ export function BlogPageClient({
   recentPosts,
   prefabricCategories,
 }: BlogPageClientProps) {
+  const locale = useLocale();
+  const dict = useDictionary();
+  const localizedPath = useLocalizedPath();
+  const dateLocale = getDateLocale(locale);
   const { posts, totalPages, currentPage, hasNextPage, hasPrevPage } = data;
   const [searchQuery, setSearchQuery] = useState("");
 
-  const normalizedQuery = searchQuery.trim().toLocaleLowerCase("tr-TR");
+  const normalizedQuery = searchQuery.trim().toLocaleLowerCase(getDateLocale(locale));
   const hasActiveSearch = normalizedQuery.length > 0;
 
   const filteredPosts = hasActiveSearch
     ? posts.filter((post) =>
         [post.title, post.excerpt, post.category].some((value) =>
-          value.toLocaleLowerCase("tr-TR").includes(normalizedQuery),
+          value.toLocaleLowerCase(getDateLocale(locale)).includes(normalizedQuery),
         ),
       )
     : posts;
 
   const filteredCategories = hasActiveSearch
     ? prefabricCategories.filter((item) =>
-        [item.name, item.title ?? "", item.description ?? ""].some((value) =>
-          value.toLocaleLowerCase("tr-TR").includes(normalizedQuery),
+        [
+          item.name,
+          item.nameEn ?? "",
+          item.nameAr ?? "",
+          item.title ?? "",
+          item.titleEn ?? "",
+          item.titleAr ?? "",
+          item.description ?? "",
+          item.descriptionEn ?? "",
+          item.descriptionAr ?? "",
+        ].some((value) =>
+          value.toLocaleLowerCase(getDateLocale(locale)).includes(normalizedQuery),
         ),
       )
     : prefabricCategories;
@@ -247,7 +273,7 @@ export function BlogPageClient({
                       {filteredPosts.map((post, index) => (
                         <Link
                           key={post.id}
-                          href={`/blog/${post.slug}`}
+                          href={localizedPath(`/blog/${post.slug}`)}
                           className="block h-full"
                         >
                           <motion.article
@@ -276,12 +302,13 @@ export function BlogPageClient({
                                   <Calendar size={14} />
                                   {formatDate(
                                     post.publishedAt || post.createdAt,
+                                    dateLocale,
                                   )}
                                 </div>
                                 {post.readTime && (
                                   <div className="flex items-center gap-1.5">
                                     <Clock size={14} />
-                                    {post.readTime} dk
+                                    {post.readTime} {dict.common.minutes}
                                   </div>
                                 )}
                               </div>
@@ -295,7 +322,7 @@ export function BlogPageClient({
                               </p>
 
                               <div className="mt-auto flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#152f51] transition-all duration-300 group-hover:gap-4">
-                                Devamını Oku <ChevronRight size={16} />
+                                {dict.blog.readMore} <ChevronRight size={16} />
                               </div>
                             </div>
                           </motion.article>
@@ -322,10 +349,10 @@ export function BlogPageClient({
                   <div className="rounded-[3px] border border-slate-300 bg-white p-6 shadow-[0_18px_40px_-30px_rgba(15,23,42,0.14)]">
                     <div className="mb-5 flex items-center justify-between">
                       <h2 className="text-lg font-black text-slate-900">
-                        Son 4 Gonderi
+                        {dict.blog.recentTitle}
                       </h2>
                       <span className="text-[11px] font-black uppercase tracking-[0.24em] text-slate-400">
-                        Yeni
+                        {dict.blog.newLabel}
                       </span>
                     </div>
 
@@ -333,7 +360,7 @@ export function BlogPageClient({
                       {recentPosts.map((post) => (
                         <Link
                           key={post.id}
-                          href={`/blog/${post.slug}`}
+                          href={localizedPath(`/blog/${post.slug}`)}
                           className="group flex items-center gap-4 rounded-[3px] border border-slate-300 p-3 transition-colors hover:border-[#152f51]/20 hover:bg-slate-50"
                         >
                           <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-[3px]">
@@ -353,7 +380,10 @@ export function BlogPageClient({
                               {post.title}
                             </h3>
                             <p className="mt-2 text-xs font-medium text-slate-400">
-                              {formatDate(post.publishedAt || post.createdAt)}
+                              {formatDate(
+                                post.publishedAt || post.createdAt,
+                                dateLocale,
+                              )}
                             </p>
                           </div>
                         </Link>
@@ -364,10 +394,10 @@ export function BlogPageClient({
                   <div className="rounded-[3px] border border-slate-300 bg-white p-6 shadow-[0_18px_40px_-30px_rgba(15,23,42,0.14)]">
                     <div className="mb-5">
                       <h2 className="text-lg font-black text-slate-900">
-                        Beton Ürün Kategorileri
+                        {dict.blog.categoriesTitle}
                       </h2>
                       <p className="mt-2 text-sm leading-relaxed text-slate-500">
-                        Ürünleri kategori bazında hızlıca inceleyin.
+                        {dict.blog.categoriesDescription}
                       </p>
                     </div>
 
@@ -376,10 +406,12 @@ export function BlogPageClient({
                         filteredCategories.map((item) => (
                           <Link
                             key={item.id}
-                            href={getCategoryHref(prefabricCategories, item)}
+                            href={localizedPath(
+                              getCategoryHref(prefabricCategories, item),
+                            )}
                             className="group flex items-center justify-between rounded-[3px] border border-slate-300 px-4 py-4 text-sm font-bold text-slate-700 transition-colors hover:border-[#152f51]/20 hover:bg-slate-50 hover:text-[#152f51]"
                           >
-                            <span>{getCategoryDisplayName(item)}</span>
+                            <span>{getCategoryDisplayName(item, locale)}</span>
                             <ChevronRight
                               size={16}
                               className="transition-transform group-hover:translate-x-1"
@@ -388,7 +420,7 @@ export function BlogPageClient({
                         ))
                       ) : (
                         <p className="rounded-[0.75rem] border border-dashed border-slate-300 px-4 py-6 text-sm text-slate-500">
-                          Aramaniza uygun kategori bulunamadi.
+                          {dict.blog.categoryNoResult}
                         </p>
                       )}
                     </div>

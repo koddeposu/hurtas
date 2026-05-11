@@ -1,4 +1,12 @@
+"use client";
+
 import { blogPost } from "@/db/schema";
+import {
+  useDictionary,
+  useLocale,
+  useLocalizedPath,
+} from "@/components/i18n-provider";
+import { getDateLocale } from "@/lib/i18n";
 import { InferSelectModel } from "drizzle-orm";
 import { ArrowUpRight, CalendarDays, Clock3 } from "lucide-react";
 import Image from "next/image";
@@ -10,10 +18,10 @@ interface LatestBlogPostsProps {
   posts: BlogPost[];
 }
 
-function formatDate(date: Date | null) {
+function formatDate(date: Date | null, locale: string) {
   if (!date) return "";
 
-  return new Date(date).toLocaleDateString("tr-TR", {
+  return new Date(date).toLocaleDateString(locale, {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -21,6 +29,11 @@ function formatDate(date: Date | null) {
 }
 
 export function LatestBlogPosts({ posts }: LatestBlogPostsProps) {
+  const locale = useLocale();
+  const dict = useDictionary();
+  const localizedPath = useLocalizedPath();
+  const dateLocale = getDateLocale(locale);
+
   if (!posts.length) {
     return null;
   }
@@ -30,24 +43,23 @@ export function LatestBlogPosts({ posts }: LatestBlogPostsProps) {
       <div className="mb-7 flex flex-col gap-4 lg:mb-8 lg:flex-row lg:items-end lg:justify-between">
         <div className="max-w-2xl">
           <span className="inline-flex rounded-[2px] border border-secondary/15 bg-secondary/10 px-3 py-1.5 text-[9px] font-black uppercase tracking-[0.2em] text-secondary">
-            Hürtaş Beton Blog Yazıları
+            {dict.blog.latestEyebrow}
           </span>
           <h2 className="mt-3 text-2xl font-black tracking-tight text-slate-900 md:text-4xl">
-            Hürtaş Beton Elemanları
-            <span className="text-secondary"> Ürün ve Proje Rehberi</span>
+            {dict.blog.latestTitle}
+            <span className="text-secondary">{dict.blog.latestAccent}</span>
           </h2>
           <p className="mt-3 max-w-xl text-sm font-medium leading-6 text-slate-500">
-            Beton boru, parke taşı, bordür ve altyapı ürünleriyle ilgili
-            seçim, tedarik ve uygulama içeriklerimizi inceleyin.
+            {dict.blog.latestDescription}
           </p>
         </div>
 
         <Link
-          href="/blog"
+          href={localizedPath("/blog")}
           prefetch={false}
           className="inline-flex w-fit items-center gap-2 rounded-[2px] border border-slate-300 px-3.5 py-2 text-[11px] font-black uppercase tracking-[0.14em] text-slate-700 transition-colors hover:border-secondary hover:text-secondary"
         >
-          Tümünü Gör
+          {dict.common.viewAll}
           <ArrowUpRight className="h-4 w-4" />
         </Link>
       </div>
@@ -56,7 +68,7 @@ export function LatestBlogPosts({ posts }: LatestBlogPostsProps) {
         {posts.map((post) => (
           <Link
             key={post.id}
-            href={`/blog/${post.slug}`}
+            href={localizedPath(`/blog/${post.slug}`)}
             prefetch={false}
             className="group overflow-hidden rounded-[3px] border border-slate-300 bg-white shadow-[0_16px_38px_-32px_rgba(15,23,42,0.24)] transition-all duration-300 hover:-translate-y-1.5 hover:border-slate-400 hover:shadow-[0_22px_48px_-28px_rgba(15,23,42,0.28)]"
           >
@@ -78,12 +90,12 @@ export function LatestBlogPosts({ posts }: LatestBlogPostsProps) {
               <div className="flex flex-wrap items-center gap-3 text-[11px] font-bold text-slate-600">
                 <span className="inline-flex items-center gap-1.5">
                   <CalendarDays className="h-3.5 w-3.5" />
-                  {formatDate(post.publishedAt || post.createdAt)}
+                  {formatDate(post.publishedAt || post.createdAt, dateLocale)}
                 </span>
                 {post.readTime ? (
                   <span className="inline-flex items-center gap-1.5">
                     <Clock3 className="h-3.5 w-3.5" />
-                    {post.readTime} dk
+                    {post.readTime} {dict.common.minutes}
                   </span>
                 ) : null}
               </div>
@@ -97,7 +109,7 @@ export function LatestBlogPosts({ posts }: LatestBlogPostsProps) {
               </p>
 
               <div className="mt-4 inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.14em] text-secondary">
-                Devamını Oku
+                {dict.blog.readMore}
                 <ArrowUpRight className="h-4 w-4" />
               </div>
             </div>

@@ -1,4 +1,6 @@
 import { getProductsPreview } from "@/actions/productActions";
+import { getDictionary } from "@/lib/i18n";
+import { getCurrentLocale } from "@/lib/i18n-server";
 import { ALL_PRODUCTS_PATH, getCategoryHref } from "@/lib/productRoutes";
 import { HomepageCategorySlider } from "./homepage-category-slider";
 
@@ -28,6 +30,8 @@ export async function HomepageProductSliders({
   categories,
   group = "core",
 }: HomepageProductSlidersProps) {
+  const locale = await getCurrentLocale();
+  const dict = getDictionary(locale);
   const infrastructureCategory = getCategory(categories, [
     "Altyapı",
     "Alt Yapı",
@@ -55,10 +59,10 @@ export async function HomepageProductSliders({
           <section className="flex justify-center py-5 lg:pt-5">
             <div className="max-w-[1280px] w-full">
               <HomepageCategorySlider
-                title="Ürünleri"
-                accent="Çevre Düzenleme"
-                seoLabel="Çevre Düzenleme Ürünleri"
-                description="Bahçe, yol, kaldırım ve saha düzenlemelerinde kullanılan tamamlayıcı beton ürünlerini bir arada görün."
+                title={dict.sliders.environment.title}
+                accent={dict.sliders.environment.accent}
+                seoLabel={dict.sliders.environment.seoLabel}
+                description={dict.sliders.environment.description}
                 href={
                   environmentCategory
                     ? getCategoryHref(categories, environmentCategory)
@@ -89,10 +93,10 @@ export async function HomepageProductSliders({
         <section className="flex justify-center py-5 lg:pt-7">
           <div className="max-w-[1280px] w-full">
             <HomepageCategorySlider
-              title="Elemanları"
-              accent="Altyapı"
-              seoLabel="Altyapı Beton Ürünleri"
-              description="Beton boru, menhol, baca ve altyapı projeleri için ihtiyaç duyulan dayanıklı beton ürünlerini inceleyin."
+              title={dict.sliders.infrastructure.title}
+              accent={dict.sliders.infrastructure.accent}
+              seoLabel={dict.sliders.infrastructure.seoLabel}
+              description={dict.sliders.infrastructure.description}
               href={
                 infrastructureCategory
                   ? getCategoryHref(categories, infrastructureCategory)
@@ -109,10 +113,10 @@ export async function HomepageProductSliders({
         <section className="flex justify-center py-5 lg:pt-5">
           <div className="max-w-[1280px] w-full">
             <HomepageCategorySlider
-              title="Elemanları"
-              accent="Üst Yapı"
-              seoLabel="Üst Yapı Beton Ürünleri"
-              description="Parke taşı, bordür ve saha kaplama çözümleriyle üst yapı projeleriniz için uygun ürünleri keşfedin."
+              title={dict.sliders.superstructure.title}
+              accent={dict.sliders.superstructure.accent}
+              seoLabel={dict.sliders.superstructure.seoLabel}
+              description={dict.sliders.superstructure.description}
               href={
                 superstructureCategory
                   ? getCategoryHref(categories, superstructureCategory)

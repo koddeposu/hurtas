@@ -5,6 +5,10 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import {
+  useDictionary,
+  useLocalizedPath,
+} from "@/components/i18n-provider";
 import { ZoomableImage } from "@/components/ZoomableImage";
 import { handleCall, handleWhatsApp } from "@/lib/analytics/googleAds";
 import { motion } from "framer-motion";
@@ -91,6 +95,7 @@ type ProductDetailRenderBlock =
     };
 
 export function ProductImage({ product }: ProductImageProps) {
+  const dict = useDictionary();
   const [api, setApi] = React.useState<CarouselApi | null>(null);
   const [current, setCurrent] = React.useState(0);
   const [selectedProduct, setSelectedProduct] = useState<DetailProduct | null>(
@@ -161,7 +166,7 @@ export function ProductImage({ product }: ProductImageProps) {
           <button
             onClick={() => setSelectedProduct(product)}
             className="absolute top-4 right-4 z-30 rounded-[2px] bg-white/95 p-2 text-[#152f51] shadow transition-all hover:bg-white"
-            aria-label="Resmi büyüt"
+            aria-label={dict.productDetail.imageZoom}
           >
             <ZoomIn className="h-5 w-5" />
           </button>
@@ -217,6 +222,9 @@ export function ProductImage({ product }: ProductImageProps) {
 }
 
 function ProductActions() {
+  const dict = useDictionary();
+  const localizedPath = useLocalizedPath();
+
   return (
     <div className="mt-5">
       <div className="hidden gap-3 md:flex">
@@ -226,14 +234,14 @@ function ProductActions() {
           className="inline-flex min-h-12 flex-1 cursor-pointer items-center justify-center gap-2 rounded-[2px] bg-[#d6a94a] px-5 py-3.5 text-xs font-black uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#bf943b] ads-whatsapp"
         >
           <MessageCircle className="h-5 w-5" />
-          WhatsApp
+          {dict.common.whatsapp}
         </button>
         <Link
-          href="/iletisim"
+          href={localizedPath("/iletisim")}
           prefetch={false}
           className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-[2px] bg-[#152f51] px-5 py-3.5 text-xs font-black uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#0d1f36] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#d6a94a] focus-visible:ring-offset-2 ads-contact"
         >
-          İletişim
+          {dict.common.contact}
           <ArrowUpRight className="h-4 w-4" />
         </Link>
       </div>
@@ -245,7 +253,7 @@ function ProductActions() {
           className="inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-[2px] bg-[#d6a94a] px-3 py-3 text-xs font-black uppercase tracking-[0.1em] text-white transition-colors hover:bg-[#bf943b] ads-whatsapp"
         >
           <MessageCircle className="h-5 w-5" />
-          WhatsApp
+          {dict.common.whatsapp}
         </button>
         <button
           type="button"
@@ -253,7 +261,7 @@ function ProductActions() {
           className="inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-[2px] bg-[#152f51] px-3 py-3 text-xs font-black uppercase tracking-[0.1em] text-white transition-colors hover:bg-[#0d1f36] ads-phone-call"
         >
           <Phone className="h-5 w-5" />
-          Bizi Arayın
+          {dict.productDetail.callUs}
         </button>
       </div>
     </div>
@@ -261,11 +269,8 @@ function ProductActions() {
 }
 
 function TrustFeatures() {
-  const items = [
-    "Dayanıklı Beton Üretimi",
-    "Planlı Sevkiyat",
-    "Altyapı ve Çevre Düzenleme Ürünleri",
-  ];
+  const dict = useDictionary();
+  const items = dict.productDetail.trust;
 
   return (
     <div className="mt-6 grid gap-3 border-y border-slate-200 py-5">
@@ -289,6 +294,8 @@ function ProductDescription({
   detailBlocks?: ProductDetailRenderBlock[];
   descriptionText?: string | null;
 }) {
+  const dict = useDictionary();
+
   if (detailBlocks.length === 0 && !descriptionText) return null;
 
   return (
@@ -296,11 +303,11 @@ function ProductDescription({
       <div className="mb-4 inline-flex items-center gap-2 rounded-[2px] border border-slate-200 bg-white px-3 py-1.5">
         <span className="h-2 w-2 rounded-[1px] bg-[#d6a94a]" />
         <span className="text-[10px] font-black uppercase tracking-[0.18em] text-[#152f51]">
-          Ürün Bilgisi
+          {dict.productDetail.info}
         </span>
       </div>
       <h2 className="text-xl font-black tracking-tight text-slate-900 md:text-3xl">
-        Ürün Açıklaması
+        {dict.productDetail.descriptionTitle}
       </h2>
       {detailBlocks.length > 0 ? (
         <div className="mt-5 space-y-8">
@@ -374,9 +381,12 @@ function ProductDescription({
 }
 
 function RelatedProductCard({ product }: { product: RelatedProduct }) {
+  const dict = useDictionary();
+  const localizedPath = useLocalizedPath();
+
   return (
     <Link
-      href={product.href}
+      href={localizedPath(product.href)}
       prefetch={false}
       className="group flex h-full flex-col overflow-hidden rounded-[3px] border border-slate-300 bg-white shadow-[0_16px_38px_-32px_rgba(15,23,42,0.24)] transition-all duration-300 hover:-translate-y-1.5 hover:border-slate-400 hover:shadow-[0_24px_52px_-30px_rgba(15,23,42,0.3)]"
     >
@@ -411,7 +421,7 @@ function RelatedProductCard({ product }: { product: RelatedProduct }) {
         ) : null}
 
         <div className="mt-auto inline-flex items-center gap-2 pt-5 text-[11px] font-black uppercase tracking-[0.14em] text-[#152f51]">
-          İncele
+          {dict.common.inspect}
           <ArrowUpRight className="h-4 w-4" />
         </div>
       </div>
@@ -426,6 +436,7 @@ function RelatedProductsSlider({
   title?: string;
   products: RelatedProduct[];
 }) {
+  const dict = useDictionary();
   const [api, setApi] = useState<CarouselApi | null>(null);
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
@@ -458,7 +469,7 @@ function RelatedProductsSlider({
     <section className="font-[family-name:var(--font-poppins)]">
       <div className="mb-6 md:mb-8">
         <h2 className="text-2xl md:text-4xl font-black tracking-tight text-slate-900">
-          {title || "Diğer Beton Ürünlerimiz"}
+          {title || dict.productDetail.relatedDefault}
         </h2>
       </div>
 
@@ -468,7 +479,7 @@ function RelatedProductsSlider({
           onClick={() => api?.scrollPrev()}
           disabled={!canScrollPrev}
           className="absolute -left-7 md:-left-10 top-1/2 z-20 inline-flex -translate-y-1/2 items-center justify-center text-black transition-colors hover:text-secondary disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer hover:scale-110"
-          aria-label={`${title || "İlgili ürünler"} önceki`}
+          aria-label={dict.productDetail.relatedPrev}
         >
           <ChevronLeft
             className="w-14 h-14 lg:w-20 lg:h-20"
@@ -481,7 +492,7 @@ function RelatedProductsSlider({
           onClick={() => api?.scrollNext()}
           disabled={!canScrollNext}
           className="absolute -right-7 md:-right-10 top-1/2 z-20 inline-flex -translate-y-1/2 items-center justify-center text-slate-700 transition-colors hover:text-secondary disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer hover:scale-110"
-          aria-label={`${title || "İlgili ürünler"} sonraki`}
+          aria-label={dict.productDetail.relatedNext}
         >
           <ChevronRight
             className="w-14 h-14 lg:w-20 lg:h-20"
@@ -536,6 +547,7 @@ export default function ProductPageClient({
   relatedProducts = [],
   relatedTitle,
 }: ProductPageClientProps) {
+  const dict = useDictionary();
   const shortDescription = product.metaDescription || descriptionText;
 
   return (
@@ -551,7 +563,7 @@ export default function ProductPageClient({
               <div className="inline-flex items-center gap-2 rounded-[2px] border border-slate-200 bg-white px-3 py-1.5">
                 <span className="h-2 w-2 rounded-[1px] bg-[#d6a94a]" />
                 <span className="text-[10px] font-black uppercase tracking-[0.18em] text-[#152f51]">
-                  Hürtaş Beton
+                  {dict.common.companyName}
                 </span>
               </div>
 

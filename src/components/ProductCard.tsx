@@ -1,3 +1,15 @@
+"use client";
+
+import {
+  useDictionary,
+  useLocale,
+  useLocalizedPath,
+} from "@/components/i18n-provider";
+import {
+  getLocalizedImageAlt,
+  getLocalizedProductMetaDescription,
+  getLocalizedProductName,
+} from "@/lib/i18n";
 import type { RouteCategory } from "@/lib/productRoutes";
 import {
   getCategoryDisplayName,
@@ -26,8 +38,17 @@ export const ProductCard = ({
   product: ProductCardProduct;
   categories?: RouteCategory[];
 }) => {
+  const locale = useLocale();
+  const dict = useDictionary();
+  const localizedPath = useLocalizedPath();
+  const productName = isDBProduct(product)
+    ? getLocalizedProductName(product, locale)
+    : product.name;
   const images = isDBProduct(product)
-    ? product.images.map((img) => ({ src: img.url, alt: img.alt }))
+    ? product.images.map((img) => ({
+        src: img.url,
+        alt: getLocalizedImageAlt(img, locale),
+      }))
     : product.img.map((img) => ({
         src: typeof img.src === "string" ? `/product/${img.src}` : img.src,
         alt: img.alt,
@@ -35,7 +56,7 @@ export const ProductCard = ({
 
   const categoryName = isDBProduct(product)
     ? product.category
-      ? getCategoryDisplayName(product.category)
+      ? getCategoryDisplayName(product.category, locale)
       : undefined
     : product.category;
   const categoryLabel = categoryName?.toLocaleLowerCase("tr-TR");
@@ -48,16 +69,18 @@ export const ProductCard = ({
     : getProductDetailHref(detailSlug);
 
   const coverImage = images[0];
-  const coverAlt = coverImage?.alt?.trim() || product.name;
+  const coverAlt = coverImage?.alt?.trim() || productName;
   const metaDescription =
-    "metaDescription" in product && typeof product.metaDescription === "string"
-      ? product.metaDescription
-      : "";
+    isDBProduct(product)
+      ? getLocalizedProductMetaDescription(product, locale)
+      : "metaDescription" in product && typeof product.metaDescription === "string"
+        ? product.metaDescription
+        : "";
   const cardDescription = metaDescription.trim() || null;
 
   return (
     <Link
-      href={detailHref}
+      href={localizedPath(detailHref)}
       prefetch={false}
       className="group flex w-full flex-col justify-between overflow-hidden rounded-[3px] border border-slate-300 bg-white text-left shadow-[0_16px_34px_-28px_rgba(15,23,42,0.12)] transition-all duration-200 hover:-translate-y-1 hover:border-slate-400 hover:shadow-[0_22px_44px_-28px_rgba(15,23,42,0.18)]"
     >
@@ -81,7 +104,7 @@ export const ProductCard = ({
                   event.stopPropagation();
                   fullscreenChange();
                 }}
-                aria-label="Ürün görselini büyüt"
+                aria-label={dict.products.imageZoom}
                 className="absolute bottom-4 right-4 flex h-9 w-9 items-center justify-center rounded-[2px] bg-black/35 text-white transition-all duration-200 hover:scale-105"
               >
                 <Maximize2 size={18} className="text-white" />
@@ -89,13 +112,15 @@ export const ProductCard = ({
             </>
           ) : (
             <div className="flex h-full w-full items-center justify-center">
-              <span className="text-sm text-slate-400">Görsel yok</span>
+              <span className="text-sm text-slate-400">
+                {dict.common.noImage}
+              </span>
             </div>
           )}
 
           {bestseller ? (
             <div className="absolute left-4 top-4 z-10 rounded-[2px] bg-[#d6a94a] px-3 py-1 text-[9px] font-black uppercase tracking-widest text-[#152f51] shadow-sm">
-              Çok Satan
+              {dict.products.bestseller}
             </div>
           ) : null}
         </div>
@@ -109,7 +134,7 @@ export const ProductCard = ({
         ) : null}
 
         <h3 className="mb-1.5 text-lg font-black text-slate-900 transition-colors duration-200 group-hover:text-[#152f51]">
-          {product.name}
+          {productName}
         </h3>
 
         {cardDescription ? (
@@ -121,7 +146,7 @@ export const ProductCard = ({
 
       <div className="px-5 pb-5">
         <div className="mt-2 flex w-full items-center justify-center gap-2 rounded-[2px] bg-[#152f51] py-3.5 text-[11px] font-bold uppercase tracking-[0.14em] text-white transition-all duration-200 group-hover:bg-[#10243d]">
-          İncele <ArrowUpRight size={14} />
+          {dict.common.inspect} <ArrowUpRight size={14} />
         </div>
       </div>
     </Link>

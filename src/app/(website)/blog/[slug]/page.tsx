@@ -3,6 +3,17 @@ import { getCategories } from "@/actions/categoryActions";
 import { getProductsPreview } from "@/actions/productActions";
 import { HomepageCategorySlider } from "@/components/home-page/homepage-category-slider";
 import {
+  getDateLocale,
+  getDictionary,
+  getLocalizedCategoryDisplayName,
+  getLocalizedUrl,
+  getMetadataAlternates,
+  localizePath,
+  type Dictionary,
+  type Locale,
+} from "@/lib/i18n";
+import { getCurrentLocale } from "@/lib/i18n-server";
+import {
   ALL_PRODUCTS_PATH,
   getCategoryDisplayName,
   getCategoryHref,
@@ -74,15 +85,6 @@ function getContentSections(content: string | null) {
   }
 }
 
-function formatDate(date: Date | null) {
-  if (!date) return "";
-  return new Date(date).toLocaleDateString("tr-TR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-}
-
 function getCategory(categories: CategorySummary[], matchers: string[]) {
   return (
     categories.find((category) =>
@@ -99,17 +101,21 @@ function MobileQuickLinks({
   categories,
   infrastructureCategory,
   superstructureCategory,
+  dict,
+  locale,
 }: {
   categories: CategorySummary[];
   infrastructureCategory: CategorySummary | null;
   superstructureCategory: CategorySummary | null;
+  dict: Dictionary;
+  locale: Locale;
 }) {
   return (
     <section className="mb-8 md:hidden">
       <div className="mb-3 flex items-center gap-2 px-1">
         <span className="h-2 w-2 rounded-[1px] bg-[#d6a94a]" />
         <h3 className="text-sm font-black text-slate-800">
-          Ürün Gruplarını Keşfet
+          {dict.common.viewProducts}
         </h3>
       </div>
 
@@ -117,8 +123,8 @@ function MobileQuickLinks({
         <Link
           href={
             infrastructureCategory
-              ? getCategoryHref(categories, infrastructureCategory)
-              : ALL_PRODUCTS_PATH
+              ? localizePath(getCategoryHref(categories, infrastructureCategory), locale)
+              : localizePath(ALL_PRODUCTS_PATH, locale)
           }
           className="group relative overflow-hidden rounded-[3px] border border-slate-200 bg-white p-4 shadow-[0_12px_26px_-24px_rgba(15,23,42,0.32)] transition-all active:scale-95"
         >
@@ -126,10 +132,10 @@ function MobileQuickLinks({
             <Construction className="h-5 w-5" />
           </div>
           <h2 className="text-sm font-black leading-tight text-slate-900">
-            Altyapı Elemanları
+            {dict.structure.items[0].title}
           </h2>
           <div className="mt-3 flex items-center gap-1 text-[11px] font-black uppercase tracking-[0.12em] text-[#152f51]">
-            İncele
+            {dict.common.inspect}
             <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
           </div>
         </Link>
@@ -137,8 +143,8 @@ function MobileQuickLinks({
         <Link
           href={
             superstructureCategory
-              ? getCategoryHref(categories, superstructureCategory)
-              : ALL_PRODUCTS_PATH
+              ? localizePath(getCategoryHref(categories, superstructureCategory), locale)
+              : localizePath(ALL_PRODUCTS_PATH, locale)
           }
           className="group relative overflow-hidden rounded-[3px] border border-slate-200 bg-white p-4 shadow-[0_12px_26px_-24px_rgba(15,23,42,0.32)] transition-all active:scale-95"
         >
@@ -146,10 +152,10 @@ function MobileQuickLinks({
             <Layers3 className="h-5 w-5" />
           </div>
           <h2 className="text-sm font-black leading-tight text-slate-900">
-            Üst Yapı Elemanları
+            {dict.structure.items[1].title}
           </h2>
           <div className="mt-3 flex items-center gap-1 text-[11px] font-black uppercase tracking-[0.12em] text-[#152f51]">
-            Tümünü Gör
+            {dict.common.viewAll}
             <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
           </div>
         </Link>
@@ -162,24 +168,26 @@ function SuggestedLinks({
   categories,
   infrastructureCategory,
   superstructureCategory,
+  dict,
+  locale,
 }: {
   categories: CategorySummary[];
   infrastructureCategory: CategorySummary | null;
   superstructureCategory: CategorySummary | null;
+  dict: Dictionary;
+  locale: Locale;
 }) {
   const links = [
     {
-      title: "Altyapı Elemanları",
-      description:
-        "Beton boru, menhol, baca ve altyapı projeleri için kullanılan ürünleri inceleyin.",
+      title: dict.structure.items[0].title,
+      description: dict.sliders.infrastructure.description,
       href: infrastructureCategory
         ? getCategoryHref(categories, infrastructureCategory)
         : ALL_PRODUCTS_PATH,
     },
     {
-      title: "Üst Yapı Elemanları",
-      description:
-        "Parke taşı, bordür ve saha kaplama çözümlerini kategori bazında görün.",
+      title: dict.structure.items[1].title,
+      description: dict.sliders.superstructure.description,
       href: superstructureCategory
         ? getCategoryHref(categories, superstructureCategory)
         : ALL_PRODUCTS_PATH,
@@ -190,10 +198,10 @@ function SuggestedLinks({
     <section className="mt-14 border-y border-slate-200 bg-[#f6f8fb] py-7">
       <div className="max-w-2xl">
         <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#d6a94a]">
-          İlgili Bağlantılar
+          {dict.common.concreteProducts}
         </p>
         <h2 className="mt-3 text-2xl font-black tracking-tight text-[#152f51] md:text-3xl">
-          Ürün kategorilerine hızlı geçiş yapın.
+          {dict.blog.categoriesDescription}
         </h2>
       </div>
 
@@ -201,7 +209,7 @@ function SuggestedLinks({
         {links.map((item) => (
           <Link
             key={item.title}
-            href={item.href}
+            href={localizePath(item.href, locale)}
             className="group rounded-[3px] border border-slate-200 bg-white p-5 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#d6a94a]/60 hover:shadow-[0_20px_44px_-34px_rgba(15,23,42,0.22)]"
           >
             <div className="flex items-start justify-between gap-4">
@@ -228,19 +236,22 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const locale = await getCurrentLocale();
+  const dict = getDictionary(locale);
   const data = await getPostData(slug);
 
   if (!data) {
     return {
-      title: "Blog | Hürtaş Beton",
+      title: dict.seo.blogTitle,
     };
   }
 
   const { post } = data;
 
   return {
-    title: `${post.title} | Hürtaş Beton Blog`,
+    title: `${post.title} | ${dict.seo.blogTitle}`,
     description: post.excerpt,
+    alternates: getMetadataAlternates(`/blog/${post.slug}`, locale),
     openGraph: {
       title: post.title,
       description: post.excerpt,
@@ -255,6 +266,8 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
+  const locale = await getCurrentLocale();
+  const dict = getDictionary(locale);
   const data = await getPostData(slug);
 
   if (!data) {
@@ -284,11 +297,11 @@ export default async function BlogPostPage({
         <div className="container mx-auto grid max-w-7xl gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(420px,1.1fr)] lg:items-center">
           <div>
             <Link
-              href="/blog"
+              href={localizePath("/blog", locale)}
               className="mb-6 inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.16em] text-[#152f51] transition-colors hover:text-[#d6a94a]"
             >
               <ArrowLeft className="h-4 w-4" />
-              Bloga Dön
+              {dict.common.previous}
             </Link>
 
             <div className="inline-flex items-center gap-2 rounded-[2px] border border-slate-200 bg-[#f6f8fb] px-3 py-1.5">
@@ -309,12 +322,23 @@ export default async function BlogPostPage({
             <div className="mt-6 flex flex-wrap items-center gap-5 text-sm font-bold text-slate-500">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-[#152f51]" />
-                <span>{formatDate(post.publishedAt || post.createdAt)}</span>
+                <span>
+                  {new Date(post.publishedAt || post.createdAt).toLocaleDateString(
+                    getDateLocale(locale),
+                    {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    },
+                  )}
+                </span>
               </div>
               {post.readTime ? (
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4 text-[#152f51]" />
-                  <span>{post.readTime} dk</span>
+                  <span>
+                    {post.readTime} {dict.common.minutes}
+                  </span>
                 </div>
               ) : null}
             </div>
@@ -339,6 +363,8 @@ export default async function BlogPostPage({
           categories={categories}
           infrastructureCategory={infrastructureCategory}
           superstructureCategory={superstructureCategory}
+          dict={dict}
+          locale={locale}
         />
 
         <div className="blog-content text-slate-700">
@@ -355,10 +381,13 @@ export default async function BlogPostPage({
       {sliderCategory && sliderProducts.length > 0 ? (
         <section className="container mx-auto max-w-7xl pb-10">
           <HomepageCategorySlider
-            title="Ürünleri"
-            accent={getCategoryDisplayName(sliderCategory)}
-            seoLabel="Blog İçeriğine Uygun Ürünler"
-            description={`${post.title} içeriğiyle ilgili ${getCategoryDisplayName(sliderCategory).toLocaleLowerCase("tr-TR")} ürünlerini inceleyin.`}
+            title={dict.sliders.featured.title}
+            accent={getCategoryDisplayName(sliderCategory, locale)}
+            seoLabel={dict.blog.categoriesTitle}
+            description={`${post.title} - ${getLocalizedCategoryDisplayName(
+              sliderCategory,
+              locale,
+            )}`}
             href={getCategoryHref(categories, sliderCategory)}
             products={sliderProducts}
             categories={categories}
@@ -380,11 +409,13 @@ export default async function BlogPostPage({
           categories={categories}
           infrastructureCategory={infrastructureCategory}
           superstructureCategory={superstructureCategory}
+          dict={dict}
+          locale={locale}
         />
 
         <div className="mt-14 flex flex-col items-center justify-between gap-5 border-t border-slate-200 pt-8 md:flex-row">
           <div className="text-lg font-black text-slate-900">
-            Bu yazıyı paylaş
+            {dict.blog.sharePost}
           </div>
           <ShareButtons title={post.title} slug={post.slug} />
         </div>

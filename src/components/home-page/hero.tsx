@@ -14,6 +14,10 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import {
+  useDictionary,
+  useLocalizedPath,
+} from "@/components/i18n-provider";
 import { handleCall, handleWhatsApp } from "@/lib/analytics/googleAds";
 import { ALL_PRODUCTS_PATH } from "@/lib/productRoutes";
 import { CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
@@ -21,51 +25,30 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const SLIDES = [
+const SLIDE_IMAGES = [
   {
     id: 1,
-    title: "Hürtaş ile Güçlü Altyapı Çözümleri",
-    desc: "Beton boru, parke taşı, bordür ve altyapı elemanlarında dayanıklı üretim, düzenli sevkiyat ve güvenilir tedarik sağlıyoruz.",
     image: HeroSlideImage1,
     mobilImage: HeroMobilSlideImage1,
   },
   {
     id: 2,
-    title: "Şantiye ve Belediye Projelerine Uygun Beton Ürünleri",
-    desc: "Yol, çevre düzenleme ve altyapı ihtiyaçları için standartlara uygun beton elemanları zamanında teslim ediyoruz.",
     image: HeroSlideImage2,
     mobilImage: HeroMobilSlideImage2,
   },
   {
     id: 3,
-    title: "Üretimden Teslimata Planlı Beton Elemanı Tedariki",
-    desc: "Projenizin ihtiyacına göre doğru ürün, doğru adet ve doğru sevkiyat planıyla iş akışınızı hızlandırıyoruz.",
     image: HeroSlideImage3,
     mobilImage: HeroMobilSlideImage3,
   },
 ];
 
-const FEATURES = [
-  "Dayanıklı Beton Üretimi",
-  "Planlı Sevkiyat",
-  "Altyapı ve Çevre Düzenleme Ürünleri",
-];
-
-const MARQUEE_ITEMS = [
-  "Beton Boru",
-  "Parke Taşı",
-  "Bordür",
-  "Menhol",
-  "Yağmur Oluğu",
-  "Altyapı Elemanları",
-  "Şantiye Tedariki",
-  "Planlı Sevkiyat",
-];
-
 export const Hero4 = () => {
+  const dict = useDictionary();
+  const localizedPath = useLocalizedPath();
   const [api, setApi] = useState<CarouselApi | null>(null);
   const [current, setCurrent] = useState(0);
-  const activeSlide = SLIDES[current];
+  const activeSlide = dict.hero.slides[current] ?? dict.hero.slides[0];
 
   useEffect(() => {
     if (!api) return;
@@ -127,6 +110,7 @@ export const Hero4 = () => {
 
       <div className="relative h-[calc(100svh_-_5.3rem_-_env(safe-area-inset-bottom))] min-h-[calc(100svh_-_5.3rem_-_env(safe-area-inset-bottom))] max-h-[calc(100svh_-_5.3rem_-_env(safe-area-inset-bottom))] lg:h-[600px] lg:min-h-0 xl:h-[711px]">
         <Carousel
+          dir="ltr"
           setApi={setApi}
           opts={{
             align: "start",
@@ -135,8 +119,9 @@ export const Hero4 = () => {
           className="absolute inset-0 h-full w-full [&>[data-slot=carousel-content]]:h-full"
         >
           <CarouselContent className="h-full -ml-0">
-            {SLIDES.map((slide, index) => {
+            {SLIDE_IMAGES.map((slide, index) => {
               const isActive = index === current;
+              const slideText = dict.hero.slides[index] ?? dict.hero.slides[0];
 
               return (
                 <CarouselItem key={slide.id} className="h-full basis-full pl-0">
@@ -148,7 +133,7 @@ export const Hero4 = () => {
                     >
                       <Image
                         src={slide.image}
-                        alt={slide.title}
+                        alt={slideText.title}
                         fill
                         preload={index === 0}
                         fetchPriority={index === 0 ? "high" : "auto"}
@@ -168,7 +153,7 @@ export const Hero4 = () => {
                     >
                       <Image
                         src={slide.mobilImage}
-                        alt={slide.title}
+                        alt={slideText.title}
                         fill
                         preload={index === 0}
                         fetchPriority={index === 0 ? "high" : "auto"}
@@ -191,9 +176,9 @@ export const Hero4 = () => {
           <div className="max-w-3xl">
             <div className="hidden items-center gap-2 rounded-[2px] border border-white/20 bg-white/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-[#dbe7f3] backdrop-blur md:inline-flex">
               <span className="h-2 w-2 rounded-[1px] bg-[#152f51] shadow-[0_0_14px_rgba(21,47,81,0.9)]" />
-              <span>Hürtaş</span>
+              <span>{dict.common.brand}</span>
               <span className="h-1 w-1 rounded-[1px] bg-[#dbe7f3]/70" />
-              <span>Beton Elemanları</span>
+              <span>{dict.common.brandTagline}</span>
             </div>
 
             <h1 className="mt-5 max-w-2xl overflow-hidden text-2xl font-semibold leading-tight tracking-tight text-white line-clamp-3 md:text-4xl lg:h-auto lg:line-clamp-none">
@@ -210,26 +195,26 @@ export const Hero4 = () => {
                 onClick={handleWhatsApp}
                 className="inline-flex min-h-12 cursor-pointer items-center justify-center rounded-[2px] bg-[#d6a94a] px-6 py-3.5 text-xs font-black uppercase tracking-[0.14em] text-white transition-colors hover:bg-[#10243d] focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#152f51] sm:text-sm ads-whatsapp"
               >
-                WhatsApp
+                {dict.common.whatsapp}
               </button>
               <button
                 type="button"
                 onClick={handleCall}
                 className="inline-flex min-h-12 cursor-pointer items-center justify-center rounded-[2px] bg-white px-6 py-3.5 text-xs font-black uppercase tracking-[0.14em] text-slate-900 transition-colors hover:bg-[#f4f7fb] focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#152f51] sm:text-sm ads-phone-call"
               >
-                Hemen Ara
+                {dict.common.callNow}
               </button>
               <Link
-                href={ALL_PRODUCTS_PATH}
+                href={localizedPath(ALL_PRODUCTS_PATH)}
                 prefetch={false}
                 className="inline-flex min-h-12 items-center justify-center rounded-[2px] border border-white/50 px-6 py-3.5 text-xs font-black uppercase tracking-[0.14em] text-white transition-colors hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#152f51] sm:text-sm"
               >
-                Ürünleri İncele
+                {dict.common.viewProducts}
               </Link>
             </div>
 
             <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3">
-              {FEATURES.map((item) => (
+              {dict.hero.features.map((item) => (
                 <div
                   key={item}
                   className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.08em] text-slate-100"
@@ -246,7 +231,7 @@ export const Hero4 = () => {
           type="button"
           onClick={() => api?.scrollPrev()}
           className="absolute left-3 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-[2px] border border-white/30 bg-black/25 text-white backdrop-blur transition-colors hover:bg-black/40 sm:left-6 lg:h-13 lg:w-13"
-          aria-label="Önceki slayt"
+          aria-label={dict.hero.prevSlide}
         >
           <ChevronLeft className="h-5 w-5" />
         </button>
@@ -255,7 +240,7 @@ export const Hero4 = () => {
           type="button"
           onClick={() => api?.scrollNext()}
           className="absolute right-3 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-[2px] border border-white/30 bg-black/25 text-white backdrop-blur transition-colors hover:bg-black/40 sm:right-6 lg:h-13 lg:w-13"
-          aria-label="Sonraki slayt"
+          aria-label={dict.hero.nextSlide}
         >
           <ChevronRight className="h-5 w-5" />
         </button>
@@ -264,7 +249,7 @@ export const Hero4 = () => {
           className="absolute bottom-16 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2"
           aria-hidden="true"
         >
-          {SLIDES.map((slide, index) => (
+          {SLIDE_IMAGES.map((slide, index) => (
             <span
               key={slide.id}
               className={`h-2 rounded-[2px] transition-all ${
@@ -281,7 +266,7 @@ export const Hero4 = () => {
           <div className="absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-[#0d1f36] to-transparent sm:w-28" />
           <div className="absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-[#0d1f36] to-transparent sm:w-28" />
           <div className="hero-marquee flex w-max items-center whitespace-nowrap">
-            {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, index) => (
+            {[...dict.hero.marquee, ...dict.hero.marquee].map((item, index) => (
               <span
                 key={`${item}-${index}`}
                 className="inline-flex items-center text-[10px] font-black uppercase tracking-[0.18em] text-slate-100 sm:text-xs"

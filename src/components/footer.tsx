@@ -1,6 +1,11 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
+import {
+  useDictionary,
+  useLocale,
+  useLocalizedPath,
+} from "@/components/i18n-provider";
 import { CONTACT_INFO, CONTACT_PHONES } from "@/lib/contact";
 import {
   ALL_PRODUCTS_PATH,
@@ -24,7 +29,11 @@ interface Category {
   id: string;
   parentId: string | null;
   name: string;
+  nameEn?: string | null;
+  nameAr?: string | null;
   title: string | null;
+  titleEn?: string | null;
+  titleAr?: string | null;
   slug: string;
   order: number;
 }
@@ -34,23 +43,18 @@ interface FooterProps {
 }
 
 const pageLinks = [
-  { name: "Hakkımızda", href: "/hakkimizda" },
-  { name: "Arge", href: "/arge" },
-  { name: "Ürünler", href: ALL_PRODUCTS_PATH },
-  { name: "Blog", href: "/blog" },
-  { name: "Galeri", href: "/galeri" },
-  { name: "İletişim", href: "/iletisim" },
-];
-
-const FOOTER_PRODUCTS = [
-  "Beton Boru",
-  "Parke Taşı",
-  "Bordür",
-  "Menhol",
-  "Yağmur Oluğu",
-];
+  { labelKey: "about", href: "/hakkimizda" },
+  { labelKey: "arge", href: "/arge" },
+  { labelKey: "products", href: ALL_PRODUCTS_PATH },
+  { labelKey: "blog", href: "/blog" },
+  { labelKey: "gallery", href: "/galeri" },
+  { labelKey: "contact", href: "/iletisim" },
+] as const;
 
 const Footer = ({ categories = [] }: FooterProps) => {
+  const locale = useLocale();
+  const dict = useDictionary();
+  const localizedPath = useLocalizedPath();
   const currentYear = new Date().getFullYear();
   const [copiedAddress, setCopiedAddress] = useState(false);
   const [copiedPhone, setCopiedPhone] = useState(false);
@@ -80,10 +84,10 @@ const Footer = ({ categories = [] }: FooterProps) => {
   const productLinks =
     categories.length > 0
       ? getTopLevelCategories(categories).slice(0, 5).map((category) => ({
-          name: getCategoryDisplayName(category),
+          name: getCategoryDisplayName(category, locale),
           href: getCategoryHref(categories, category),
         }))
-      : FOOTER_PRODUCTS.map((name) => ({
+      : dict.homeAbout.links.slice(1).map((name) => ({
           name,
           href: `${ALL_PRODUCTS_PATH}?q=${encodeURIComponent(name)}`,
         }));
@@ -95,14 +99,13 @@ const Footer = ({ categories = [] }: FooterProps) => {
           <div className="grid gap-5 px-4 py-5 sm:px-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:px-6">
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#d6a94a]">
-                Proje Tedariki
+                {dict.footer.supplyEyebrow}
               </p>
               <h2 className="mt-2 max-w-3xl text-2xl font-black tracking-tight text-white sm:text-3xl">
-                Beton ürün ihtiyacınızı netleştirelim.
+                {dict.footer.supplyTitle}
               </h2>
               <p className="mt-2 max-w-2xl text-sm font-medium leading-6 text-slate-300">
-                Altyapı, üst yapı ve çevre düzenleme ürünleri için doğru adet,
-                doğru ürün ve planlı sevkiyat.
+                {dict.footer.supplyDescription}
               </p>
             </div>
 
@@ -111,7 +114,7 @@ const Footer = ({ categories = [] }: FooterProps) => {
               className="inline-flex min-h-12 w-fit items-center justify-center gap-2 border border-[#d6a94a] bg-[#d6a94a] px-5 text-xs font-black uppercase tracking-[0.14em] text-[#152f51] transition-colors hover:bg-transparent hover:text-[#f4d78d] ads-phone-call"
             >
               <Phone className="h-4 w-4" />
-              Hemen Ara
+              {dict.common.callNow}
             </a>
           </div>
         </section>
@@ -127,44 +130,45 @@ const Footer = ({ categories = [] }: FooterProps) => {
                   {CONTACT_INFO.companyName}
                 </p>
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#d6a94a]">
-                  Beton Elemanları
+                  {dict.common.brandTagline}
                 </p>
               </div>
             </div>
 
             <p className="mt-5 max-w-sm text-sm font-medium leading-6 text-slate-300">
-              Altyapı ve üst yapı beton elemanlarında dayanıklı üretim,
-              anlaşılır ürün seçimi ve düzenli tedarik yaklaşımıyla çalışıyoruz.
+              {dict.footer.description}
             </p>
           </div>
 
-          <nav className="lg:col-span-2" aria-label="Footer kurumsal linkleri">
+          <nav className="lg:col-span-2" aria-label={dict.footer.corporate}>
             <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#d6a94a]">
-              Kurumsal
+              {dict.footer.corporate}
             </h4>
             <ul className="mt-5 space-y-3">
               {pageLinks.map((item) => (
                 <li key={item.href}>
                   <Link
-                    href={item.href}
+                    href={localizedPath(item.href)}
                     className="inline-flex items-center gap-2 text-sm font-bold text-slate-300 transition-colors hover:text-white"
                   >
-                    {item.name}
+                    {item.labelKey === "products"
+                      ? dict.footer.products
+                      : dict.nav[item.labelKey]}
                   </Link>
                 </li>
               ))}
             </ul>
           </nav>
 
-          <nav className="lg:col-span-2" aria-label="Footer ürün linkleri">
+          <nav className="lg:col-span-2" aria-label={dict.footer.products}>
             <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#d6a94a]">
-              Ürünler
+              {dict.footer.products}
             </h4>
             <ul className="mt-5 space-y-3">
               {productLinks.map((item) => (
                 <li key={item.href}>
                   <Link
-                    href={item.href}
+                    href={localizedPath(item.href)}
                     className="inline-flex items-center gap-2 text-sm font-bold text-slate-300 transition-colors hover:text-white"
                   >
                     {item.name}
@@ -177,13 +181,14 @@ const Footer = ({ categories = [] }: FooterProps) => {
 
           <div className="lg:col-span-4">
             <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[#d6a94a]">
-              İletişim
+              {dict.footer.contact}
             </h4>
             <div className="mt-5 space-y-4">
               <ContactRow
                 icon={<MapPin className="h-4 w-4" />}
                 copied={copiedAddress}
-                copyLabel="Adresi kopyala"
+                copyLabel={dict.footer.copyAddress}
+                copiedText={dict.common.copied}
                 onCopy={() =>
                   copyToClipboard(CONTACT_INFO.address.full, "address")
                 }
@@ -200,7 +205,8 @@ const Footer = ({ categories = [] }: FooterProps) => {
               <ContactRow
                 icon={<Phone className="h-4 w-4" />}
                 copied={copiedPhone}
-                copyLabel="Telefon numarasını kopyala"
+                copyLabel={dict.footer.copyPhone}
+                copiedText={dict.common.copied}
                 onCopy={() =>
                   copyToClipboard(
                     CONTACT_PHONES.map((phone) => phone.display).join(" / "),
@@ -225,7 +231,8 @@ const Footer = ({ categories = [] }: FooterProps) => {
               <ContactRow
                 icon={<Mail className="h-4 w-4" />}
                 copied={copiedEmail}
-                copyLabel="E-posta adresini kopyala"
+                copyLabel={dict.footer.copyEmail}
+                copiedText={dict.common.copied}
                 onCopy={() => copyToClipboard(CONTACT_INFO.email, "email")}
               >
                 <a
@@ -242,14 +249,20 @@ const Footer = ({ categories = [] }: FooterProps) => {
 
         <div className="flex flex-col gap-4 border-x border-b border-white/15 px-4 py-5 text-[10px] font-black uppercase tracking-[0.16em] text-slate-400 sm:px-5 md:flex-row md:items-center md:justify-between lg:px-6">
           <p>
-            © {currentYear} {CONTACT_INFO.companyName}. Tüm hakları saklıdır.
+            © {currentYear} {CONTACT_INFO.companyName}. {dict.footer.rights}
           </p>
           <div className="flex flex-wrap gap-5">
-            <Link href="/kvkk" className="transition-colors hover:text-white">
+            <Link
+              href={localizedPath("/kvkk")}
+              className="transition-colors hover:text-white"
+            >
               KVKK
             </Link>
-            <Link href="/iletisim" className="transition-colors hover:text-white">
-              İletişim
+            <Link
+              href={localizedPath("/iletisim")}
+              className="transition-colors hover:text-white"
+            >
+              {dict.common.contact}
             </Link>
           </div>
         </div>
@@ -262,6 +275,7 @@ interface ContactRowProps {
   icon: React.ReactNode;
   copied: boolean;
   copyLabel: string;
+  copiedText: string;
   onCopy: () => void;
   children: React.ReactNode;
 }
@@ -270,6 +284,7 @@ function ContactRow({
   icon,
   copied,
   copyLabel,
+  copiedText,
   onCopy,
   children,
 }: ContactRowProps) {
@@ -301,7 +316,7 @@ function ContactRow({
             exit={{ opacity: 0, y: 5 }}
             className="absolute -top-9 left-0 border border-[#d6a94a]/35 bg-[#10243d] px-3 py-1 text-xs font-bold text-[#f4d78d] shadow-[0_16px_34px_-24px_rgba(0,0,0,0.8)]"
           >
-            Kopyalandı
+            {copiedText}
           </motion.div>
         ) : null}
       </AnimatePresence>

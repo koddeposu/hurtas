@@ -6,75 +6,31 @@ import BrandsImage from "@/assets/hero/home-page-4.webp";
 import ContactImage from "@/assets/hero/desktop/hero-2.webp";
 import GalleryImage from "@/assets/hero/home-page-3.webp";
 import TSEImage from "@/assets/hero/home-page-1.webp";
+import { useDictionary } from "@/components/i18n-provider";
 import Image, { type StaticImageData } from "next/image";
 
-interface PageHeroData {
-  eyebrow: string;
-  title: string;
-  description: string;
-  image: StaticImageData;
-}
-
-const HERO_BY_PATH: Record<string, PageHeroData> = {
-  "/hakkimizda": {
-    eyebrow: "Kurumsal",
-    title: "Hürtaş Beton Elemanları",
-    description:
-      "Altyapı, üst yapı ve çevre düzenleme projeleri için dayanıklı beton ürünleri üretiyor; ürün seçimi ve sevkiyat planını netleştiriyoruz.",
-    image: AboutImage,
-  },
-  "/arge": {
-    eyebrow: "Kurumsal",
-    title: "Arge",
-    description:
-      "Beton elemanlarında üretim kalitesi, ürün geliştirme ve saha ihtiyaçlarına uygun çözüm yaklaşımımız.",
-    image: AboutImage,
-  },
-  "/iletisim": {
-    eyebrow: "İletişim",
-    title: "Projeniz İçin Bize Ulaşın",
-    description:
-      "Beton boru, parke taşı, bordür ve saha ürünleri için ürün, adet ve sevkiyat detaylarını birlikte planlayalım.",
-    image: ContactImage,
-  },
-  "/blog": {
-    eyebrow: "Blog",
-    title: "Beton Ürünleri Rehberi",
-    description:
-      "Altyapı ve üst yapı beton elemanları için ürün seçimi, saha kullanımı ve tedarik planlamasına dair içerikler.",
-    image: BlogImage,
-  },
-  "/galeri": {
-    eyebrow: "Galeri",
-    title: "Ürün ve Saha Galerisi",
-    description:
-      "Beton elemanlarımızın sahadaki kullanım alanlarını, üretim detaylarını ve tamamlanan uygulama görsellerini inceleyin.",
-    image: GalleryImage,
-  },
-  "/calistigimiz-markalar": {
-    eyebrow: "Kurumsal",
-    title: "Çalıştığımız Markalar",
-    description:
-      "Belediye, şantiye ve saha projelerinde beton elemanı tedariki için düzenli, takip edilebilir ve güven veren iş birlikleri kuruyoruz.",
-    image: BrandsImage,
-  },
-  "/tse-onayli-belgeler": {
-    eyebrow: "Belgeler",
-    title: "TSE Onaylı Belgeler",
-    description:
-      "Beton ürünlerinde standartlara uygun üretim yaklaşımımızı ve kalite belgelerimizi bu sayfada topluyoruz.",
-    image: TSEImage,
-  },
-  "/katalog": {
-    eyebrow: "Katalog",
-    title: "Hürtaş Beton Kataloğu",
-    description:
-      "Beton ürün gruplarını, kullanım alanlarını ve proje tedariki için öne çıkan ürün bilgilerini katalog üzerinden inceleyin.",
-    image: BlogImage,
-  },
+const HERO_IMAGES: Record<string, StaticImageData> = {
+  "/hakkimizda": AboutImage,
+  "/arge": AboutImage,
+  "/iletisim": ContactImage,
+  "/blog": BlogImage,
+  "/galeri": GalleryImage,
+  "/calistigimiz-markalar": BrandsImage,
+  "/tse-onayli-belgeler": TSEImage,
+  "/katalog": BlogImage,
 };
 
-function getHeroData(pathname: string) {
+function getHeroData(
+  pathname: string,
+  data: Record<
+    string,
+    {
+      eyebrow: string;
+      title: string;
+      description: string;
+    }
+  >,
+) {
   if (
     pathname === "/" ||
     pathname.startsWith("/tum-urunler") ||
@@ -83,15 +39,23 @@ function getHeroData(pathname: string) {
     return null;
   }
 
-  if (pathname.startsWith("/blog/")) {
-    return HERO_BY_PATH["/blog"];
+  const path = pathname.startsWith("/blog/") ? "/blog" : pathname;
+  const content = data[path as keyof typeof data];
+  const image = HERO_IMAGES[path];
+
+  if (content && image) {
+    return {
+      ...content,
+      image,
+    };
   }
 
-  return HERO_BY_PATH[pathname] ?? null;
+  return null;
 }
 
 export function PageHero({ pathname }: { pathname: string }) {
-  const data = getHeroData(pathname);
+  const dict = useDictionary();
+  const data = getHeroData(pathname, dict.pageHero);
 
   if (!data) {
     return null;

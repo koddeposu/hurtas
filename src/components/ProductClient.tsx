@@ -2,6 +2,22 @@
 
 import { ProductCard } from "@/components/ProductCard";
 import {
+  useDictionary,
+  useLocale,
+  useLocalizedPath,
+} from "@/components/i18n-provider";
+import {
+  formatMessage,
+  getDateLocale,
+  getLocalizedImageAlt,
+  getLocalizedCategoryField,
+  getLocalizedProductDescription,
+  getLocalizedProductMetaDescription,
+  getLocalizedProductName,
+  type Dictionary,
+  type Locale,
+} from "@/lib/i18n";
+import {
   ALL_PRODUCTS_PATH,
   getCategoryDisplayName,
   getCategoryHref,
@@ -83,13 +99,16 @@ function getCategoryKey(
   return "all";
 }
 
-function normalizeSearchValue(value: string | null | undefined) {
-  return (value ?? "").toLocaleLowerCase("tr-TR").trim();
+function normalizeSearchValue(value: string | null | undefined, locale: Locale) {
+  return (value ?? "").toLocaleLowerCase(getDateLocale(locale)).trim();
 }
 
-function productMatchesQuery(product: DBProduct, query: string) {
+function productMatchesQuery(product: DBProduct, query: string, locale: Locale) {
   const searchableText = [
+    getLocalizedProductName(product, locale),
     product.name,
+    product.nameEn,
+    product.nameAr,
     product.slug,
     product.area,
     product.room,
@@ -98,165 +117,76 @@ function productMatchesQuery(product: DBProduct, query: string) {
     product.height,
     product.price,
     product.oldPrice,
+    getLocalizedProductDescription(product, locale),
+    getLocalizedProductMetaDescription(product, locale),
     product.description,
+    product.descriptionEn,
+    product.descriptionAr,
     product.metaDescription,
+    product.metaDescriptionEn,
+    product.metaDescriptionAr,
+    product.category ? getCategoryDisplayName(product.category, locale) : null,
     product.category?.name,
+    product.category?.nameEn,
+    product.category?.nameAr,
     product.category?.title,
+    product.category?.titleEn,
+    product.category?.titleAr,
     product.category?.slug,
     ...(product.categories?.flatMap((item) => [
+      getCategoryDisplayName(item, locale),
       item.name,
+      item.nameEn,
+      item.nameAr,
       item.title,
+      item.titleEn,
+      item.titleAr,
       item.slug,
     ]) ?? []),
   ]
-    .map((item) => normalizeSearchValue(item))
+    .map((item) => normalizeSearchValue(item, locale))
     .join(" ");
 
   return searchableText.includes(query);
 }
 
-function getRoomPageContent(room: RoomKey) {
+function getRoomPageContent(room: RoomKey, dict: Dictionary) {
   return {
-    eyebrow: `${room} Ürün Seçkisi`,
-    title: `${room} Ölçü ve Proje Uygunluğu`,
-    description:
-      "Ürünleri ölçü, kullanım alanı ve sevkiyat ihtiyacına göre karşılaştırın.",
-    seoTitle: `Beton Ürün Ölçüleri ve Proje Seçimi ${CURRENT_YEAR}`,
-    seoDescription:
-      "Beton ürünlerinde doğru seçim; ölçü, yük sınıfı, kullanım alanı, bağlantı tipi, adet ve sevkiyat planı birlikte değerlendirilerek yapılır.",
-    seoCards: [
-      {
-        title: "Ürün Ölçüsü Nasıl Netleştirilir?",
-        text: "Beton boru, baca elemanı, bordür, parke taşı veya menfez seçiminde proje ölçüsü, uygulama alanı ve ihtiyaç duyulan adet birlikte değerlendirilmelidir.",
-      },
-      {
-        title: "Teklif İçin Hangi Bilgiler Gerekir?",
-        text: "Ürün adı, yaklaşık ölçü, adet, teslim adresi ve kullanım alanı bilgisi teklif sürecini hızlandırır.",
-      },
-      {
-        title: "Sahaya Uygun Ürün Nasıl Seçilir?",
-        text: "Altyapı, yol, kaldırım, otopark, şantiye veya peyzaj ihtiyacına göre ürün grubu ve teknik beklenti birlikte ele alınmalıdır.",
-      },
-    ],
+    eyebrow: formatMessage(dict.products.rooms.eyebrow, { room }),
+    title: formatMessage(dict.products.rooms.title, { room }),
+    description: dict.products.rooms.description,
   };
 }
 
-function getPageContent(categoryName?: string, categorySlug?: string) {
+function getPageContent(
+  dict: Dictionary,
+  categoryName?: string,
+  categorySlug?: string,
+) {
   const categoryKey = getCategoryKey(categoryName, categorySlug);
 
-  if (categoryKey === "room-1-1") return getRoomPageContent("1+1");
-  if (categoryKey === "room-2-1") return getRoomPageContent("2+1");
-  if (categoryKey === "room-3-1") return getRoomPageContent("3+1");
-  if (categoryKey === "room-4-1") return getRoomPageContent("4+1");
+  if (categoryKey === "room-1-1") return getRoomPageContent("1+1", dict);
+  if (categoryKey === "room-2-1") return getRoomPageContent("2+1", dict);
+  if (categoryKey === "room-3-1") return getRoomPageContent("3+1", dict);
+  if (categoryKey === "room-4-1") return getRoomPageContent("4+1", dict);
 
   if (categoryKey === "single") {
-    return {
-      eyebrow: "Altyapı Beton Ürünleri",
-      title: "Beton Boru ve Baca Elemanları",
-      description:
-        "Beton boru, betonarme boru, muayene bacası, parsel bacası ve yağmur suyu elemanlarını proje ihtiyacına göre inceleyin.",
-      seoTitle: `Beton Boru ve Baca Elemanları ${CURRENT_YEAR}`,
-      seoDescription:
-        "Beton boru, betonarme boru, contalı boru ve baca elemanlarında doğru seçim; çap, bağlantı tipi, yük ihtiyacı, hat amacı ve sevkiyat planına göre yapılır.",
-      seoCards: [
-        {
-          title: "Beton Boru Seçimi",
-          text: "Yağmur suyu, atık su ve drenaj hatlarında beton boru veya betonarme boru seçimi; çap, hat yükü, bağlantı yapısı ve proje şartlarına göre değerlendirilmelidir.",
-        },
-        {
-          title: "Rögar ve Menhol Elemanları",
-          text: "Muayene baca gövdesi, baca tabanı, parsel baca gövdesi, konik eleman ve baca yükseltme halkası altyapı hatlarında erişim ve bakım için kullanılır.",
-        },
-        {
-          title: "Yağmur Suyu Ürünleri",
-          text: "Yağmur suyu ızgara tabanları ve oluk taşları yol, otopark ve saha zeminlerinde suyun kontrollü şekilde toplanmasına yardımcı olur.",
-        },
-      ],
-    };
+    return dict.products.infrastructure;
   }
 
   if (categoryKey === "double") {
-    return {
-      eyebrow: "Üst Yapı Beton Ürünleri",
-      title: "Bordür, Parke Taşı ve Çevre Düzenleme Ürünleri",
-      description:
-        "Bordür taşı, parke taşı, oluk taşı, çim taşı, şev taşı ve beton bariyer ürünlerini kullanım alanına göre karşılaştırın.",
-      seoTitle: `Bordür Taşı, Parke Taşı ve Beton Saha Ürünleri ${CURRENT_YEAR}`,
-      seoDescription:
-        "Bordür taşı, parke taşı, oluk taşı, çim taşı, şev taşı ve beton bariyer seçiminde zemin kullanımı, trafik yükü, drenaj ihtiyacı ve uygulama alanı dikkate alınır.",
-      seoCards: [
-        {
-          title: "Bordür Taşı Nerede Kullanılır?",
-          text: "Bordür taşları yol kenarı, kaldırım, refüj, bahçe ve otopark sınırlarında zemini düzenli bitirmek için kullanılır.",
-        },
-        {
-          title: "Parke Taşı ve Oluk Taşı",
-          text: "Parke taşları yaya yolu, site içi yol, otopark ve bahçe zeminlerinde; oluk taşları ise yüzey suyunu yönlendirmek gereken alanlarda tercih edilir.",
-        },
-        {
-          title: "Şev Taşı ve Beton Bariyer",
-          text: "Şev taşı ve Terra Blok eğimli arazilerde düzenleme için; beton bariyer ise şantiye, yol ve saha güvenliği için kullanılır.",
-        },
-      ],
-    };
+    return dict.products.superstructure;
   }
 
   if (categoryKey === "steel") {
-    return {
-      eyebrow: "Proje Tedariki",
-      title: "Beton Ürünlerinde Ölçü, Adet ve Sevkiyat Planı",
-      description:
-        "Şantiye, belediye, altyapı ve çevre düzenleme projeleri için beton ürün tedarikini planlayın.",
-      seoTitle: `Beton Ürünleri Tedarik ve Teklif Süreci ${CURRENT_YEAR}`,
-      seoDescription:
-        "Beton ürünlerinde teklif süreci ürün grubu, ölçü, adet, teslim adresi, stok durumu ve proje programına göre netleşir.",
-      seoCards: [
-        {
-          title: "Teklif Süreci Nasıl Başlar?",
-          text: "Ürün adı, yaklaşık adet, ölçü ve teslim adresi paylaşıldığında stok, üretim ve sevkiyat uygunluğu daha hızlı değerlendirilir.",
-        },
-        {
-          title: "Toplu Alım ve Kurumsal Tedarik",
-          text: "Belediye, müteahhit, sanayi tesisi ve altyapı projeleri için toplu ürün talepleri proje bazında planlanabilir.",
-        },
-        {
-          title: "Sevkiyat Planı Neye Göre Oluşur?",
-          text: "Sevkiyat planı ürün hacmi, teslim lokasyonu, saha programı ve araç uygunluğu gibi başlıklar birlikte değerlendirilerek oluşturulur.",
-        },
-      ],
-    };
+    return dict.products.projectSupply;
   }
 
   return {
-    eyebrow: "Hürtaş Beton Ürün Seçkisi",
-    title: "Tüm Beton Ürünleri",
-    description:
-      "Altyapı, üst yapı ve çevre düzenleme projeleri için beton ürünlerini kategori, kullanım alanı ve proje ihtiyacına göre inceleyin.",
-    seoTitle: `Beton Boru, Baca, Bordür ve Parke Taşı Ürünleri ${CURRENT_YEAR}`,
-    seoDescription:
-      "Hürtaş Beton; beton boru, betonarme boru, baca elemanları, kutu menfez, bordür taşı, parke taşı, oluk taşı, şev taşı, beton bariyer, briket ve çim taşı ürünlerini proje ihtiyacına göre sunar.",
-    seoCards: [
-      {
-        title: "Beton Boru ve Betonarme Borular",
-        text: "Beton borular, betonarme borular, entegre contalı borular ve lambazıvana borular yağmur suyu, atık su ve drenaj hatlarında kullanılır.",
-      },
-      {
-        title: "Muayene Bacası, Parsel Bacası ve Menhol",
-        text: "Muayene baca gövdesi, baca tabanı, parsel baca elemanları, konik elemanlar ve baca yükseltme halkaları altyapı erişim noktalarında kullanılır.",
-      },
-      {
-        title: "Bordür, Parke Taşı ve Çevre Düzenleme",
-        text: "Bordür taşı, parke taşı, oluk taşı, çim taşı, şev taşı ve Terra Blok ürünleri yol, kaldırım, otopark ve peyzaj düzenlemelerinde tercih edilir.",
-      },
-      {
-        title: "Kutu Menfez ve Saha Güvenliği Ürünleri",
-        text: "Beton kutu menfez, beton bariyer ve briket gibi ürünler altyapı geçişleri, şantiye düzeni ve saha ihtiyaçları için değerlendirilir.",
-      },
-      {
-        title: "Doğru Ürün İçin Teklif Bilgileri",
-        text: "Ürün adı, ölçü, adet, teslim adresi ve kullanım alanı bilgisi paylaşıldığında doğru ürün ve sevkiyat planı daha hızlı netleşir.",
-      },
-    ],
+    ...dict.products.defaults,
+    seoTitle: formatMessage(dict.products.defaults.seoTitle, {
+      year: CURRENT_YEAR,
+    }),
   };
 }
 
@@ -269,9 +199,12 @@ function ProductSidebarMenu({
   activeCategory?: string;
   onNavigate?: () => void;
 }) {
+  const locale = useLocale();
+  const dict = useDictionary();
+  const localizedPath = useLocalizedPath();
   const quickLinks = [
     {
-      label: "Tümü",
+      label: dict.products.all,
       href: ALL_PRODUCTS_PATH,
       active: !activeCategory,
       icon: Home,
@@ -286,18 +219,18 @@ function ProductSidebarMenu({
             <span className="h-8 w-1 bg-[#d6a94a]" aria-hidden="true" />
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#d6a94a]">
-                Ürün Menüsü
-              </p>
-              <h2 className="mt-1 text-lg font-black uppercase tracking-tight">
-                Beton Ürünleri
-              </h2>
+                  {dict.products.menu}
+                </p>
+                <h2 className="mt-1 text-lg font-black uppercase tracking-tight">
+                  {dict.common.concreteProducts}
+                </h2>
             </div>
           </div>
         </div>
 
-        <nav className="p-3" aria-label="Ürün kategorileri">
+          <nav className="p-3" aria-label={dict.products.categories}>
           <p className="px-2 pb-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-            Hızlı Seçim
+            {dict.products.quickSelection}
           </p>
           <div className="space-y-1">
             {quickLinks.map((item) => {
@@ -306,7 +239,7 @@ function ProductSidebarMenu({
               return (
                 <Link
                   key={item.label}
-                  href={item.href}
+                  href={localizedPath(item.href)}
                   onClick={onNavigate}
                   className={`group flex min-h-11 items-center justify-between border px-3 py-2 text-xs font-black uppercase tracking-[0.12em] transition-colors ${
                     item.active
@@ -327,17 +260,17 @@ function ProductSidebarMenu({
           <div className="my-4 h-px bg-white/10" />
 
           <p className="px-2 pb-2 text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
-            Kategoriler
+            {dict.products.categories}
           </p>
           <div className="space-y-1">
             {categories.map((category) => {
               const isActive = activeCategory === category.slug;
-              const categoryLabel = getCategoryDisplayName(category);
+              const categoryLabel = getCategoryDisplayName(category, locale);
 
               return (
                 <Link
                   key={category.id}
-                  href={getCategoryHref(categories, category)}
+                  href={localizedPath(getCategoryHref(categories, category))}
                   onClick={onNavigate}
                   className={`group flex min-h-11 items-center justify-between border px-3 py-2 text-sm font-bold transition-colors ${
                     isActive
@@ -362,17 +295,14 @@ function ProductSidebarMenu({
   );
 }
 
-function getFilledText(value: string | null | undefined) {
-  const trimmed = value?.trim();
-  return trimmed ? trimmed : undefined;
-}
-
 function SeoFooter({
   title,
   description,
+  eyebrow,
 }: {
   title?: string;
   description?: string;
+  eyebrow: string;
 }) {
   if (!title && !description) return null;
 
@@ -380,7 +310,7 @@ function SeoFooter({
     <section className="mt-60 border-t border-slate-200 pt-8">
       <div className="max-w-3xl">
         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#6f839d]">
-          Ürün Bilgisi
+          {eyebrow}
         </p>
         {title ? (
           <h2 className="mt-2 text-2xl font-black tracking-tight text-[#152f51] md:text-3xl">
@@ -403,14 +333,17 @@ const ProductsClient = ({
   activeCategory,
   searchQuery = "",
 }: ProductsClientProps) => {
+  const locale = useLocale();
+  const dict = useDictionary();
+  const localizedPath = useLocalizedPath();
   const [selectedProduct, setSelectedProduct] = useState<DBProduct | null>(
     null,
   );
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const normalizedSearchQuery = normalizeSearchValue(searchQuery);
+  const normalizedSearchQuery = normalizeSearchValue(searchQuery, locale);
   const visibleProducts = normalizedSearchQuery
     ? products.filter((product) =>
-        productMatchesQuery(product, normalizedSearchQuery),
+        productMatchesQuery(product, normalizedSearchQuery, locale),
       )
     : products;
 
@@ -418,22 +351,35 @@ const ProductsClient = ({
     ? categories.find((category) => category.slug === activeCategory)
     : undefined;
   const activeCategoryName = activeCategoryItem?.name;
+  const activeCategoryDisplayName = activeCategoryItem
+    ? getCategoryDisplayName(activeCategoryItem, locale)
+    : undefined;
   const activeCategoryLabel = activeCategoryItem
-    ? getCategoryDisplayName(activeCategoryItem)
+    ? getCategoryDisplayName(activeCategoryItem, locale)
     : undefined;
 
-  const content = getPageContent(activeCategoryName, activeCategory);
+  const content = getPageContent(dict, activeCategoryName, activeCategory);
   const headerEyebrow =
-    getFilledText(activeCategoryItem?.name) ?? content.eyebrow;
+    (activeCategoryItem
+      ? getLocalizedCategoryField(activeCategoryItem, "name", locale)
+      : undefined) ?? content.eyebrow;
   const headerTitle =
-    getFilledText(activeCategoryItem?.title) ??
-    activeCategoryName ??
+    (activeCategoryItem
+      ? getLocalizedCategoryField(activeCategoryItem, "title", locale)
+      : undefined) ??
+    activeCategoryDisplayName ??
     content.title;
   const headerDescription =
-    getFilledText(activeCategoryItem?.description) ??
+    (activeCategoryItem
+      ? getLocalizedCategoryField(activeCategoryItem, "description", locale)
+      : undefined) ??
     (activeCategoryItem ? undefined : content.description);
-  const bottomTitle = getFilledText(activeCategoryItem?.subtitle);
-  const bottomDescription = getFilledText(activeCategoryItem?.subdescription);
+  const bottomTitle = activeCategoryItem
+    ? getLocalizedCategoryField(activeCategoryItem, "subtitle", locale)
+    : undefined;
+  const bottomDescription = activeCategoryItem
+    ? getLocalizedCategoryField(activeCategoryItem, "subdescription", locale)
+    : undefined;
   const hasBottomContent = Boolean(bottomTitle || bottomDescription);
 
   useEffect(() => {
@@ -451,7 +397,7 @@ const ProductsClient = ({
           projects={selectedProduct.images.map((image, index) => ({
             id: index,
             img: image.url,
-            title: image.alt,
+            title: getLocalizedImageAlt(image, locale),
           }))}
           isOpen
           onClose={() => setSelectedProduct(null)}
@@ -464,17 +410,17 @@ const ProductsClient = ({
             <div className="flex min-h-16 items-center justify-between border-b border-white/10 px-4">
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#d6a94a]">
-                  Ürün Menüsü
+                  {dict.products.menu}
                 </p>
                 <p className="mt-1 text-sm font-black uppercase tracking-[0.08em] text-white">
-                  Kategori Seç
+                  {dict.products.chooseCategory}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="inline-flex h-11 w-11 items-center justify-center border border-white/15 bg-white/5 text-white"
-                aria-label="Ürün menüsünü kapat"
+                aria-label={dict.products.closeMenu}
               >
                 <X className="h-5 w-5" />
               </button>
@@ -520,10 +466,10 @@ const ProductsClient = ({
               <Filter className="h-5 w-5 shrink-0 text-[#d6a94a]" />
               <span>
                 <span className="block text-xs font-black uppercase tracking-[0.16em] text-[#d6a94a]">
-                  Ürün Menüsü
+                  {dict.products.menu}
                 </span>
                 <span className="block text-sm font-black uppercase tracking-[0.08em]">
-                  Kategorileri Aç
+                  {dict.products.openCategories}
                 </span>
               </span>
             </span>
@@ -546,20 +492,24 @@ const ProductsClient = ({
                   <Filter size={32} className="text-slate-400" />
                 </div>
                 <h3 className="text-xl font-black text-slate-900">
-                  Ürün Bulunamadı
+                  {dict.products.notFound}
                 </h3>
                 <p className="mt-2 max-w-md text-center text-slate-500">
                   {normalizedSearchQuery
-                    ? `"${searchQuery}" araması için uygun ürün bulunamadı.`
+                    ? formatMessage(dict.products.notFoundSearch, {
+                        query: searchQuery,
+                      })
                     : activeCategoryLabel
-                      ? `"${activeCategoryLabel}" kategorisinde henüz ürün bulunmuyor.`
-                      : "Henüz ürün eklenmemiş."}
+                      ? formatMessage(dict.products.notFoundCategory, {
+                          category: activeCategoryLabel,
+                        })
+                      : dict.products.notAdded}
                 </p>
                 <Link
-                  href={ALL_PRODUCTS_PATH}
+                  href={localizedPath(ALL_PRODUCTS_PATH)}
                   className="mt-6 inline-flex items-center gap-2 bg-primary px-5 py-3 text-sm font-bold text-white transition-colors hover:bg-primary/90"
                 >
-                  Tüm Ürünleri Gör
+                  {dict.products.seeAll}
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
               </div>
@@ -579,7 +529,11 @@ const ProductsClient = ({
         </div>
 
         {hasBottomContent ? (
-          <SeoFooter title={bottomTitle} description={bottomDescription} />
+          <SeoFooter
+            title={bottomTitle}
+            description={bottomDescription}
+            eyebrow={dict.products.seoEyebrow}
+          />
         ) : null}
       </section>
     </div>

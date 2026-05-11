@@ -1,4 +1,6 @@
 import { SeoFaqSection } from "@/components/seo-faq-section";
+import { getDictionary, type Locale } from "@/lib/i18n";
+import { getCurrentLocale } from "@/lib/i18n-server";
 
 export const HOMEPAGE_FAQS = [
   {
@@ -78,13 +80,20 @@ export const HOMEPAGE_FAQS = [
   },
 ] as const;
 
-export function HomepageFaq() {
+export function getHomepageFaqs(locale: Locale) {
+  return getDictionary(locale).faq.homepageItems;
+}
+
+export async function HomepageFaq() {
+  const locale = await getCurrentLocale();
+  const dict = getDictionary(locale);
+
   return (
     <SeoFaqSection
-      title="Beton Altyapı ve Üst Yapı Ürünleri Hakkında"
-      accent="En Çok Sorulan Sorular"
-      description="Beton boru, parsel bacası, bordür taşı, parke taşı, kutu menfez, beton bariyer ve daha fazlası hakkında merak ettiğiniz soruların cevaplarını burada bulabilirsiniz."
-      items={HOMEPAGE_FAQS}
+      title={dict.faq.homepageTitle}
+      accent={dict.faq.homepageAccent}
+      description={dict.faq.homepageDescription}
+      items={getHomepageFaqs(locale)}
     />
   );
 }

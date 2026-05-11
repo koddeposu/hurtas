@@ -3,6 +3,7 @@
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import { PageHero } from "@/components/page-hero";
+import { stripLocaleFromPathname } from "@/lib/i18n";
 import { usePathname } from "next/navigation";
 import BottomBar from "./bottomBar";
 
@@ -37,7 +38,8 @@ export default function ClientLayout({
   categories = [],
   productSearchItems = [],
 }: ClientLayoutProps) {
-  const pathname = usePathname();
+  const rawPathname = usePathname();
+  const pathname = stripLocaleFromPathname(rawPathname);
   const isHomepage = pathname === "/";
 
   const hideLayout = pathname.startsWith("/katalog");
