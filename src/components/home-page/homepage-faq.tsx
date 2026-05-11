@@ -2,113 +2,88 @@ import { SeoFaqSection } from "@/components/seo-faq-section";
 
 export const HOMEPAGE_FAQS = [
   {
-    question: "Çelik prefabrik ev modelleri nelerdir?",
+    question: "Hürtaş Beton hangi ürünleri üretiyor?",
     answer:
-      "Çelik prefabrik ev modelleri tek katlı, dubleks, villa tipi ve projeye özel planlanan yaşam alanlarından oluşur. CT Prefabrik, arsa yapısına ve kullanım ihtiyacına göre farklı metrekarelerde çözümler sunar.",
+      "Hürtaş Beton; beton borular, parsel bacaları, baca gövde ve tabanları, kutu menfez, PTT menhol, betonarme borular, baca elemanları, lambazıvana beton borular, baca yükseltme halkaları ve kapaklar, C parçalar, konik elemanlar, taban elemanları, yağmur suyu ızgara tabanları, beton saksılar, harpuşta ve küpeşteler, blok taşları, bordür taşları, oluk taşları, parke taşları, beton bariyer, zemin karoları ve park mantarı & beton dubalar üretmektedir.",
   },
   {
-    question: "Çelik prefabrik ev modelleri fiyatları neye göre değişir?",
+    question: "Rögar kapağı veya baca kapağı nereden alınır?",
     answer:
-      "Fiyatları metrekare, kat sayısı, kullanılan malzeme, cephe detayları, yalıtım seviyesi ve anahtar teslim kapsamı belirler. Net fiyat için proje kapsamının birlikte değerlendirilmesi gerekir.",
+      "Rögar kapağı, baca kapağı veya muayene bacası kapağı olarak da bilinen ürünler Hürtaş Beton'un baca yükseltme halkaları ve kapaklar kategorisinde yer almaktadır. Farklı çap ve yük sınıflarında üretim yapılmaktadır.",
   },
   {
-    question: "Çelik prefabrik ev yapımı ne kadar sürer?",
+    question: "Beton boru fiyatları neye göre değişir?",
     answer:
-      "Çelik prefabrik ev yapımı proje tipine göre değişse de keşif, üretim ve montaj planı doğru kurulduğunda süreç klasik yapılara göre çok daha hızlı ilerler. Birçok projede üretim ve montaj 30-45 gün bandında tamamlanabilir.",
+      "Beton boru fiyatları; boru çapı, et kalınlığı, boru boyu, kullanım amacı (yağmur suyu, atık su, drenaj) ve sipariş miktarına göre değişir. Betonarme boru ve normal beton boru arasında da fiyat farkı oluşabilir.",
   },
   {
-    question: "Çelik konstrüksiyon hazır ev nedir?",
+    question: "Parsel bacası nedir, ne işe yarar?",
     answer:
-      "Çelik konstrüksiyon hazır ev, taşıyıcı sistemi çelikten oluşan ve üretim sürecinin önemli kısmı kontrollü ortamda hazırlanan konut modelidir. Sahada daha hızlı kurulum avantajı sağlar.",
+      "Parsel bacası; binaların atık su sistemini ana kanalizasyon hattına bağlayan ve bakım-temizlik amacıyla erişim imkânı sunan beton elemandır. Konut, site ve sanayi projelerinde zorunlu altyapı bileşenidir.",
   },
   {
-    question: "Prefabrik ev modelleri ve fiyatları nasıl belirlenir?",
+    question: "Kutu menfez ne için kullanılır?",
     answer:
-      "Prefabrik ev modelleri oda sayısı, yaşam senaryosu ve arsa durumuna göre seçilir. Fiyatları ise metrekare, teknik detaylar, yalıtım, nakliye ve montaj kapsamına göre şekillenir.",
+      "Kutu menfez; yol altı geçişleri, tarım arazisi su kanalları ve dere ıslahı gibi projelerde kullanılan dikdörtgen kesitli beton yapı elemanıdır. Farklı açıklık ve yükseklik ölçülerinde üretilir.",
   },
   {
-    question: "Anahtar teslim çelik konstrüksiyon ev fiyatları neleri kapsar?",
+    question: "Bordür taşı çeşitleri nelerdir?",
     answer:
-      "Anahtar teslim çelik konstrüksiyon ev fiyatları genellikle proje planı, taşıyıcı sistem, dış cephe, çatı, doğrama, iç bölmeler ve belirlenen montaj kalemlerini kapsar. Kapsam firmadan firmaya değiştiği için teklif içeriği net okunmalıdır.",
+      "Hürtaş Beton; yol kenarı bordürü, bahçe bordürü, tretuvar bordürü ve kanal bordürü gibi farklı profillerde beton bordür taşı üretmektedir. Standart ve özel ölçülerde sipariş verilebilir.",
   },
   {
-    question: "Prefabrik ev için ruhsat gerekir mi?",
+    question: "Parke taşı fiyatları nasıl hesaplanır?",
     answer:
-      "Evet, prefabrik ev projelerinde ilgili belediye ve arsa durumuna göre ruhsat süreçleri önemlidir. Uygulamaya başlamadan önce imar koşulları ve proje uygunluğu kontrol edilmelidir.",
+      "Parke taşı fiyatları; taş boyutu, kalınlık, desen, renk ve sipariş miktarına göre belirlenir. Metrekare bazında fiyatlandırma yapılır; nakliye mesafesi de toplam maliyeti etkiler.",
   },
   {
-    question: "Tek katlı çelik ev fiyatları neye göre hesaplanır?",
+    question: "Beton saksı ve çiçeklik modelleri var mı?",
     answer:
-      "Tek katlı çelik ev fiyatları toplam metrekare, plan tipi, cephe tercihleri, zemin durumu ve anahtar teslim beklentisine göre hesaplanır. Basit metrekare çarpımı yerine gerçek proje kapsamı üzerinden teklif verilmesi daha doğrudur.",
+      "Evet, Hürtaş Beton farklı desen, renk ve ölçülerde beton saksı ve çiçeklik üretmektedir. Peyzaj düzenlemesi, park alanı ve dış mekân süslemesi için uygun modeller mevcuttur.",
   },
   {
-    question: "Çelik ev fiyatları ile prefabrik ev fiyatları arasında fark var mı?",
+    question: "Beton bariyer nedir, nerede kullanılır?",
     answer:
-      "Evet, taşıyıcı sistem, teknik detay ve seçilen malzeme seviyesine göre fark oluşabilir. Her iki çözümde de doğru maliyet analizi için ihtiyaç, kullanım amacı ve teslim kapsamı birlikte değerlendirilmelidir.",
+      "Beton bariyer; yol güvenliği, şantiye çevrimi, otopark ayırımı ve kaza önleme amacıyla kullanılan ağır beton elemanlardır. Taşınabilir ve sabit modelleri mevcuttur.",
   },
   {
-    question: "Prefabrik villa yaptırmak mantıklı mı?",
+    question: "Park mantarı ve beton duba ne işe yarar?",
     answer:
-      "Prefabrik villa; hızlı kurulum, kontrollü üretim ve modern plan avantajı arayan kullanıcılar için güçlü bir seçenektir. Doğru projelendirme ile hem estetik hem de fonksiyonel sonuç alınabilir.",
+      "Park mantarı ve beton dubalar; park alanı düzenlemesi, yaya bölgesi koruması ve araç girişi engelleme amacıyla kullanılır. Dayanıklı yapıları sayesinde uzun yıllar bakım gerektirmez.",
   },
   {
-    question: "Dubleks prefabrik ev hangi arsalar için uygundur?",
+    question: "Zemin karosu ve harpuşta ürünleri var mı?",
     answer:
-      "Dubleks prefabrik ev modelleri daha geniş yaşam alanı isteyen kullanıcılar için uygundur. Arsanın imar durumu, çekme mesafeleri ve zemin şartları bu modelin uygunluğunu belirler.",
+      "Evet, Hürtaş Beton zemin karoları ile duvar üstü su geçişini önlemek amacıyla kullanılan harpuşta ve küpeşte ürünleri de üretmektedir. Farklı profil ve ölçü seçenekleri mevcuttur.",
   },
   {
-    question: "Konteyner ev nedir?",
+    question: "Yağmur suyu ızgarası ve ızgara tabanı nasıl seçilir?",
     answer:
-      "Konteyner ev; modüler kullanım, hızlı kurulum ve pratik yerleşim avantajı sunan bir yapı çözümüdür. Yaşam alanı, ofis, şantiye yapısı veya geçici kullanım amaçları için tercih edilebilir.",
+      "Yağmur suyu ızgara tabanı seçiminde; ızgara açıklığı, yük sınıfı (yaya/araç trafiği), bağlantı borusu çapı ve kurulum yapılacak zemin tipi göz önünde bulundurulmalıdır.",
   },
   {
-    question: "Konteyner ev modelleri hangi kullanım alanlarına uygundur?",
+    question: "PTT menhol nedir?",
     answer:
-      "Konteyner ev modelleri bireysel yaşam, bağ evi, ofis, satış noktası, şantiye ve kısa süreli konaklama gibi farklı kullanım senaryolarına uygundur. Planlama tamamen ihtiyaca göre şekillendirilebilir.",
+      "PTT menhol; telekomünikasyon altyapısında kablo geçişleri ve bağlantı noktaları için kullanılan özel beton muayene bacasıdır. Standart PTT projelerinin altyapı şartnamelerine uygun üretilir.",
   },
   {
-    question: "Konteyner ev fiyatları neye göre değişir?",
+    question: "Oluk taşı ne işe yarar?",
     answer:
-      "Konteyner ev fiyatları ölçü, birleşim adedi, yalıtım seviyesi, iç mekan donatıları ve sevkiyat mesafesine göre değişir. Standart model ile özel tasarım model arasında ciddi fark olabilir.",
+      "Oluk taşı; yol kenarı, bahçe ve çevre düzenlemesinde yüzey sularının toplanması ve yönlendirilmesi amacıyla kullanılır. Bordür taşıyla birlikte uygulanan drenaj çözümüdür.",
   },
   {
-    question: "Prefabrik evler depreme dayanıklı mı?",
+    question: "Toplu sipariş ve kurumsal alım yapılabilir mi?",
     answer:
-      "Doğru mühendislik, uygun taşıyıcı sistem ve standartlara uygun üretimle prefabrik evler deprem güvenliği açısından güçlü çözümler sunar. Projenin teknik hesapları bu noktada belirleyicidir.",
-  },
-  {
-    question: "Çelik prefabrik ev kışın sıcak olur mu?",
-    answer:
-      "Uygun yalıtım katmanları, doğru doğrama seçimi ve kaliteli uygulama ile çelik prefabrik evler kışın konforlu kullanım sağlar. Isı performansı doğrudan malzeme ve detay çözümüne bağlıdır.",
-  },
-  {
-    question: "Prefabrik ev teslim süresi kaç gündür?",
-    answer:
-      "Teslim süresi proje büyüklüğüne, üretim yoğunluğuna ve saha hazırlığına göre değişir. Birçok prefabrik ev projesinde planlı üretim ve montajla süreç 30-45 gün içinde tamamlanabilir.",
-  },
-  {
-    question: "Anahtar teslim prefabrik evde neler dahil olur?",
-    answer:
-      "Anahtar teslim prefabrik ev paketinde yer alan kalemler projeye göre değişir. Dış kabuk, iç bölmeler, çatı, doğrama, elektrik ve ıslak hacim detayları teklif kapsamında açıkça belirtilmelidir.",
-  },
-  {
-    question: "Çelik konstrüksiyon ev uzun ömürlü mü?",
-    answer:
-      "Uygun proje, doğru üretim ve düzenli bakım ile çelik konstrüksiyon evler uzun ömürlü kullanım sunar. Burada belirleyici olan malzeme kalitesi ve uygulama disiplinidir.",
-  },
-  {
-    question: "Sakarya prefabrik ev hizmetiniz var mı?",
-    answer:
-      "Evet, CT Prefabrik özellikle Sakarya prefabrik ev taleplerinde güçlü saha planlamasıyla çalışır. Sakarya başta olmak üzere Türkiye geneline prefabrik ev, çelik ev ve konteyner çözümleri sunar.",
+      "Evet, Hürtaş Beton belediyeler, müteahhitler, inşaat firmaları ve altyapı proje sahiplerine toplu sipariş ve kurumsal alım imkânı sunmaktadır. Fiyat teklifi için iletişime geçebilirsiniz.",
   },
 ] as const;
 
 export function HomepageFaq() {
   return (
     <SeoFaqSection
-      title="Prefabrik Ev, Çelik Ev ve"
-      accent="Konteyner Ev Hakkında En Çok Aranan Sorular"
-      description="Çelik prefabrik ev modelleri, prefabrik ev modelleri ve fiyatları, anahtar teslim çelik konstrüksiyon ev fiyatları, dubleks prefabrik, prefabrik villa ve konteyner ev fiyatları gibi konularda en çok merak edilen soruları tek alanda topladık."
+      title="Beton Altyapı ve Üst Yapı Ürünleri Hakkında"
+      accent="En Çok Sorulan Sorular"
+      description="Beton boru, parsel bacası, bordür taşı, parke taşı, kutu menfez, beton bariyer ve daha fazlası hakkında merak ettiğiniz soruların cevaplarını burada bulabilirsiniz."
       items={HOMEPAGE_FAQS}
     />
   );
