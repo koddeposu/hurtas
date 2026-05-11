@@ -12,7 +12,9 @@ export async function uploadImage(formData: FormData) {
 
   const file = formData.get("file") as File;
   const folder = (formData.get("folder") as string) || "uploads";
-  const skipWatermark = formData.get("skipWatermark") === "true";
+  // const skipWatermark = formData.get("skipWatermark") === "true";
+
+  const skipWatermark = true;
 
   if (!file) {
     return { error: "No file provided" };
