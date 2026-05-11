@@ -9,7 +9,8 @@ import {
 import { MetadataRoute } from "next";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hurtasbeton.com";
+  const baseUrl =
+    process.env.NEXT_PUBLIC_SITE_URL || "https://www.hurtasbeton.com";
 
   // Veritabanından ürünleri al
   const dbCategories = await getCategories();
@@ -52,7 +53,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/projelerimiz`,
+      url: `${baseUrl}/galeri`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.8,

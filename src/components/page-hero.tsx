@@ -44,7 +44,7 @@ const HERO_BY_PATH: Record<string, PageHeroData> = {
       "Altyapı ve üst yapı beton elemanları için ürün seçimi, saha kullanımı ve tedarik planlamasına dair içerikler.",
     image: BlogImage,
   },
-  "/projelerimiz": {
+  "/galeri": {
     eyebrow: "Galeri",
     title: "Ürün ve Saha Galerisi",
     description:

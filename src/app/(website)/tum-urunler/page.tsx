@@ -18,17 +18,17 @@ export const metadata: Metadata = {
       "Beton boru, parke taşı, bordür, menhol ve saha ürünlerini Hürtaş Beton ürün kataloğunda inceleyin.",
     images: [
       {
-        url: "https://ctprefabrik.com/og-image.png",
+        url: "https://www.hurtasbeton.com/og-image.png",
         width: 1200,
         height: 630,
         alt: "Hürtaş Beton Ürünleri",
       },
     ],
     type: "website",
-    url: "https://ctprefabrik.com/tum-urunler",
+    url: "https://www.hurtasbeton.com/tum-urunler",
   },
   alternates: {
-    canonical: "https://ctprefabrik.com/tum-urunler",
+    canonical: "https://www.hurtasbeton.com/tum-urunler",
   },
 };
 

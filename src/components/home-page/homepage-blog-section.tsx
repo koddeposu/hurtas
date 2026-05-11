@@ -24,7 +24,7 @@ export async function HomepageBlogSection() {
             itemListElement: blogData.posts.map((post, index) => ({
               "@type": "ListItem",
               position: index + 1,
-              url: `https://ctprefabrik.com/blog/${post.slug}`,
+              url: `https://www.hurtasbeton.com/blog/${post.slug}`,
               name: post.title,
             })),
           }),

@@ -13,12 +13,12 @@ export const WhoWeAre = () => {
             <div className="mb-3 flex items-center gap-2">
               <span className="w-8 h-[2px] bg-secondary"></span>
               <span className="text-secondary font-bold uppercase tracking-[0.2em] text-xs">
-                Akıllı Mimari
+                Beton Elemanları
               </span>
             </div>
             <h2 className="text-2xl font-bold tracking-tight leading-[1.1] md:text-5xl">
-              Geleneksel Yapıdan <br />
-              <span className="text-slate-400">Daha Fazlası.</span>
+              Altyapı ve Saha İçin <br />
+              <span className="text-slate-400">Güçlü Üretim.</span>
             </h2>
           </div>
 
@@ -27,9 +27,8 @@ export const WhoWeAre = () => {
             whileInView={{ opacity: 1 }}
             className="max-w-sm text-sm font-medium leading-6 text-slate-500"
           >
-            CT Prefabrik ruhundan ilham alarak, insaat surecini bir
-            &quot;yuk&quot; olmaktan cikarip, 30 gunde anahtar teslim bir
-            &quot;sanat eserine&quot;
+            Hürtaş Beton olarak beton boru, baca elemanı, bordür, parke taşı ve
+            saha ürünlerinde ihtiyacı anlaşılır bir tedarik planına
             dönüştürüyoruz.
           </motion.p>
         </div>
@@ -41,7 +40,7 @@ export const WhoWeAre = () => {
             <div className="relative h-[320px] w-full overflow-hidden rounded-[3px]">
               <Image
                 src={HeroImage}
-                alt="prefabrik-ev"
+                alt="Hürtaş Beton üretim ve saha ürünleri"
                 fill
                 loading="lazy"
                 quality={55}
@@ -50,7 +49,7 @@ export const WhoWeAre = () => {
               <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-[2px] flex items-center gap-2 shadow-sm">
                 <div className="w-2 h-2 rounded-[1px] bg-[#d6a94a] animate-pulse" />
                 <span className="text-[10px] font-bold uppercase tracking-widest">
-                  30 GÜNDE TESLİM
+                  PLANLI SEVKİYAT
                 </span>
               </div>
             </div>
@@ -58,10 +57,10 @@ export const WhoWeAre = () => {
             <div className="flex items-center justify-between p-6">
               <div>
                 <h3 className="mb-1 text-lg font-bold italic lg:text-xl">
-                  Milimetrik Hassasiyet
+                  Ölçü ve Üretim Disiplini
                 </h3>
                 <p className="text-sm text-slate-400">
-                  Fabrika ortamında, hata payı olmadan üretim.
+                  Proje ihtiyacına uygun beton ürün tedariki.
                 </p>
               </div>
               <button
@@ -79,10 +78,10 @@ export const WhoWeAre = () => {
             <div className="relative flex-1 overflow-hidden rounded-[3px] border border-slate-50 bg-white p-8 shadow-[0_20px_50px_rgba(0,0,0,0.03)]">
               <div className="absolute -right-8 -top-8 w-32 h-32 bg-[#fffaf0] rounded-[3px] opacity-50" />
               <ShieldCheck className="relative z-10 mb-5 h-9 w-9 text-secondary" />
-              <h4 className="mb-2 text-lg font-bold">Statik Güven</h4>
+              <h4 className="mb-2 text-lg font-bold">Dayanıklı Ürün</h4>
               <p className="text-sm font-medium leading-6 text-slate-500">
-                Yüksek dayanımlı çelik gövdelerimizle, sismik güvenlikte
-                standartların üzerine çıkıyoruz.
+                Altyapı ve saha kullanımına uygun beton elemanlarıyla güven
+                veren çözümler sunuyoruz.
               </p>
             </div>
 
@@ -93,10 +92,10 @@ export const WhoWeAre = () => {
             >
               <Trees className="mb-4 h-9 w-9 text-[#9b7430] transition-transform group-hover:scale-110" />
               <h4 className="mb-1 text-lg font-bold text-[#152f51]">
-                Ekolojik Yaşam
+                Saha Düzeni
               </h4>
               <p className="text-[#9b7430]/70 text-xs font-bold uppercase tracking-widest">
-                Geri Dönüştürülebilir Yapı
+                Uzun Ömürlü Beton Ürünleri
               </p>
             </motion.div>
           </div>
@@ -111,7 +110,7 @@ export const WhoWeAre = () => {
                 HIZ
               </div>
               <p className="text-xs font-bold text-slate-400 uppercase">
-                Zaman Tasarrufu
+                Planlı Tedarik
               </p>
             </div>
           </div>
@@ -121,9 +120,9 @@ export const WhoWeAre = () => {
               <PencilRuler className="text-white" size={24} />
             </div>
             <div>
-              <div className="text-2xl font-black tracking-tighter">MİMARİ</div>
+              <div className="text-2xl font-black tracking-tighter">ÜRÜN</div>
               <p className="text-xs font-bold text-slate-400 uppercase">
-                Estetik Çözümler
+                Doğru Seçim
               </p>
             </div>
           </div>

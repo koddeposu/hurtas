@@ -35,229 +35,145 @@ export const ABOUT_FAQS: readonly SeoFaqItem[] = [
 
 export const PROJECTS_FAQS: readonly SeoFaqItem[] = [
   {
-    question: "Galeri sayfasında neler gösteriliyor?",
+    question: "Fotoğraftaki büyük yuvarlak beton borunun adı nedir?",
     answer:
-      "Galeri sayfasında beton ürünleri, saha uygulamaları ve referans niteliği taşıyan ürün görselleri yer alır. Amaç ürünleri sahadaki kullanım bağlamıyla göstermektir.",
+      "Bu ürün sahada çoğu zaman beton boru, betonarme boru, künk veya büz olarak aranır. Yağmur suyu, atık su ve drenaj hatlarında kullanım amacına göre beton boru, betonarme boru, entegre contalı beton boru veya lambazıvana betonarme boru tercih edilir.",
   },
   {
-    question: "Galeri görselleri ürün seçimine yardımcı olur mu?",
+    question: "Conta takılı beton boru hangi üründür?",
     answer:
-      "Evet, görseller beton boru, parke taşı, bordür ve diğer beton elemanlarının kullanım alanlarını daha net görmeye yardımcı olur.",
+      "Boru birleşim yerinde sızdırmazlık istenen projelerde entegre contalı beton borular ve entegre contalı betonarme borular kullanılır. Galerideki contalı boru görselleri, özellikle atık su ve yağmur suyu hatları için doğru bağlantı tipini anlamaya yardımcı olur.",
   },
   {
-    question: "Bir ürünü galeride gördüğümde teklif alabilir miyim?",
+    question: "Rögar, kanalizasyon bacası veya menhol diye aranan ürün hangisi?",
     answer:
-      "Evet, ilgilendiğiniz ürün veya uygulama görselini belirterek iletişim kanallarından teklif talebi oluşturabilirsiniz.",
+      "Rögar, kanalizasyon bacası ve menhol aramalarında genellikle muayene baca gövdesi, muayene baca tabanı, muayene konik elemanları ve baca yükseltme halkası gibi ürünler kastedilir. Galeride bu parçaların sahada nasıl bir araya geldiğini görebilirsiniz.",
   },
   {
-    question: "Galeride tüm ürün grupları yer alır mı?",
+    question: "Bina çıkışındaki küçük altyapı bacası nasıl adlandırılır?",
     answer:
-      "Galeri içerikleri zaman içinde güncellenir. Beton boru, parke taşı, bordür, menhol ve çevre düzenleme ürünlerine ait görseller eklenebilir.",
+      "Bina, site veya parsel bağlantılarında kullanılan bu ürünler parsel baca tabanı ve parsel baca gövdesi olarak adlandırılır. Kullanıcılar bu ürünleri parsel rögarı, bina kanalizasyon bacası veya bağlantı bacası olarak da arayabilir.",
+  },
+  {
+    question: "Yoldaki yağmur suyunu toplamak için hangi beton ürün kullanılır?",
+    answer:
+      "Yol, otopark, fabrika sahası ve çevre düzenleme alanlarında yağmur suyunu toplamak için yağmur suyu ızgara tabanları ve oluk taşları kullanılır. Bu ürünler suyun yüzeyde birikmeden hatta yönlendirilmesine yardımcı olur.",
+  },
+  {
+    question: "Yol altından su geçiren dikdörtgen beton yapı nedir?",
+    answer:
+      "Yol, arazi geçişi veya dere bağlantılarında kullanılan dikdörtgen kesitli büyük beton eleman beton kutu menfez olarak adlandırılır. Kutu menfezler su geçişi, altyapı hattı ve saha drenajı gibi projelerde tercih edilir.",
+  },
+  {
+    question: "Yol kenarındaki kaldırım sınır taşı hangisidir?",
+    answer:
+      "Kaldırım, yol kenarı, refüj, otopark ve bahçe sınırlarında kullanılan uzun beton taşlar bordür taşlarıdır. Bordür taşı, zemini sınırlandırmak ve parke taşı uygulamasını daha düzenli bitirmek için kullanılır.",
+  },
+  {
+    question: "Bahçe, kaldırım ve otopark zemininde hangi taşlar kullanılır?",
+    answer:
+      "Yaya yolu, otopark, bahçe ve site içi yollarda parke taşları; su yönlendirmesi gereken kenarlarda oluk taşları; yeşil alanla araç veya yaya kullanımının birlikte istendiği yerlerde çim taşı tercih edilebilir.",
+  },
+  {
+    question: "Eğimli arazide toprağı tutan taşların adı nedir?",
+    answer:
+      "Şevli arazilerde, yol kenarlarında ve peyzaj düzenlemelerinde kullanılan toprak tutucu beton elemanlar şev taşı, Flora şev taşı veya Terra Blok olarak bilinir. Bu ürünler hem zemin tutma hem de düzenli görünüm için kullanılır.",
+  },
+  {
+    question: "Şantiye ve yol güvenliği için kullanılan ağır beton blok nedir?",
+    answer:
+      "Şantiye çevresi, yol ayrımı, otopark yönlendirmesi ve geçici güvenlik alanlarında kullanılan ağır beton blok beton bariyer olarak adlandırılır. Galerideki beton bariyer görselleri ürünün sahadaki ölçeğini ve kullanım şeklini gösterir.",
+  },
+  {
+    question: "Duvar örmek için kullanılan beton blok hangisidir?",
+    answer:
+      "Duvar, bölme ve bazı saha yapılarında kullanılan boşluklu beton bloklar briket olarak adlandırılır. Briket ürünlerinde ölçü, adet ve kullanım alanı bilgisi teklif sürecinde netleştirilir.",
+  },
+  {
+    question: "Galeride gördüğüm ürünün adını bilmiyorsam teklif alabilir miyim?",
+    answer:
+      "Evet. Ürün adını bilmeniz şart değildir; galerideki görseli, kullanım yerini, yaklaşık ölçü veya adet bilgisini paylaşmanız yeterlidir. Ekip, görseldeki ürünün beton boru, baca elemanı, bordür, parke taşı, şev taşı, beton bariyer veya başka bir beton eleman olup olmadığını netleştirir.",
   },
   {
     question: "Görsellerdeki ürünler aynı ölçülerde temin edilir mi?",
     answer:
-      "Ürün ölçüleri stok, üretim ve proje ihtiyacına göre değerlendirilir. Net ölçü ve adet bilgisi için iletişime geçilmesi önerilir.",
+      "Ürün ölçüleri stok, üretim planı, proje ihtiyacı ve sevkiyat durumuna göre değerlendirilir. Beton borular, baca elemanları, kutu menfez, bordür taşları, parke taşları ve diğer beton ürünler için net ölçü ve adet bilgisiyle teklif almak en doğru yoldur.",
   },
   {
-    question: "Saha uygulaması da Hürtaş Beton tarafından mı yapılır?",
+    question: "Galeri hangi Hürtaş Beton ürünlerini kapsar?",
     answer:
-      "Hürtaş Beton temel olarak beton elemanları üretimi ve tedariki odağında çalışır. Uygulama kapsamı proje bazında ayrıca değerlendirilir.",
+      "Galeri; beton borular, betonarme borular, entegre contalı borular, lambazıvana borular, muayene ve parsel baca elemanları, yağmur suyu ızgara tabanları, kutu menfez, baca yükseltme halkası, şev taşı, Terra Blok, beton bariyer, bordür taşı, parke taşı, oluk taşı, briket ve çim taşı gibi ürün gruplarını kapsayabilir.",
   },
 ] as const;
 
 export const PRODUCTS_FAQS: readonly SeoFaqItem[] = [
   {
-    question: "Prefabrik ev modelleri arasından seçim yaparken nelere dikkat edilmeli?",
+    question: "Beton ürün seçerken hangi bilgiler gerekir?",
     answer:
-      "Metrekare, oda planı, yaşam alışkanlığı, arsa uygunluğu ve anahtar teslim kapsamı birlikte değerlendirilmelidir. Doğru model, yalnızca estetik değil kullanım konforu açısından da uygun olmalıdır.",
+      "Ürün adı, kullanım alanı, yaklaşık ölçü, adet ve teslim adresi bilgisi doğru beton ürün seçimini ve teklif sürecini hızlandırır.",
   },
   {
-    question: "Prefabrik ev modelleri ve fiyatları neden farklılık gösterir?",
+    question: "Beton boru ile betonarme boru arasında nasıl seçim yapılır?",
     answer:
-      "Fiyat farklılığı metrekare, malzeme kalitesi, cephe detayları, yalıtım seviyesi, nakliye ve montaj kapsamı gibi teknik başlıklardan kaynaklanır. Bu nedenle tüm projeler tek tip fiyatla değerlendirilmez.",
+      "Seçim; hat amacı, çap, yük ihtiyacı, zemin koşulu ve proje şartlarına göre yapılır. Yağmur suyu, atık su ve drenaj hatlarında ihtiyaç farklılaşabilir.",
   },
   {
-    question: "Tek katlı prefabrik ev modelleri kimler için uygundur?",
+    question: "Rögar veya menhol için hangi ürünler kullanılır?",
     answer:
-      "Tek katlı prefabrik ev modelleri sade plan, kolay erişim ve pratik kullanım isteyen kullanıcılar için uygundur. Özellikle küçük ve orta ölçekli ailelerde oldukça sık tercih edilir.",
+      "Rögar ve menhol çözümlerinde muayene baca gövdesi, muayene baca tabanı, konik eleman, parsel baca gövdesi, parsel baca tabanı ve baca yükseltme halkası gibi ürünler kullanılır.",
   },
   {
-    question: "Çift katlı prefabrik ev modelleri hangi avantajları sunar?",
+    question: "Bordür taşı ve parke taşı nerelerde kullanılır?",
     answer:
-      "Çift katlı prefabrik ev modelleri daha geniş yaşam alanı, kat ayrımı, ferah oda planı ve villa tipi yaşam hissi sunar. Geniş aileler ve daha fazla oda ihtiyacı olan kullanıcılar için güçlü bir seçenektir.",
+      "Bordür taşı yol, kaldırım, refüj, bahçe ve otopark sınırlarında; parke taşı ise yaya yolu, site içi yol, bahçe ve saha zeminlerinde kullanılır.",
   },
   {
-    question: "Çelik ev fiyatları ile prefabrik ev fiyatları neden karşılaştırılır?",
+    question: "Kutu menfez hangi projelerde tercih edilir?",
     answer:
-      "Çünkü kullanıcılar hem teknik dayanım hem de maliyet dengesini birlikte görmek ister. Çelik evler ile prefabrik evler arasında taşıyıcı sistem ve teknik çözüm farkları bulunduğu için kapsamlı kıyaslama yapılmalıdır.",
+      "Beton kutu menfez; yol altı su geçişleri, dere bağlantıları, drenaj hatları ve altyapı geçişlerinde kullanılan dikdörtgen kesitli beton elemandır.",
   },
   {
-    question: "Anahtar teslim prefabrik evde hangi kalemler önemli?",
+    question: "Yağmur suyu için hangi beton ürünler kullanılır?",
     answer:
-      "Dış cephe, çatı, doğrama, iç bölme, elektrik altyapısı, ıslak hacimler, nakliye ve montaj kalemleri anahtar teslim değerlendirmede önemlidir. Teklifte bu başlıkların açık olması gerekir.",
+      "Yağmur suyu hatlarında beton borular, entegre contalı borular, yağmur suyu ızgara tabanları ve oluk taşları proje ihtiyacına göre değerlendirilebilir.",
   },
   {
-    question: "Prefabrik villa ile standart prefabrik ev arasında ne fark vardır?",
+    question: "Şev taşı ve Terra Blok ne işe yarar?",
     answer:
-      "Prefabrik villa çözümleri genellikle daha geniş metrekare, özel cephe tasarımı, yüksek tavan etkisi ve daha karakterli plan kurgusu ile öne çıkar. Standart prefabrik evler ise daha dengeli ve ekonomik planlar sunar.",
+      "Şev taşı, Flora şev taşı ve Terra Blok eğimli arazilerde zemin tutma, peyzaj düzenleme ve daha düzenli alan oluşturma amacıyla kullanılır.",
   },
   {
-    question: "Dubleks prefabrik ev fiyatları hangi detaylardan etkilenir?",
+    question: "Beton bariyer hangi alanlarda kullanılır?",
     answer:
-      "Merdiven çözümü, balkon ve teras kullanımı, kat planı, cephe malzemesi ve anahtar teslim kapsamı dubleks prefabrik ev fiyatlarını doğrudan etkiler.",
+      "Beton bariyer yol güvenliği, şantiye çevrimi, otopark yönlendirmesi, geçici alan ayırma ve saha güvenliği uygulamalarında kullanılır.",
   },
   {
-    question: "Konteyner ev modelleri bu sayfada neden önemlidir?",
+    question: "Toplu ürün alımı yapılabilir mi?",
     answer:
-      "Konteyner ev modelleri modüler ve hızlı çözümler arayan kullanıcılar için önemli bir alternatif oluşturur. Prefabrik ev ve çelik ev seçenekleriyle birlikte düşünülerek doğru yapı tipi seçilebilir.",
+      "Evet, belediye, müteahhit, şantiye, sanayi tesisi ve altyapı projeleri için toplu beton ürün talepleri proje bazında değerlendirilebilir.",
   },
   {
-    question: "Sakarya prefabrik ev aramalarında model seçimi nasıl yapılmalı?",
+    question: "Ürün fiyatları neye göre değişir?",
     answer:
-      "Sakarya prefabrik ev aramalarında kullanıcıların en çok dikkat ettiği başlıklar fiyat, metrekare, teslim süresi ve uygulama kalitesidir. Model seçimi yapılırken arsa durumu ve kullanım amacı mutlaka birlikte değerlendirilmelidir.",
+      "Fiyatlar ürün grubu, ölçü, adet, üretim planı, stok durumu, teslim adresi ve sevkiyat koşullarına göre değişebilir.",
   },
   {
-    question: "Prefabrik ev teslim süresi model seçiminde önemli mi?",
+    question: "Ürünler sahaya nasıl planlanır?",
     answer:
-      "Evet, teslim süresi özellikle hızlı yerleşim planlayan kullanıcılar için önemli bir karar kriteridir. Ancak sadece hız değil, üretim kalitesi ve montaj doğruluğu da birlikte değerlendirilmelidir.",
+      "Sevkiyat planı ürün hacmi, araç uygunluğu, teslim lokasyonu, saha programı ve ihtiyaç duyulan teslim tarihine göre oluşturulur.",
   },
   {
     question: "Bu sayfadaki ürünler teklif süreci için başlangıç noktası olur mu?",
     answer:
-      "Evet, burada görülen tüm modeller teklif süreci için referans oluşturabilir. Kullanıcı seçtiği modele yakın bir planla başlayıp ihtiyaçlarına göre kapsamı genişletebilir veya sadeleştirebilir.",
+      "Evet, ürün sayfasındaki beton boru, baca elemanı, bordür, parke taşı, şev taşı, beton bariyer ve diğer ürünler teklif süreci için referans olabilir.",
   },
 ] as const;
 
-export const SINGLE_STOREY_PRODUCT_FAQS: readonly SeoFaqItem[] = [
-  {
-    question: "Tek katlı prefabrik ev fiyatları neye göre belirlenir?",
-    answer:
-      "Tek katlı prefabrik ev fiyatları; metrekare, oda planı, duvar ve çatı sistemi, yalıtım seviyesi, cephe detayları, nakliye mesafesi ve anahtar teslim kapsamına göre belirlenir. Sağlıklı fiyat karşılaştırması için teklif içeriğinin net biçimde incelenmesi gerekir.",
-  },
-  {
-    question: "Tek katlı prefabrik ev modelleri hangi kullanıcılar için uygundur?",
-    answer:
-      "Tek katlı prefabrik ev modelleri; pratik kullanım, erişilebilir plan ve sade yaşam arayan kullanıcılar için idealdir. Özellikle küçük ve orta ölçekli aileler, yaşlı bireyler ve hızlı yerleşim hedefleyen kullanıcılar tarafından sık tercih edilir.",
-  },
-  {
-    question: "Anahtar teslim tek katlı prefabrik ev neleri kapsar?",
-    answer:
-      "Anahtar teslim tek katlı prefabrik ev projelerinde dış cephe, çatı, doğrama, iç bölme çözümleri, elektrik altyapısı, ıslak hacim detayları, nakliye ve montaj gibi kalemler değerlendirilir. Ancak kapsam firmaya göre değişebileceği için teklif kalemleri tek tek kontrol edilmelidir.",
-  },
-  {
-    question: "Tek katlı prefabrik ev modellerinde 2+1 ve 3+1 planlar nasıl seçilir?",
-    answer:
-      "2+1 ve 3+1 plan seçimi yapılırken aile büyüklüğü, günlük yaşam düzeni, salon-mutfak ilişkisi ve arsa ölçüsü birlikte değerlendirilmelidir. Doğru plan seçimi yalnızca oda sayısına değil, yaşam konforuna göre yapılmalıdır.",
-  },
-  {
-    question: "Tek katlı prefabrik ev için ruhsat gerekir mi?",
-    answer:
-      "Evet, tek katlı prefabrik ev projelerinde ilgili belediye veya yerel idarenin ruhsat ve imar şartları dikkate alınmalıdır. Arsa uygunluğu ve bölgesel yönetmelikler kontrol edilmeden karar verilmemesi önemlidir.",
-  },
-  {
-    question: "Tek katlı prefabrik ev teslim süresi ne kadar sürer?",
-    answer:
-      "Teslim süresi proje ölçüsüne, üretim yoğunluğuna, nakliye planına ve montaj kapsamına göre değişir. Ancak prefabrik sistemler kontrollü üretim sayesinde geleneksel yapılara kıyasla daha planlı ve daha hızlı teslim avantajı sunar.",
-  },
-  {
-    question: "Tek katlı prefabrik evlerde ısı yalıtımı önemli midir?",
-    answer:
-      "Evet, ısı yalıtımı tek katlı prefabrik evlerde hem yaşam konforu hem de enerji maliyetleri açısından çok önemlidir. Doğru duvar sistemi, çatı çözümü ve pencere kalitesiyle dört mevsim daha dengeli bir iç mekan elde edilir.",
-  },
-  {
-    question: "Sakarya tek katlı prefabrik ev hizmeti alırken nelere dikkat edilmeli?",
-    answer:
-      "Sakarya tek katlı prefabrik ev taleplerinde arsa uygunluğu, teslim kapsamı, fiyat dengesi ve uygulama tecrübesi birlikte değerlendirilmelidir. Yerel keşif, zemin durumu ve kullanım amacı doğru model seçiminde belirleyici olur.",
-  },
-] as const;
+export const SINGLE_STOREY_PRODUCT_FAQS: readonly SeoFaqItem[] = PRODUCTS_FAQS;
 
-export const DOUBLE_STOREY_PRODUCT_FAQS: readonly SeoFaqItem[] = [
-  {
-    question: "Çift katlı prefabrik ev fiyatları hangi detaylardan etkilenir?",
-    answer:
-      "Çift katlı prefabrik ev fiyatları; metrekare, kat planı, merdiven çözümü, balkon ve teras kullanımı, cephe malzemesi, yalıtım seviyesi ve anahtar teslim kapsamına göre değişir. Dubleks prefabrik ev tekliflerinde kapsam farklılıkları fiyatı doğrudan etkiler.",
-  },
-  {
-    question: "Dubleks prefabrik ev modelleri kimler için uygundur?",
-    answer:
-      "Dubleks prefabrik ev modelleri geniş aileler, daha fazla oda ihtiyacı olan kullanıcılar ve villa tipi yaşam hissi arayanlar için uygundur. Kat ayrımı sayesinde yaşam alanı ile özel alan daha konforlu biçimde planlanabilir.",
-  },
-  {
-    question: "İki katlı prefabrik ev modellerinde planlama nasıl yapılır?",
-    answer:
-      "İki katlı prefabrik ev planlamasında zemin kat ve üst kat işlevleri ayrı değerlendirilir. Salon, mutfak ve ortak alanlar çoğunlukla alt katta; yatak odaları ve özel alanlar ise üst katta konumlandırılarak daha düzenli bir yaşam akışı sağlanır.",
-  },
-  {
-    question: "Anahtar teslim dubleks prefabrik evde hangi kalemler önemlidir?",
-    answer:
-      "Anahtar teslim dubleks prefabrik ev projelerinde taşıyıcı sistem, merdiven çözümü, ıslak hacimler, doğrama, çatı, dış cephe, elektrik altyapısı, nakliye ve montaj kalemleri büyük önem taşır. Teklif karşılaştırması yapılırken bu detayların açıkça yazılı olması gerekir.",
-  },
-  {
-    question: "Çift katlı prefabrik evler depreme dayanıklı mıdır?",
-    answer:
-      "Doğru mühendislik, uygun taşıyıcı sistem ve kaliteli üretim ile çift katlı prefabrik evler güvenli ve uzun ömürlü kullanım sağlayabilir. Dayanım değerlendirmesi yapılırken projelendirme disiplini ve uygulama kalitesi birlikte incelenmelidir.",
-  },
-  {
-    question: "Çift katlı prefabrik evlerde balkon ve teras çözümleri uygulanabilir mi?",
-    answer:
-      "Evet, çift katlı prefabrik ev modellerinde balkon, teras ve geniş pencere açıklıkları gibi detaylar uygulanabilir. Bu unsurlar hem dış görünümü güçlendirir hem de yaşam alanının ferahlığını artırır.",
-  },
-  {
-    question: "Dubleks prefabrik ev için ruhsat süreci nasıl işler?",
-    answer:
-      "Dubleks prefabrik ev projelerinde de ruhsat ve imar süreçleri ilgili bölgenin mevzuatına göre yürütülür. Arsanın kullanım durumu, yerel yönetmelikler ve proje uygunluğu karar öncesinde netleştirilmelidir.",
-  },
-  {
-    question: "Sakarya çift katlı prefabrik ev taleplerinde en çok neye bakılır?",
-    answer:
-      "Sakarya çift katlı prefabrik ev taleplerinde kullanıcılar en çok fiyat, geniş yaşam planı, teslim süresi ve uygulama kalitesine bakar. Arsa ölçüsü ve aile yapısı doğru model seçiminde temel belirleyicidir.",
-  },
-] as const;
+export const DOUBLE_STOREY_PRODUCT_FAQS: readonly SeoFaqItem[] = PRODUCTS_FAQS;
 
-export const STEEL_HOUSE_PRODUCT_FAQS: readonly SeoFaqItem[] = [
-  {
-    question: "Çelik ev fiyatları neye göre değişir?",
-    answer:
-      "Çelik ev fiyatları; taşıyıcı sistem çözümü, metrekare, çelik yoğunluğu, yalıtım seviyesi, cephe kaplaması, mimari detaylar ve anahtar teslim kapsamına göre değişir. Bu nedenle çelik prefabrik ev fiyatları değerlendirilirken yalnızca m2 değil teknik içerik de dikkate alınmalıdır.",
-  },
-  {
-    question: "Çelik prefabrik ev modelleri hangi avantajları sunar?",
-    answer:
-      "Çelik prefabrik ev modelleri güçlü taşıyıcı sistem, modern tasarım, plan esnekliği ve uzun ömürlü kullanım avantajı sunar. Teknik dayanım ile estetik görünümü bir arada isteyen kullanıcılar için güçlü bir alternatiftir.",
-  },
-  {
-    question: "Çelik prefabrik ev yapımı nasıl ilerler?",
-    answer:
-      "Çelik prefabrik ev yapımı keşif, projelendirme, üretim, sevkiyat ve montaj aşamalarından oluşur. Kontrollü üretim süreci sahadaki belirsizlikleri azaltır ve uygulamanın daha planlı ilerlemesini sağlar.",
-  },
-  {
-    question: "Anahtar teslim çelik konstrüksiyon ev fiyatları neden farklı olur?",
-    answer:
-      "Anahtar teslim çelik konstrüksiyon ev fiyatları firmadan firmaya değişebilir çünkü her teklif aynı kapsamı içermez. İç mekan detayları, yalıtım çözümü, ıslak hacim uygulamaları ve montaj sonrası teslim kalemleri fiyatı doğrudan etkiler.",
-  },
-  {
-    question: "Tek katlı çelik ev fiyatları ile standart prefabrik ev fiyatları aynı mıdır?",
-    answer:
-      "Hayır, tek katlı çelik ev fiyatları ile standart prefabrik ev fiyatları aynı değildir. Taşıyıcı sistem, teknik çözüm ve malzeme standardı farklı olduğu için fiyat seviyeleri de proje bazında değişir.",
-  },
-  {
-    question: "Çelik ev mi prefabrik ev mi sorusunda nasıl karar verilir?",
-    answer:
-      "Karar verirken bütçe, arsa koşulu, kullanım amacı, beklenen teknik performans ve mimari beklenti birlikte değerlendirilmelidir. Çelik evler daha teknik ve dayanım odaklı bir çözüm sunarken, prefabrik evler daha geniş plan çeşitliliği ve dengeli maliyet avantajı sağlayabilir.",
-  },
-  {
-    question: "Çelik evlerde ısı ve ses yalıtımı yeterli olur mu?",
-    answer:
-      "Doğru duvar sistemi, çatı çözümü ve pencere seçimi ile çelik evlerde güçlü ısı ve ses yalıtımı sağlanabilir. Yalıtım performansı kullanılan malzeme ve uygulama kalitesine bağlı olarak değişir.",
-  },
-  {
-    question: "Sakarya çelik ev taleplerinde en çok hangi konular sorulur?",
-    answer:
-      "Sakarya çelik ev taleplerinde en çok fiyat, teslim süresi, teknik dayanım, yalıtım performansı ve anahtar teslim kapsamı sorulur. Arsa koşulları ve kullanım senaryosu da teklif sürecini doğrudan etkiler.",
-  },
-] as const;
-
+export const STEEL_HOUSE_PRODUCT_FAQS: readonly SeoFaqItem[] = PRODUCTS_FAQS;
 type RoomKey = "1+1" | "2+1" | "3+1" | "4+1";
 
 function detectRoomKey(categoryNameOrSlug?: string): RoomKey | null {
@@ -275,28 +191,28 @@ function detectRoomKey(categoryNameOrSlug?: string): RoomKey | null {
 function getRoomSpecificFaqs(room: RoomKey): readonly SeoFaqItem[] {
   return [
     {
-      question: `${room} prefabrik ev fiyatları neye göre belirlenir?`,
-      answer: `${room} prefabrik ev fiyatları; metrekare, plan tipi, yalıtım seviyesi, cephe detayları, nakliye ve anahtar teslim kapsamına göre belirlenir. Doğru karşılaştırma için teklif içeriği kalem kalem incelenmelidir.`,
+      question: `${room} ölçülü ürünlerde teklif nasıl hazırlanır?`,
+      answer: `${room} gibi ölçü veya varyasyon bilgisi içeren ürünlerde teklif; ürün grubu, ölçü, adet, kullanım alanı, stok durumu ve teslim adresine göre hazırlanır.`,
     },
     {
-      question: `${room} prefabrik ev modelleri kimler için uygundur?`,
-      answer: `${room} planlar; aile yapısı, günlük yaşam alışkanlığı ve arsa koşuluna göre farklı kullanıcı profillerine hitap eder. Doğru model seçimi için oda dağılımı ve kullanım konforu birlikte değerlendirilmelidir.`,
+      question: `${room} ibaresi ürün seçiminde ne ifade eder?`,
+      answer: `Ürün sayfalarında yer alan ölçü, sınıf veya varyasyon bilgileri doğru ürünün ayrıştırılmasına yardımcı olur. Net seçim için proje ölçüsü ve kullanım amacı birlikte değerlendirilmelidir.`,
     },
     {
-      question: `${room} prefabrik ev anahtar teslim kapsamda neler olur?`,
-      answer: `Anahtar teslim ${room} prefabrik ev projelerinde dış cephe, çatı, iç bölme, elektrik altyapısı, ıslak hacim uygulamaları, nakliye ve montaj gibi başlıklar değerlendirilir. Nihai kapsam teklif detayında netleştirilmelidir.`,
+      question: `${room} ürünlerde stok bilgisi nasıl öğrenilir?`,
+      answer: `Stok ve üretim uygunluğu ürün grubu, adet ve teslim planına göre değişebilir. En doğru bilgi için ürün adı ve yaklaşık adetle iletişime geçilmesi gerekir.`,
     },
     {
-      question: `${room} prefabrik ev için ruhsat gerekir mi?`,
-      answer: `Evet, ${room} prefabrik ev projelerinde ilgili belediye ve yerel mevzuata göre ruhsat süreci yürütülmelidir. Arsa imar durumu ve proje uygunluğu karar öncesinde kontrol edilmelidir.`,
+      question: `${room} ürünler sahaya sevk edilebilir mi?`,
+      answer: `Evet, ürünlerin sahaya sevki ürün hacmi, araç uygunluğu, teslim adresi ve saha programına göre planlanır.`,
     },
     {
-      question: `${room} prefabrik ev teslim süresi ne kadar sürer?`,
-      answer: `Teslim süresi üretim yoğunluğu, proje kapsamı, nakliye mesafesi ve montaj planına göre değişir. Prefabrik sistemlerde süreç çoğu zaman geleneksel yapılara göre daha planlı ilerler.`,
+      question: `${room} ürünlerde teslim süresi neye göre değişir?`,
+      answer: `Teslim süresi stok, üretim yoğunluğu, adet, sevkiyat mesafesi ve saha programına göre değişir.`,
     },
     {
-      question: `${room} prefabrik ev seçerken en kritik kriter nedir?`,
-      answer: `En kritik kriter; fiyat, teknik kalite, plan verimliliği ve uzun ömürlü kullanım dengesini birlikte değerlendirmektir. Sadece başlangıç fiyatına bakmak yerine toplam proje kapsamına odaklanmak gerekir.`,
+      question: `${room} ürün seçerken en kritik kriter nedir?`,
+      answer: `En kritik kriter ürünün proje ihtiyacına uygun ölçü, dayanım, bağlantı ve kullanım alanı beklentilerini karşılamasıdır.`,
     },
   ];
 }

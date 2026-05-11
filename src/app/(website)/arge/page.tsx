@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description:
     "Hürtaş Beton'un beton elemanlarında üretim geliştirme, kalite kontrol ve saha ihtiyaçlarına uygun çözüm yaklaşımı hakkında bilgi alın.",
   alternates: {
-    canonical: "https://ctprefabrik.com/arge",
+    canonical: "https://www.hurtasbeton.com/arge",
   },
 };
 

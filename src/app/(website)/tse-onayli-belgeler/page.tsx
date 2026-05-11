@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   description:
     "Hürtaş Beton'un TSE onaylı belge yaklaşımı, kalite standardı ve beton elemanları üretim süreçleri hakkında bilgi alın.",
   alternates: {
-    canonical: "https://ctprefabrik.com/tse-onayli-belgeler",
+    canonical: "https://www.hurtasbeton.com/tse-onayli-belgeler",
   },
 };
 

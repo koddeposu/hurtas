@@ -22,8 +22,8 @@ export async function generateMetadata({
     alternates: {
       canonical:
         page > 1
-          ? `https://ctprefabrik.com/blog?page=${page}`
-          : "https://ctprefabrik.com/blog",
+          ? `https://www.hurtasbeton.com/blog?page=${page}`
+          : "https://www.hurtasbeton.com/blog",
     },
   };
 }

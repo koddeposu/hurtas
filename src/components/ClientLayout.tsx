@@ -15,14 +15,27 @@ interface Category {
   order: number;
 }
 
+interface ProductSearchItem {
+  id: string;
+  name: string;
+  href: string;
+  categoryLabel: string | null;
+  categoryHrefs: string[];
+  imageUrl: string | null;
+  imageAlt: string;
+  searchText: string;
+}
+
 interface ClientLayoutProps {
   children: React.ReactNode;
   categories?: Category[];
+  productSearchItems?: ProductSearchItem[];
 }
 
 export default function ClientLayout({
   children,
   categories = [],
+  productSearchItems = [],
 }: ClientLayoutProps) {
   const pathname = usePathname();
   const isHomepage = pathname === "/";
@@ -33,7 +46,7 @@ export default function ClientLayout({
   return (
     <>
       <div className="fixed w-full h-screen -z-10  opacity-10 blur-in-sm " />
-      <Navbar categories={categories} />
+      <Navbar categories={categories} productSearchItems={productSearchItems} />
 
       <main
         className={`relative overflow-hidden ${

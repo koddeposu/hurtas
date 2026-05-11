@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'İletişim | Hürtaş Beton',
     description: 'Hürtaş Beton ile iletişime geçin. Beton elemanları için hemen arayın.',
-    url: 'https://ctprefabrik.com/iletisim',
+    url: 'https://www.hurtasbeton.com/iletisim',
     siteName: 'Hürtaş Beton',
     images: [
       {
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     images: ['/og-contact.jpg'],
   },
   alternates: {
-    canonical: 'https://ctprefabrik.com/iletisim',
+    canonical: 'https://www.hurtasbeton.com/iletisim',
   },
   robots: {
     index: true,
@@ -59,7 +59,7 @@ export default function ContactPage() {
             '@type': 'ContactPage',
             name: 'İletişim',
             description: 'Hürtaş Beton iletişim bilgileri',
-            url: 'https://ctprefabrik.com/iletisim',
+            url: 'https://www.hurtasbeton.com/iletisim',
           }),
         }}
       />
@@ -71,10 +71,10 @@ export default function ContactPage() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'LocalBusiness',
-            '@id': 'https://ctprefabrik.com',
+            '@id': 'https://www.hurtasbeton.com',
             name: CONTACT_INFO.companyName,
-            image: 'https://ctprefabrik.com/logo.png',
-            url: 'https://ctprefabrik.com',
+            image: 'https://www.hurtasbeton.com/logo.png',
+            url: 'https://www.hurtasbeton.com',
             telephone: CONTACT_INFO.primaryPhone.schema,
             email: CONTACT_INFO.email,
             priceRange: '₺₺',
@@ -99,11 +99,6 @@ export default function ContactPage() {
                 closes: '14:00',
               },
             ],
-            sameAs: [
-              'https://www.facebook.com/ctprefabrik',
-              'https://www.instagram.com/ctprefabrik',
-              'https://twitter.com/ctprefabrik',
-            ],
             areaServed: {
               '@type': 'Country',
               name: 'Turkey',
@@ -125,13 +120,13 @@ export default function ContactPage() {
                 '@type': 'ListItem',
                 position: 1,
                 name: 'Ana Sayfa',
-                item: 'https://ctprefabrik.com',
+                item: 'https://www.hurtasbeton.com',
               },
               {
                 '@type': 'ListItem',
                 position: 2,
                 name: 'İletişim',
-                item: 'https://ctprefabrik.com/iletisim',
+                item: 'https://www.hurtasbeton.com/iletisim',
               },
             ],
           }),
@@ -146,7 +141,7 @@ export default function ContactPage() {
             '@context': 'https://schema.org',
             '@type': 'Organization',
             name: CONTACT_INFO.companyName,
-            url: 'https://ctprefabrik.com',
+            url: 'https://www.hurtasbeton.com',
             contactPoint: [
               {
                 '@type': 'ContactPoint',

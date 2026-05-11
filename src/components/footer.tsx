@@ -38,7 +38,7 @@ const pageLinks = [
   { name: "Arge", href: "/arge" },
   { name: "Ürünler", href: ALL_PRODUCTS_PATH },
   { name: "Blog", href: "/blog" },
-  { name: "Projelerimiz", href: "/projelerimiz" },
+  { name: "Galeri", href: "/galeri" },
   { name: "İletişim", href: "/iletisim" },
 ];
 

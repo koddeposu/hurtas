@@ -117,27 +117,25 @@ function productMatchesQuery(product: DBProduct, query: string) {
 
 function getRoomPageContent(room: RoomKey) {
   return {
-    eyebrow: `${room} Prefabrik Ev Seçkisi`,
-    title: `${room} Prefabrik Ev Fiyatları ve Modelleri`,
-    description: `${room} prefabrik ev modellerini metrekare, kat planı, kullanım amacı ve anahtar teslim kapsamına göre inceleyin. Kompakt yaşamdan aile kullanımına kadar farklı plan alternatiflerini tek sayfada karşılaştırın.`,
-    seoTitle: `${room} Prefabrik Ev Fiyatları ${CURRENT_YEAR}`,
-    seoDescription: `${room} prefabrik ev fiyatları; metrekare, malzeme kalitesi, yalıtım seviyesi, proje kapsamı ve teslim detaylarına göre değişir. ${room} plan arayan kullanıcılar için doğru model seçimi, yalnızca fiyat değil plan verimliliği ve uzun ömürlü kullanım kriterleriyle yapılmalıdır.`,
+    eyebrow: `${room} Ürün Seçkisi`,
+    title: `${room} Ölçü ve Proje Uygunluğu`,
+    description:
+      "Ürünleri ölçü, kullanım alanı ve sevkiyat ihtiyacına göre karşılaştırın.",
+    seoTitle: `Beton Ürün Ölçüleri ve Proje Seçimi ${CURRENT_YEAR}`,
+    seoDescription:
+      "Beton ürünlerinde doğru seçim; ölçü, yük sınıfı, kullanım alanı, bağlantı tipi, adet ve sevkiyat planı birlikte değerlendirilerek yapılır.",
     seoCards: [
       {
-        title: `${room} Prefabrik Ev Modelleri`,
-        text: `${room} prefabrik ev modelleri, yaşam alışkanlığına uygun plan kurgusu ile öne çıkar. Salon-mutfak ilişkisi, oda yerleşimi, doğal ışık kullanımı ve günlük kullanım konforu birlikte değerlendirilmelidir.`,
+        title: "Ürün Ölçüsü Nasıl Netleştirilir?",
+        text: "Beton boru, baca elemanı, bordür, parke taşı veya menfez seçiminde proje ölçüsü, uygulama alanı ve ihtiyaç duyulan adet birlikte değerlendirilmelidir.",
       },
       {
-        title: `${room} Prefabrik Ev Fiyatları Neye Göre Değişir?`,
-        text: `${room} prefabrik ev fiyatlarında metrekare, duvar sistemi, çatı tipi, pencere-doğrama seçimi ve anahtar teslim kapsamı temel belirleyicilerdir. Sağlıklı karşılaştırma için teklif içeriği kalem kalem incelenmelidir.`,
+        title: "Teklif İçin Hangi Bilgiler Gerekir?",
+        text: "Ürün adı, yaklaşık ölçü, adet, teslim adresi ve kullanım alanı bilgisi teklif sürecini hızlandırır.",
       },
       {
-        title: `${room} Planında Doğru Model Seçimi`,
-        text: `${room} planı tercih edilirken arsa ölçüsü, aile kişi sayısı, depolama ihtiyacı ve gelecekteki kullanım senaryoları birlikte ele alınmalıdır. Böylece hem bütçeye hem yaşam konforuna uygun model seçimi yapılabilir.`,
-      },
-      {
-        title: `${room} Prefabrik Evlerde Anahtar Teslim Kapsam`,
-        text: `Anahtar teslim ${room} prefabrik ev projelerinde dış cephe, çatı, iç bölme, elektrik altyapısı, ıslak hacim detayları, nakliye ve montaj kalemleri teklif kapsamında açık şekilde yer almalıdır.`,
+        title: "Sahaya Uygun Ürün Nasıl Seçilir?",
+        text: "Altyapı, yol, kaldırım, otopark, şantiye veya peyzaj ihtiyacına göre ürün grubu ve teknik beklenti birlikte ele alınmalıdır.",
       },
     ],
   };
@@ -153,37 +151,25 @@ function getPageContent(categoryName?: string, categorySlug?: string) {
 
   if (categoryKey === "single") {
     return {
-      eyebrow: "Tek Katlı Prefabrik Ev Seçkisi",
-      title: `Tek Katlı Prefabrik Ev Fiyatları ve Modelleri`,
+      eyebrow: "Altyapı Beton Ürünleri",
+      title: "Beton Boru ve Baca Elemanları",
       description:
-        "Tek katlı prefabrik ev modellerini metrekare, oda planı ve yaşam ihtiyaçlarına göre inceleyin. Fiyatları etkileyen detayları ve anahtar teslim kapsamını net biçimde değerlendirin.",
-      seoTitle: `Tek Katlı Prefabrik Ev Fiyatları ${CURRENT_YEAR}`,
+        "Beton boru, betonarme boru, muayene bacası, parsel bacası ve yağmur suyu elemanlarını proje ihtiyacına göre inceleyin.",
+      seoTitle: `Beton Boru ve Baca Elemanları ${CURRENT_YEAR}`,
       seoDescription:
-        "Tek katlı prefabrik ev fiyatları ve modelleri değerlendirilirken sadece başlangıç fiyatlarına değil, malzeme kalitesi, anahtar teslim kapsamı, ruhsat uygunluğu, enerji verimliliği ve arsa koşullarına birlikte bakmak gerekir. Doğru planlandığında tek katlı prefabrik evler hem ekonomik hem de uzun ömürlü bir yaşam çözümü sunar.",
+        "Beton boru, betonarme boru, contalı boru ve baca elemanlarında doğru seçim; çap, bağlantı tipi, yük ihtiyacı, hat amacı ve sevkiyat planına göre yapılır.",
       seoCards: [
         {
-          title: `Tek Katlı Prefabrik Ev Fiyatları ${CURRENT_YEAR}`,
-          text: "Tek katlı prefabrik ev fiyatları 2026 yılında metrekare, oda sayısı, çatı sistemi, cephe detayları, yalıtım seviyesi ve anahtar teslim kapsamına göre değişir. Hammadde ve üretim maliyetlerindeki hareketlilik fiyatları etkileyebilir; ancak prefabrik evler hâlâ betonarme yapılara göre daha kontrollü ve çoğu zaman daha ekonomik bir çözüm sunar. Sağlıklı bir karşılaştırma için yalnızca başlangıç rakamına değil, teklifin içinde hangi uygulama kalemlerinin bulunduğuna da dikkat edilmelidir.",
+          title: "Beton Boru Seçimi",
+          text: "Yağmur suyu, atık su ve drenaj hatlarında beton boru veya betonarme boru seçimi; çap, hat yükü, bağlantı yapısı ve proje şartlarına göre değerlendirilmelidir.",
         },
         {
-          title: "Tek Katlı Prefabrik Ev Modelleri ve Fiyat Karşılaştırması",
-          text: "Tek katlı prefabrik ev modelleri; 1+1, 2+1, 3+1 ve daha geniş plan alternatifleriyle farklı yaşam ihtiyaçlarına hitap eder. Model seçerken arsa yapısı, aile büyüklüğü, oda dağılımı, mutfak-salon ilişkisi ve kullanım alışkanlıkları dikkate alınmalıdır. Modern çizgili ya da klasik görünümlü modeller arasında karar verirken sadece görsele değil, iç planın günlük yaşama ne kadar uyduğuna bakmak daha doğru sonuç verir.",
+          title: "Rögar ve Menhol Elemanları",
+          text: "Muayene baca gövdesi, baca tabanı, parsel baca gövdesi, konik eleman ve baca yükseltme halkası altyapı hatlarında erişim ve bakım için kullanılır.",
         },
         {
-          title: "Tek Katlı Prefabrik Ev Alırken Nelere Dikkat Edilmeli?",
-          text: "Prefabrik ev alırken dikkat edilmesi gereken en önemli konular ruhsat uygunluğu, inşaat malzemelerinin kalitesi, ısı yalıtımı, teslim süresi ve montaj kapsamıdır. Teklif alınırken nakliye, montaj, iç kapılar, ıslak hacimler, elektrik altyapısı ve çatı sistemi gibi başlıkların dahil olup olmadığı net görülmelidir. En ucuz teklif her zaman en iyi çözüm anlamına gelmez; önemli olan uzun ömürlü kullanım sağlayacak kalite-fiyat dengesidir.",
-        },
-        {
-          title: "Arazi Uygunluğu, Enerji Verimliliği ve Ruhsat Süreci",
-          text: "Tek katlı prefabrik evler için düz ve ulaşımı kolay araziler avantaj sağlar; ancak asıl belirleyici unsur arsanın imar uygunluğu ve ruhsat süreçleridir. Bunun yanında enerji verimliliği sunan duvar sistemleri, çatı yalıtımı ve kaliteli doğrama çözümleri uzun vadede ısınma ve soğutma maliyetlerini düşürür. Doğru malzeme tercihleriyle prefabrik evlerde konforlu ve ekonomik bir yaşam kurmak mümkündür.",
-        },
-        {
-          title: "Tek Katlı Prefabrik Evlerin Avantajları Nelerdir?",
-          text: "Tek katlı prefabrik evler hızlı kurulum, dengeli maliyet, kolay bakım ve sade yaşam planı avantajıyla öne çıkar. Özellikle erişilebilir kullanım isteyen aileler, yaşlı bireyler veya pratik yaşam alanı arayan kullanıcılar için tek katlı planlar hem konfor hem de fonksiyon açısından güçlü bir tercih oluşturur.",
-        },
-        {
-          title: "Tek Katlı Prefabrik Evlerde Isı Yalıtımı Neden Önemli?",
-          text: "Isı yalıtımı, tek katlı prefabrik evlerde hem yaşam konforunu hem de enerji maliyetlerini doğrudan etkiler. Doğru duvar sistemi, çatı çözümü ve pencere kalitesi sayesinde kış aylarında ısı kaybı azalır, yaz aylarında ise iç mekan daha dengeli kalır. Bu da uzun vadede daha ekonomik kullanım sağlar.",
+          title: "Yağmur Suyu Ürünleri",
+          text: "Yağmur suyu ızgara tabanları ve oluk taşları yol, otopark ve saha zeminlerinde suyun kontrollü şekilde toplanmasına yardımcı olur.",
         },
       ],
     };
@@ -191,38 +177,25 @@ function getPageContent(categoryName?: string, categorySlug?: string) {
 
   if (categoryKey === "double") {
     return {
-      eyebrow: "Çift Katlı Prefabrik Ev Seçkisi",
-      title: "Çift Katlı Prefabrik Ev Fiyatları ve Modelleri",
+      eyebrow: "Üst Yapı Beton Ürünleri",
+      title: "Bordür, Parke Taşı ve Çevre Düzenleme Ürünleri",
       description:
-        "Dubleks prefabrik ev modellerini geniş yaşam planı, cephe dili ve teslim kapsamına göre karşılaştırın. Çift katlı çözümlerde fiyatı ve planı etkileyen ana unsurları birlikte görün.",
-      seoTitle: `Çift Katlı Prefabrik Ev Fiyatları ve Modelleri ${CURRENT_YEAR}`,
+        "Bordür taşı, parke taşı, oluk taşı, çim taşı, şev taşı ve beton bariyer ürünlerini kullanım alanına göre karşılaştırın.",
+      seoTitle: `Bordür Taşı, Parke Taşı ve Beton Saha Ürünleri ${CURRENT_YEAR}`,
       seoDescription:
-        "Çift katlı prefabrik ev modelleri geniş yaşam alanı, ferah plan ve villa hissi arayan kullanıcılar için güçlü bir seçenektir. Dubleks prefabrik ev fiyatlarını değerlendirirken kat planı, cephe malzemesi, balkon-teras detayları ve anahtar teslim kapsamı birlikte okunmalıdır.",
+        "Bordür taşı, parke taşı, oluk taşı, çim taşı, şev taşı ve beton bariyer seçiminde zemin kullanımı, trafik yükü, drenaj ihtiyacı ve uygulama alanı dikkate alınır.",
       seoCards: [
         {
-          title: "Dubleks Prefabrik Ev Fiyatları ve Modelleri",
-          text: "Dubleks prefabrik ev fiyatları; kat planı, merdiven çözümü, balkon-teras detayları, cephe malzemesi ve anahtar teslim beklentisine göre şekillenir. Büyük metrekareli yapılar sunmasına rağmen çift katlı prefabrik evler, doğru planlama ile hâlâ avantajlı bir maliyet-performans dengesi oluşturabilir. Fiyat karşılaştırması yaparken sadece m2 büyüklüğüne değil, tasarım ve uygulama kapsamına da birlikte bakılmalıdır.",
+          title: "Bordür Taşı Nerede Kullanılır?",
+          text: "Bordür taşları yol kenarı, kaldırım, refüj, bahçe ve otopark sınırlarında zemini düzenli bitirmek için kullanılır.",
         },
         {
-          title: "Çift Katlı Prefabrik Evlerde Konforlu Planlama",
-          text: "Çift katlı prefabrik evler yaşam alanını iki kata yayarak salon, mutfak, banyo ve yatak odaları arasında daha konforlu bir ayrım kurulmasını sağlar. Geniş aileler, üst katta özel yaşam alanı isteyen kullanıcılar ve villa tipi plan hayal edenler için dubleks prefabrik çözümler oldukça güçlüdür. İhtiyaca göre oda sayısı, pencere düzeni, balkon ve dış cephe dili kişiselleştirilebilir.",
+          title: "Parke Taşı ve Oluk Taşı",
+          text: "Parke taşları yaya yolu, site içi yol, otopark ve bahçe zeminlerinde; oluk taşları ise yüzey suyunu yönlendirmek gereken alanlarda tercih edilir.",
         },
         {
-          title: "Çift Katlı Prefabrik Ev Alırken Nelere Bakılmalı?",
-          text: "Taşıyıcı sistem kalitesi, katlar arası plan dengesi, ısı ve ses yalıtımı, ruhsat uygunluğu ve teslim kapsamı dikkatle değerlendirilmelidir. Özellikle çift katlı yapılarda proje çözümünün sağlam olması, deprem güvenliği ve uzun ömürlü kullanım açısından kritik öneme sahiptir. Teklif alınırken hangi malzemelerin kullanıldığı ve montaj sonrası hangi kalemlerin teslim edildiği mutlaka netleştirilmelidir.",
-        },
-        {
-          title: "Neden Çift Katlı Prefabrik Ev Tercih Edilir?",
-          text: "Çift katlı prefabrik evler geniş yaşam alanı sunarken hızlı kurulum, ekonomik üretim ve modern tasarım avantajlarını da beraberinde getirir. Ferah oda planları, teras ve balkon gibi detaylarla zenginleşen dubleks prefabrik yapılar, uzun yıllar kullanılabilecek konforlu bir yaşam alanı oluşturmak isteyenler için dikkat çeken bir seçenektir.",
-        },
-        {
-          title: "Prefabrik Ev Kaç Katlı Olabilir?",
-          text: "Prefabrik ev projelerinde en yaygın çözümler tek katlı ve çift katlı planlardır. Özellikle dubleks prefabrik evler, geniş yaşam alanı ihtiyacını ekonomik ve hızlı bir üretim modeliyle karşılamak isteyen kullanıcılar için güçlü bir alternatiftir. Kat sayısı planlanırken arsa imarı ve kullanım senaryosu birlikte değerlendirilmelidir.",
-        },
-        {
-          title:
-            "Çift Katlı Prefabrik Evlerde Dış Cephe ve Tasarım Seçenekleri",
-          text: "Çift katlı prefabrik evlerde geniş pencere açıklıkları, balkon-teras çözümleri, modern cephe çizgileri ve farklı renk kombinasyonları ile güçlü bir dış görünüm elde edilebilir. Tasarım detayları yalnızca estetik değil, aynı zamanda iç mekan ışığı ve yaşam kalitesi açısından da önemli katkı sağlar.",
+          title: "Şev Taşı ve Beton Bariyer",
+          text: "Şev taşı ve Terra Blok eğimli arazilerde düzenleme için; beton bariyer ise şantiye, yol ve saha güvenliği için kullanılır.",
         },
       ],
     };
@@ -230,38 +203,25 @@ function getPageContent(categoryName?: string, categorySlug?: string) {
 
   if (categoryKey === "steel") {
     return {
-      eyebrow: "Çelik Ev Seçkisi",
-      title: "Çelik Ev Fiyatları ve Modelleri",
+      eyebrow: "Proje Tedariki",
+      title: "Beton Ürünlerinde Ölçü, Adet ve Sevkiyat Planı",
       description:
-        "Çelik prefabrik ev modellerini, anahtar teslim çelik konstrüksiyon ev fiyatlarını ve projelendirme sürecini tek sayfada inceleyin. Dayanıklılık, modern tasarım ve teknik kaliteyi bir arada değerlendirin.",
-      seoTitle: `Çelik Prefabrik Ev Modelleri ve Fiyatları ${CURRENT_YEAR}`,
+        "Şantiye, belediye, altyapı ve çevre düzenleme projeleri için beton ürün tedarikini planlayın.",
+      seoTitle: `Beton Ürünleri Tedarik ve Teklif Süreci ${CURRENT_YEAR}`,
       seoDescription:
-        "Çelik prefabrik ev modelleri, anahtar teslim çelik konstrüksiyon ev fiyatları ve çelik prefabrik ev yapımı hakkında doğru karar vermek için teknik kalite, yalıtım seviyesi, teslim kapsamı ve kullanım ömrü birlikte değerlendirilmelidir.",
+        "Beton ürünlerinde teklif süreci ürün grubu, ölçü, adet, teslim adresi, stok durumu ve proje programına göre netleşir.",
       seoCards: [
         {
-          title: "Çelik Prefabrik Ev Modelleri ve Fiyatları",
-          text: "Çelik prefabrik ev modelleri ve fiyatları; taşıyıcı sistem detayları, cephe çözümleri, çelik kalınlığı, yalıtım seviyesi ve yaşam planına göre değişir. Anahtar teslim çelik konstrüksiyon ev fiyatları değerlendirilirken yalnızca kaba yapı değil, proje içeriğinin hangi detayları kapsadığı da dikkatle okunmalıdır. Tek katlı çelik ev, villa tipi çelik ev ve özel planlı çelik yapı teklifleri bu nedenle farklı fiyat seviyelerinde olabilir.",
+          title: "Teklif Süreci Nasıl Başlar?",
+          text: "Ürün adı, yaklaşık adet, ölçü ve teslim adresi paylaşıldığında stok, üretim ve sevkiyat uygunluğu daha hızlı değerlendirilir.",
         },
         {
-          title: "Çelik Prefabrik Ev Yapımı Nasıl İlerler?",
-          text: "Çelik prefabrik ev yapımı keşif, proje geliştirme, üretim, sevkiyat ve montaj adımlarından oluşur. Üretimin kontrollü ortamda ilerlemesi, sahadaki iş yükünü azaltır ve süreci klasik yapılara kıyasla daha planlı hale getirir. Özellikle çelik konstrüksiyon hazır ev çözümlerinde doğru proje yönetimi hem teslim süresini hem de uygulama kalitesini doğrudan etkiler.",
+          title: "Toplu Alım ve Kurumsal Tedarik",
+          text: "Belediye, müteahhit, sanayi tesisi ve altyapı projeleri için toplu ürün talepleri proje bazında planlanabilir.",
         },
         {
-          title: "Çelik Konstrüksiyon Hazır Ev Alırken Nelere Dikkat Edilmeli?",
-          text: "Malzeme kalitesi, teknik detay çözümü, ısı yalıtımı, nem ve ısı davranışı, teslim kapsamı ve garanti yaklaşımı en önemli başlıklardır. Çelik konstrüksiyon hazır ev alırken yalnızca fiyat odaklı ilerlemek yerine, kullanılan malzemenin standardını ve uygulama disiplinini birlikte değerlendirmek gerekir. Güçlü teknik altyapı, uzun ömürlü ve güvenli kullanım için belirleyici olur.",
-        },
-        {
-          title: "Çelik Evlerde Konfor, Dayanıklılık ve Uzun Ömür",
-          text: "Çelik ev modelleri modern tasarım dili, güçlü taşıyıcı sistem ve yüksek yalıtım performansı ile öne çıkar. Doğru projelendirme yapıldığında çelik evler dört mevsim konforlu kullanım sağlar ve uzun vadeli enerji maliyetlerini kontrol altında tutar. Bu nedenle çelik ev fiyatları değerlendirilirken sadece ilk yatırım değil, kullanım ömrü ve yaşam kalitesi de hesaba katılmalıdır.",
-        },
-        {
-          title: "Tek Katlı Çelik Ev Fiyatları Neye Göre Değişir?",
-          text: "Tek katlı çelik ev fiyatları; metrekare, taşıyıcı sistem kalitesi, duvar ve çatı çözümleri, yalıtım seviyesi ve anahtar teslim kapsamına göre değişir. Basit m2 hesabı yerine teknik detaylarla birlikte yapılan değerlendirme, daha doğru fiyat analizi sağlar.",
-        },
-        {
-          title:
-            "Anahtar Teslim Çelik Konstrüksiyon Ev Fiyatları Neden Farklıdır?",
-          text: "Anahtar teslim çelik konstrüksiyon ev fiyatları firmadan firmaya değişebilir çünkü her teklif aynı kapsamı içermez. Bazı projelerde iç mekan çözümleri, ıslak hacim detayları, doğrama sistemi veya montaj sonrası teslim kalemleri farklı olabilir. Bu yüzden teklif karşılaştırması yapılırken kapsama odaklanmak gerekir.",
+          title: "Sevkiyat Planı Neye Göre Oluşur?",
+          text: "Sevkiyat planı ürün hacmi, teslim lokasyonu, saha programı ve araç uygunluğu gibi başlıklar birlikte değerlendirilerek oluşturulur.",
         },
       ],
     };
@@ -272,34 +232,29 @@ function getPageContent(categoryName?: string, categorySlug?: string) {
     title: "Tüm Beton Ürünleri",
     description:
       "Altyapı, üst yapı ve çevre düzenleme projeleri için beton ürünlerini kategori, kullanım alanı ve proje ihtiyacına göre inceleyin.",
-    seoTitle: `Prefabrik Ev Modelleri ve Fiyatları ${CURRENT_YEAR}`,
+    seoTitle: `Beton Boru, Baca, Bordür ve Parke Taşı Ürünleri ${CURRENT_YEAR}`,
     seoDescription:
-      "Prefabrik ev modelleri, prefabrik villa, dubleks prefabrik, çelik prefabrik ev modelleri fiyatları ve konteyner ev çözümleri arasında doğru karar verebilmek için model yapısı, proje kapsamı, üretim kalitesi ve fiyat-performans dengesi birlikte değerlendirilmelidir.",
+      "Hürtaş Beton; beton boru, betonarme boru, baca elemanları, kutu menfez, bordür taşı, parke taşı, oluk taşı, şev taşı, beton bariyer, briket ve çim taşı ürünlerini proje ihtiyacına göre sunar.",
     seoCards: [
       {
-        title: "Prefabrik Ev Modelleri ve Fiyatları",
-        text: "Prefabrik ev modelleri ve fiyatları; metrekare, plan tipi, malzeme seviyesi, cephe detayları ve anahtar teslim kapsamına göre değişir. Tek katlı prefabrik ev, çift katlı prefabrik ev ve çelik prefabrik ev modelleri arasında doğru karşılaştırma yapmak için yalnızca fiyat listesine değil, yaşam beklentisine ve uygulama içeriğine birlikte bakmak gerekir.",
+        title: "Beton Boru ve Betonarme Borular",
+        text: "Beton borular, betonarme borular, entegre contalı borular ve lambazıvana borular yağmur suyu, atık su ve drenaj hatlarında kullanılır.",
       },
       {
-        title: "Prefabrik Villa, Dubleks Prefabrik ve Çelik Ev Seçenekleri",
-        text: "Prefabrik villa çözümleri, dubleks prefabrik ev planları ve çelik konstrüksiyon hazır ev modelleri farklı yaşam beklentilerine yanıt verir. Daha geniş ve ferah plan isteyen kullanıcılar için çift katlı çözümler öne çıkarken, teknik dayanım ve modern çizgi isteyenler çelik ev modellerine yönelir. Her modelin avantajı arsa yapısı, kullanım amacı ve bütçe doğrultusunda değerlendirilmelidir.",
+        title: "Muayene Bacası, Parsel Bacası ve Menhol",
+        text: "Muayene baca gövdesi, baca tabanı, parsel baca elemanları, konik elemanlar ve baca yükseltme halkaları altyapı erişim noktalarında kullanılır.",
       },
       {
-        title:
-          "Konteyner Ev, Anahtar Teslim Çelik Konstrüksiyon Ev ve Teslim Süreci",
-        text: "Konteyner ev modelleri, konteyner ev fiyatları ve anahtar teslim çelik konstrüksiyon ev fiyatları proje kapsamına göre değişkenlik gösterir. Özellikle hızlı yerleşim, modüler kullanım veya pratik çözüm arayanlar için konteyner evler güçlü bir alternatif sunar. Sağlıklı karar için üretim kalitesi, teslim süresi, yalıtım yapısı ve uygulama içeriği birlikte incelenmelidir.",
+        title: "Bordür, Parke Taşı ve Çevre Düzenleme",
+        text: "Bordür taşı, parke taşı, oluk taşı, çim taşı, şev taşı ve Terra Blok ürünleri yol, kaldırım, otopark ve peyzaj düzenlemelerinde tercih edilir.",
       },
       {
-        title: "Prefabrik Ev Alırken Doğru Karar Nasıl Verilir?",
-        text: "Prefabrik ev satın alırken ruhsat uygunluğu, zemin durumu, enerji verimliliği, üretim kalitesi ve satış sonrası yaklaşım en önemli başlıklardır. Markalar arası karşılaştırma yapılırken sadece kampanya veya başlangıç fiyatına odaklanmak yerine, uzun ömürlü kullanım sağlayacak teknik kaliteyi görmek daha doğru sonuç verir. Bu yaklaşım hem bütçeyi korur hem de daha güvenli bir yatırım süreci sağlar.",
+        title: "Kutu Menfez ve Saha Güvenliği Ürünleri",
+        text: "Beton kutu menfez, beton bariyer ve briket gibi ürünler altyapı geçişleri, şantiye düzeni ve saha ihtiyaçları için değerlendirilir.",
       },
       {
-        title: "Prefabrik Ev, Konteyner Ev ve Çelik Ev Arasındaki Farklar",
-        text: "Prefabrik ev, konteyner ev ve çelik ev çözümleri farklı ihtiyaçlara hitap eder. Prefabrik evler plan çeşitliliği ve uygun maliyet dengesiyle öne çıkarken, çelik evler teknik dayanım ve modern çizgi arayan kullanıcılar için güçlü bir seçenektir. Konteyner ev modelleri ise hızlı yerleşim ve modüler kullanım avantajı sunar.",
-      },
-      {
-        title: "Anahtar Teslim Yapılarda Neler Sorgulanmalı?",
-        text: "Anahtar teslim bir yapı satın alınırken teklifin hangi işleri kapsadığı ayrıntılı biçimde görülmelidir. Üretim standardı, montaj, elektrik altyapısı, ıslak hacim çözümleri, iç kapılar, pencere sistemleri ve yalıtım düzeyi gibi başlıkların açık yazılması, daha güvenli bir satın alma süreci sağlar.",
+        title: "Doğru Ürün İçin Teklif Bilgileri",
+        text: "Ürün adı, ölçü, adet, teslim adresi ve kullanım alanı bilgisi paylaşıldığında doğru ürün ve sevkiyat planı daha hızlı netleşir.",
       },
     ],
   };

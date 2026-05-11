@@ -24,7 +24,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { type FormEvent, useEffect, useRef, useState } from "react";
+import { type FormEvent, useEffect, useMemo, useRef, useState } from "react";
 
 interface Category {
   id: string;
@@ -37,6 +37,18 @@ interface Category {
 
 interface NavbarProps {
   categories?: Category[];
+  productSearchItems?: ProductSearchItem[];
+}
+
+interface ProductSearchItem {
+  id: string;
+  name: string;
+  href: string;
+  categoryLabel: string | null;
+  categoryHrefs: string[];
+  imageUrl: string | null;
+  imageAlt: string;
+  searchText: string;
 }
 
 const COMPANY = {
@@ -61,12 +73,22 @@ const NAV_LINKS = [
   { href: "/blog", label: "Blog" },
 ];
 
-const Navbar = ({ categories = [] }: NavbarProps) => {
+function normalizeSearchValue(value: string | null | undefined) {
+  return (value ?? "")
+    .toLocaleLowerCase("tr-TR")
+    .replace(/ı/g, "i")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
+const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileCorporateOpen, setIsMobileCorporateOpen] = useState(false);
   const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(true);
   const [productSearchQuery, setProductSearchQuery] = useState("");
   const [selectedProductCategory, setSelectedProductCategory] = useState("all");
+  const [isProductSearchOpen, setIsProductSearchOpen] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
   const [showCompactNavbar, setShowCompactNavbar] = useState(false);
   const [showMobileNavbar, setShowMobileNavbar] = useState(true);
@@ -81,6 +103,7 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
   const scrollFrameRef = useRef<number | null>(null);
   const mainNavbarRef = useRef<HTMLElement | null>(null);
   const isMobileMenuOpenRef = useRef(false);
+  const productSearchRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     isMobileMenuOpenRef.current = isMobileMenuOpen;
@@ -105,6 +128,21 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
       document.body.style.overflow = "";
     };
   }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!productSearchRef.current) return;
+      if (productSearchRef.current.contains(event.target as Node)) return;
+
+      setIsProductSearchOpen(false);
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+    };
+  }, []);
 
   useEffect(() => {
     const updateMainNavbarHeight = () => {
@@ -212,6 +250,33 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
       label: getCategoryDisplayName(child),
     })),
   }));
+  const normalizedProductSearchQuery = normalizeSearchValue(productSearchQuery);
+  const productSearchResults = useMemo(() => {
+    if (!normalizedProductSearchQuery) return [];
+
+    return productSearchItems
+      .filter((item) => {
+        const matchesQuery = normalizeSearchValue(
+          `${item.name} ${item.searchText}`,
+        ).includes(normalizedProductSearchQuery);
+        const matchesCategory =
+          selectedProductCategory === "all" ||
+          item.categoryHrefs.some(
+            (href) =>
+              href === selectedProductCategory ||
+              href.startsWith(`${selectedProductCategory}/`),
+          );
+
+        return matchesQuery && matchesCategory;
+      })
+      .slice(0, 6);
+  }, [
+    normalizedProductSearchQuery,
+    productSearchItems,
+    selectedProductCategory,
+  ]);
+  const shouldShowProductSearchResults =
+    isProductSearchOpen && normalizedProductSearchQuery.length > 0;
   const handleProductSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -227,6 +292,7 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
     }
 
     const queryString = query.toString();
+    setIsProductSearchOpen(false);
     router.push(queryString ? `${nextPath}?${queryString}` : nextPath);
   };
 
@@ -377,54 +443,110 @@ const Navbar = ({ categories = [] }: NavbarProps) => {
             </Link>
 
             <div className="ml-auto flex min-w-0 flex-1 items-center justify-end gap-3">
-              <form
-                onSubmit={handleProductSearch}
-                className="flex min-w-0 flex-1 overflow-hidden rounded-[3px] border border-[#152f51]/15 bg-white shadow-[0_16px_36px_-32px_rgba(21,47,81,0.65)]"
-              >
-                <label htmlFor="desktop-product-category" className="sr-only">
-                  Ürün kategorisi
-                </label>
-                <select
-                  id="desktop-product-category"
-                  value={selectedProductCategory}
-                  onChange={(event) =>
-                    setSelectedProductCategory(event.target.value)
-                  }
-                  className="w-44 shrink-0 border-r border-[#152f51]/15 bg-[#f4f7fb] px-3 text-sm font-bold text-[#152f51] outline-none transition-colors hover:bg-[#e9eff6] "
+              <div ref={productSearchRef} className="relative min-w-0 flex-1">
+                <form
+                  onSubmit={handleProductSearch}
+                  className="flex min-w-0 overflow-hidden rounded-[3px] border border-[#152f51]/15 bg-white shadow-[0_16px_36px_-32px_rgba(21,47,81,0.65)]"
                 >
-                  <option value="all">Tüm Ürünler</option>
-                  {categoryLinks.map((item) => (
-                    <option key={`desktop-search-${item.id}`} value={item.href}>
-                      {item.label}
-                    </option>
-                  ))}
-                </select>
+                  <label htmlFor="desktop-product-category" className="sr-only">
+                    Ürün kategorisi
+                  </label>
+                  <select
+                    id="desktop-product-category"
+                    value={selectedProductCategory}
+                    onChange={(event) => {
+                      setSelectedProductCategory(event.target.value);
+                      setIsProductSearchOpen(true);
+                    }}
+                    className="w-44 shrink-0 border-r border-[#152f51]/15 bg-[#f4f7fb] px-3 text-sm font-bold text-[#152f51] outline-none transition-colors hover:bg-[#e9eff6] "
+                  >
+                    <option value="all">Tüm Ürünler</option>
+                    {categoryLinks.map((item) => (
+                      <option
+                        key={`desktop-search-${item.id}`}
+                        value={item.href}
+                      >
+                        {item.label}
+                      </option>
+                    ))}
+                  </select>
 
-                <label htmlFor="desktop-product-search" className="sr-only">
-                  Ürün ara
-                </label>
-                <div className="relative min-w-0 flex-1">
-                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6f839d]" />
-                  <input
-                    id="desktop-product-search"
-                    type="search"
-                    value={productSearchQuery}
-                    onChange={(event) =>
-                      setProductSearchQuery(event.target.value)
-                    }
-                    placeholder="Ürün ara..."
-                    className="h-12 w-full min-w-0 px-10 text-sm font-semibold text-[#152f51] outline-none placeholder:text-slate-400"
-                  />
-                </div>
+                  <label htmlFor="desktop-product-search" className="sr-only">
+                    Ürün ara
+                  </label>
+                  <div className="relative min-w-0 flex-1">
+                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6f839d]" />
+                    <input
+                      id="desktop-product-search"
+                      type="search"
+                      value={productSearchQuery}
+                      onChange={(event) => {
+                        setProductSearchQuery(event.target.value);
+                        setIsProductSearchOpen(true);
+                      }}
+                      onFocus={() => setIsProductSearchOpen(true)}
+                      placeholder="Ürün ara..."
+                      className="h-12 w-full min-w-0 px-10 text-sm font-semibold text-[#152f51] outline-none placeholder:text-slate-400"
+                    />
+                  </div>
 
-                <button
-                  type="submit"
-                  className="inline-flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center bg-[#152f51] text-white transition-colors hover:bg-[#10243d]"
-                  aria-label="Ürün ara"
-                >
-                  <Search className="h-4 w-4" />
-                </button>
-              </form>
+                  <button
+                    type="submit"
+                    className="inline-flex h-12 w-12 shrink-0 cursor-pointer items-center justify-center bg-[#152f51] text-white transition-colors hover:bg-[#10243d]"
+                    aria-label="Ürün ara"
+                  >
+                    <Search className="h-4 w-4" />
+                  </button>
+                </form>
+
+                {shouldShowProductSearchResults ? (
+                  <div className="absolute left-0 right-0 top-full z-[70] mt-2 overflow-hidden rounded-[3px] border border-slate-200 bg-white shadow-[0_24px_70px_-34px_rgba(15,23,42,0.45)]">
+                    {productSearchResults.length > 0 ? (
+                      <div className="max-h-[420px] overflow-y-auto py-2">
+                        {productSearchResults.map((item) => (
+                          <Link
+                            key={`desktop-product-result-${item.id}`}
+                            href={item.href}
+                            prefetch={false}
+                            onClick={() => setIsProductSearchOpen(false)}
+                            className="group flex items-center gap-3 border-b border-slate-100 px-3 py-3 transition-colors last:border-b-0 hover:bg-[#f4f7fb]"
+                          >
+                            <span className="relative h-14 w-16 shrink-0 overflow-hidden rounded-[2px] bg-slate-100">
+                              {item.imageUrl ? (
+                                <Image
+                                  src={item.imageUrl}
+                                  alt={item.imageAlt}
+                                  fill
+                                  sizes="64px"
+                                  className="object-cover"
+                                />
+                              ) : (
+                                <span className="flex h-full w-full items-center justify-center text-slate-400">
+                                  <Search className="h-4 w-4" />
+                                </span>
+                              )}
+                            </span>
+                            <span className="min-w-0 flex-1">
+                              <span className="block truncate text-sm font-black text-slate-900 group-hover:text-[#152f51]">
+                                {item.name}
+                              </span>
+                              {item.categoryLabel ? (
+                                <span className="mt-1 block truncate text-xs font-bold text-slate-500">
+                                  {item.categoryLabel}
+                                </span>
+                              ) : null}
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="px-4 py-5 text-sm font-semibold text-slate-500">
+                        Bu aramaya uygun ürün bulunamadı.
+                      </div>
+                    )}
+                  </div>
+                ) : null}
+              </div>
 
               <button
                 type="button"

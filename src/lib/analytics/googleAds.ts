@@ -1,5 +1,5 @@
 "use client";
-import { trackButtonClick } from "@/hooks/use-analytics"; // EKLEME
+import { trackButtonClick } from "@/hooks/use-analytics";
 import { CONTACT_INFO } from "@/lib/contact";
 import { trackPhoneClick, trackWhatsAppClick } from "../gtag";
 
@@ -8,21 +8,15 @@ const whatsappNumber = CONTACT_INFO.mobilePhone.href;
 const whatsappMessage = "Merhaba, Hürtaş Beton sitesinden ulaşıyorum.";
 
 export const handleCall = () => {
-  // Analytics tracking ekle
-  trackButtonClick("telefon-butonu"); // EKLEME
+  trackButtonClick("telefon-butonu");
 
   trackPhoneClick(() => {
     window.location.href = `tel:${callNumber}`;
   });
-
-  setTimeout(() => {
-    window.location.href = `tel:${callNumber}`;
-  }, 500);
 };
 
 export const handleWhatsApp = () => {
-  // Analytics tracking ekle
-  trackButtonClick("whatsapp-butonu"); // EKLEME
+  trackButtonClick("whatsapp-butonu");
 
   const encodedMessage = encodeURIComponent(whatsappMessage);
   const whatsappUrl = `https://wa.me/${whatsappNumber.replace(/\+/g, "")}?text=${encodedMessage}`;
@@ -30,8 +24,4 @@ export const handleWhatsApp = () => {
   trackWhatsAppClick(() => {
     window.open(whatsappUrl, "_blank");
   });
-
-  setTimeout(() => {
-    window.open(whatsappUrl, "_blank");
-  }, 500);
 };

@@ -1,31 +1,29 @@
-// lib/gtag.ts
-
 export const trackWhatsAppClick = (callback?: () => void) => {
-  if (typeof window !== "undefined" && window.gtag) {
-    window.gtag("event", "conversion", {
-      send_to: "AW-17869486943/c6tyCK_3kekbELa-7shC",
-      event_callback: callback,
+  if (typeof window !== "undefined") {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "whatsapp_click",
+      button_id: "whatsapp-butonu",
     });
-  } else {
-    // gtag yoksa bile kullanıcıyı kaybetme
-    callback?.();
   }
+
+  callback?.();
 };
 
 export const trackPhoneClick = (callback?: () => void) => {
-  if (typeof window !== "undefined" && window.gtag) {
-    window.gtag("event", "conversion", {
-      send_to: "AW-17869486943/c6tyCK_3kekbELa-7shC",
-      event_callback: callback,
+  if (typeof window !== "undefined") {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: "phone_click",
+      button_id: "telefon-butonu",
     });
-  } else {
-    callback?.();
   }
+
+  callback?.();
 };
-// TypeScript için
+
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void;
-    dataLayer: any[];
+    dataLayer: Array<Record<string, unknown>>;
   }
 }

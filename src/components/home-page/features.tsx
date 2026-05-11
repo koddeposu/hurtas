@@ -22,13 +22,13 @@ export const Features = () => {
     },
     {
       id: "04",
-      title: "Modern Tasarımlar",
+      title: "Geniş Ürün Grubu",
       icon: <Ruler size={20} />,
       color: "#152f51",
     },
     {
       id: "05",
-      title: "Fiyat Performans",
+      title: "Planlı Tedarik",
       icon: <Zap size={20} />,
       color: "#d6a94a",
     },
@@ -44,7 +44,7 @@ export const Features = () => {
     <section className="relative  font-[family-name:var(--font-poppins)]">
       {/* Arka Plan Büyük Yazı Efekti (Mimari Dergi Hissi) */}
       <div className="absolute top-10 left-[0%] text-[15vw] font-black text-slate-100/80 select-none leading-none z-0">
-        CT PREFABRİK
+        HÜRTAŞ BETON
       </div>
 
       <div className="container mx-auto relative z-10">
@@ -61,7 +61,7 @@ export const Features = () => {
 
               <h2 className="mb-6 text-2xl font-black leading-[1.1] tracking-tighter text-slate-900 md:text-5xl">
                 Neden <br />
-                <span style={{ color: "#152f51" }}>CT</span> Prefabrik Ev?
+                <span style={{ color: "#152f51" }}>Hürtaş</span> Beton?
               </h2>
 
               <div className="relative space-y-5 border-l-2 border-slate-100 pl-7">
@@ -70,8 +70,8 @@ export const Features = () => {
                   sunuyoruz.&quot;
                 </p>
                 <p className="max-w-sm text-sm leading-6 text-slate-600">
-                  Geleneksel yapıların hantallığından uzak, modern yaşamın tüm
-                  ihtiyaçlarını karşılayan bütünsel bir deneyim.
+                  Beton ürünlerinde doğru seçim, güvenilir üretim ve planlı
+                  sevkiyat yaklaşımı.
                 </p>
               </div>
             </div>
@@ -108,7 +108,7 @@ export const Features = () => {
                       {item.title}
                     </h3>
                     <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-600">
-                      CT Standartları
+                      Hürtaş Standartları
                     </p>
                   </div>
                 </div>

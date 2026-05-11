@@ -27,16 +27,15 @@ export function ServiceRegions() {
           </div>
 
           <h2 className="mt-5 text-3xl font-black leading-tight tracking-tight text-slate-900 md:text-4xl">
-            Tüm Türkiye&apos;ye Hizmet, <br />
-            <span className="text-primary">Sakarya&apos;da Güçlü Saha</span>
+            İstanbul ve Marmara&apos;da <br />
+            <span className="text-primary">Planlı Beton Ürün Tedariki</span>
           </h2>
 
           <p className="mt-4 text-sm font-medium leading-relaxed text-slate-700">
-            CT Prefabrik olarak <strong>tek katlı prefabrik</strong>,{" "}
-            <strong>dubleks prefabrik</strong> ve <strong>çelik ev</strong>{" "}
-            projelerinizi Türkiye&apos;nin her noktasına ulaştırıyoruz. Özellikle{" "}
-            <strong>Sakarya prefabrik ev</strong> taleplerinde daha hızlı keşif
-            ve yakın saha koordinasyonu avantajı sunuyoruz.
+            Hürtaş Beton olarak <strong>beton boru</strong>,{" "}
+            <strong>baca elemanları</strong>, <strong>bordür taşı</strong>,{" "}
+            <strong>parke taşı</strong> ve saha beton ürünlerinde proje bazlı
+            tedarik ve sevkiyat planı oluşturuyoruz.
           </p>
 
           {/* Şehir Etiketleri (Daha kompakt) */}
@@ -61,7 +60,7 @@ export function ServiceRegions() {
               href={ALL_PRODUCTS_PATH}
               className="inline-flex items-center gap-2 rounded-[2px] bg-primary px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white transition-all hover:bg-primary/90 hover:shadow-lg hover:-translate-y-0.5"
             >
-              Modelleri İncele
+              Ürünleri İncele
               <ArrowUpRight className="h-4 w-4" />
             </Link>
             <Link
@@ -82,11 +81,11 @@ export function ServiceRegions() {
             </div>
             <div>
               <h3 className="text-lg font-black tracking-tight text-white">
-                Sakarya Prefabrik Ev Merkezi
+                Beton Ürünleri Tedarik Merkezi
               </h3>
               <p className="mt-1 text-sm font-medium leading-relaxed text-white/80">
-                Keşif, teklif ve uygulama planlamasında en güçlü operasyon
-                akışımızı Sakarya genelinde kuruyor, süreci hızlandırıyoruz.
+                Ürün seçimi, teklif ve sevkiyat planında saha ihtiyacını net
+                okuyarak süreci hızlandırıyoruz.
               </p>
             </div>
           </article>
@@ -101,7 +100,7 @@ export function ServiceRegions() {
             </h3>
             <p className="mt-1.5 text-xs font-medium leading-relaxed text-slate-600">
               Kocaeli, Düzce, Bursa, İstanbul ve çevresinde planlı sevkiyat ve
-              montaj.
+              sevkiyat.
             </p>
           </article>
 
@@ -113,8 +112,8 @@ export function ServiceRegions() {
               Türkiye Geneli
             </h3>
             <p className="mt-1.5 text-xs font-medium leading-relaxed text-slate-600">
-              Tüm prefabrik ev projelerimizi Türkiye&apos;nin farklı şehirlerine
-              güvenle ulaştırıyoruz.
+              Beton ürün taleplerini proje, adet ve sevkiyat planına göre
+              değerlendiriyoruz.
             </p>
           </article>
         </div>

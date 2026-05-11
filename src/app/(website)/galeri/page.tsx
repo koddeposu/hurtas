@@ -4,23 +4,29 @@ import { Metadata } from "next";
 import ProjectsClient from "./projects-client";
 
 export const metadata: Metadata = {
-  title: "Galeri | Hürtaş Beton Ürün ve Saha Görselleri",
+  title: "Galeri | Hürtaş Beton Boru, Baca, Bordür ve Parke Görselleri",
   description:
-    "Hürtaş Beton galerisini inceleyin. Beton boru, parke taşı, bordür, menhol ve saha beton elemanlarına ait ürün ve uygulama görsellerini görün.",
+    "Hürtaş Beton galerisinde beton boru, betonarme boru, baca elemanları, kutu menfez, bordür, parke taşı, şev taşı ve saha beton ürünleri görsellerini inceleyin.",
   keywords: [
     "Hürtaş Beton galeri",
     "beton ürünleri galeri",
     "beton boru görselleri",
+    "betonarme boru görselleri",
+    "rögar baca görselleri",
+    "muayene baca görselleri",
+    "kutu menfez görselleri",
     "parke taşı görselleri",
     "bordür görselleri",
-    "menhol görselleri",
+    "şev taşı görselleri",
+    "beton bariyer görselleri",
+    "yağmur suyu ızgara tabanı",
     "saha beton elemanları",
   ],
   openGraph: {
-    title: "Galeri | Hürtaş Beton Ürün Görselleri",
+    title: "Galeri | Hürtaş Beton Ürün ve Saha Görselleri",
     description:
-      "Beton boru, parke taşı, bordür ve altyapı beton ürünleri için ürün ve saha görsellerini inceleyin.",
-    url: "https://ctprefabrik.com/projelerimiz",
+      "Beton boru, baca elemanları, kutu menfez, parke taşı, bordür ve altyapı beton ürünleri için ürün ve saha görsellerini inceleyin.",
+    url: "https://www.hurtasbeton.com/galeri",
     siteName: "Hürtaş Beton",
     images: [
       {
@@ -37,11 +43,11 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Galeri | Hürtaş Beton",
     description:
-      "Beton ürünleri ve saha uygulamalarında Hürtaş Beton galerisini keşfedin.",
+      "Beton boru, baca elemanları, bordür, parke taşı ve saha ürünleri için Hürtaş Beton galerisini keşfedin.",
     images: ["/og-image.png"],
   },
   alternates: {
-    canonical: "https://ctprefabrik.com/projelerimiz",
+    canonical: "https://www.hurtasbeton.com/galeri",
   },
   robots: {
     index: true,
@@ -57,15 +63,9 @@ export default async function ProjectsPage() {
     id: project.id,
     img: project.images.map((img, index) => ({
       src: img.url,
-      alt:
-        img.alt?.trim()
-          ? img.alt
-          : `${project.title} beton ürünü${project.location ? ` ${project.location}` : ""} görseli ${index + 1}`,
+      alt: img.alt?.trim() ? img.alt : `görseli ${index + 1}`,
     })),
     title: project.title,
-    area: project.area,
-    room: project.room,
-    loc: project.location,
   }));
 
   return (
@@ -81,13 +81,13 @@ export default async function ProjectsPage() {
                 "@type": "ListItem",
                 position: 1,
                 name: "Ana Sayfa",
-                item: "https://ctprefabrik.com",
+                item: "https://www.hurtasbeton.com",
               },
               {
                 "@type": "ListItem",
                 position: 2,
                 name: "Galeri",
-                item: "https://ctprefabrik.com/projelerimiz",
+                item: "https://www.hurtasbeton.com/galeri",
               },
             ],
           }),

@@ -20,36 +20,40 @@ import { Metadata } from "next";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "CT Prefabrik | Türkiye'nin En Kaliteli Prefabrik Ev Üreticisi",
+  title: "Hürtaş Beton | Beton Boru, Rögar, Menhol, Bordür ve Parke Taşı",
   description:
-    "CT Prefabrik ile hayalinizdeki eve kavuşun. TSE onaylı malzemeler, 10 yıl garanti, uygun fiyatlar ve hemen teslim imkanı. 2+1, 3+1, villa tipi prefabrik ev modelleri.",
+    "Hürtaş Beton; beton boru, betonarme boru, muayene bacası, parsel bacası, kutu menfez, bordür taşı, parke taşı, şev taşı ve beton bariyer üretimi yapar.",
   keywords: [
-    "prefabrik ev",
-    "prefabrik ev fiyatları",
-    "prefabrik ev modelleri",
-    "CT Prefabrik Ev",
-    "CT Prefabrik",
-    "ctprefabrik",
-    "ctprefabrik ev",
-    "prefabrik konut",
-    "modüler ev",
-    "prefabrik villa",
-    "uygun fiyatlı prefabrik",
-    "TSE onaylı prefabrik",
-    "hızlı montaj prefabrik",
+    "Hürtaş Beton",
+    "beton boru",
+    "betonarme boru",
+    "entegre contalı beton boru",
+    "rögar",
+    "menhol",
+    "muayene bacası",
+    "parsel bacası",
+    "kutu menfez",
+    "baca yükseltme halkası",
+    "bordür taşı",
+    "parke taşı",
+    "oluk taşı",
+    "şev taşı",
+    "beton bariyer",
+    "briket",
+    "çim taşı",
   ],
   openGraph: {
-    title: "CT Prefabrik | Türkiye'nin En Kaliteli Prefabrik Ev Üreticisi",
+    title: "Hürtaş Beton | Beton Altyapı ve Üst Yapı Ürünleri",
     description:
-      "TSE onaylı, 10 yıl garantili prefabrik ev modelleri. Hayalinizdeki eve hemen kavuşun.",
-    url: "https://ctprefabrik.com",
-    siteName: "CT Prefabrik",
+      "Beton boru, baca elemanları, kutu menfez, bordür, parke taşı, şev taşı ve beton bariyer ürünleri için Hürtaş Beton.",
+    url: "https://www.hurtasbeton.com",
+    siteName: "Hürtaş Beton",
     images: [
       {
-        url: "/og-home.jpg",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "CT Prefabrik - Prefabrik Ev Modelleri",
+        alt: "Hürtaş Beton beton boru ve saha ürünleri",
       },
     ],
     locale: "tr_TR",
@@ -57,12 +61,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "CT Prefabrik | Prefabrik Ev Modelleri",
-    description: "TSE onaylı, 10 yıl garantili prefabrik ev modelleri",
-    images: ["/og-home.jpg"],
+    title: "Hürtaş Beton | Beton Ürünleri",
+    description:
+      "Beton boru, rögar, menhol, bordür, parke taşı ve saha ürünleri.",
+    images: ["/og-image.png"],
   },
   alternates: {
-    canonical: "https://ctprefabrik.com",
+    canonical: "https://www.hurtasbeton.com",
   },
   robots: {
     index: true,
@@ -81,12 +86,12 @@ export default async function Page() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "WebSite",
-            name: "CT Prefabrik",
-            url: "https://ctprefabrik.com",
+            name: "Hürtaş Beton",
+            url: "https://www.hurtasbeton.com",
             potentialAction: {
               "@type": "SearchAction",
               target:
-                `https://ctprefabrik.com${ALL_PRODUCTS_PATH}?q={search_term_string}`,
+                `https://www.hurtasbeton.com${ALL_PRODUCTS_PATH}?q={search_term_string}`,
               "query-input": "required name=search_term_string",
             },
           }),
@@ -100,9 +105,10 @@ export default async function Page() {
             "@context": "https://schema.org",
             "@type": "Organization",
             name: CONTACT_INFO.companyName,
-            url: "https://ctprefabrik.com",
-            logo: "https://ctprefabrik.com/logo.png",
-            description: "Türkiye'nin en kaliteli prefabrik ev üreticisi",
+            url: "https://www.hurtasbeton.com",
+            logo: "https://www.hurtasbeton.com/logo.png",
+            description:
+              "Beton boru, baca elemanları, kutu menfez, bordür, parke taşı ve çevre düzenleme beton ürünleri üreticisi",
             address: {
               "@type": "PostalAddress",
               streetAddress: `${CONTACT_INFO.address.street}, ${CONTACT_INFO.address.note}`,
@@ -128,11 +134,6 @@ export default async function Page() {
                 availableLanguage: ["Turkish"],
               },
             ],
-            sameAs: [
-              "https://www.facebook.com/ctprefabrik",
-              "https://www.instagram.com/ctprefabrik",
-              "https://twitter.com/ctprefabrik",
-            ],
           }),
         }}
       />
@@ -144,9 +145,9 @@ export default async function Page() {
             "@context": "https://schema.org",
             "@type": "LocalBusiness",
             name: CONTACT_INFO.companyName,
-            image: "https://ctprefabrik.com/og-home.jpg",
-            "@id": "https://ctprefabrik.com",
-            url: "https://ctprefabrik.com",
+            image: "https://www.hurtasbeton.com/og-image.png",
+            "@id": "https://www.hurtasbeton.com",
+            url: "https://www.hurtasbeton.com",
             telephone: CONTACT_INFO.primaryPhone.schema,
             email: CONTACT_INFO.email,
             priceRange: "₺₺",

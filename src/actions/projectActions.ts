@@ -123,7 +123,7 @@ export async function createProject(data: {
   }
 
   revalidatePath("/admin/projects");
-  revalidatePath("/projelerimiz");
+  revalidatePath("/galeri");
 
   return { id, slug };
 }
@@ -156,7 +156,7 @@ export async function updateProject(
   await db.update(project).set(updateData).where(eq(project.id, id));
 
   revalidatePath("/admin/projects");
-  revalidatePath("/projelerimiz");
+  revalidatePath("/galeri");
 
   return { success: true };
 }
@@ -167,7 +167,7 @@ export async function deleteProject(id: string) {
   await db.delete(project).where(eq(project.id, id));
 
   revalidatePath("/admin/projects");
-  revalidatePath("/projelerimiz");
+  revalidatePath("/galeri");
 
   return { success: true };
 }
@@ -185,7 +185,7 @@ export async function updateProjectsOrder(
   }
 
   revalidatePath("/admin/projects");
-  revalidatePath("/projelerimiz");
+  revalidatePath("/galeri");
 
   return { success: true };
 }
@@ -217,7 +217,7 @@ export async function addProjectImage(
   });
 
   revalidatePath("/admin/projects");
-  revalidatePath("/projelerimiz");
+  revalidatePath("/galeri");
 
   return { id };
 }
@@ -228,7 +228,7 @@ export async function deleteProjectImage(imageId: string) {
   await db.delete(projectImage).where(eq(projectImage.id, imageId));
 
   revalidatePath("/admin/projects");
-  revalidatePath("/projelerimiz");
+  revalidatePath("/galeri");
 
   return { success: true };
 }
@@ -242,6 +242,7 @@ export async function updateProjectImageOrder(imageId: string, order: number) {
     .where(eq(projectImage.id, imageId));
 
   revalidatePath("/admin/projects");
+  revalidatePath("/galeri");
 
   return { success: true };
 }
@@ -259,7 +260,7 @@ export async function updateProjectImagesOrder(
   }
 
   revalidatePath("/admin/projects");
-  revalidatePath("/projelerimiz");
+  revalidatePath("/galeri");
 
   return { success: true };
 }
@@ -282,7 +283,7 @@ export async function updateProjectImageAlt(
     .where(eq(projectImage.id, imageId));
 
   revalidatePath("/admin/projects");
-  revalidatePath("/projelerimiz");
+  revalidatePath("/galeri");
 
   return { success: true };
 }

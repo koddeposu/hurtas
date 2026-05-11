@@ -10,59 +10,58 @@ import {
 const STEPS = [
   {
     id: "01",
-    title: "Keşif ve Arsa Analizi",
+    title: "İhtiyaç ve Ürün Analizi",
     description:
-      "Arsa durumunuza en uygun tek katlı, dubleks prefabrik veya çelik ev modelini belirlemek için yerinde değerlendirme yapıyoruz.",
+      "Projeniz için beton boru, baca elemanı, bordür, parke taşı veya diğer beton ürün ihtiyaçlarını birlikte netleştiriyoruz.",
     icon: ClipboardCheck,
   },
   {
     id: "02",
-    title: "Projelendirme ve Fiyatlandırma",
+    title: "Ölçü ve Teklif Planı",
     description:
-      "Bütçenize uygun prefabrik ev fiyatları, net malzeme listesi ve şeffaf sözleşme ile sürpriz maliyetleri tamamen ortadan kaldırıyoruz.",
+      "Ürün ölçüsü, adet, teslim adresi ve kullanım alanına göre anlaşılır teklif süreci oluşturuyoruz.",
     icon: Ruler,
   },
   {
     id: "03",
-    title: "Fabrika Üretimi ve Kalite",
+    title: "Üretim ve Kalite",
     description:
-      "Hafif çelik ve prefabrik yapı elemanlarını, yüksek yalıtım standartlarında ve uzun ömürlü kullanım için fabrikamızda üretiyoruz.",
+      "Beton ve betonarme ürünleri proje ihtiyacına uygun dayanım ve üretim standardıyla hazırlıyoruz.",
     icon: Shield,
   },
   {
     id: "04",
-    title: "Montaj ve Anahtar Teslim",
+    title: "Sevkiyat ve Tedarik",
     description:
-      "Uzman saha ekibimizle profesyonel kurulumu tamamlıyor, hayalinizdeki evi söz verdiğimiz tarihte anahtar teslim sunuyoruz.",
+      "Saha programınıza uygun sevkiyat ve ürün tedarik planını netleştiriyoruz.",
     icon: HardHat,
   },
 ];
 
 export function ProcessJourney() {
   return (
-    <section aria-labelledby="prefabrik-surec-baslik" className="bg-white ">
+    <section aria-labelledby="beton-tedarik-sureci-baslik" className="bg-white ">
       <div className="mx-auto max-w-7xl ">
         {/* SEO Odaklı Üst Başlık ve İçerik */}
         <div className="mx-auto max-w-3xl text-center">
           <div className="inline-flex items-center gap-1.5 rounded-[2px] bg-primary/10 px-4 py-1.5 text-sm font-bold text-primary">
             <BadgeCheck className="h-4 w-4" aria-hidden="true" />
-            <span>CT Prefabrik Güvencesi</span>
+            <span>Hürtaş Beton Güvencesi</span>
           </div>
 
           <h2
-            id="prefabrik-surec-baslik"
+            id="beton-tedarik-sureci-baslik"
             className="mt-5 text-2xl font-black tracking-tight text-slate-900 sm:text-4xl "
           >
-            Anahtar Teslim Prefabrik ve Çelik Ev Yapım Süreci
+            Beton Ürünleri Tedarik Süreci
           </h2>
 
           <p className="mt-6 text-base leading-relaxed text-slate-600 sm:text-md">
-            <strong>CT Prefabrik</strong> olarak;{" "}
-            <strong>tek katlı prefabrik ev</strong>,{" "}
-            <strong>dubleks prefabrik villa</strong> ve{" "}
-            <strong>hafif çelik ev</strong> projelerinizin her aşamasını tek
-            merkezden yönetiyoruz. Yüksek yalıtımlı ve uzun ömürlü yapıları söz
-            verdiğimiz tarihte güvenle teslim ediyoruz.
+            <strong>Hürtaş Beton</strong> olarak;{" "}
+            <strong>beton boru</strong>, <strong>baca elemanları</strong>,{" "}
+            <strong>kutu menfez</strong>, <strong>bordür taşı</strong> ve{" "}
+            <strong>parke taşı</strong> ihtiyaçlarında ürün seçimi, teklif ve
+            sevkiyat sürecini anlaşılır biçimde planlıyoruz.
           </p>
         </div>
 

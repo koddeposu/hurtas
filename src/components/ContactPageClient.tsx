@@ -121,7 +121,7 @@ export default function ContactPageClient() {
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             className="hidden lg:block absolute left-10 top-1/2 -translate-y-1/2 opacity-10 pointer-events-none"
           >
-            <div className="text-[15rem] font-black text-[#152f51]">2005</div>
+            <div className="text-[15rem] font-black text-[#152f51]">1986</div>
           </motion.div>
         </div>
       </section>

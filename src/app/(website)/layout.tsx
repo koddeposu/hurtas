@@ -1,58 +1,70 @@
 import { getCategories } from "@/actions/categoryActions";
+import { getProductsPreview } from "@/actions/productActions";
 import "@/app/globals.css";
 import { AnalyticsWrapper } from "@/components/analytics-wrapper";
 import ClientLayout from "@/components/ClientLayout";
 import { CONTACT_INFO } from "@/lib/contact";
+import {
+  getCategoryDisplayName,
+  getCategoryHref,
+  getProductCategoryDetailHref,
+} from "@/lib/productRoutes";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://ctprefabrik.com"),
+  metadataBase: new URL("https://www.hurtasbeton.com"),
   title: {
-    default: "Sakarya CT Prefabrik Evler",
-    template: "%s | Sakarya CT Prefabrik Evler",
+    default: "Hürtaş Beton | Beton Boru, Baca, Bordür ve Parke Taşı",
+    template: "%s | Hürtaş Beton",
   },
   description:
     `Beton boru, parke taşı, bordür ve altyapı elemanları için Hürtaş Beton ile iletişime geçin. Telefon: ${CONTACT_INFO.primaryPhone.display}, ${CONTACT_INFO.mobilePhone.display}.`,
   keywords: [
-    "prefabrik ev",
-    "prefabrik ev fiyatları",
-    "prefabrik ev modelleri",
-    "prefabrik konut",
-    "modüler ev",
-    "CT Prefabrik",
-    "ctprefabrik",
-    "prefabrik ev üreticisi",
-    "uygun fiyatlı prefabrik",
-    "prefabrik villa",
+    "Hürtaş Beton",
+    "beton boru",
+    "betonarme boru",
+    "entegre contalı beton boru",
+    "muayene bacası",
+    "parsel bacası",
+    "rögar",
+    "menhol",
+    "kutu menfez",
+    "bordür taşı",
+    "parke taşı",
+    "oluk taşı",
+    "şev taşı",
+    "beton bariyer",
+    "çim taşı",
   ],
-  authors: [{ name: "CT Prefabrik" }],
-  creator: "CT Prefabrik",
-  publisher: "CT Prefabrik",
+  authors: [{ name: "Hürtaş Beton" }],
+  creator: "Hürtaş Beton",
+  publisher: "Hürtaş Beton",
 
   openGraph: {
     type: "website",
     locale: "tr_TR",
-    url: "https://ctprefabrik.com",
-    siteName: "CT Prefabrik",
-    title: "CT Prefabrik | Prefabrik Ev Modelleri ve Fiyatları",
+    url: "https://www.hurtasbeton.com",
+    siteName: "Hürtaş Beton",
+    title: "Hürtaş Beton | Beton Altyapı ve Üst Yapı Elemanları",
     description:
-      "Türkiye'nin en kaliteli prefabrik ev üreticisi. Uygun fiyatlı, TSE onaylı prefabrik ev modelleri.",
+      "Beton boru, betonarme boru, baca elemanları, kutu menfez, bordür, parke taşı ve saha beton ürünleri için Hürtaş Beton.",
     images: [
       {
-        url: "https://ctprefabrik.com/og-image-2.png",
+        url: "https://www.hurtasbeton.com/og-image.png",
         width: 1200,
         height: 630,
-        alt: "CT Prefabrik",
+        alt: "Hürtaş Beton beton ürünleri",
       },
     ],
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "CT Prefabrik | Prefabrik Ev Modelleri",
-    description: "Türkiye'nin en kaliteli prefabrik ev üreticisi",
-    images: ["/og-image-2.png"],
+    title: "Hürtaş Beton | Beton Ürünleri",
+    description:
+      "Beton boru, baca, menhol, bordür, parke taşı ve altyapı beton ürünleri.",
+    images: ["/og-image.png"],
   },
 
   robots: {
@@ -73,10 +85,10 @@ export const metadata: Metadata = {
   },
 
   alternates: {
-    canonical: "https://ctprefabrik.com",
+    canonical: "https://www.hurtasbeton.com",
   },
 
-  category: "Real Estate",
+  category: "Construction Materials",
 
   // ✅ BURASINI DEĞİŞTİRİN
   icons: {
@@ -110,7 +122,51 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const categories = await getCategories();
+  const [categories, productPreviews] = await Promise.all([
+    getCategories(),
+    getProductsPreview(),
+  ]);
+  const productSearchItems = productPreviews.map((product) => {
+    const productCategories = product.categories ?? [];
+    const category = product.category ?? productCategories[0] ?? null;
+    const categoryLabel = category ? getCategoryDisplayName(category) : null;
+    const categoryHrefs = productCategories.map((item) =>
+      getCategoryHref(categories, item),
+    );
+
+    if (category) {
+      const categoryHref = getCategoryHref(categories, category);
+
+      if (!categoryHrefs.includes(categoryHref)) {
+        categoryHrefs.unshift(categoryHref);
+      }
+    }
+
+    return {
+      id: product.id,
+      name: product.name,
+      href: getProductCategoryDetailHref(product, categories),
+      categoryLabel,
+      categoryHrefs,
+      imageUrl: product.image?.url ?? null,
+      imageAlt: product.image?.alt ?? product.name,
+      searchText: [
+        product.name,
+        product.slug,
+        product.metaDescription,
+        product.description,
+        category?.name,
+        category?.title,
+        ...productCategories.flatMap((item) => [
+          item.name,
+          item.title,
+          item.slug,
+        ]),
+      ]
+        .filter(Boolean)
+        .join(" "),
+    };
+  });
 
   return (
     <html lang="tr">
@@ -122,39 +178,19 @@ export default async function RootLayout({
           content="-eKu2_9KxeaM_RgTv1LMwIx2955IHuOtoSJYUdxScT0"
         />
 
-        {/* Google Analytics */}
-
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-B77049HMXP"
-        ></script>
-        {/* Google Tag (gtag.js) */}
-        {/* Sadece bir tane script yüklemek yeterli, AW veya G- fark etmez */}
-        <script
-          async
-          src={`https://www.googletagmanager.com/gtag/js?id=AW-17869486943`}
-        ></script>
+        {/* Google Tag Manager */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      // 1. Google Analytics Bağlantısı
-      gtag('config', 'G-B77049HMXP');
-
-      // 2. Google Ads Ana Bağlantısı (Az önce paylaştığın kod)
-      gtag('config', 'AW-17869486943');
-
-      // 3. Web Sitesi Telefon Araması Dönüşümü (Daha önce paylaştığın kod)
-      // Bu kod, sitedeki numarayı otomatik olarak takip numarasına çevirir.
-      gtag('config', 'AW-17869486943/c6tyCK_3kekbELa-7shC', {
-        'phone_conversion_number': '${CONTACT_INFO.primaryPhone.intlDisplay}'
-      });
-    `,
+              (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+              })(window,document,'script','dataLayer','GTM-NBNQSJ46');
+            `,
           }}
         />
+        {/* End Google Tag Manager */}
         {/* Organization Schema */}
         <script
           type="application/ld+json"
@@ -163,8 +199,8 @@ export default async function RootLayout({
               "@context": "https://schema.org",
               "@type": "Organization",
               name: CONTACT_INFO.companyName,
-              url: "https://ctprefabrik.com",
-              logo: "https://ctprefabrik.com/logo.png",
+              url: "https://www.hurtasbeton.com",
+              logo: "https://www.hurtasbeton.com/logo.png",
               contactPoint: [
                 {
                   "@type": "ContactPoint",
@@ -183,11 +219,6 @@ export default async function RootLayout({
                   availableLanguage: "Turkish",
                 },
               ],
-              sameAs: [
-                "https://www.facebook.com/ctprefabrik",
-                "https://www.instagram.com/ctprefabrik",
-                "https://twitter.com/ctprefabrik",
-              ],
             }),
           }}
         />
@@ -195,8 +226,23 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-NBNQSJ46"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
+        {/* End Google Tag Manager (noscript) */}
         <AnalyticsWrapper>
-          <ClientLayout categories={categories}>{children}</ClientLayout>
+          <ClientLayout
+            categories={categories}
+            productSearchItems={productSearchItems}
+          >
+            {children}
+          </ClientLayout>
         </AnalyticsWrapper>
       </body>
     </html>

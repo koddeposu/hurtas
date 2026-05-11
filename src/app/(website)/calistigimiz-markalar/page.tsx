@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description:
     "Hürtaş Beton'un beton elemanları tedarikinde çalıştığı sektörler, proje tipleri ve iş ortaklığı yaklaşımı hakkında bilgi alın.",
   alternates: {
-    canonical: "https://ctprefabrik.com/calistigimiz-markalar",
+    canonical: "https://www.hurtasbeton.com/calistigimiz-markalar",
   },
 };
 

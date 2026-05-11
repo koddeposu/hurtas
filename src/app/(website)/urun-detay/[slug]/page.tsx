@@ -141,7 +141,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const firstImage = product.images[0]?.url;
-  const imageUrl = firstImage || 'https://ctprefabrik.com/og-image.png';
+  const imageUrl = firstImage || 'https://www.hurtasbeton.com/og-image.png';
   const plainDescription = extractPlainTextFromProductDetailContent(product.description);
   const fallbackDescription = `${product.name} ürünü. Detaylı bilgi için Hürtaş Beton ile iletişime geçin.`;
   const categories = await getCategories();
@@ -179,12 +179,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     // Canonical URL
     alternates: {
-      canonical: `https://ctprefabrik.com${canonicalPath}`,
+      canonical: `https://www.hurtasbeton.com${canonicalPath}`,
     },
     openGraph: {
       title: `${product.name} | Hürtaş Beton`,
       description,
-      url: `https://ctprefabrik.com${canonicalPath}`,
+      url: `https://www.hurtasbeton.com${canonicalPath}`,
       type: 'website',
       images: [
         {
@@ -222,7 +222,7 @@ export default async function ProductPage({ params }: Props) {
   const imageUrls = product.images.map((img) => img.url);
   const categories = await getCategories();
   const canonicalPath = getProductCategoryDetailHref(product, categories);
-  const pageUrl = `https://ctprefabrik.com${canonicalPath}`;
+  const pageUrl = `https://www.hurtasbeton.com${canonicalPath}`;
   const plainDescription = extractPlainTextFromProductDetailContent(product.description);
   const detailBlocks = getProductDetailBlocks(product.description);
   const categoryDisplayName = product.category
@@ -313,7 +313,7 @@ export default async function ProductPage({ params }: Props) {
     manufacturer: {
       "@type": "Organization",
       name: "Hürtaş Beton",
-      url: "https://ctprefabrik.com",
+      url: "https://www.hurtasbeton.com",
     },
     additionalProperty,
     potentialAction: {
@@ -331,13 +331,13 @@ export default async function ProductPage({ params }: Props) {
         '@type': 'ListItem',
         position: 1,
         name: 'Ana Sayfa',
-        item: 'https://ctprefabrik.com',
+        item: 'https://www.hurtasbeton.com',
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Tüm Ürünler',
-        item: 'https://ctprefabrik.com/tum-urunler',
+        item: 'https://www.hurtasbeton.com/tum-urunler',
       },
       {
         '@type': 'ListItem',

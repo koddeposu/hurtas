@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     title: "Hakkımızda | Hürtaş Beton Elemanları",
     description:
       "Hürtaş Beton'un beton elemanları üretim, ürün seçimi ve planlı tedarik yaklaşımı hakkında bilgi alın.",
-    url: "https://ctprefabrik.com/hakkimizda",
+    url: "https://www.hurtasbeton.com/hakkimizda",
     siteName: "Hürtaş Beton",
     images: [
       {
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     images: ["/og-about.jpg"],
   },
   alternates: {
-    canonical: "https://ctprefabrik.com/hakkimizda",
+    canonical: "https://www.hurtasbeton.com/hakkimizda",
   },
   robots: {
     index: true,
@@ -64,14 +64,14 @@ export default function AboutPage() {
             name: "Hakkımızda",
             description:
               "Hürtaş Beton hakkında bilgiler, beton elemanları üretimi ve planlı tedarik yaklaşımımız",
-            url: "https://ctprefabrik.com/hakkimizda",
+            url: "https://www.hurtasbeton.com/hakkimizda",
             mainEntity: {
               "@type": "Organization",
               name: CONTACT_INFO.companyName,
               description:
                 "Beton boru, parke taşı, bordür, menhol ve çevre düzenleme ürünleri sunan beton elemanları üreticisi",
-              url: "https://ctprefabrik.com",
-              logo: "https://ctprefabrik.com/logo.png",
+              url: "https://www.hurtasbeton.com",
+              logo: "https://www.hurtasbeton.com/logo.png",
               address: {
                 "@type": "PostalAddress",
                 streetAddress: `${CONTACT_INFO.address.street}, ${CONTACT_INFO.address.note}`,
@@ -104,13 +104,13 @@ export default function AboutPage() {
                 "@type": "ListItem",
                 position: 1,
                 name: "Ana Sayfa",
-                item: "https://ctprefabrik.com",
+                item: "https://www.hurtasbeton.com",
               },
               {
                 "@type": "ListItem",
                 position: 2,
                 name: "Hakkımızda",
-                item: "https://ctprefabrik.com/hakkimizda",
+                item: "https://www.hurtasbeton.com/hakkimizda",
               },
             ],
           }),
@@ -144,8 +144,8 @@ export default function AboutPage() {
             "@context": "https://schema.org",
             "@type": "Organization",
             name: CONTACT_INFO.companyName,
-            url: "https://ctprefabrik.com",
-            logo: "https://ctprefabrik.com/logo.png",
+            url: "https://www.hurtasbeton.com",
+            logo: "https://www.hurtasbeton.com/logo.png",
             description:
               "Beton boru, parke taşı, bordür, menhol ve altyapı beton ürünleri sunan üretici marka",
             numberOfEmployees: {

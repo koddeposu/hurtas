@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description =
     getFilledText(categoryData.description) ??
     `Hürtaş Beton ${categoryData.name.toLocaleLowerCase("tr-TR")} ürünlerini inceleyin.`;
-  const url = `https://ctprefabrik.com/${categoryData.slug}`;
+  const url = `https://www.hurtasbeton.com/${categoryData.slug}`;
 
   return {
     title,
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       images: [
         {
-          url: "https://ctprefabrik.com/og-image.png",
+          url: "https://www.hurtasbeton.com/og-image.png",
           width: 1200,
           height: 630,
           alt: `Hürtaş Beton - ${categoryData.name}`,
