@@ -1,10 +1,7 @@
 "use client";
 
-import AboutImage from "@/assets/who-we-are.webp";
-import {
-  useDictionary,
-  useLocalizedPath,
-} from "@/components/i18n-provider";
+import AboutImage from "@/assets/hero/desktop/hero-1.webp";
+import { useDictionary, useLocalizedPath } from "@/components/i18n-provider";
 import { ALL_PRODUCTS_PATH } from "@/lib/productRoutes";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
@@ -35,7 +32,7 @@ export function HomepageAboutSection() {
         className="absolute inset-0 object-cover opacity-[0.24]"
         aria-hidden="true"
       />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,31,54,0.98)_0%,rgba(13,31,54,0.9)_58%,rgba(13,31,54,0.78)_100%)] lg:bg-[linear-gradient(90deg,rgba(13,31,54,0.98)_0%,rgba(13,31,54,0.9)_46%,rgba(13,31,54,0.68)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,31,54,0.90)_0%,rgba(13,31,54,0.9)_54%,rgba(13,31,54,0.78)_100%)] lg:bg-[linear-gradient(90deg,rgba(13,31,54,0.98)_0%,rgba(13,31,54,0.7)_46%,rgba(13,31,54,0.68)_100%)]" />
 
       <div className="relative mx-auto grid max-w-7xl gap-5 px-4 py-8 sm:px-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-center lg:px-8 lg:py-12">
         <div className="max-w-2xl">

@@ -1,17 +1,22 @@
 "use client";
 
-import AboutImage from "@/assets/hakkimizda-2.jpg";
-import BlogImage from "@/assets/hero/home-page-5.webp";
-import BrandsImage from "@/assets/hero/home-page-4.webp";
-import ContactImage from "@/assets/hero/desktop/hero-2.webp";
-import GalleryImage from "@/assets/hero/home-page-3.webp";
-import TSEImage from "@/assets/hero/home-page-1.webp";
+import AboutImage from "@/assets/hero/desktop/hero-1.webp";
+import BrandsImage from "@/assets/hero/desktop/hero-3.webp";
+import ContactImage from "@/assets/kapak-1.webp";
+import {
+  default as GalleryImage,
+  default as TSEImage,
+} from "@/assets/kapak-2.webp";
+import {
+  default as ArgeImage,
+  default as BlogImage,
+} from "@/assets/kapak-3.webp";
 import { useDictionary } from "@/components/i18n-provider";
 import Image, { type StaticImageData } from "next/image";
 
 const HERO_IMAGES: Record<string, StaticImageData> = {
   "/hakkimizda": AboutImage,
-  "/arge": AboutImage,
+  "/arge": ArgeImage,
   "/iletisim": ContactImage,
   "/blog": BlogImage,
   "/galeri": GalleryImage,
@@ -74,7 +79,7 @@ export function PageHero({ pathname }: { pathname: string }) {
           className="object-cover"
           aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0d1f36]/96 via-[#152f51]/74 to-slate-950/20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0d1f36]/40 via-[#152f51]/30 to-slate-950/10" />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(13,31,54,0.15)_0%,rgba(13,31,54,0.76)_100%)]" />
 
         <div className="relative z-10 mx-auto flex h-full max-w-7xl items-end px-4 pb-10 sm:px-6 lg:px-8 lg:pb-14">

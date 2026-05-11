@@ -1,11 +1,8 @@
 "use client";
 
-import CategoryImage1 from "@/assets/hero/home-page-1.webp";
-import CategoryImage2 from "@/assets/hero/home-page-2.webp";
-import {
-  useDictionary,
-  useLocalizedPath,
-} from "@/components/i18n-provider";
+import CategoryImage2 from "@/assets/kapak-1.webp";
+import CategoryImage1 from "@/assets/kapak-3.webp";
+import { useDictionary, useLocalizedPath } from "@/components/i18n-provider";
 import { ArrowRight, Building2, Layers3 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,7 +29,8 @@ export function StructureCategoryBoxes() {
       <div className="mx-auto grid max-w-7xl gap-3 md:grid-cols-2">
         {STRUCTURE_CATEGORIES.map((item, index) => {
           const Icon = item.icon;
-          const content = dict.structure.items[index] ?? dict.structure.items[0];
+          const content =
+            dict.structure.items[index] ?? dict.structure.items[0];
 
           return (
             <Link

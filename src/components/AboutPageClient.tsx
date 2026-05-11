@@ -1,14 +1,10 @@
-import AboutImage from "@/assets/hakkimizda-3.webp";
+import AboutImage from "@/assets/hero/desktop/hero-1.webp";
 import { SiteDroneVideo } from "@/components/home-page/site-drone-video";
 import { getDictionary } from "@/lib/i18n";
 import { getCurrentLocale } from "@/lib/i18n-server";
 import Image from "next/image";
 
-const STATS = [
-  { value: "1986" },
-  { value: "40+" },
-  { value: "100+" },
-];
+const STATS = [{ value: "1986" }, { value: "40+" }, { value: "100+" }];
 
 export default async function AboutPageClient() {
   const locale = await getCurrentLocale();

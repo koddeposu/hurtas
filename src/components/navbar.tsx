@@ -357,16 +357,17 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
       <button
         type="button"
         aria-label={dict.nav.language}
-        className={`inline-flex items-center gap-1.5 rounded-[2px] border font-black uppercase transition-colors ${
+        className={`inline-flex items-center gap-1.5 rounded-[2px] border bg-white font-black uppercase transition-colors ${
           compact
-            ? "h-10 border-slate-200 bg-white px-3 text-[11px] tracking-[0.12em] text-slate-700 hover:bg-[#f4f7fb]"
-            : "h-12 border-[#152f51]/15 bg-white px-3 text-xs tracking-[0.12em] text-[#152f51] hover:bg-[#f4f7fb]"
+            ? "h-10 border-slate-200 px-3 text-[11px] tracking-[0.12em] text-slate-700 hover:bg-[#f4f7fb]"
+            : "h-12 border-[#152f51]/15 px-3 text-xs tracking-[0.12em] text-[#152f51] hover:bg-[#f4f7fb]"
         }`}
       >
         <Globe2 className="h-4 w-4" />
         {currentLanguage.shortLabel}
         <ChevronDown className="h-3.5 w-3.5" />
       </button>
+
       <div className="invisible absolute right-0 top-full z-[80] w-40 pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100">
         <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
           {LANGUAGE_OPTIONS.map((item) => (
@@ -375,6 +376,8 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
               href={getLanguageHref(item.locale)}
               prefetch={false}
               onClick={(event) => handleLanguageChange(event, item.locale)}
+              aria-label={item.label}
+              aria-current={item.locale === locale ? "page" : undefined}
               className={`block px-4 py-3 text-sm font-bold transition-colors ${
                 item.locale === locale
                   ? "bg-[#f4f7fb] text-[#152f51]"
@@ -385,6 +388,39 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
             </Link>
           ))}
         </div>
+      </div>
+    </div>
+  );
+  const renderMobileLanguageSelector = () => (
+    <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
+      <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+        {dict.nav.language}
+      </p>
+      <div
+        className="mt-3 grid grid-cols-3 gap-2"
+        role="group"
+        aria-label={dict.nav.language}
+      >
+        {LANGUAGE_OPTIONS.map((item) => (
+          <Link
+            key={`mobile-language-${item.locale}`}
+            href={getLanguageHref(item.locale)}
+            prefetch={false}
+            onClick={(event) => {
+              closeMobileMenu();
+              handleLanguageChange(event, item.locale);
+            }}
+            aria-label={item.label}
+            aria-current={item.locale === locale ? "page" : undefined}
+            className={`rounded-xl px-3 py-2 text-center text-sm font-black transition-colors ${
+              item.locale === locale
+                ? "bg-[#152f51] text-white"
+                : "bg-[#f4f7fb] text-slate-700"
+            }`}
+          >
+            {item.shortLabel}
+          </Link>
+        ))}
       </div>
     </div>
   );
@@ -948,31 +984,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                   {dict.common.home}
                 </Link>
 
-                <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
-                  <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-500">
-                    {dict.nav.language}
-                  </p>
-                  <div className="mt-3 grid grid-cols-3 gap-2">
-                    {LANGUAGE_OPTIONS.map((item) => (
-                      <Link
-                        key={`mobile-language-${item.locale}`}
-                        href={getLanguageHref(item.locale)}
-                        prefetch={false}
-                        onClick={(event) => {
-                          closeMobileMenu();
-                          handleLanguageChange(event, item.locale);
-                        }}
-                        className={`rounded-xl px-3 py-2 text-center text-sm font-black transition-colors ${
-                          item.locale === locale
-                            ? "bg-[#152f51] text-white"
-                            : "bg-[#f4f7fb] text-slate-700"
-                        }`}
-                      >
-                        {item.shortLabel}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
+                {renderMobileLanguageSelector()}
 
                 <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
                   <button
