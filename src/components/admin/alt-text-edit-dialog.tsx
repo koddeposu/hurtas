@@ -79,7 +79,7 @@ export function AltTextEditDialog({
                   SEO&apos;ya yardımcı olur.
                 </p>
                 <p className="text-blue-600 mt-2 italic">
-                  Örnek: &quot;Modern tek katlı prefabrik ev dış cephesi&quot;
+                  Örnek: &quot;Beton saksı&quot;
                 </p>
               </div>
             </div>

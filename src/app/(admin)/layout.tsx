@@ -14,7 +14,7 @@ export default async function AdminLayout({
   return (
     <html lang="tr">
       <head>
-        <title>CT Prefabrik Admin</title>
+        <title>Hürtaş Beton Admin</title>
       </head>
       <body className="min-h-screen bg-slate-50">
         <AdminLayoutContent>{children}</AdminLayoutContent>

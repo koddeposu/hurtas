@@ -1,9 +1,9 @@
 /**
- * Reset Password Script for CT Prefabrik Admin Panel
+ * Reset Password Script for Admin Panel
  *
  * Usage: npx tsx scripts/reset-password.ts <email> <new-password>
  *
- * Example: npx tsx scripts/reset-password.ts admin@ctprefabrik.com newpassword123
+ * Example: npx tsx scripts/reset-password.ts admin@hurtasbeton.com newpassword123
  */
 
 import { config } from "dotenv";
@@ -28,7 +28,7 @@ async function resetPassword() {
       "Usage: npx tsx scripts/reset-password.ts <email> <new-password>",
     );
     console.log(
-      "Example: npx tsx scripts/reset-password.ts admin@ctprefabrik.com newpassword123",
+      "Example: npx tsx scripts/reset-password.ts admin@hurtasbeton.com newpassword123",
     );
     process.exit(1);
   }

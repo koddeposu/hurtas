@@ -29,7 +29,7 @@ config({ path: ".env" });
 const args = process.argv.slice(2);
 const DRY_RUN = args.includes("--dry-run");
 const BATCH_SIZE = parseInt(
-  args.find((a) => a.startsWith("--batch="))?.split("=")[1] || "10"
+  args.find((a) => a.startsWith("--batch="))?.split("=")[1] || "10",
 );
 
 // Database connection
@@ -64,7 +64,7 @@ interface ProcessingResult {
  * Extract R2 key from URL
  * Handles both formats:
  * - Old: /product/filename.webp -> products/filename.webp (note: product -> products)
- * - New: https://cdn.ctprefabrik.com/products/filename.webp -> products/filename.webp
+ * - New: https://cdn.hurtasbeton.com/products/filename.webp -> products/filename.webp
  */
 function extractKeyFromUrl(url: string): string | null {
   try {
@@ -80,7 +80,7 @@ function extractKeyFromUrl(url: string): string | null {
       return url.slice(1);
     }
 
-    // New format: https://cdn.ctprefabrik.com/products/...
+    // New format: https://cdn.hurtasbeton.com/products/...
     const urlObj = new URL(url);
     return urlObj.pathname.slice(1); // Remove leading slash from pathname
   } catch {
@@ -139,7 +139,7 @@ async function downloadFromR2(key: string): Promise<Buffer> {
 async function uploadToR2(
   buffer: Buffer,
   key: string,
-  contentType: string
+  contentType: string,
 ): Promise<void> {
   const command = new PutObjectCommand({
     Bucket: R2_BUCKET_NAME,
@@ -179,7 +179,7 @@ function formatDuration(ms: number): string {
 async function processImage(
   image: { id: string; url: string; productId: string },
   index: number,
-  total: number
+  total: number,
 ): Promise<{ success: boolean; error?: string }> {
   const progress = `[${index + 1}/${total}]`;
 
@@ -223,7 +223,7 @@ async function processImage(
 async function processBatch(
   images: Array<{ id: string; url: string; productId: string }>,
   startIndex: number,
-  result: ProcessingResult
+  result: ProcessingResult,
 ): Promise<void> {
   const batch = images.slice(startIndex, startIndex + BATCH_SIZE);
 
@@ -231,7 +231,11 @@ async function processBatch(
     const image = batch[i];
     const globalIndex = startIndex + i;
 
-    const { success, error } = await processImage(image, globalIndex, result.total);
+    const { success, error } = await processImage(
+      image,
+      globalIndex,
+      result.total,
+    );
 
     if (success) {
       result.processed++;
@@ -287,7 +291,9 @@ async function main() {
 
   // Confirm before proceeding (unless dry run)
   if (!DRY_RUN) {
-    console.log("UYARI: Bu işlem R2 deposundaki görselleri kalıcı olarak değiştirecek!");
+    console.log(
+      "UYARI: Bu işlem R2 deposundaki görselleri kalıcı olarak değiştirecek!",
+    );
     console.log("İptal etmek için 5 saniye içinde Ctrl+C tuşlarına basın...\n");
     await new Promise((resolve) => setTimeout(resolve, 5000));
   }

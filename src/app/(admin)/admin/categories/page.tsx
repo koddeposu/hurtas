@@ -14,7 +14,7 @@ export default async function CategoriesPage() {
       <div className="flex-1 lg:ml-64">
         <AdminHeader
           title="Kategoriler"
-          description="Prefabrik ev kategorilerini yönetin"
+          description="Kategorileri yönetin"
           userName={session.user.name}
         />
 
@@ -25,4 +25,3 @@ export default async function CategoriesPage() {
     </div>
   );
 }
-

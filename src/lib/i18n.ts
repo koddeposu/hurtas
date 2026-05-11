@@ -884,7 +884,7 @@ export const dictionaries = {
     },
     catalog: {
       title: "Proje Kataloğu",
-      subtitle: "CT Prefabrik 2025",
+      subtitle: "Hürtaş Beton 2025",
       instruction: "Sayfaları çevirmek için tıklayın",
       cover: "Kapak",
       page: "S. {page}",
@@ -1539,7 +1539,7 @@ export const dictionaries = {
     },
     catalog: {
       title: "Project Catalog",
-      subtitle: "CT Prefabrik 2025",
+      subtitle: "Hürtaş Beton 2025",
       instruction: "Click to turn the pages",
       cover: "Cover",
       page: "P. {page}",
@@ -2174,7 +2174,7 @@ export const dictionaries = {
     },
     catalog: {
       title: "كتالوج المشروع",
-      subtitle: "CT Prefabrik 2025",
+      subtitle: "Hürtaş Beton 2025",
       instruction: "انقر لتقليب الصفحات",
       cover: "الغلاف",
       page: "ص. {page}",

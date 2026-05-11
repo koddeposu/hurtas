@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-CT Prefabrik is a Next.js 16 full-stack web application for a Turkish prefabricated house manufacturer. It features a public-facing website and a protected admin panel for content/product management.
+Hürtaş Beton is a Next.js 16 full-stack web application for a Turkish prefabricated house manufacturer. It features a public-facing website and a protected admin panel for content/product management.
 
 **Tech Stack:** Next.js 16 (App Router), TypeScript 5, React 19, PostgreSQL with Drizzle ORM, Better Auth, Radix UI + shadcn, Tailwind CSS v4, Jotai, React Hook Form + Zod, Cloudflare R2 for file storage.
 
@@ -26,10 +26,12 @@ npx drizzle-kit studio    # Open Drizzle Studio (DB GUI)
 ## Architecture
 
 ### Route Groups
+
 - `(website)` - Public pages with Turkish URLs (kebab-case: `/prefabrik-evler`, `/urun-detay/[slug]`)
 - `(admin)` - Protected admin routes; all except `/admin/login` require auth via `requireAuth()`
 
 ### Key Directories
+
 - `src/actions/` - Server Actions for data mutations (protected with `requireAuth()`)
 - `src/db/schema.ts` - All Drizzle ORM table definitions
 - `src/lib/auth.ts` - Better Auth server config
@@ -39,15 +41,18 @@ npx drizzle-kit studio    # Open Drizzle Studio (DB GUI)
 - `src/components/ui/` - shadcn UI components
 
 ### Database Schema
+
 Tables: `user`, `session`, `account`, `verification` (Better Auth), `category`, `product`, `productImage`, `project`, `blogPost`, `contactSubmission`
 
 Key patterns:
+
 - UUID primary keys (text type)
 - `order` column for custom sorting
 - `isActive`/`isPublished` flags for soft visibility control
 - Auto timestamps with update triggers
 
 ### Authentication Pattern
+
 ```typescript
 import { requireAuth } from "@/lib/requireAuth";
 
@@ -58,6 +63,7 @@ export default async function AdminPage() {
 ```
 
 ### Server Action Pattern
+
 ```typescript
 "use server";
 import { requireAuth } from "@/lib/requireAuth";
@@ -71,9 +77,11 @@ export async function actionName(data) {
 ```
 
 ### File Upload Pattern
-Files upload to Cloudflare R2 via `src/lib/s3.ts`. Images served from `https://cdn.ctprefabrik.com`.
+
+Files upload to Cloudflare R2 via `src/lib/s3.ts`. Images served from `https://cdn.hurtasbeton.com`.
 
 ### Slug Generation
+
 Use `generateUniqueSlug(tableName, title, existingId?)` from `src/lib/slug.ts` for URL-safe, unique slugs with Turkish character support.
 
 ## Important Constraints

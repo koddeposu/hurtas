@@ -1,5 +1,5 @@
 /**
- * Seed Script for CT Prefabrik Admin Panel
+ * Seed Script for Admin Panel
  *
  * Usage: npx tsx scripts/seed.ts
  *
@@ -33,7 +33,7 @@ async function seed() {
   console.log("🌱 Starting seed...\n");
 
   // 1. Create Admin User
-  const adminEmail = "admin@ctprefabrik.com";
+  const adminEmail = "admin@hurtasbeton.com";
   const adminPassword = "admin123"; // Change this!
 
   const userId = crypto.randomUUID();

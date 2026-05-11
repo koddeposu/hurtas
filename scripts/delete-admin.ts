@@ -18,7 +18,7 @@ const db = drizzle({
 });
 
 async function deleteAdmin() {
-  const adminEmail = "admin@ctprefabrik.com";
+  const adminEmail = "admin@hurtasbeton.com";
 
   console.log("🗑️  Deleting admin user...\n");
 

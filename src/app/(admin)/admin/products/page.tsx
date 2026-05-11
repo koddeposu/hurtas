@@ -14,7 +14,7 @@ export default async function ProductsPage() {
       <div className="flex-1 lg:ml-64">
         <AdminHeader
           title="Ürünler"
-          description="Prefabrik ev modellerini yönetin"
+          description="Ürünleri yönetin"
           userName={session.user.name}
         />
 
@@ -25,4 +25,3 @@ export default async function ProductsPage() {
     </div>
   );
 }
-

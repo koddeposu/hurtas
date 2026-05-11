@@ -222,10 +222,7 @@ export function NewProductForm({ categories }: NewProductFormProps) {
     <div className="flex min-h-screen">
       <AdminSidebar />
       <div className="flex-1 lg:ml-64">
-        <AdminHeader
-          title="Yeni Ürün"
-          description="Yeni bir prefabrik ev modeli ekleyin"
-        />
+        <AdminHeader title="Yeni Ürün" description="Yeni bir ürün ekleyin" />
 
         <main className="p-6">
           <div className="mb-6">
@@ -310,7 +307,7 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                         onChange={(e) =>
                           setFormData({ ...formData, name: e.target.value })
                         }
-                        placeholder="Örn: 2+1 Tek Katlı Prefabrik Ev 65 m2"
+                        placeholder="Örn: Beton Saksı"
                         required
                       />
                     </div>

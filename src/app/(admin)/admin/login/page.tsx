@@ -55,9 +55,7 @@ export default function AdminLoginPage() {
             CT
           </div>
           <CardTitle className="text-2xl font-bold">Admin Girişi</CardTitle>
-          <CardDescription>
-            CT Prefabrik yönetim paneline hoş geldiniz
-          </CardDescription>
+          <CardDescription>Yönetim paneline hoş geldiniz</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">

@@ -85,7 +85,7 @@ function generateContactEmailHtml(data: ContactFormData): string {
   </table>
 
   <p style="color: #666; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
-    Bu e-posta CT Prefabrik web sitesi iletisim formu tarafindan otomatik olarak gonderilmistir.
+    Bu e-posta Hürtaş Beton web sitesi iletisim formu tarafindan otomatik olarak gonderilmistir.
   </p>
 </body>
 </html>
@@ -100,13 +100,13 @@ function generateContactEmailText(data: ContactFormData): string {
   if (data.message) {
     text += `Mesaj: ${data.message}\n`;
   }
-  text += `\n---\nBu e-posta CT Prefabrik web sitesi iletisim formu tarafindan otomatik olarak gonderilmistir.`;
+  text += `\n---\nBu e-posta Hürtaş Beton web sitesi iletisim formu tarafindan otomatik olarak gonderilmistir.`;
   return text;
 }
 
 // Send contact form notification email
 export async function sendContactNotification(
-  data: ContactFormData
+  data: ContactFormData,
 ): Promise<{ success: boolean; error?: string }> {
   if (!isEmailConfigured()) {
     console.warn("Email not configured, skipping notification");

@@ -19,7 +19,7 @@ const db = drizzle({
 });
 
 async function fixAdmin() {
-  const adminEmail = "admin@ctprefabrik.com";
+  const adminEmail = "admin@hurtasbeton.com";
   const adminPassword = "admin123";
 
   console.log("🔧 Fixing admin password with better-auth...\n");

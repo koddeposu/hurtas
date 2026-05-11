@@ -64,7 +64,7 @@ export default async function AdminDashboard() {
       <div className="flex-1 lg:ml-64">
         <AdminHeader
           title="Dashboard"
-          description="CT Prefabrik Yönetim Paneli"
+          description="Yönetim Paneli"
           userName={session.user.name}
         />
 
@@ -155,4 +155,3 @@ export default async function AdminDashboard() {
     </div>
   );
 }
-

@@ -105,7 +105,6 @@ export const accountRelations = relations(account, ({ one }) => ({
 // Admin Panel Tables
 // ============================================
 
-// Categories for Prefabrik Evler (Tek Katlı, Çift Katlı, Çelik Ev)
 export const category = pgTable("category", {
   id: text("id").primaryKey(),
   parentId: text("parent_id"),
@@ -133,7 +132,6 @@ export const category = pgTable("category", {
     .notNull(),
 });
 
-// Products (Prefabrik Evler)
 export const product = pgTable(
   "product",
   {

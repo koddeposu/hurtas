@@ -28,7 +28,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "cdn.ctprefabrik.com",
+        hostname: "cdn.hurtasbeton.com",
         pathname: "/**",
       },
     ],
