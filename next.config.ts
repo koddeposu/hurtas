@@ -9,6 +9,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  redirects: async () => {
+    return [
+      {
+        source: "/yasin",
+        destination: "/altyapi-elemanlari/item/yagmur-suyu-izgara-tabanlari",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [320, 480, 560, 640, 768, 1024, 1280],
