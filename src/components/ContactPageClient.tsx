@@ -124,13 +124,6 @@ export default function ContactPageClient() {
       <section className="bg-white px-5">
         <div className="relative">
           <LeadForm />
-          <motion.div
-            animate={{ y: [0, -20, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="hidden lg:block absolute left-10 top-1/2 -translate-y-1/2 opacity-10 pointer-events-none"
-          >
-            <div className="text-[15rem] font-black text-[#152f51]">1986</div>
-          </motion.div>
         </div>
       </section>
 
