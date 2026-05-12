@@ -194,13 +194,6 @@ export default function KatalogPage() {
               key={index}
               className="group relative rounded-[2px] border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md"
             >
-              {/* Page number badge */}
-              <div className="absolute left-3 top-3 z-10 flex h-7 items-center rounded-[2px] bg-[#152f51] px-2.5">
-                <span className="text-[10px] font-black uppercase tracking-[0.16em] text-[#d6a94a]">
-                  {index}
-                </span>
-              </div>
-
               <Image
                 src={src}
                 alt={alt}
