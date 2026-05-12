@@ -30,6 +30,9 @@ export type ProductDetailContent = {
 };
 
 type JsonRecord = Record<string, unknown>;
+type LegacyLangCode = "tr" | "en" | "ar";
+
+const LEGACY_LANG_CODES: LegacyLangCode[] = ["tr", "en", "ar"];
 
 function isJsonRecord(value: unknown): value is JsonRecord {
   return typeof value === "object" && value !== null;
@@ -78,6 +81,63 @@ function normalizeTableBlock(block: JsonRecord): ProductDetailTableBlock {
   };
 }
 
+function hasTableContent(table: ProductDetailTableBlock) {
+  return (
+    table.title.trim().length > 0 ||
+    table.headers.some((header) => header.trim().length > 0) ||
+    table.rows.some((row) => row.some((cell) => cell.trim().length > 0))
+  );
+}
+
+function hasBlockContent(block: ProductDetailBlock) {
+  if (block.type === "description") {
+    return extractPlainTextFromRichContent(block.content).length > 0;
+  }
+
+  return hasTableContent(block);
+}
+
+function normalizeLegacyV2Content(parsed: JsonRecord): ProductDetailContent | null {
+  if (parsed.version !== 2) return null;
+
+  const descriptions = isJsonRecord(parsed.descriptions)
+    ? parsed.descriptions
+    : {};
+  const tables = isJsonRecord(parsed.tables) ? parsed.tables : {};
+  const blocks: ProductDetailBlock[] = [];
+
+  const description = LEGACY_LANG_CODES.map((lang) => descriptions[lang]).find(
+    (value) =>
+      typeof value === "string" &&
+      extractPlainTextFromRichContent(value).length > 0,
+  );
+
+  if (typeof description === "string") {
+    blocks.push({
+      id: createId(),
+      type: "description",
+      content: toTipTapDocJson(description),
+    });
+  }
+
+  for (const lang of LEGACY_LANG_CODES) {
+    const table = tables[lang];
+    if (!isJsonRecord(table)) continue;
+
+    const normalizedTable = normalizeTableBlock(table);
+    if (hasTableContent(normalizedTable)) {
+      blocks.push(normalizedTable);
+      break;
+    }
+  }
+
+  return {
+    type: "productDetailContent",
+    version: 1,
+    blocks,
+  };
+}
+
 export function createEmptyProductDetailContent(): ProductDetailContent {
   return {
     type: "productDetailContent",
@@ -123,6 +183,11 @@ export function parseProductDetailContent(
         blocks,
       };
     }
+
+    const legacyV2Content = isJsonRecord(parsed)
+      ? normalizeLegacyV2Content(parsed)
+      : null;
+    if (legacyV2Content) return legacyV2Content;
   } catch {
     return null;
   }
@@ -166,17 +231,32 @@ export function hasProductDetailContent(
     return extractPlainTextFromRichContent(content).length > 0;
   }
 
-  return detailContent.blocks.some((block) => {
-    if (block.type === "description") {
-      return extractPlainTextFromRichContent(block.content).length > 0;
-    }
+  return detailContent.blocks.some(hasBlockContent);
+}
 
-    return (
-      block.title.trim().length > 0 ||
-      block.headers.some((header) => header.trim().length > 0) ||
-      block.rows.some((row) => row.some((cell) => cell.trim().length > 0))
-    );
-  });
+export function toProductDetailStorageJson(
+  content: string | null | undefined,
+): string {
+  const detailContent = parseProductDetailContent(content);
+
+  if (!detailContent) {
+    const legacyDoc = parseTipTapDoc(content);
+    return legacyDoc ? JSON.stringify(legacyDoc) : toTipTapDocJson(content);
+  }
+
+  const blocksWithContent = detailContent.blocks.filter(hasBlockContent);
+
+  if (
+    blocksWithContent.length === 1 &&
+    blocksWithContent[0].type === "description"
+  ) {
+    return blocksWithContent[0].content;
+  }
+
+  return JSON.stringify({
+    ...detailContent,
+    blocks: blocksWithContent,
+  } satisfies ProductDetailContent);
 }
 
 export function extractPlainTextFromProductDetailContent(

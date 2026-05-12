@@ -17,6 +17,10 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { buildCategoryOptions } from "@/lib/categoryTree";
+import {
+  hasProductDetailContent,
+  toProductDetailStorageJson,
+} from "@/lib/productDetailContent";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -64,7 +68,9 @@ export function NewProductForm({ categories }: NewProductFormProps) {
     floor: "-",
     bath: "-",
     height: "-",
-    detailContent: "",
+    description: "",
+    descriptionEn: "",
+    descriptionAr: "",
     metaDescription: "",
     metaDescriptionEn: "",
     metaDescriptionAr: "",
@@ -84,24 +90,19 @@ export function NewProductForm({ categories }: NewProductFormProps) {
     setIsLoading(true);
 
     try {
-      // detailContent içinden tr/en/ar'ı parse edip ilgili action alanlarına dağıt
-      let parsedDetail: {
-        descriptions?: Record<string, string>;
-        tables?: Record<string, unknown>;
-      } = {};
-      try {
-        parsedDetail = formData.detailContent
-          ? JSON.parse(formData.detailContent)
-          : {};
-      } catch {}
-
       await createProduct({
         ...formData,
         categoryIds:
           formData.categoryIds.length > 0 ? formData.categoryIds : undefined,
-        description: parsedDetail.descriptions?.tr || undefined,
-        descriptionEn: parsedDetail.descriptions?.en || undefined,
-        descriptionAr: parsedDetail.descriptions?.ar || undefined,
+        description: hasProductDetailContent(formData.description)
+          ? toProductDetailStorageJson(formData.description)
+          : undefined,
+        descriptionEn: hasProductDetailContent(formData.descriptionEn)
+          ? toProductDetailStorageJson(formData.descriptionEn)
+          : undefined,
+        descriptionAr: hasProductDetailContent(formData.descriptionAr)
+          ? toProductDetailStorageJson(formData.descriptionAr)
+          : undefined,
         metaDescription: formData.metaDescription.trim() || undefined,
         metaDescriptionEn: formData.metaDescriptionEn.trim() || undefined,
         metaDescriptionAr: formData.metaDescriptionAr.trim() || undefined,
@@ -423,15 +424,40 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                     </Card>
                     <hr className="h-[3px] w-full bg-secondary" />
 
-                    {/* TEK editor — TR/EN/AR içinde */}
                     <div className="space-y-2">
-                      <Label>Ürün Detay İçeriği</Label>
+                      <Label htmlFor="description">Ürün Detay İçeriği</Label>
                       <ProductDetailContentEditor
-                        content={formData.detailContent}
+                        content={formData.description}
                         onChange={(json) =>
-                          setFormData({ ...formData, detailContent: json })
+                          setFormData({ ...formData, description: json })
                         }
                       />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="descriptionEn">
+                        Ürün Detay İçeriği (İngilizce)
+                      </Label>
+                      <ProductDetailContentEditor
+                        content={formData.descriptionEn}
+                        onChange={(json) =>
+                          setFormData({ ...formData, descriptionEn: json })
+                        }
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="descriptionAr">
+                        Ürün Detay İçeriği (Arapça)
+                      </Label>
+                      <div dir="rtl">
+                        <ProductDetailContentEditor
+                          content={formData.descriptionAr}
+                          onChange={(json) =>
+                            setFormData({ ...formData, descriptionAr: json })
+                          }
+                        />
+                      </div>
                     </div>
                   </CardContent>
                 </Card>

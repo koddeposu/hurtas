@@ -628,7 +628,8 @@ export const dictionaries = {
       experienceTitle: "40+ yıllık tecrübe ile üretim ve tedarik.",
       stats: ["Kuruluş", "Yıllık Tecrübe", "Ürün Çeşidi"],
       brandsTitle: "Çalıştığımız Markalar",
-      brandsDescription: "Logo görselleri hazır olduğunda bu alana eklenecek.",
+      brandsDescription:
+        "Kamu kurumları, belediyeler ve sektör markalarıyla yürüttüğümüz projelerden seçili referanslar.",
       brandSlot: "Marka Logosu",
     },
     contactPage: {
@@ -1280,7 +1281,8 @@ export const dictionaries = {
       experienceTitle: "Production and supply with 40+ years of experience.",
       stats: ["Founded", "Years of Experience", "Product Types"],
       brandsTitle: "Partner Sectors",
-      brandsDescription: "Logo visuals will be added to this area when ready.",
+      brandsDescription:
+        "Selected references from projects delivered with public institutions, municipalities and sector brands.",
       brandSlot: "Brand Logo",
     },
     contactPage: {
@@ -1924,7 +1926,8 @@ export const dictionaries = {
       experienceTitle: "إنتاج وتوريد بخبرة تزيد عن 40 عاما.",
       stats: ["التأسيس", "سنوات الخبرة", "تنوع المنتجات"],
       brandsTitle: "القطاعات التي نخدمها",
-      brandsDescription: "ستتم إضافة شعارات العلامات هنا عند تجهيزها.",
+      brandsDescription:
+        "نماذج مختارة من مشاريع نفذناها مع مؤسسات عامة وبلديات وعلامات في القطاع.",
       brandSlot: "شعار العلامة",
     },
     contactPage: {

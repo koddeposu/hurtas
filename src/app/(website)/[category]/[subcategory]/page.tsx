@@ -1,5 +1,8 @@
 import { getCategories, getCategoryBySlug } from "@/actions/categoryActions";
 import { getProductsWithImages } from "@/actions/productActions";
+import ProductPage, {
+  generateMetadata as generateProductMetadata,
+} from "@/app/(website)/urun-detay/[slug]/page";
 import ProductsClient from "@/components/ProductClient";
 import {
   getDictionary,
@@ -19,6 +22,10 @@ interface Props {
   searchParams: Promise<{ q?: string }>;
 }
 
+function getProductParams(slug: string) {
+  return Promise.resolve({ slug });
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { category: parentSlug, subcategory: categorySlug } = await params;
   const locale = await getCurrentLocale();
@@ -33,9 +40,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     !categoryData ||
     categoryData.parentId !== parentCategory.id
   ) {
-    return {
-      title: dict.seo.categoryNotFoundTitle,
-    };
+    return generateProductMetadata({ params: getProductParams(categorySlug) });
   }
 
   const title =
@@ -87,7 +92,7 @@ const CategoryPage = async ({ params, searchParams }: Props) => {
     !categoryData ||
     categoryData.parentId !== parentCategory.id
   ) {
-    notFound();
+    return ProductPage({ params: getProductParams(categorySlug) });
   }
 
   const currentHref = getCategoryHref(categories, categoryData);

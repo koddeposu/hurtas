@@ -1,5 +1,6 @@
 import AboutImage from "@/assets/hero/desktop/hero-1.webp";
 import { SiteDroneVideo } from "@/components/home-page/site-drone-video";
+import { Referans } from "@/components/referans";
 import { getDictionary } from "@/lib/i18n";
 import { getCurrentLocale } from "@/lib/i18n-server";
 import Image from "next/image";
@@ -9,7 +10,6 @@ const STATS = [{ value: "1986" }, { value: "40+" }, { value: "100+" }];
 export default async function AboutPageClient() {
   const locale = await getCurrentLocale();
   const dict = getDictionary(locale);
-  const brandSlots = Array.from({ length: 6 }, () => dict.about.brandSlot);
 
   return (
     <main className="min-h-screen bg-white">
@@ -121,7 +121,7 @@ export default async function AboutPageClient() {
             </div>
           </section>
 
-          <section className="mt-12 overflow-hidden border-t border-slate-200 pt-8">
+          <section className="mt-12 overflow-hidden pt-8">
             <div className="mb-5">
               <h2 className="text-2xl font-black text-[#152f51]">
                 {dict.about.brandsTitle}
@@ -131,18 +131,7 @@ export default async function AboutPageClient() {
               </p>
             </div>
 
-            <div className="overflow-hidden">
-              <div className="flex w-max animate-marquee gap-4">
-                {[...brandSlots, ...brandSlots].map((slot, index) => (
-                  <div
-                    key={`${slot}-${index}`}
-                    className="flex h-20 w-44 shrink-0 items-center justify-center border border-slate-200 bg-[#f8fafc] text-sm font-black text-slate-400"
-                  >
-                    {slot}
-                  </div>
-                ))}
-              </div>
-            </div>
+            <Referans className="py-2" />
           </section>
         </div>
       </section>

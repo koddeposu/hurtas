@@ -6,7 +6,6 @@ import {
 
 export const ALL_PRODUCTS_PATH = "/tum-urunler";
 export const PRODUCT_DETAIL_PREFIX = "/urun-detay";
-export const PRODUCT_ITEM_SEGMENT = "item";
 
 export type RouteCategory = {
   id: string;
@@ -86,7 +85,7 @@ export function getProductCategoryDetailHref(
           primaryCategory,
         ];
 
-  return `${getCategoryHref(categorySource, primaryCategory)}/${PRODUCT_ITEM_SEGMENT}/${productSlug}`;
+  return `${getCategoryHref(categorySource, primaryCategory)}/${productSlug}`;
 }
 
 export function getCategoryHref(

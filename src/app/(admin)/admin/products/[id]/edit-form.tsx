@@ -25,6 +25,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { buildCategoryOptions } from "@/lib/categoryTree";
 import {
   hasProductDetailContent,
+  toProductDetailStorageJson,
   toProductDetailContentJson,
 } from "@/lib/productDetailContent";
 import { ArrowLeft, Loader2 } from "lucide-react";
@@ -136,13 +137,13 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
         url: formData.url.trim() || null,
         categoryIds: formData.categoryIds,
         description: hasProductDetailContent(formData.description)
-          ? formData.description
+          ? toProductDetailStorageJson(formData.description)
           : null,
         descriptionEn: hasProductDetailContent(formData.descriptionEn)
-          ? formData.descriptionEn
+          ? toProductDetailStorageJson(formData.descriptionEn)
           : null,
         descriptionAr: hasProductDetailContent(formData.descriptionAr)
-          ? formData.descriptionAr
+          ? toProductDetailStorageJson(formData.descriptionAr)
           : null,
         metaDescription: formData.metaDescription.trim() || null,
         metaDescriptionEn: formData.metaDescriptionEn.trim() || null,

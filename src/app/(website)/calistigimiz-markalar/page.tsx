@@ -1,4 +1,5 @@
 import { RandomProductsSliderSection } from "@/components/random-products-slider-section";
+import { Referans } from "@/components/referans";
 import {
   getDictionary,
   getMetadataAlternates,
@@ -51,6 +52,8 @@ export default async function BrandsPage() {
             {dict.brandsPage.description}
           </p>
         </div>
+
+        <Referans className="mt-8" />
 
         <section className="mt-8 grid gap-4 md:grid-cols-3">
           {PARTNER_GROUPS.map((item, index) => {

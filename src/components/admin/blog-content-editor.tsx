@@ -1,7 +1,7 @@
 "use client";
 
 import { EditorContent, EditorContext, useEditor } from "@tiptap/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 // --- Tiptap Core Extensions ---
 import { DragHandle } from "@tiptap/extension-drag-handle-react";
@@ -64,7 +64,6 @@ import { LinkIcon } from "@/components/tiptap-icons/link-icon";
 // --- Hooks ---
 import { useCursorVisibility } from "@/hooks/use-cursor-visibility";
 import { useIsBreakpoint } from "@/hooks/use-is-breakpoint";
-import { useWindowSize } from "@/hooks/use-window-size";
 
 // --- Lib ---
 import { handleImageUpload, MAX_FILE_SIZE } from "@/lib/tiptap-utils";
@@ -76,6 +75,16 @@ import "./blog-content-editor.css";
 interface BlogContentEditorProps {
   content: string; // JSON string
   onChange: (json: string) => void;
+}
+
+function parseEditorContent(content: string) {
+  if (!content) return "";
+
+  try {
+    return JSON.parse(content);
+  } catch {
+    return "";
+  }
 }
 
 const MainToolbarContent = ({
@@ -192,11 +201,10 @@ export function BlogContentEditor({
   onChange,
 }: BlogContentEditorProps) {
   const isMobile = useIsBreakpoint();
-  const { height } = useWindowSize();
   const [mobileView, setMobileView] = useState<"main" | "highlighter" | "link">(
     "main",
   );
-  const toolbarRef = useRef<HTMLDivElement>(null);
+  const activeMobileView = isMobile ? mobileView : "main";
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -235,46 +243,37 @@ export function BlogContentEditor({
         onError: (error) => console.error("Upload failed:", error),
       }),
     ],
-    content: content ? JSON.parse(content) : "",
+    content: parseEditorContent(content),
     onUpdate: ({ editor }) => {
       onChange(JSON.stringify(editor.getJSON()));
     },
   });
 
-  const rect = useCursorVisibility({
+  useCursorVisibility({
     editor,
-    overlayHeight: toolbarRef.current?.getBoundingClientRect().height ?? 0,
+    overlayHeight: 0,
   });
-
-  useEffect(() => {
-    if (!isMobile && mobileView !== "main") {
-      setMobileView("main");
-    }
-  }, [isMobile, mobileView]);
 
   // Update editor content when prop changes (for edit mode)
   useEffect(() => {
     if (editor) {
       const currentJson = JSON.stringify(editor.getJSON());
       if (content !== currentJson) {
-        editor.commands.setContent(content ? JSON.parse(content) : "");
+        editor.commands.setContent(parseEditorContent(content));
       }
     }
-    // Only run when content prop changes from outside, not on every editor update
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [content, editor]);
 
   return (
     <div className="blog-content-editor">
       <div className="simple-editor-wrapper border rounded-lg overflow-hidden">
         <EditorContext.Provider value={{ editor }}>
           <Toolbar
-            ref={toolbarRef}
             style={{
               position: "relative",
             }}
           >
-            {mobileView === "main" ? (
+            {activeMobileView === "main" ? (
               <MainToolbarContent
                 onHighlighterClick={() => setMobileView("highlighter")}
                 onLinkClick={() => setMobileView("link")}
@@ -282,7 +281,7 @@ export function BlogContentEditor({
               />
             ) : (
               <MobileToolbarContent
-                type={mobileView === "highlighter" ? "highlighter" : "link"}
+                type={activeMobileView === "highlighter" ? "highlighter" : "link"}
                 onBack={() => setMobileView("main")}
               />
             )}
