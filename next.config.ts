@@ -1,6 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  rewrites: () => {
+    return [
+      {
+        source: "/aliveli",
+        destination: "/altyapi-elemanlari/item/baca-elemanlari",
+      },
+    ];
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [320, 480, 560, 640, 768, 1024, 1280],
