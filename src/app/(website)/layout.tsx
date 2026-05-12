@@ -90,11 +90,13 @@ export async function generateMetadata(): Promise<Metadata> {
     category: dict.seo.category,
     icons: {
       icon: [
-        { url: "/favicon.ico", sizes: "any" },
-        { url: "/logo.png", sizes: "192x192", type: "image/png" },
+        { url: "/favicon.ico?v=20260512", sizes: "any" },
+        { url: "/logo.png?v=20260512", sizes: "192x192", type: "image/png" },
       ],
-      apple: [{ url: "/logo.png", sizes: "180x180", type: "image/png" }],
-      shortcut: "/favicon.ico",
+      apple: [
+        { url: "/logo.png?v=20260512", sizes: "180x180", type: "image/png" },
+      ],
+      shortcut: "/favicon.ico?v=20260512",
     },
   };
 }
