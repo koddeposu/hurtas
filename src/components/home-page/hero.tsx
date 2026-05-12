@@ -8,16 +8,13 @@ import HeroMobilSlideImage1 from "@/assets/hero/mobil/hero-1.webp";
 import HeroMobilSlideImage2 from "@/assets/hero/mobil/hero-2.webp";
 import HeroMobilSlideImage3 from "@/assets/hero/mobil/hero-3.webp";
 
+import { useDictionary, useLocalizedPath } from "@/components/i18n-provider";
 import {
   Carousel,
   CarouselApi,
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import {
-  useDictionary,
-  useLocalizedPath,
-} from "@/components/i18n-provider";
 import { handleCall, handleWhatsApp } from "@/lib/analytics/googleAds";
 import { ALL_PRODUCTS_PATH } from "@/lib/productRoutes";
 import { CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
@@ -84,13 +81,16 @@ function HeroSlidePicture({
           fill
           fetchPriority={isFirst ? "high" : "auto"}
           loading={isFirst ? "eager" : "lazy"}
-          quality={isFirst ? 70 : 60}
+          quality={isFirst ? 80 : 60}
           placeholder="blur"
           sizes={HERO_IMAGE_SIZES}
           className="object-cover"
         />
       </picture>
-      <div className="absolute inset-0 bg-gradient-to-r from-[#152f51]/90 via-[#152f51]/62 to-slate-950/36 md:from-[#152f51]/88 md:via-[#152f51]/50 md:to-slate-950/24" />
+      <div
+        className="absolute inset-0 bg-gradient-to-r from-[black]/80 via-[black]/50 to-slate-950/30
+       md:from-[black]/78 md:via-[black]/30 md:to-slate-950/21"
+      />
     </div>
   );
 }
@@ -249,19 +249,19 @@ export const Hero4 = () => {
         <button
           type="button"
           onClick={() => api?.scrollPrev()}
-          className="absolute left-3 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-[2px] border border-white/30 bg-black/25 text-white backdrop-blur transition-colors hover:bg-black/40 sm:left-6 lg:h-13 lg:w-13"
+          className="absolute left-3 top-1/2 z-20 hidden lg:inline-flex  -translate-y-1/2 cursor-pointer items-center justify-center  text-white  transition-colors hover:bg-black/40 sm:left-6  "
           aria-label={dict.hero.prevSlide}
         >
-          <ChevronLeft className="h-5 w-5" />
+          <ChevronLeft className="h-20 w-20" strokeWidth={0.8} />
         </button>
 
         <button
           type="button"
           onClick={() => api?.scrollNext()}
-          className="absolute right-3 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-[2px] border border-white/30 bg-black/25 text-white backdrop-blur transition-colors hover:bg-black/40 sm:right-6 lg:h-13 lg:w-13"
+          className="absolute right-3 top-1/2 z-20 hidden lg:inline-flex  -translate-y-1/2 cursor-pointer items-center justify-center text-white transition-colors hover:bg-black/40 "
           aria-label={dict.hero.nextSlide}
         >
-          <ChevronRight className="h-5 w-5" />
+          <ChevronRight className="h-20 w-20" strokeWidth={0.8} />
         </button>
 
         <div

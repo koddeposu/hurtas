@@ -1,15 +1,12 @@
 "use client";
 
+import { useDictionary, useLocalizedPath } from "@/components/i18n-provider";
 import {
   Carousel,
   CarouselApi,
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import {
-  useDictionary,
-  useLocalizedPath,
-} from "@/components/i18n-provider";
 import { ALL_PRODUCTS_PATH } from "@/lib/productRoutes";
 import { ChevronLeft, ChevronRight, Quote, Star } from "lucide-react";
 import Link from "next/link";
@@ -95,26 +92,20 @@ export function HomepageReviewsSlider() {
       aria-labelledby="reviews-heading"
       className="font-[family-name:var(--font-poppins)]"
     >
-      <div className="border-y border-slate-200 bg-[#f6f8fb] px-4 py-4 sm:px-5 lg:px-6">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div className="border-y border-slate-200 bg-[#f8fafc] px-4 py-3 sm:px-5 lg:px-6">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-3xl">
-            <div className="flex items-center gap-3">
-              <span className="h-px w-10 bg-[#d6a94a]" aria-hidden="true" />
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#6f839d]">
+            <div className="flex items-center gap-2">
+              <span className="h-px w-7 bg-[#d6a94a]" aria-hidden="true" />
+              <span className="text-[9px] font-black uppercase tracking-[0.18em] text-slate-500">
                 {dict.reviews.label}
               </span>
             </div>
-            <h2
-              id="reviews-heading"
-              className="mt-2 text-xl font-black tracking-tight text-slate-900 sm:text-2xl"
-            >
-              {dict.reviews.title}
-            </h2>
           </div>
 
           <div className="flex items-center justify-between gap-3 sm:justify-start lg:justify-end">
-            <div className="inline-flex h-10 items-center gap-2 rounded-[2px] border border-slate-300 bg-white px-3 text-[11px] font-black uppercase tracking-[0.14em] text-slate-700">
-              <Star className="h-3.5 w-3.5 fill-[#d6a94a] text-[#d6a94a]" />
+            <div className="inline-flex h-8 items-center gap-1.5 rounded-[2px] border border-slate-200 bg-white px-2.5 text-[10px] font-black uppercase tracking-[0.12em] text-slate-600">
+              <Star className="h-3 w-3 fill-[#d6a94a] text-[#d6a94a]" />
               {AVERAGE_RATING} / 5 {dict.reviews.satisfaction}
             </div>
 
@@ -124,27 +115,27 @@ export function HomepageReviewsSlider() {
                   type="button"
                   onClick={() => api?.scrollPrev()}
                   disabled={!canScrollPrev}
-                  className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-[2px] border border-[#152f51]/20 bg-white text-[#152f51] transition-colors hover:bg-[#152f51] hover:text-white disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400"
+                  className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-[2px] border border-[#152f51]/20 bg-white text-[#152f51] transition-colors hover:bg-[#152f51] hover:text-white disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400"
                   aria-label={dict.reviews.prev}
                 >
-                  <ChevronLeft className="h-4 w-4" strokeWidth={2} />
+                  <ChevronLeft className="h-3.5 w-3.5" strokeWidth={2} />
                 </button>
 
                 <button
                   type="button"
                   onClick={() => api?.scrollNext()}
                   disabled={!canScrollNext}
-                  className="inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-[2px] border border-[#152f51]/20 bg-white text-[#152f51] transition-colors hover:bg-[#152f51] hover:text-white disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400"
+                  className="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-[2px] border border-[#152f51]/20 bg-white text-[#152f51] transition-colors hover:bg-[#152f51] hover:text-white disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-400"
                   aria-label={dict.reviews.next}
                 >
-                  <ChevronRight className="h-4 w-4" strokeWidth={2} />
+                  <ChevronRight className="h-3.5 w-3.5" strokeWidth={2} />
                 </button>
               </div>
             ) : null}
           </div>
         </div>
 
-        <div className="relative mt-4">
+        <div className="relative mt-3">
           <Carousel
             setApi={setApi}
             opts={{
@@ -160,58 +151,58 @@ export function HomepageReviewsSlider() {
                   dict.reviews.slides[index] ?? dict.reviews.slides[0];
 
                 return (
-                <CarouselItem
-                  key={review.id}
-                  className="basis-full md:basis-1/2 xl:basis-1/3"
-                >
-                  <figure className="relative flex h-full min-h-48 flex-col rounded-[3px] border border-slate-200 bg-white p-4 shadow-[0_16px_34px_-30px_rgba(15,23,42,0.28)] transition-colors hover:border-slate-300 sm:p-5">
-                    <div className="flex items-start justify-between gap-3">
-                      <Link
-                        href={localizedPath(review.href)}
-                        prefetch={false}
-                        className="inline-flex min-h-8 items-center rounded-[2px] border border-[#152f51]/10 bg-[#152f51]/5 px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#152f51] transition-colors hover:bg-[#152f51]/10"
-                      >
-                        {content.productName}
-                      </Link>
-                      <Quote className="h-6 w-6 shrink-0 rotate-180 text-slate-200" />
-                    </div>
-
-                    <blockquote className="mt-4 flex-1">
-                      <p className="line-clamp-3 text-sm font-medium leading-6 text-slate-700">
-                        &ldquo;{content.comment}&rdquo;
-                      </p>
-                    </blockquote>
-
-                    <figcaption className="mt-4 border-t border-slate-200 pt-3">
-                      <div className="flex items-center justify-between">
-                        <cite className="not-italic text-sm font-black text-slate-900">
-                          {content.customerName}
-                        </cite>
-                        <span className="text-xs font-bold text-slate-500">
-                          {content.city}
-                        </span>
+                  <CarouselItem
+                    key={review.id}
+                    className="basis-full md:basis-1/2 xl:basis-1/4"
+                  >
+                    <figure className="relative flex h-full min-h-36 flex-col rounded-[3px] border border-slate-200 bg-white p-3 shadow-[0_12px_26px_-26px_rgba(15,23,42,0.22)] transition-colors hover:border-slate-300 sm:p-3.5">
+                      <div className="flex items-start justify-between gap-3">
+                        <Link
+                          href={localizedPath(review.href)}
+                          prefetch={false}
+                          className="inline-flex min-h-7 items-center rounded-[2px] border border-[#152f51]/10 bg-[#152f51]/5 px-2 py-1 text-[9px] font-black uppercase tracking-[0.1em] text-[#152f51] transition-colors hover:bg-[#152f51]/10"
+                        >
+                          {content.productName}
+                        </Link>
+                        <Quote className="h-5 w-5 shrink-0 rotate-180 text-slate-200" />
                       </div>
-                      <div
-                        className="mt-2 flex items-center gap-0.5 text-[#d6a94a]"
-                        aria-label={dict.reviews.stars.replace(
-                          "{rating}",
-                          String(review.rating),
-                        )}
-                      >
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <Star
-                            key={`${review.id}-star-${i}`}
-                            className={`h-3.5 w-3.5 ${
-                              i < review.rating
-                                ? "fill-current"
-                                : "text-slate-200"
-                            }`}
-                          />
-                        ))}
-                      </div>
-                    </figcaption>
-                  </figure>
-                </CarouselItem>
+
+                      <blockquote className="mt-3 flex-1">
+                        <p className="line-clamp-2 text-xs font-medium leading-5 text-slate-600">
+                          &ldquo;{content.comment}&rdquo;
+                        </p>
+                      </blockquote>
+
+                      <figcaption className="mt-3 border-t border-slate-200 pt-2.5">
+                        <div className="flex items-center justify-between">
+                          <cite className="not-italic text-xs font-black text-slate-900">
+                            {content.customerName}
+                          </cite>
+                          <span className="text-[11px] font-bold text-slate-500">
+                            {content.city}
+                          </span>
+                        </div>
+                        <div
+                          className="mt-1.5 flex items-center gap-0.5 text-[#d6a94a]"
+                          aria-label={dict.reviews.stars.replace(
+                            "{rating}",
+                            String(review.rating),
+                          )}
+                        >
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <Star
+                              key={`${review.id}-star-${i}`}
+                              className={`h-3 w-3 ${
+                                i < review.rating
+                                  ? "fill-current"
+                                  : "text-slate-200"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </figcaption>
+                    </figure>
+                  </CarouselItem>
                 );
               })}
             </CarouselContent>
