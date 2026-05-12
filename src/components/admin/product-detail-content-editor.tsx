@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  createEmptyProductDetailContent,
   parseProductDetailContent,
   toProductDetailContentJson,
   type ProductDetailBlock,
@@ -19,6 +18,7 @@ import { useMemo } from "react";
 
 type Props = {
   content: string;
+  languageLabel: string;
   onChange: (content: string) => void;
 };
 
@@ -50,19 +50,32 @@ function createTableBlock(): ProductDetailTableBlock {
 
 function parseEditorContent(content: string): ProductDetailContent {
   const normalized = parseProductDetailContent(toProductDetailContentJson(content));
+  const descriptionBlock =
+    normalized?.blocks.find(
+      (block): block is ProductDetailDescriptionBlock =>
+        block.type === "description",
+    ) ?? createDescriptionBlock();
+  const tableBlock =
+    normalized?.blocks.find(
+      (block): block is ProductDetailTableBlock => block.type === "table",
+    ) ?? createTableBlock();
 
-  if (!normalized || normalized.blocks.length === 0) {
-    return createEmptyProductDetailContent();
-  }
-
-  return normalized;
+  return {
+    type: "productDetailContent",
+    version: 1,
+    blocks: [descriptionBlock, tableBlock],
+  };
 }
 
 function serialize(data: ProductDetailContent) {
   return JSON.stringify(data);
 }
 
-export function ProductDetailContentEditor({ content, onChange }: Props) {
+export function ProductDetailContentEditor({
+  content,
+  languageLabel,
+  onChange,
+}: Props) {
   const data = useMemo(() => parseEditorContent(content), [content]);
 
   const update = (next: ProductDetailContent) => onChange(serialize(next));
@@ -74,11 +87,6 @@ export function ProductDetailContentEditor({ content, onChange }: Props) {
         block.id === blockId ? nextBlock : block,
       ),
     });
-  };
-
-  const removeBlock = (blockId: string) => {
-    const blocks = data.blocks.filter((block) => block.id !== blockId);
-    update(blocks.length > 0 ? { ...data, blocks } : createEmptyProductDetailContent());
   };
 
   const setHeader = (
@@ -160,19 +168,9 @@ export function ProductDetailContentEditor({ content, onChange }: Props) {
               {index + 1}
             </span>
             <span className="text-sm font-semibold text-slate-700">
-              {block.type === "description" ? "Açıklama" : "Tablo"}
+              {languageLabel} {block.type === "description" ? "Açıklama" : "Tablo"}
             </span>
             <div className="h-px flex-1 bg-slate-200" />
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon-sm"
-              onClick={() => removeBlock(block.id)}
-              disabled={data.blocks.length <= 1}
-              aria-label="Bloğu sil"
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
           </div>
 
           {block.type === "description" ? (
@@ -294,31 +292,6 @@ export function ProductDetailContentEditor({ content, onChange }: Props) {
           )}
         </div>
       ))}
-
-      <div className="flex flex-wrap gap-2">
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() =>
-            update({ ...data, blocks: [...data.blocks, createDescriptionBlock()] })
-          }
-        >
-          <Plus className="h-4 w-4" />
-          Açıklama Ekle
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() =>
-            update({ ...data, blocks: [...data.blocks, createTableBlock()] })
-          }
-        >
-          <Plus className="h-4 w-4" />
-          Tablo Ekle
-        </Button>
-      </div>
     </div>
   );
 }

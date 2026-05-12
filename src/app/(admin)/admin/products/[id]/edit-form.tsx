@@ -476,6 +476,7 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                       <Label htmlFor="description">Ürün Detay İçeriği</Label>
                       <ProductDetailContentEditor
                         content={formData.description}
+                        languageLabel="Türkçe"
                         onChange={(json) =>
                           setFormData({
                             ...formData,
@@ -491,6 +492,7 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                       </Label>
                       <ProductDetailContentEditor
                         content={formData.descriptionEn}
+                        languageLabel="İngilizce"
                         onChange={(json) =>
                           setFormData({
                             ...formData,
@@ -507,6 +509,7 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                       <div dir="rtl">
                         <ProductDetailContentEditor
                           content={formData.descriptionAr}
+                          languageLabel="Arapça"
                           onChange={(json) =>
                             setFormData({
                               ...formData,

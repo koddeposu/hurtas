@@ -428,6 +428,7 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                       <Label htmlFor="description">Ürün Detay İçeriği</Label>
                       <ProductDetailContentEditor
                         content={formData.description}
+                        languageLabel="Türkçe"
                         onChange={(json) =>
                           setFormData({ ...formData, description: json })
                         }
@@ -440,6 +441,7 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                       </Label>
                       <ProductDetailContentEditor
                         content={formData.descriptionEn}
+                        languageLabel="İngilizce"
                         onChange={(json) =>
                           setFormData({ ...formData, descriptionEn: json })
                         }
@@ -453,6 +455,7 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                       <div dir="rtl">
                         <ProductDetailContentEditor
                           content={formData.descriptionAr}
+                          languageLabel="Arapça"
                           onChange={(json) =>
                             setFormData({ ...formData, descriptionAr: json })
                           }
