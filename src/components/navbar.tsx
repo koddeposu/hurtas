@@ -111,8 +111,6 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
   const dict = useDictionary();
   const localizedPath = useLocalizedPath();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobileCorporateOpen, setIsMobileCorporateOpen] = useState(false);
-  const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(true);
   const [productSearchQuery, setProductSearchQuery] = useState("");
   const [selectedProductCategory, setSelectedProductCategory] = useState("all");
   const [isProductSearchOpen, setIsProductSearchOpen] = useState(false);
@@ -397,12 +395,12 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
     </div>
   );
   const renderMobileLanguageSelector = () => (
-    <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
-      <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+    <div className="border-b border-slate-200 pb-3">
+      <p className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
         {dict.nav.language}
       </p>
       <div
-        className="mt-3 grid grid-cols-3 gap-2"
+        className="mt-2 grid grid-cols-3 gap-2"
         role="group"
         aria-label={dict.nav.language}
       >
@@ -417,10 +415,10 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
             }}
             aria-label={item.label}
             aria-current={item.locale === locale ? "page" : undefined}
-            className={`rounded-xl px-3 py-2 text-center text-sm font-black transition-colors ${
+            className={`rounded-[2px] border px-3 py-2 text-center text-xs font-black uppercase tracking-[0.12em] transition-colors ${
               item.locale === locale
-                ? "bg-[#152f51] text-white"
-                : "bg-[#f4f7fb] text-slate-700"
+                ? "border-[#152f51] bg-[#152f51] text-white"
+                : "border-slate-200 bg-white text-slate-700 hover:border-[#d6a94a] hover:text-[#152f51]"
             }`}
           >
             {item.shortLabel}
@@ -901,7 +899,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
             <Link
               href={localizedPath("/iletisim")}
               prefetch={false}
-              className="hidden rounded-xl bg-[#152f51] px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] text-white transition-colors hover:bg-[#10243d] lg:inline-flex"
+              className="hidden rounded-[2px] bg-[#152f51] px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] text-white transition-colors hover:bg-[#10243d] lg:inline-flex"
             >
               {dict.common.contact}
             </Link>
@@ -909,7 +907,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
               <button
                 type="button"
                 onClick={handleCall}
-                className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-[#152f51] px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] text-white transition-colors hover:bg-[#10243d] lg:hidden ads-phone-call"
+                className="inline-flex cursor-pointer items-center gap-2 rounded-[2px] bg-[#152f51] px-3 py-2 text-xs font-semibold uppercase tracking-[0.11em] text-white transition-colors hover:bg-[#10243d] lg:hidden ads-phone-call"
               >
                 <PhoneCall className="h-4 w-4" />
                 {dict.common.callUs}
@@ -921,7 +919,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                   isMobileMenuOpen ? dict.nav.closeMenu : dict.nav.openMenu
                 }
                 onClick={toggleMobileMenu}
-                className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-[#152f51]/30 bg-white px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#152f51] shadow-[0_12px_28px_-20px_rgba(21,47,81,0.55)] transition-all hover:bg-[#f4f7fb] lg:hidden"
+                className="inline-flex cursor-pointer items-center gap-2 rounded-[2px] border border-[#152f51]/30 bg-white px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-[#152f51] shadow-[0_12px_28px_-20px_rgba(21,47,81,0.55)] transition-all hover:bg-[#f4f7fb] lg:hidden"
               >
                 {isMobileMenuOpen ? (
                   <X className="h-4.5 w-4.5" />
@@ -944,7 +942,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
             className="absolute inset-0 bg-black/45"
           />
 
-          <aside className="absolute right-0 top-0 flex h-full w-[86%] max-w-sm flex-col overflow-hidden border-l border-slate-200 bg-white shadow-[0_24px_80px_-28px_rgba(15,23,42,0.35)] pb-24">
+          <aside className="absolute right-0 top-0 flex h-full w-[86%] max-w-sm flex-col overflow-hidden border-l border-slate-200 bg-white shadow-[0_24px_80px_-28px_rgba(15,23,42,0.35)] pb-20">
             <div className="flex items-center justify-between border-b border-slate-200 px-4 py-4">
               <Link
                 href={localizedPath("/")}
@@ -975,143 +973,121 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                 type="button"
                 aria-label={dict.nav.closeMenu}
                 onClick={closeMobileMenu}
-                className="rounded-xl border border-slate-200 p-2 text-slate-700 transition-colors hover:bg-slate-50"
+                className="rounded-[2px] border border-slate-200 p-2 text-slate-700 transition-colors hover:bg-slate-50"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-4 py-4">
-              <div className="mt-4 grid gap-3">
+            <div className="flex-1 overflow-y-auto px-4 py-3">
+              <div className="grid gap-3">
+                {renderMobileLanguageSelector()}
+
                 <Link
                   href={localizedPath("/")}
                   prefetch={false}
                   onClick={closeMobileMenu}
-                  className={`rounded-2xl border px-4 py-3 text-sm font-extrabold uppercase tracking-[0.1em] transition-all duration-200 ${
+                  className={`rounded-[2px] px-3 py-3 text-sm font-black uppercase tracking-[0.1em] transition-colors ${
                     isExactActive("/")
-                      ? "border-[#152f51] bg-[#152f51] text-white"
-                      : "border-slate-200 bg-white text-slate-800 hover:border-slate-200 hover:bg-slate-50"
+                      ? "bg-[#152f51] text-white"
+                      : "text-slate-800 hover:bg-[#f4f7fb] hover:text-[#152f51]"
                   }`}
                 >
                   {dict.common.home}
                 </Link>
 
-                {renderMobileLanguageSelector()}
-
-                <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
-                  <button
-                    type="button"
-                    onClick={() => setIsMobileCorporateOpen((prev) => !prev)}
-                    className="inline-flex w-full items-center justify-between text-xs font-black uppercase tracking-[0.18em] text-slate-500"
-                  >
-                    {dict.nav.corporate}
-                    <ChevronDown
-                      className={`h-4 w-4 transition-transform ${
-                        isMobileCorporateOpen ? "rotate-180" : ""
+                <div className="border-t border-slate-200 pt-3">
+                  <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
+                    {dict.common.concreteProducts}
+                  </p>
+                  <div className="grid gap-1">
+                    <Link
+                      href={localizedPath(ALL_PRODUCTS_PATH)}
+                      prefetch={false}
+                      onClick={closeMobileMenu}
+                      className={`rounded-[2px] px-3 py-2.5 text-sm font-bold transition-colors ${
+                        pathname === ALL_PRODUCTS_PATH
+                          ? "bg-[#152f51] text-white"
+                          : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
                       }`}
-                    />
-                  </button>
-                  {isMobileCorporateOpen ? (
-                    <div className="mt-3 grid gap-2">
-                      {CORPORATE_LINKS.map((item) => (
+                    >
+                      {dict.common.allProducts}
+                    </Link>
+                    {topLevelCategoryLinks.map((item) => (
+                      <div key={`mobile-category-${item.id}`}>
                         <Link
-                          key={`mobile-corporate-${item.href}`}
                           href={localizedPath(item.href)}
                           prefetch={false}
                           onClick={closeMobileMenu}
-                          className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
-                            isSectionActive(item.href)
-                              ? "bg-[#f4f7fb] text-[#152f51]"
+                          className={`block rounded-[2px] px-3 py-2.5 text-sm font-bold transition-colors ${
+                            isCategoryPathActive(pathname, item.href)
+                              ? "bg-[#152f51] text-white"
                               : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
                           }`}
                         >
-                          {dict.nav[item.labelKey]}
+                          {item.label}
                         </Link>
-                      ))}
-                    </div>
-                  ) : null}
+                        {item.children.length > 0 ? (
+                          <div className="grid gap-1 border-l border-slate-200 pl-3">
+                            {item.children.map((child) => (
+                              <Link
+                                key={`mobile-category-child-${child.id}`}
+                                href={localizedPath(child.href)}
+                                prefetch={false}
+                                onClick={closeMobileMenu}
+                                className={`block rounded-[2px] px-3 py-2 text-sm font-semibold transition-colors ${
+                                  pathname === child.href
+                                    ? "bg-[#f4f7fb] text-[#152f51]"
+                                    : "text-slate-600 hover:bg-[#f4f7fb] hover:text-[#152f51]"
+                                }`}
+                              >
+                                {child.label}
+                              </Link>
+                            ))}
+                          </div>
+                        ) : null}
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
-                <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
-                  <button
-                    type="button"
-                    onClick={() => setIsMobileCategoriesOpen((prev) => !prev)}
-                    className="inline-flex w-full items-center justify-between text-xs font-black uppercase tracking-[0.18em] text-slate-500"
-                  >
-                    {dict.common.concreteProducts}
-                    <ChevronDown
-                      className={`h-4 w-4 transition-transform ${
-                        isMobileCategoriesOpen ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-                  {isMobileCategoriesOpen ? (
-                    <div className="mt-3 grid gap-2">
+                <div className="border-t border-slate-200 pt-3">
+                  <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
+                    {dict.nav.corporate}
+                  </p>
+                  <div className="grid gap-1">
+                    {CORPORATE_LINKS.map((item) => (
                       <Link
-                        href={localizedPath(ALL_PRODUCTS_PATH)}
+                        key={`mobile-corporate-${item.href}`}
+                        href={localizedPath(item.href)}
                         prefetch={false}
                         onClick={closeMobileMenu}
-                        className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
-                          pathname === ALL_PRODUCTS_PATH
-                            ? "bg-[#f4f7fb] text-[#152f51]"
+                        className={`rounded-[2px] px-3 py-2.5 text-sm font-bold transition-colors ${
+                          isSectionActive(item.href)
+                            ? "bg-[#152f51] text-white"
                             : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
                         }`}
                       >
-                        {dict.common.allProducts}
+                        {dict.nav[item.labelKey]}
                       </Link>
-                      {topLevelCategoryLinks.map((item) => (
-                        <div key={`mobile-category-${item.id}`}>
-                          <Link
-                            href={localizedPath(item.href)}
-                            prefetch={false}
-                            onClick={closeMobileMenu}
-                            className={`block rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
-                              isCategoryPathActive(pathname, item.href)
-                                ? "bg-[#f4f7fb] text-[#152f51]"
-                                : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
-                            }`}
-                          >
-                            {item.label}
-                          </Link>
-                          {item.children.length > 0 ? (
-                            <div className="mt-1 grid gap-1 pl-3">
-                              {item.children.map((child) => (
-                                <Link
-                                  key={`mobile-category-child-${child.id}`}
-                                  href={localizedPath(child.href)}
-                                  prefetch={false}
-                                  onClick={closeMobileMenu}
-                                  className={`block rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
-                                    pathname === child.href
-                                      ? "bg-[#f4f7fb] text-[#152f51]"
-                                      : "text-slate-600 hover:bg-[#f4f7fb] hover:text-[#152f51]"
-                                  }`}
-                                >
-                                  {child.label}
-                                </Link>
-                              ))}
-                            </div>
-                          ) : null}
-                        </div>
-                      ))}
-                    </div>
-                  ) : null}
+                    ))}
+                  </div>
                 </div>
 
-                <div className="rounded-[1.5rem] border border-slate-200 bg-white p-4 shadow-sm">
-                  <p className="text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+                <div className="border-t border-slate-200 pt-3">
+                  <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500">
                     {dict.nav.otherPages}
                   </p>
-                  <div className="mt-3 grid gap-2">
+                  <div className="grid gap-1">
                     {NAV_LINKS.map((item) => (
                       <Link
                         key={`mobile-nav-${item.href}`}
                         href={localizedPath(item.href)}
                         prefetch={false}
                         onClick={closeMobileMenu}
-                        className={`rounded-xl px-3 py-2 text-sm font-semibold transition-colors ${
+                        className={`rounded-[2px] px-3 py-2.5 text-sm font-bold transition-colors ${
                           isSectionActive(item.href)
-                            ? "bg-[#f4f7fb] text-[#152f51]"
+                            ? "bg-[#152f51] text-white"
                             : "text-slate-700 hover:bg-[#f4f7fb] hover:text-[#152f51]"
                         }`}
                       >
