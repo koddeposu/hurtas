@@ -562,7 +562,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                   height={48}
                   quality={40}
                   sizes="80px"
-                  className="h-12 w-auto"
+                  className="h-14 w-auto"
                 />
               </span>
               <span className="leading-tight">
@@ -791,7 +791,7 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
             : "lg:pointer-events-none lg:-translate-y-[140%]"
         }`}
       >
-        <div className="flex min-h-[5.25rem] w-full items-center gap-3 border-b border-slate-200 bg-white/95 px-4 shadow-[0_12px_34px_-26px_rgba(15,23,42,0.9)] backdrop-blur sm:px-5 m">
+        <div className="flex min-h-[5.25rem] w-full items-center gap-3 border-b border-slate-200 bg-white px-4 shadow-[0_12px_34px_-26px_rgba(15,23,42,0.9)] backdrop-blur sm:px-5 m">
           <Link
             href={localizedPath("/")}
             prefetch={false}
@@ -806,14 +806,14 @@ const Navbar = ({ categories = [], productSearchItems = [] }: NavbarProps) => {
                 height={36}
                 quality={40}
                 sizes="60px"
-                className="h-9 w-auto"
+                className="h-12 w-auto"
               />
             </span>
             <span className="leading-tight">
-              <span className="block text-sm font-black uppercase tracking-[0.08em] text-slate-900 sm:text-base">
+              <span className="block text-md font-black uppercase tracking-[0.08em] text-slate-900 sm:text-base">
                 Hürtaş
               </span>
-              <span className="block text-[9px] font-semibold uppercase tracking-[0.22em] text-slate-500 sm:text-[10px]">
+              <span className="block text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500 sm:text-[10px]">
                 {dict.common.brandTagline}
               </span>
             </span>
