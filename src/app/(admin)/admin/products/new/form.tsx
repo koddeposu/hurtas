@@ -97,11 +97,19 @@ export function NewProductForm({ categories }: NewProductFormProps) {
         description: hasProductDetailContent(formData.description)
           ? toProductDetailStorageJson(formData.description)
           : undefined,
-        descriptionEn: hasProductDetailContent(formData.descriptionEn)
-          ? toProductDetailStorageJson(formData.descriptionEn)
+        descriptionEn: hasProductDetailContent(formData.descriptionEn, {
+          includeTables: false,
+        })
+          ? toProductDetailStorageJson(formData.descriptionEn, {
+              includeTables: false,
+            })
           : undefined,
-        descriptionAr: hasProductDetailContent(formData.descriptionAr)
-          ? toProductDetailStorageJson(formData.descriptionAr)
+        descriptionAr: hasProductDetailContent(formData.descriptionAr, {
+          includeTables: false,
+        })
+          ? toProductDetailStorageJson(formData.descriptionAr, {
+              includeTables: false,
+            })
           : undefined,
         metaDescription: formData.metaDescription.trim() || undefined,
         metaDescriptionEn: formData.metaDescriptionEn.trim() || undefined,
@@ -429,6 +437,7 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                       <ProductDetailContentEditor
                         content={formData.description}
                         languageLabel="Türkçe"
+                        showTableTranslations
                         onChange={(json) =>
                           setFormData({ ...formData, description: json })
                         }
@@ -442,6 +451,7 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                       <ProductDetailContentEditor
                         content={formData.descriptionEn}
                         languageLabel="İngilizce"
+                        showTable={false}
                         onChange={(json) =>
                           setFormData({ ...formData, descriptionEn: json })
                         }
@@ -456,6 +466,7 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                         <ProductDetailContentEditor
                           content={formData.descriptionAr}
                           languageLabel="Arapça"
+                          showTable={false}
                           onChange={(json) =>
                             setFormData({ ...formData, descriptionAr: json })
                           }

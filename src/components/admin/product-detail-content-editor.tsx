@@ -20,6 +20,8 @@ type Props = {
   content: string;
   languageLabel: string;
   onChange: (content: string) => void;
+  showTable?: boolean;
+  showTableTranslations?: boolean;
 };
 
 function createId() {
@@ -43,27 +45,35 @@ function createTableBlock(): ProductDetailTableBlock {
     id: createId(),
     type: "table",
     title: "",
+    titleEn: "",
+    titleAr: "",
     headers: ["", ""],
+    headersEn: ["", ""],
+    headersAr: ["", ""],
     rows: [["", ""]],
   };
 }
 
-function parseEditorContent(content: string): ProductDetailContent {
+function parseEditorContent(
+  content: string,
+  includeTable: boolean,
+): ProductDetailContent {
   const normalized = parseProductDetailContent(toProductDetailContentJson(content));
   const descriptionBlock =
     normalized?.blocks.find(
       (block): block is ProductDetailDescriptionBlock =>
         block.type === "description",
     ) ?? createDescriptionBlock();
-  const tableBlock =
-    normalized?.blocks.find(
-      (block): block is ProductDetailTableBlock => block.type === "table",
-    ) ?? createTableBlock();
+  const tableBlock = includeTable
+    ? normalized?.blocks.find(
+        (block): block is ProductDetailTableBlock => block.type === "table",
+      ) ?? createTableBlock()
+    : null;
 
   return {
     type: "productDetailContent",
     version: 1,
-    blocks: [descriptionBlock, tableBlock],
+    blocks: tableBlock ? [descriptionBlock, tableBlock] : [descriptionBlock],
   };
 }
 
@@ -75,8 +85,13 @@ export function ProductDetailContentEditor({
   content,
   languageLabel,
   onChange,
+  showTable = true,
+  showTableTranslations = false,
 }: Props) {
-  const data = useMemo(() => parseEditorContent(content), [content]);
+  const data = useMemo(
+    () => parseEditorContent(content, showTable),
+    [content, showTable],
+  );
 
   const update = (next: ProductDetailContent) => onChange(serialize(next));
 
@@ -89,11 +104,57 @@ export function ProductDetailContentEditor({
     });
   };
 
+  const getTranslatedHeaders = (
+    block: ProductDetailTableBlock,
+    language: "en" | "ar",
+  ) => {
+    const headers = language === "en" ? block.headersEn : block.headersAr;
+    return block.headers.map((_, index) => headers?.[index] ?? "");
+  };
+
+  const setTitle = (
+    block: ProductDetailTableBlock,
+    language: "tr" | "en" | "ar",
+    value: string,
+  ) => {
+    updateBlock(block.id, {
+      ...block,
+      ...(language === "tr"
+        ? { title: value }
+        : language === "en"
+          ? { titleEn: value }
+          : { titleAr: value }),
+    });
+  };
+
   const setHeader = (
     block: ProductDetailTableBlock,
     colIdx: number,
     value: string,
+    language: "tr" | "en" | "ar" = "tr",
   ) => {
+    if (language === "en") {
+      const headers = getTranslatedHeaders(block, "en");
+      updateBlock(block.id, {
+        ...block,
+        headersEn: headers.map((header, index) =>
+          index === colIdx ? value : header,
+        ),
+      });
+      return;
+    }
+
+    if (language === "ar") {
+      const headers = getTranslatedHeaders(block, "ar");
+      updateBlock(block.id, {
+        ...block,
+        headersAr: headers.map((header, index) =>
+          index === colIdx ? value : header,
+        ),
+      });
+      return;
+    }
+
     updateBlock(block.id, {
       ...block,
       headers: block.headers.map((header, index) =>
@@ -124,6 +185,8 @@ export function ProductDetailContentEditor({
     updateBlock(block.id, {
       ...block,
       headers: [...block.headers, ""],
+      headersEn: [...getTranslatedHeaders(block, "en"), ""],
+      headersAr: [...getTranslatedHeaders(block, "ar"), ""],
       rows: block.rows.map((row) => [...row, ""]),
     });
   };
@@ -134,6 +197,12 @@ export function ProductDetailContentEditor({
     updateBlock(block.id, {
       ...block,
       headers: block.headers.filter((_, index) => index !== colIdx),
+      headersEn: getTranslatedHeaders(block, "en").filter(
+        (_, index) => index !== colIdx,
+      ),
+      headersAr: getTranslatedHeaders(block, "ar").filter(
+        (_, index) => index !== colIdx,
+      ),
       rows: block.rows.map((row) =>
         row.filter((_, index) => index !== colIdx),
       ),
@@ -182,19 +251,52 @@ export function ProductDetailContentEditor({
             />
           ) : (
             <div className="space-y-4">
-              <div className="space-y-2">
-                <Label>Tablo Başlığı</Label>
-                <Input
-                  value={block.title}
-                  onChange={(event) =>
-                    updateBlock(block.id, {
-                      ...block,
-                      title: event.target.value,
-                    })
-                  }
-                  placeholder="Örn: Teknik Özellikler"
-                />
-              </div>
+              {showTableTranslations ? (
+                <div className="grid gap-3 md:grid-cols-3">
+                  <div className="space-y-2">
+                    <Label>Tablo Başlığı (Türkçe)</Label>
+                    <Input
+                      value={block.title}
+                      onChange={(event) =>
+                        setTitle(block, "tr", event.target.value)
+                      }
+                      placeholder="Örn: Teknik Özellikler"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Tablo Başlığı (İngilizce)</Label>
+                    <Input
+                      value={block.titleEn ?? ""}
+                      onChange={(event) =>
+                        setTitle(block, "en", event.target.value)
+                      }
+                      placeholder="Technical Specifications"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Tablo Başlığı (Arapça)</Label>
+                    <Input
+                      dir="rtl"
+                      value={block.titleAr ?? ""}
+                      onChange={(event) =>
+                        setTitle(block, "ar", event.target.value)
+                      }
+                      placeholder="المواصفات الفنية"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <Label>Tablo Başlığı</Label>
+                  <Input
+                    value={block.title}
+                    onChange={(event) =>
+                      setTitle(block, "tr", event.target.value)
+                    }
+                    placeholder="Örn: Teknik Özellikler"
+                  />
+                </div>
+              )}
 
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[480px] border-collapse text-sm">
@@ -206,13 +308,44 @@ export function ProductDetailContentEditor({
                           className="border border-slate-200 bg-slate-50 p-2 text-left align-top"
                         >
                           <div className="flex gap-2">
-                            <Input
-                              value={header}
-                              onChange={(event) =>
-                                setHeader(block, colIdx, event.target.value)
-                              }
-                              placeholder="Kolon adı"
-                            />
+                            <div className="grid min-w-0 flex-1 gap-2">
+                              <Input
+                                value={header}
+                                onChange={(event) =>
+                                  setHeader(block, colIdx, event.target.value)
+                                }
+                                placeholder="Kolon adı (TR)"
+                              />
+                              {showTableTranslations ? (
+                                <>
+                                  <Input
+                                    value={block.headersEn?.[colIdx] ?? ""}
+                                    onChange={(event) =>
+                                      setHeader(
+                                        block,
+                                        colIdx,
+                                        event.target.value,
+                                        "en",
+                                      )
+                                    }
+                                    placeholder="Column name (EN)"
+                                  />
+                                  <Input
+                                    dir="rtl"
+                                    value={block.headersAr?.[colIdx] ?? ""}
+                                    onChange={(event) =>
+                                      setHeader(
+                                        block,
+                                        colIdx,
+                                        event.target.value,
+                                        "ar",
+                                      )
+                                    }
+                                    placeholder="اسم العمود (AR)"
+                                  />
+                                </>
+                              ) : null}
+                            </div>
                             <Button
                               type="button"
                               variant="ghost"

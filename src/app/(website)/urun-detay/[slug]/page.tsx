@@ -12,6 +12,7 @@ import {
   getMetadataAlternates,
   getLocalizedUrl,
   SITE_URL,
+  type Locale,
 } from '@/lib/i18n';
 import { getCurrentLocale } from '@/lib/i18n-server';
 import {
@@ -82,7 +83,23 @@ function getRelatedTitle(
     : relatedDefault;
 }
 
-function getProductDetailBlocks(
+function pickProductDetailTableText(
+  locale: Locale,
+  tr: string | null | undefined,
+  en?: string | null,
+  ar?: string | null,
+) {
+  const trText = tr?.trim() ?? '';
+  const enText = en?.trim() ?? '';
+  const arText = ar?.trim() ?? '';
+
+  if (locale === 'en') return enText || trText;
+  if (locale === 'ar') return arText || enText || trText;
+
+  return trText;
+}
+
+function getProductDetailDescriptionBlocks(
   description: string | null | undefined,
 ): ProductDetailRenderBlock[] {
   const detailContent = parseProductDetailContent(description);
@@ -104,35 +121,74 @@ function getProductDetailBlocks(
 
   return detailContent.blocks
     .map((block): ProductDetailRenderBlock | null => {
-      if (block.type === 'description') {
-        const html = getDescriptionHtml(block.content);
-        const text = extractPlainTextFromProductDetailContent(block.content);
-        return html || text
-          ? {
-              id: block.id,
-              type: 'description',
-              html,
-              text,
-            }
-          : null;
-      }
+      if (block.type !== 'description') return null;
 
+      const html = getDescriptionHtml(block.content);
+      const text = extractPlainTextFromProductDetailContent(block.content);
+      return html || text
+        ? {
+            id: block.id,
+            type: 'description',
+            html,
+            text,
+          }
+        : null;
+    })
+    .filter((block): block is ProductDetailRenderBlock => block !== null);
+}
+
+function getProductDetailTableBlocks(
+  description: string | null | undefined,
+  locale: Locale,
+): ProductDetailRenderBlock[] {
+  const detailContent = parseProductDetailContent(description);
+  if (!detailContent) return [];
+
+  return detailContent.blocks
+    .map((block): ProductDetailRenderBlock | null => {
+      if (block.type !== 'table') return null;
+
+      const title = pickProductDetailTableText(
+        locale,
+        block.title,
+        block.titleEn,
+        block.titleAr,
+      );
+      const headers = block.headers.map((header, index) =>
+        pickProductDetailTableText(
+          locale,
+          header,
+          block.headersEn?.[index],
+          block.headersAr?.[index],
+        ),
+      );
       const hasTableContent =
-        block.title.trim() ||
-        block.headers.some((header) => header.trim()) ||
+        title ||
+        headers.some((header) => header.trim()) ||
         block.rows.some((row) => row.some((cell) => cell.trim()));
 
       return hasTableContent
         ? {
             id: block.id,
             type: 'table',
-            title: block.title,
-            headers: block.headers,
+            title,
+            headers,
             rows: block.rows,
           }
         : null;
     })
     .filter((block): block is ProductDetailRenderBlock => block !== null);
+}
+
+function getProductDetailBlocks(
+  description: string | null | undefined,
+  tableDescription: string | null | undefined,
+  locale: Locale,
+): ProductDetailRenderBlock[] {
+  return [
+    ...getProductDetailDescriptionBlocks(description),
+    ...getProductDetailTableBlocks(tableDescription || description, locale),
+  ];
 }
 
 // Metadata oluştur
@@ -261,7 +317,11 @@ export default async function ProductPage({ params }: Props) {
   const pageUrl = getLocalizedUrl(canonicalPath, locale);
   const plainDescription =
     extractPlainTextFromProductDetailContent(localizedDescription);
-  const detailBlocks = getProductDetailBlocks(localizedDescription);
+  const detailBlocks = getProductDetailBlocks(
+    localizedDescription,
+    product.description,
+    locale,
+  );
   const categoryDisplayName = product.category
     ? getCategoryDisplayName(product.category, locale)
     : null;

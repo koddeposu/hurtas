@@ -25,6 +25,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { buildCategoryOptions } from "@/lib/categoryTree";
 import {
   hasProductDetailContent,
+  mergeProductDetailTableHeaderTranslations,
   toProductDetailStorageJson,
   toProductDetailContentJson,
 } from "@/lib/productDetailContent";
@@ -111,7 +112,11 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
     floor: product.floor,
     bath: product.bath,
     height: product.height,
-    description: toProductDetailContentJson(product.description || ""),
+    description: mergeProductDetailTableHeaderTranslations(
+      toProductDetailContentJson(product.description || ""),
+      product.descriptionEn,
+      product.descriptionAr,
+    ),
     descriptionEn: toProductDetailContentJson(product.descriptionEn || ""),
     descriptionAr: toProductDetailContentJson(product.descriptionAr || ""),
     metaDescription: product.metaDescription || "",
@@ -139,11 +144,19 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
         description: hasProductDetailContent(formData.description)
           ? toProductDetailStorageJson(formData.description)
           : null,
-        descriptionEn: hasProductDetailContent(formData.descriptionEn)
-          ? toProductDetailStorageJson(formData.descriptionEn)
+        descriptionEn: hasProductDetailContent(formData.descriptionEn, {
+          includeTables: false,
+        })
+          ? toProductDetailStorageJson(formData.descriptionEn, {
+              includeTables: false,
+            })
           : null,
-        descriptionAr: hasProductDetailContent(formData.descriptionAr)
-          ? toProductDetailStorageJson(formData.descriptionAr)
+        descriptionAr: hasProductDetailContent(formData.descriptionAr, {
+          includeTables: false,
+        })
+          ? toProductDetailStorageJson(formData.descriptionAr, {
+              includeTables: false,
+            })
           : null,
         metaDescription: formData.metaDescription.trim() || null,
         metaDescriptionEn: formData.metaDescriptionEn.trim() || null,
@@ -477,6 +490,7 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                       <ProductDetailContentEditor
                         content={formData.description}
                         languageLabel="Türkçe"
+                        showTableTranslations
                         onChange={(json) =>
                           setFormData({
                             ...formData,
@@ -493,6 +507,7 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                       <ProductDetailContentEditor
                         content={formData.descriptionEn}
                         languageLabel="İngilizce"
+                        showTable={false}
                         onChange={(json) =>
                           setFormData({
                             ...formData,
@@ -510,6 +525,7 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                         <ProductDetailContentEditor
                           content={formData.descriptionAr}
                           languageLabel="Arapça"
+                          showTable={false}
                           onChange={(json) =>
                             setFormData({
                               ...formData,

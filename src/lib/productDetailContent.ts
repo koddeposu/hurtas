@@ -15,7 +15,11 @@ export type ProductDetailTableBlock = {
   id: string;
   type: "table";
   title: string;
+  titleEn?: string;
+  titleAr?: string;
   headers: string[];
+  headersEn?: string[];
+  headersAr?: string[];
   rows: string[][];
 };
 
@@ -57,6 +61,14 @@ function normalizeDescriptionBlock(block: JsonRecord): ProductDetailDescriptionB
   };
 }
 
+function normalizeOptionalHeaders(value: unknown, columnCount: number) {
+  if (!Array.isArray(value)) return undefined;
+
+  return Array.from({ length: columnCount }, (_, index) =>
+    String(value[index] ?? ""),
+  );
+}
+
 function normalizeTableBlock(block: JsonRecord): ProductDetailTableBlock {
   const headers =
     Array.isArray(block.headers) && block.headers.length > 0
@@ -76,7 +88,11 @@ function normalizeTableBlock(block: JsonRecord): ProductDetailTableBlock {
     id: typeof block.id === "string" ? block.id : createId(),
     type: "table",
     title: typeof block.title === "string" ? block.title : "",
+    titleEn: typeof block.titleEn === "string" ? block.titleEn : undefined,
+    titleAr: typeof block.titleAr === "string" ? block.titleAr : undefined,
     headers,
+    headersEn: normalizeOptionalHeaders(block.headersEn, headers.length),
+    headersAr: normalizeOptionalHeaders(block.headersAr, headers.length),
     rows,
   };
 }
@@ -84,7 +100,11 @@ function normalizeTableBlock(block: JsonRecord): ProductDetailTableBlock {
 function hasTableContent(table: ProductDetailTableBlock) {
   return (
     table.title.trim().length > 0 ||
+    Boolean(table.titleEn?.trim()) ||
+    Boolean(table.titleAr?.trim()) ||
     table.headers.some((header) => header.trim().length > 0) ||
+    Boolean(table.headersEn?.some((header) => header.trim().length > 0)) ||
+    Boolean(table.headersAr?.some((header) => header.trim().length > 0)) ||
     table.rows.some((row) => row.some((cell) => cell.trim().length > 0))
   );
 }
@@ -225,18 +245,24 @@ export function toProductDetailContentJson(
 
 export function hasProductDetailContent(
   content: string | null | undefined,
+  options: { includeTables?: boolean } = {},
 ): boolean {
+  const includeTables = options.includeTables ?? true;
   const detailContent = parseProductDetailContent(content);
   if (!detailContent) {
     return extractPlainTextFromRichContent(content).length > 0;
   }
 
-  return detailContent.blocks.some(hasBlockContent);
+  return detailContent.blocks.some(
+    (block) => (includeTables || block.type !== "table") && hasBlockContent(block),
+  );
 }
 
 export function toProductDetailStorageJson(
   content: string | null | undefined,
+  options: { includeTables?: boolean } = {},
 ): string {
+  const includeTables = options.includeTables ?? true;
   const detailContent = parseProductDetailContent(content);
 
   if (!detailContent) {
@@ -244,7 +270,13 @@ export function toProductDetailStorageJson(
     return legacyDoc ? JSON.stringify(legacyDoc) : toTipTapDocJson(content);
   }
 
-  const blocksWithContent = detailContent.blocks.filter(hasBlockContent);
+  const blocksWithContent = detailContent.blocks.filter(
+    (block) => (includeTables || block.type !== "table") && hasBlockContent(block),
+  );
+
+  if (blocksWithContent.length === 0) {
+    return "";
+  }
 
   if (
     blocksWithContent.length === 1 &&
@@ -287,6 +319,68 @@ export function extractPlainTextFromProductDetailContent(
   }
 
   return chunks.join("\n\n").trim();
+}
+
+function getTableBlocks(content: string | null | undefined) {
+  return (
+    parseProductDetailContent(content)?.blocks.filter(
+      (block): block is ProductDetailTableBlock => block.type === "table",
+    ) ?? []
+  );
+}
+
+function hasTranslatedValue(value: string | null | undefined) {
+  return Boolean(value?.trim());
+}
+
+function hasTranslatedHeaders(headers: string[] | undefined) {
+  return Boolean(headers?.some((header) => header.trim().length > 0));
+}
+
+function alignHeaders(headers: string[] | undefined, columnCount: number) {
+  if (!headers) return undefined;
+
+  return Array.from({ length: columnCount }, (_, index) => headers[index] ?? "");
+}
+
+export function mergeProductDetailTableHeaderTranslations(
+  content: string,
+  enContent?: string | null,
+  arContent?: string | null,
+) {
+  const baseContent = parseProductDetailContent(content);
+  if (!baseContent) return content;
+
+  const enTables = getTableBlocks(enContent);
+  const arTables = getTableBlocks(arContent);
+  let tableIndex = 0;
+
+  return JSON.stringify({
+    ...baseContent,
+    blocks: baseContent.blocks.map((block) => {
+      if (block.type !== "table") return block;
+
+      const index = tableIndex++;
+      const enTable = enTables[index];
+      const arTable = arTables[index];
+
+      return {
+        ...block,
+        titleEn: hasTranslatedValue(block.titleEn)
+          ? block.titleEn
+          : enTable?.title,
+        titleAr: hasTranslatedValue(block.titleAr)
+          ? block.titleAr
+          : arTable?.title,
+        headersEn: hasTranslatedHeaders(block.headersEn)
+          ? block.headersEn
+          : alignHeaders(enTable?.headers, block.headers.length),
+        headersAr: hasTranslatedHeaders(block.headersAr)
+          ? block.headersAr
+          : alignHeaders(arTable?.headers, block.headers.length),
+      };
+    }),
+  } satisfies ProductDetailContent);
 }
 
 export function isTipTapJsonContent(content: string): content is string {
