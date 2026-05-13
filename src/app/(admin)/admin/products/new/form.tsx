@@ -3,6 +3,7 @@
 import { createProduct } from "@/actions/productActions";
 import { uploadImage } from "@/actions/uploadActions";
 import { AltTextEditDialog } from "@/components/admin/alt-text-edit-dialog";
+import { CategoryPicker } from "@/components/admin/category-picker";
 import { AdminHeader } from "@/components/admin/header";
 import { ProductDetailContentEditor } from "@/components/admin/product-detail-content-editor";
 import { AdminSidebar } from "@/components/admin/sidebar";
@@ -253,30 +254,15 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
                       <Label>Kategoriler</Label>
-                      <div className="flex flex-wrap gap-2">
-                        {categoryOptions.map(({ category: cat, depth }) => {
-                          const selected = formData.categoryIds.includes(
-                            cat.id,
-                          );
-                          return (
-                            <Button
-                              key={cat.id}
-                              type="button"
-                              variant={selected ? "default" : "outline"}
-                              onClick={() => toggleCategory(cat.id)}
-                              className={
-                                selected ? "bg-primary hover:bg-[#3a1924]" : ""
-                              }
-                            >
-                              {depth > 0 ? `${"-- ".repeat(depth)}` : ""}
-                              {cat.name}
-                            </Button>
-                          );
-                        })}
-                      </div>
+                      <CategoryPicker
+                        categories={categories}
+                        selectedIds={formData.categoryIds}
+                        onChange={(ids) =>
+                          setFormData((prev) => ({ ...prev, categoryIds: ids }))
+                        }
+                      />
                       <p className="text-xs text-slate-500">
                         Birden fazla kategori seçebilirsiniz. İlk seçilen
-                        kategori ana kategori olarak kullanılır.
                       </p>
                       {formData.categoryIds.length > 0 ? (
                         <Button

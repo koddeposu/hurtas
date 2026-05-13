@@ -9,6 +9,7 @@ import {
 } from "@/actions/productActions";
 import { uploadImage } from "@/actions/uploadActions";
 import { AltTextEditDialog } from "@/components/admin/alt-text-edit-dialog";
+import { CategoryPicker } from "@/components/admin/category-picker";
 import { AdminHeader } from "@/components/admin/header";
 import { ProductDetailContentEditor } from "@/components/admin/product-detail-content-editor";
 import { AdminSidebar } from "@/components/admin/sidebar";
@@ -22,12 +23,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
-import { buildCategoryOptions } from "@/lib/categoryTree";
 import {
   hasProductDetailContent,
   mergeProductDetailTableHeaderTranslations,
-  toProductDetailStorageJson,
   toProductDetailContentJson,
+  toProductDetailStorageJson,
 } from "@/lib/productDetailContent";
 import { ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -124,7 +124,6 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
     metaDescriptionAr: product.metaDescriptionAr || "",
     isActive: product.isActive,
   });
-  const categoryOptions = buildCategoryOptions(categories);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -328,27 +327,13 @@ export function EditProductForm({ product, categories }: EditProductFormProps) {
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
                       <Label>Kategoriler</Label>
-                      <div className="flex flex-wrap gap-2">
-                        {categoryOptions.map(({ category: cat, depth }) => {
-                          const selected = formData.categoryIds.includes(
-                            cat.id,
-                          );
-                          return (
-                            <Button
-                              key={cat.id}
-                              type="button"
-                              variant={selected ? "default" : "outline"}
-                              onClick={() => toggleCategory(cat.id)}
-                              className={
-                                selected ? "bg-primary hover:bg-[#3a1924]" : ""
-                              }
-                            >
-                              {depth > 0 ? `${"-- ".repeat(depth)}` : ""}
-                              {cat.name}
-                            </Button>
-                          );
-                        })}
-                      </div>
+                      <CategoryPicker
+                        categories={categories}
+                        selectedIds={formData.categoryIds}
+                        onChange={(ids) =>
+                          setFormData((prev) => ({ ...prev, categoryIds: ids }))
+                        }
+                      />
                       <p className="text-xs text-slate-500">
                         Birden fazla kategori seçebilirsiniz. İlk seçilen
                         kategori ana kategori olarak kullanılır.
