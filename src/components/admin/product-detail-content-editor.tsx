@@ -58,16 +58,18 @@ function parseEditorContent(
   content: string,
   includeTable: boolean,
 ): ProductDetailContent {
-  const normalized = parseProductDetailContent(toProductDetailContentJson(content));
+  const normalized = parseProductDetailContent(
+    toProductDetailContentJson(content),
+  );
   const descriptionBlock =
     normalized?.blocks.find(
       (block): block is ProductDetailDescriptionBlock =>
         block.type === "description",
     ) ?? createDescriptionBlock();
   const tableBlock = includeTable
-    ? normalized?.blocks.find(
+    ? (normalized?.blocks.find(
         (block): block is ProductDetailTableBlock => block.type === "table",
-      ) ?? createTableBlock()
+      ) ?? createTableBlock())
     : null;
 
   return {
@@ -203,9 +205,7 @@ export function ProductDetailContentEditor({
       headersAr: getTranslatedHeaders(block, "ar").filter(
         (_, index) => index !== colIdx,
       ),
-      rows: block.rows.map((row) =>
-        row.filter((_, index) => index !== colIdx),
-      ),
+      rows: block.rows.map((row) => row.filter((_, index) => index !== colIdx)),
     });
   };
 
@@ -237,7 +237,8 @@ export function ProductDetailContentEditor({
               {index + 1}
             </span>
             <span className="text-sm font-semibold text-slate-700">
-              {languageLabel} {block.type === "description" ? "Açıklama" : "Tablo"}
+              {languageLabel}{" "}
+              {block.type === "description" ? "Açıklama" : "Tablo"}
             </span>
             <div className="h-px flex-1 bg-slate-200" />
           </div>

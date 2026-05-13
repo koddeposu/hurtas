@@ -261,9 +261,7 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                           setFormData((prev) => ({ ...prev, categoryIds: ids }))
                         }
                       />
-                      <p className="text-xs text-slate-500">
-                        Birden fazla kategori seçebilirsiniz. İlk seçilen
-                      </p>
+
                       {formData.categoryIds.length > 0 ? (
                         <Button
                           type="button"
@@ -290,9 +288,6 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                         }
                         placeholder="bos-birakilirsa-urun-adindan-olusturulur"
                       />
-                      <p className="text-xs text-slate-500">
-                        Boş bırakılırsa ürün adından otomatik oluşturulur.
-                      </p>
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="name">Ürün Adı *</Label>
@@ -419,7 +414,6 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                     <hr className="h-[3px] w-full bg-secondary" />
 
                     <div className="space-y-2">
-                      <Label htmlFor="description">Ürün Detay İçeriği</Label>
                       <ProductDetailContentEditor
                         content={formData.description}
                         languageLabel="Türkçe"
@@ -431,9 +425,6 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="descriptionEn">
-                        Ürün Detay İçeriği (İngilizce)
-                      </Label>
                       <ProductDetailContentEditor
                         content={formData.descriptionEn}
                         languageLabel="İngilizce"
@@ -445,9 +436,6 @@ export function NewProductForm({ categories }: NewProductFormProps) {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="descriptionAr">
-                        Ürün Detay İçeriği (Arapça)
-                      </Label>
                       <div dir="rtl">
                         <ProductDetailContentEditor
                           content={formData.descriptionAr}

@@ -281,7 +281,9 @@ export function BlogContentEditor({
               />
             ) : (
               <MobileToolbarContent
-                type={activeMobileView === "highlighter" ? "highlighter" : "link"}
+                type={
+                  activeMobileView === "highlighter" ? "highlighter" : "link"
+                }
                 onBack={() => setMobileView("main")}
               />
             )}
@@ -306,6 +308,11 @@ export function BlogContentEditor({
             editor={editor}
             role="presentation"
             className="simple-editor-content"
+            style={{
+              minHeight: "200px",
+              maxHeight: "200px",
+              overflowY: "auto",
+            }}
           />
         </EditorContext.Provider>
       </div>
