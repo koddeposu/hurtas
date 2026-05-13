@@ -19,8 +19,6 @@ interface Category {
   id: string;
   parentId: string | null;
   name: string;
-  nameEn: string | null;
-  nameAr: string | null;
   slug: string;
   title: string | null;
   titleEn: string | null;
@@ -50,8 +48,6 @@ export function EditCategoryForm({
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: category.name,
-    nameEn: category.nameEn || "",
-    nameAr: category.nameAr || "",
     parentId: category.parentId || "",
     title: category.title || "",
     titleEn: category.titleEn || "",
@@ -75,8 +71,6 @@ export function EditCategoryForm({
     try {
       await updateCategory(category.id, {
         name: formData.name,
-        nameEn: formData.nameEn,
-        nameAr: formData.nameAr,
         parentId: formData.parentId || null,
         title: formData.title,
         titleEn: formData.titleEn,
@@ -144,7 +138,7 @@ export function EditCategoryForm({
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="name">Kategori Adı *</Label>
+                  <Label htmlFor="name">url</Label>
                   <Input
                     id="name"
                     value={formData.name}
@@ -156,35 +150,10 @@ export function EditCategoryForm({
                   />
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="nameEn">Kategori Adı (İngilizce)</Label>
-                    <Input
-                      id="nameEn"
-                      value={formData.nameEn}
-                      onChange={(e) =>
-                        setFormData({ ...formData, nameEn: e.target.value })
-                      }
-                      placeholder="English category name"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="nameAr">Kategori Adı (Arapça)</Label>
-                    <Input
-                      id="nameAr"
-                      dir="rtl"
-                      value={formData.nameAr}
-                      onChange={(e) =>
-                        setFormData({ ...formData, nameAr: e.target.value })
-                      }
-                      placeholder="اسم التصنيف"
-                    />
-                  </div>
-                </div>
                 <hr className="h-[3px] w-full bg-secondary" />
 
                 <div className="space-y-2">
-                  <Label htmlFor="title">Kategori Üst Başlık Açıklama</Label>
+                  <Label htmlFor="title">Kategori İsmi</Label>
                   <Input
                     id="title"
                     value={formData.title}
@@ -197,9 +166,7 @@ export function EditCategoryForm({
 
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="titleEn">
-                      Kategori Üst Başlık Açıklama (İngilizce)
-                    </Label>
+                    <Label htmlFor="titleEn">Kategori İsmi (İngilizce)</Label>
                     <Input
                       id="titleEn"
                       value={formData.titleEn}
@@ -210,9 +177,7 @@ export function EditCategoryForm({
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="titleAr">
-                      Kategori Üst Başlık Açıklama (Arapça)
-                    </Label>
+                    <Label htmlFor="titleAr">Kategori İsmi (Arapça)</Label>
                     <Input
                       id="titleAr"
                       dir="rtl"
@@ -227,7 +192,9 @@ export function EditCategoryForm({
                 <hr className="h-[3px] w-full bg-secondary" />
 
                 <div className="space-y-2">
-                  <Label htmlFor="description">Kategori Üst Açıklama</Label>
+                  <Label htmlFor="description">
+                    Kategori İsmi Üst Açıklama
+                  </Label>
                   <Textarea
                     id="description"
                     value={formData.description}
@@ -242,7 +209,7 @@ export function EditCategoryForm({
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor="descriptionEn">
-                      Kategori Üst Açıklama (İngilizce)
+                      Kategori İsmi Üst Açıklama (İngilizce)
                     </Label>
                     <Textarea
                       id="descriptionEn"
@@ -259,7 +226,7 @@ export function EditCategoryForm({
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="descriptionAr">
-                      Kategori Üst Açıklama (Arapça)
+                      Kategori İsmi Üst Açıklama (Arapça)
                     </Label>
                     <Textarea
                       id="descriptionAr"
