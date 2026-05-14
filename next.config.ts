@@ -34,6 +34,11 @@ const nextConfig: NextConfig = {
         hostname: "cdn.hurtasbeton.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "cdnhurtas.teknoon.com",
+        pathname: "/**",
+      },
     ],
   },
 };
